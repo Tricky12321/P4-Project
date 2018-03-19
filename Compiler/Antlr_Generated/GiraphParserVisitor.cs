@@ -122,12 +122,6 @@ public interface IGiraphParserVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <return>The visitor result.</return>
 	Result VisitQuery([NotNull] GiraphParser.QueryContext context);
 	/// <summary>
-	/// Visit a parse tree produced by <see cref="GiraphParser.querySC"/>.
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	/// <return>The visitor result.</return>
-	Result VisitQuerySC([NotNull] GiraphParser.QuerySCContext context);
-	/// <summary>
 	/// Visit a parse tree produced by <see cref="GiraphParser.noReturnQuery"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
@@ -344,53 +338,11 @@ public interface IGiraphParserVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <return>The visitor result.</return>
 	Result VisitLoopDcl([NotNull] GiraphParser.LoopDclContext context);
 	/// <summary>
-	/// Visit a parse tree produced by <see cref="GiraphParser.foreachLoop"/>.
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	/// <return>The visitor result.</return>
-	Result VisitForeachLoop([NotNull] GiraphParser.ForeachLoopContext context);
-	/// <summary>
-	/// Visit a parse tree produced by <see cref="GiraphParser.whileLoop"/>.
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	/// <return>The visitor result.</return>
-	Result VisitWhileLoop([NotNull] GiraphParser.WhileLoopContext context);
-	/// <summary>
-	/// Visit a parse tree produced by <see cref="GiraphParser.doWhileLoop"/>.
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	/// <return>The visitor result.</return>
-	Result VisitDoWhileLoop([NotNull] GiraphParser.DoWhileLoopContext context);
-	/// <summary>
-	/// Visit a parse tree produced by <see cref="GiraphParser.forLoop"/>.
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	/// <return>The visitor result.</return>
-	Result VisitForLoop([NotNull] GiraphParser.ForLoopContext context);
-	/// <summary>
 	/// Visit a parse tree produced by <see cref="GiraphParser.forCondition"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
 	Result VisitForCondition([NotNull] GiraphParser.ForConditionContext context);
-	/// <summary>
-	/// Visit a parse tree produced by <see cref="GiraphParser.assignmentParant"/>.
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	/// <return>The visitor result.</return>
-	Result VisitAssignmentParant([NotNull] GiraphParser.AssignmentParantContext context);
-	/// <summary>
-	/// Visit a parse tree produced by <see cref="GiraphParser.forConditionInside"/>.
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	/// <return>The visitor result.</return>
-	Result VisitForConditionInside([NotNull] GiraphParser.ForConditionInsideContext context);
-	/// <summary>
-	/// Visit a parse tree produced by <see cref="GiraphParser.operation"/>.
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	/// <return>The visitor result.</return>
-	Result VisitOperation([NotNull] GiraphParser.OperationContext context);
 	/// <summary>
 	/// Visit a parse tree produced by <see cref="GiraphParser.inlineDcl"/>.
 	/// </summary>
@@ -422,35 +374,17 @@ public interface IGiraphParserVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <return>The visitor result.</return>
 	Result VisitCollectionDcl([NotNull] GiraphParser.CollectionDclContext context);
 	/// <summary>
-	/// Visit a parse tree produced by <see cref="GiraphParser.collectionAssignment"/>.
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	/// <return>The visitor result.</return>
-	Result VisitCollectionAssignment([NotNull] GiraphParser.CollectionAssignmentContext context);
-	/// <summary>
 	/// Visit a parse tree produced by <see cref="GiraphParser.setQuery"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
 	Result VisitSetQuery([NotNull] GiraphParser.SetQueryContext context);
 	/// <summary>
-	/// Visit a parse tree produced by <see cref="GiraphParser.graphSetQuery"/>.
+	/// Visit a parse tree produced by <see cref="GiraphParser.setExpression"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	Result VisitGraphSetQuery([NotNull] GiraphParser.GraphSetQueryContext context);
-	/// <summary>
-	/// Visit a parse tree produced by <see cref="GiraphParser.setExpressionAtri"/>.
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	/// <return>The visitor result.</return>
-	Result VisitSetExpressionAtri([NotNull] GiraphParser.SetExpressionAtriContext context);
-	/// <summary>
-	/// Visit a parse tree produced by <see cref="GiraphParser.setExpressionVari"/>.
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	/// <return>The visitor result.</return>
-	Result VisitSetExpressionVari([NotNull] GiraphParser.SetExpressionVariContext context);
+	Result VisitSetExpression([NotNull] GiraphParser.SetExpressionContext context);
 	/// <summary>
 	/// Visit a parse tree produced by <see cref="GiraphParser.compoundAssign"/>.
 	/// </summary>
@@ -517,6 +451,12 @@ public interface IGiraphParserVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
 	Result VisitExtractMaxOP([NotNull] GiraphParser.ExtractMaxOPContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="GiraphParser.equalComp"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitEqualComp([NotNull] GiraphParser.EqualCompContext context);
 	/// <summary>
 	/// Visit a parse tree produced by <see cref="GiraphParser.parameters"/>.
 	/// </summary>

@@ -7,7 +7,7 @@ namespace Compiler
 {
     static class ASTTool
     {
-        public void MakeNode()
+        static public void MakeNode()
         {
 
         }
