@@ -48,12 +48,32 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ASTTool.cs" />
     <Compile Include="compiler\GiraphLexer.cs" />
     <Compile Include="compiler\GiraphParser.cs" />
     <Compile Include="compiler\GiraphParserBaseListener.cs" />
     <Compile Include="compiler\GiraphParserBaseVisitor.cs" />
     <Compile Include="compiler\GiraphParserListener.cs" />
     <Compile Include="compiler\GiraphParserVisitor.cs" />
+    <Compile Include="Nodes\AbstractNode.cs" />
+    <Compile Include="Nodes\AssignNode.cs" />
+    <Compile Include="Nodes\BinaryExprNode.cs" />
+    <Compile Include="Nodes\BoolExprNode.cs" />
+    <Compile Include="Nodes\ClassReferenceNode.cs" />
+    <Compile Include="Nodes\CodeBlockNode.cs" />
+    <Compile Include="Nodes\ExtensionNode.cs" />
+    <Compile Include="Nodes\ForLoopNode.cs" />
+    <Compile Include="Nodes\FunctionDclNode.cs" />
+    <Compile Include="Nodes\GraphDclNode.cs" />
+    <Compile Include="Nodes\IfNode.cs" />
+    <Compile Include="Nodes\IntNode.cs" />
+    <Compile Include="Nodes\ReturnNode.cs" />
+    <Compile Include="Nodes\RunFunctionNode.cs" />
+    <Compile Include="Nodes\StringNode.cs" />
+    <Compile Include="Nodes\UnaryExprNode.cs" />
+    <Compile Include="Nodes\ValueNode.cs" />
+    <Compile Include="Nodes\VariableNode.cs" />
+    <Compile Include="Nodes\WhileLoopNode.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
