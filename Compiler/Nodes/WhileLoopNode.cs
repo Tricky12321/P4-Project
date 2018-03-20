@@ -7,7 +7,7 @@ namespace Compiler.Nodes
 {
     class WhileLoopNode : AbstractNode
     {
-        /*condition
-        body*/
+        BoolExprNode Condition;
+        CodeBlockNode Body;
     }
 }

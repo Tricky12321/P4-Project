@@ -8,7 +8,7 @@ namespace Compiler.Nodes
     class FunctionDclNode : AbstractNode
     {
         /*name
-        body
+        CodeBlockNode Body
         returntype
         parameters*/
     }

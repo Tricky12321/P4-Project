@@ -8,7 +8,7 @@ namespace Compiler.Nodes
     class AssignNode : AbstractNode
     {
         /*Type
-        name
+        VariableNode Target;
         value*/
     }
 }

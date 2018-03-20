@@ -8,8 +8,8 @@ namespace Compiler.Nodes
     class ForLoopNode : AbstractNode
     {
         /*initializer
-        condition
+        BoolExprNode Condition;
         increment
-        body*/
+        CodeBlockNode Body*/
     }
 }
