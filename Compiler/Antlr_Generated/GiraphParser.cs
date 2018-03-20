@@ -44,13 +44,21 @@ public partial class GiraphParser : Parser {
 		SET=39, SELECT=40, SELECTALL=41, FROM=42, WHERE=43, ADD=44, COLLECTION=45, 
 		RIGHTARROW=46, RUN=47, WITH=48, EXTEND=49, PREDICATE=50, POP=51, PUSH=52, 
 		PEEK=53, ENQUEUE=54, DEQUEUE=55, INITIALLY=56, CONDITIONSEP=57, EXTRACTMIN=58, 
+<<<<<<< Updated upstream
 		EXTRACTMAX=59, PRINT=60, INF=61, UNDERSCORE=62, BOOL=63, INTEGER=64, FLOATNUM=65, 
 		VARIABLENAME=66, LETTER=67, LOWLETTER=68, CAPLETTER=69, ZERO=70, DIGITNZ=71, 
 		FUNCTIONID=72, ID=73, WhiteSpace=74, WS=75, STRING=76, SPECIALCHARS=77;
+=======
+		EXTRACTMAX=59, PRINT=60, INF=61, UNDERSCORE=62, COMMENTSTART=63, BOOL=64, 
+		COMPOUNDASSIGN=65, INTEGER=66, FLOATNUM=67, VARIABLENAME=68, LETTER=69, 
+		LOWLETTER=70, CAPLETTER=71, ZERO=72, DIGITNZ=73, FUNCTIONID=74, WhiteSpace=75, 
+		WS=76, STRING=77, SPECIALCHARS=78;
+>>>>>>> Stashed changes
 	public const int
 		RULE_start = 0, RULE_program = 1, RULE_dcls = 2, RULE_objectDcl = 3, RULE_variableDcl = 4, 
 		RULE_graphInitDcl = 5, RULE_graphDclBlock = 6, RULE_vertexDcls = 7, RULE_vertexDcl = 8, 
 		RULE_edgeDcls = 9, RULE_edgeDcl = 10, RULE_assignment = 11, RULE_expression = 12, 
+<<<<<<< Updated upstream
 		RULE_expressionExtension = 13, RULE_query = 14, RULE_noReturnQuery = 15, 
 		RULE_returnQuery = 16, RULE_operator = 17, RULE_simpleOperators = 18, 
 		RULE_advancedOperators = 19, RULE_formalParams = 20, RULE_formalParam = 21, 
@@ -86,6 +94,48 @@ public partial class GiraphParser : Parser {
 		"popOP", "pushOP", "extractMinOP", "extractMaxOP", "equalComp", "parameters", 
 		"printOptions", "printOption", "print", "dequeueOPOneLine", "commentLine", 
 		"comments"
+=======
+		RULE_expressionExtension = 13, RULE_query = 14, RULE_querySC = 15, RULE_noReturnQuery = 16, 
+		RULE_returnQuery = 17, RULE_operator = 18, RULE_simpleOperators = 19, 
+		RULE_advancedOperators = 20, RULE_formalParams = 21, RULE_formalParam = 22, 
+		RULE_functionDcl = 23, RULE_codeBlock = 24, RULE_returnBlock = 25, RULE_runFunction = 26, 
+		RULE_codeBlockContent = 27, RULE_varOrConst = 28, RULE_varOrFuncOrConst = 29, 
+		RULE_variable = 30, RULE_variableFunc = 31, RULE_dotFunction = 32, RULE_constant = 33, 
+		RULE_string = 34, RULE_integer = 35, RULE_floatnum = 36, RULE_bool = 37, 
+		RULE_objects = 38, RULE_ifElseIfElse = 39, RULE_boolComparisons = 40, 
+		RULE_predicate = 41, RULE_predicateCall = 42, RULE_where = 43, RULE_andOr = 44, 
+		RULE_extend = 45, RULE_select = 46, RULE_selectAll = 47, RULE_addQuery = 48, 
+		RULE_addToGraph = 49, RULE_addToColl = 50, RULE_loopDcl = 51, RULE_foreachLoop = 52, 
+		RULE_whileLoop = 53, RULE_doWhileLoop = 54, RULE_forLoop = 55, RULE_forCondition = 56, 
+		RULE_assignmentParant = 57, RULE_forConditionInside = 58, RULE_operation = 59, 
+		RULE_inlineDcl = 60, RULE_foreachCondition = 61, RULE_allType = 62, RULE_allTypeWithColl = 63, 
+		RULE_collectionDcl = 64, RULE_collectionAssignment = 65, RULE_setQuery = 66, 
+		RULE_graphSetQuery = 67, RULE_setExpressionAtri = 68, RULE_setExpressionVari = 69, 
+		RULE_compoundAssign = 70, RULE_attribute = 71, RULE_setOneAttri = 72, 
+		RULE_collNoReturnOps = 73, RULE_collReturnOps = 74, RULE_enqueueOP = 75, 
+		RULE_dequeueOP = 76, RULE_popOP = 77, RULE_pushOP = 78, RULE_extractMinOP = 79, 
+		RULE_extractMaxOP = 80, RULE_parameters = 81, RULE_printOptions = 82, 
+		RULE_printOption = 83, RULE_print = 84, RULE_dequeueOPOneLine = 85, RULE_commentLine = 86, 
+		RULE_comments = 87;
+	public static readonly string[] ruleNames = {
+		"start", "program", "dcls", "objectDcl", "variableDcl", "graphInitDcl", 
+		"graphDclBlock", "vertexDcls", "vertexDcl", "edgeDcls", "edgeDcl", "assignment", 
+		"expression", "expressionExtension", "query", "querySC", "noReturnQuery", 
+		"returnQuery", "operator", "simpleOperators", "advancedOperators", "formalParams", 
+		"formalParam", "functionDcl", "codeBlock", "returnBlock", "runFunction", 
+		"codeBlockContent", "varOrConst", "varOrFuncOrConst", "variable", "variableFunc", 
+		"dotFunction", "constant", "string", "integer", "floatnum", "bool", "objects", 
+		"ifElseIfElse", "boolComparisons", "predicate", "predicateCall", "where", 
+		"andOr", "extend", "select", "selectAll", "addQuery", "addToGraph", "addToColl", 
+		"loopDcl", "foreachLoop", "whileLoop", "doWhileLoop", "forLoop", "forCondition", 
+		"assignmentParant", "forConditionInside", "operation", "inlineDcl", "foreachCondition", 
+		"allType", "allTypeWithColl", "collectionDcl", "collectionAssignment", 
+		"setQuery", "graphSetQuery", "setExpressionAtri", "setExpressionVari", 
+		"compoundAssign", "attribute", "setOneAttri", "collNoReturnOps", "collReturnOps", 
+		"enqueueOP", "dequeueOP", "popOP", "pushOP", "extractMinOP", "extractMaxOP", 
+		"parameters", "printOptions", "printOption", "print", "dequeueOPOneLine", 
+		"commentLine", "comments"
+>>>>>>> Stashed changes
 	};
 
 	private static readonly string[] _LiteralNames = {
@@ -97,7 +147,11 @@ public partial class GiraphParser : Parser {
 		"'WHERE'", "'ADD'", "'COLLECTION'", "'->'", "'RUN'", "'WITH'", "'EXTEND'", 
 		"'PREDICATE'", "'POP'", "'PUSH'", "'PEEK'", "'ENQUEUE'", "'DEQUEUE'", 
 		"'INITIALLY'", null, "'EXTRACTMIN'", "'EXTRACTMAX'", "'PRINT'", "'INF'", 
+<<<<<<< Updated upstream
 		"'_'"
+=======
+		"'_'", "'//'"
+>>>>>>> Stashed changes
 	};
 	private static readonly string[] _SymbolicNames = {
 		null, "BOOLOPERATOR", "TYPE", "GRAPHOBJ", "VERTEXOBJ", "EDGEOBJ", "RESERVEDFUNC", 
@@ -108,9 +162,15 @@ public partial class GiraphParser : Parser {
 		"FROM", "WHERE", "ADD", "COLLECTION", "RIGHTARROW", "RUN", "WITH", "EXTEND", 
 		"PREDICATE", "POP", "PUSH", "PEEK", "ENQUEUE", "DEQUEUE", "INITIALLY", 
 		"CONDITIONSEP", "EXTRACTMIN", "EXTRACTMAX", "PRINT", "INF", "UNDERSCORE", 
+<<<<<<< Updated upstream
 		"BOOL", "INTEGER", "FLOATNUM", "VARIABLENAME", "LETTER", "LOWLETTER", 
 		"CAPLETTER", "ZERO", "DIGITNZ", "FUNCTIONID", "ID", "WhiteSpace", "WS", 
 		"STRING", "SPECIALCHARS"
+=======
+		"COMMENTSTART", "BOOL", "COMPOUNDASSIGN", "INTEGER", "FLOATNUM", "VARIABLENAME", 
+		"LETTER", "LOWLETTER", "CAPLETTER", "ZERO", "DIGITNZ", "FUNCTIONID", "WhiteSpace", 
+		"WS", "STRING", "SPECIALCHARS"
+>>>>>>> Stashed changes
 	};
 	public static readonly IVocabulary DefaultVocabulary = new Vocabulary(_LiteralNames, _SymbolicNames);
 
@@ -144,6 +204,7 @@ public partial class GiraphParser : Parser {
 		Interpreter = new ParserATNSimulator(this, _ATN, decisionToDFA, sharedContextCache);
 	}
 	public partial class StartContext : ParserRuleContext {
+<<<<<<< Updated upstream
 		public ITerminalNode Eof() { return GetToken(GiraphParser.Eof, 0); }
 		public ProgramContext[] program() {
 			return GetRuleContexts<ProgramContext>();
@@ -151,22 +212,32 @@ public partial class GiraphParser : Parser {
 		public ProgramContext program(int i) {
 			return GetRuleContext<ProgramContext>(i);
 		}
+=======
+		public ProgramContext program() {
+			return GetRuleContext<ProgramContext>(0);
+		}
+		public ITerminalNode Eof() { return GetToken(GiraphParser.Eof, 0); }
+>>>>>>> Stashed changes
 		public StartContext(ParserRuleContext parent, int invokingState)
 			: base(parent, invokingState)
 		{
 		}
 		public override int RuleIndex { get { return RULE_start; } }
+<<<<<<< Updated upstream
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IGiraphParserVisitor<TResult> typedVisitor = visitor as IGiraphParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitStart(this);
 			else return visitor.VisitChildren(this);
 		}
+=======
+>>>>>>> Stashed changes
 	}
 
 	[RuleVersion(0)]
 	public StartContext start() {
 		StartContext _localctx = new StartContext(Context, State);
 		EnterRule(_localctx, 0, RULE_start);
+<<<<<<< Updated upstream
 		int _la;
 		try {
 			EnterOuterAlt(_localctx, 1);
@@ -185,6 +256,13 @@ public partial class GiraphParser : Parser {
 				_la = TokenStream.LA(1);
 			} while ( (((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << TYPE) | (1L << GRAPHOBJ) | (1L << VERTEXOBJ) | (1L << EDGEOBJ) | (1L << DIVIDE) | (1L << SET) | (1L << SELECT) | (1L << SELECTALL) | (1L << ADD) | (1L << COLLECTION) | (1L << EXTEND))) != 0) || _la==VARIABLENAME );
 			State = 161; Match(Eof);
+=======
+		try {
+			EnterOuterAlt(_localctx, 1);
+			{
+			State = 176; program();
+			State = 177; Match(Eof);
+>>>>>>> Stashed changes
 			}
 		}
 		catch (RecognitionException re) {
@@ -219,11 +297,14 @@ public partial class GiraphParser : Parser {
 		{
 		}
 		public override int RuleIndex { get { return RULE_program; } }
+<<<<<<< Updated upstream
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IGiraphParserVisitor<TResult> typedVisitor = visitor as IGiraphParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitProgram(this);
 			else return visitor.VisitChildren(this);
 		}
+=======
+>>>>>>> Stashed changes
 	}
 
 	[RuleVersion(0)]
@@ -231,13 +312,21 @@ public partial class GiraphParser : Parser {
 		ProgramContext _localctx = new ProgramContext(Context, State);
 		EnterRule(_localctx, 2, RULE_program);
 		try {
+<<<<<<< Updated upstream
 			State = 168;
+=======
+			State = 184;
+>>>>>>> Stashed changes
 			ErrorHandler.Sync(this);
 			switch (TokenStream.LA(1)) {
 			case VARIABLENAME:
 				EnterOuterAlt(_localctx, 1);
 				{
+<<<<<<< Updated upstream
 				State = 163; functionDcl();
+=======
+				State = 179; functionDcl();
+>>>>>>> Stashed changes
 				}
 				break;
 			case TYPE:
@@ -247,19 +336,28 @@ public partial class GiraphParser : Parser {
 			case COLLECTION:
 				EnterOuterAlt(_localctx, 2);
 				{
+<<<<<<< Updated upstream
 				State = 164; dcls();
+=======
+				State = 180; dcls();
+>>>>>>> Stashed changes
 				}
 				break;
 			case EXTEND:
 				EnterOuterAlt(_localctx, 3);
 				{
+<<<<<<< Updated upstream
 				State = 165; extend();
+=======
+				State = 181; extend();
+>>>>>>> Stashed changes
 				}
 				break;
 			case SET:
 			case SELECT:
 			case SELECTALL:
 			case ADD:
+<<<<<<< Updated upstream
 				EnterOuterAlt(_localctx, 4);
 				{
 				State = 166; query();
@@ -269,6 +367,21 @@ public partial class GiraphParser : Parser {
 				EnterOuterAlt(_localctx, 5);
 				{
 				State = 167; comments();
+=======
+			case POP:
+			case DEQUEUE:
+			case EXTRACTMIN:
+			case EXTRACTMAX:
+				EnterOuterAlt(_localctx, 4);
+				{
+				State = 182; query();
+				}
+				break;
+			case COMMENTSTART:
+				EnterOuterAlt(_localctx, 5);
+				{
+				State = 183; comments();
+>>>>>>> Stashed changes
 				}
 				break;
 			default:
@@ -301,11 +414,14 @@ public partial class GiraphParser : Parser {
 		{
 		}
 		public override int RuleIndex { get { return RULE_dcls; } }
+<<<<<<< Updated upstream
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IGiraphParserVisitor<TResult> typedVisitor = visitor as IGiraphParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitDcls(this);
 			else return visitor.VisitChildren(this);
 		}
+=======
+>>>>>>> Stashed changes
 	}
 
 	[RuleVersion(0)]
@@ -313,7 +429,11 @@ public partial class GiraphParser : Parser {
 		DclsContext _localctx = new DclsContext(Context, State);
 		EnterRule(_localctx, 4, RULE_dcls);
 		try {
+<<<<<<< Updated upstream
 			State = 173;
+=======
+			State = 189;
+>>>>>>> Stashed changes
 			ErrorHandler.Sync(this);
 			switch (TokenStream.LA(1)) {
 			case GRAPHOBJ:
@@ -321,19 +441,31 @@ public partial class GiraphParser : Parser {
 			case EDGEOBJ:
 				EnterOuterAlt(_localctx, 1);
 				{
+<<<<<<< Updated upstream
 				State = 170; objectDcl();
+=======
+				State = 186; objectDcl();
+>>>>>>> Stashed changes
 				}
 				break;
 			case COLLECTION:
 				EnterOuterAlt(_localctx, 2);
 				{
+<<<<<<< Updated upstream
 				State = 171; collectionDcl();
+=======
+				State = 187; collectionDcl();
+>>>>>>> Stashed changes
 				}
 				break;
 			case TYPE:
 				EnterOuterAlt(_localctx, 3);
 				{
+<<<<<<< Updated upstream
 				State = 172; variableDcl();
+=======
+				State = 188; variableDcl();
+>>>>>>> Stashed changes
 				}
 				break;
 			default:
@@ -363,6 +495,12 @@ public partial class GiraphParser : Parser {
 		public ExpressionContext expression() {
 			return GetRuleContext<ExpressionContext>(0);
 		}
+<<<<<<< Updated upstream
+=======
+		public VariableFuncContext variableFunc() {
+			return GetRuleContext<VariableFuncContext>(0);
+		}
+>>>>>>> Stashed changes
 		public GraphInitDclContext graphInitDcl() {
 			return GetRuleContext<GraphInitDclContext>(0);
 		}
@@ -371,11 +509,14 @@ public partial class GiraphParser : Parser {
 		{
 		}
 		public override int RuleIndex { get { return RULE_objectDcl; } }
+<<<<<<< Updated upstream
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IGiraphParserVisitor<TResult> typedVisitor = visitor as IGiraphParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitObjectDcl(this);
 			else return visitor.VisitChildren(this);
 		}
+=======
+>>>>>>> Stashed changes
 	}
 
 	[RuleVersion(0)]
@@ -384,33 +525,69 @@ public partial class GiraphParser : Parser {
 		EnterRule(_localctx, 6, RULE_objectDcl);
 		int _la;
 		try {
+<<<<<<< Updated upstream
 			State = 184;
+=======
+			State = 203;
+>>>>>>> Stashed changes
 			ErrorHandler.Sync(this);
 			switch ( Interpreter.AdaptivePredict(TokenStream,4,Context) ) {
 			case 1:
 				EnterOuterAlt(_localctx, 1);
 				{
+<<<<<<< Updated upstream
 				State = 175; objects();
 				State = 176; variable();
 				State = 179;
+=======
+				State = 191; objects();
+				State = 192; variable();
+				State = 198;
+>>>>>>> Stashed changes
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
 				if (_la==EQUALS) {
 					{
+<<<<<<< Updated upstream
 					State = 177; Match(EQUALS);
 					State = 178; expression();
+=======
+					State = 193; Match(EQUALS);
+					State = 196;
+					ErrorHandler.Sync(this);
+					switch ( Interpreter.AdaptivePredict(TokenStream,2,Context) ) {
+					case 1:
+						{
+						State = 194; expression();
+						}
+						break;
+					case 2:
+						{
+						State = 195; variableFunc();
+						}
+						break;
+					}
+>>>>>>> Stashed changes
 					}
 				}
 
 				{
+<<<<<<< Updated upstream
 				State = 181; Match(SC);
+=======
+				State = 200; Match(SC);
+>>>>>>> Stashed changes
 				}
 				}
 				break;
 			case 2:
 				EnterOuterAlt(_localctx, 2);
 				{
+<<<<<<< Updated upstream
 				State = 183; graphInitDcl();
+=======
+				State = 202; graphInitDcl();
+>>>>>>> Stashed changes
 				}
 				break;
 			}
@@ -441,11 +618,14 @@ public partial class GiraphParser : Parser {
 		{
 		}
 		public override int RuleIndex { get { return RULE_variableDcl; } }
+<<<<<<< Updated upstream
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IGiraphParserVisitor<TResult> typedVisitor = visitor as IGiraphParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitVariableDcl(this);
 			else return visitor.VisitChildren(this);
 		}
+=======
+>>>>>>> Stashed changes
 	}
 
 	[RuleVersion(0)]
@@ -456,20 +636,35 @@ public partial class GiraphParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
+<<<<<<< Updated upstream
 			State = 186; Match(TYPE);
 			State = 187; variable();
 			State = 190;
+=======
+			State = 205; Match(TYPE);
+			State = 206; variable();
+			State = 209;
+>>>>>>> Stashed changes
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
 			if (_la==EQUALS) {
 				{
+<<<<<<< Updated upstream
 				State = 188; Match(EQUALS);
 				State = 189; expression();
+=======
+				State = 207; Match(EQUALS);
+				State = 208; expression();
+>>>>>>> Stashed changes
 				}
 			}
 
 			{
+<<<<<<< Updated upstream
 			State = 192; Match(SC);
+=======
+			State = 211; Match(SC);
+>>>>>>> Stashed changes
 			}
 			}
 		}
@@ -497,11 +692,14 @@ public partial class GiraphParser : Parser {
 		{
 		}
 		public override int RuleIndex { get { return RULE_graphInitDcl; } }
+<<<<<<< Updated upstream
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IGiraphParserVisitor<TResult> typedVisitor = visitor as IGiraphParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitGraphInitDcl(this);
 			else return visitor.VisitChildren(this);
 		}
+=======
+>>>>>>> Stashed changes
 	}
 
 	[RuleVersion(0)]
@@ -511,9 +709,15 @@ public partial class GiraphParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
+<<<<<<< Updated upstream
 			State = 194; Match(GRAPHOBJ);
 			State = 195; variable();
 			State = 196; graphDclBlock();
+=======
+			State = 213; Match(GRAPHOBJ);
+			State = 214; variable();
+			State = 215; graphDclBlock();
+>>>>>>> Stashed changes
 			}
 		}
 		catch (RecognitionException re) {
@@ -530,11 +734,19 @@ public partial class GiraphParser : Parser {
 	public partial class GraphDclBlockContext : ParserRuleContext {
 		public ITerminalNode LCB() { return GetToken(GiraphParser.LCB, 0); }
 		public ITerminalNode RCB() { return GetToken(GiraphParser.RCB, 0); }
+<<<<<<< Updated upstream
 		public SetQueryContext[] setQuery() {
 			return GetRuleContexts<SetQueryContext>();
 		}
 		public SetQueryContext setQuery(int i) {
 			return GetRuleContext<SetQueryContext>(i);
+=======
+		public GraphSetQueryContext[] graphSetQuery() {
+			return GetRuleContexts<GraphSetQueryContext>();
+		}
+		public GraphSetQueryContext graphSetQuery(int i) {
+			return GetRuleContext<GraphSetQueryContext>(i);
+>>>>>>> Stashed changes
 		}
 		public VertexDclsContext[] vertexDcls() {
 			return GetRuleContexts<VertexDclsContext>();
@@ -557,11 +769,14 @@ public partial class GiraphParser : Parser {
 		{
 		}
 		public override int RuleIndex { get { return RULE_graphDclBlock; } }
+<<<<<<< Updated upstream
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IGiraphParserVisitor<TResult> typedVisitor = visitor as IGiraphParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitGraphDclBlock(this);
 			else return visitor.VisitChildren(this);
 		}
+=======
+>>>>>>> Stashed changes
 	}
 
 	[RuleVersion(0)]
@@ -572,26 +787,45 @@ public partial class GiraphParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
+<<<<<<< Updated upstream
 			State = 198; Match(LCB);
 			State = 208;
+=======
+			State = 217; Match(LCB);
+			State = 227;
+>>>>>>> Stashed changes
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
 			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << VERTEXOBJ) | (1L << EDGEOBJ) | (1L << SET))) != 0)) {
 				{
+<<<<<<< Updated upstream
 				State = 206;
+=======
+				State = 225;
+>>>>>>> Stashed changes
 				ErrorHandler.Sync(this);
 				switch (TokenStream.LA(1)) {
 				case SET:
 					{
+<<<<<<< Updated upstream
 					State = 199; setQuery();
+=======
+					State = 218; graphSetQuery();
+>>>>>>> Stashed changes
 					}
 					break;
 				case VERTEXOBJ:
 					{
 					{
+<<<<<<< Updated upstream
 					State = 200; vertexDcls();
 					{
 					State = 201; Match(SC);
+=======
+					State = 219; vertexDcls();
+					{
+					State = 220; Match(SC);
+>>>>>>> Stashed changes
 					}
 					}
 					}
@@ -599,9 +833,15 @@ public partial class GiraphParser : Parser {
 				case EDGEOBJ:
 					{
 					{
+<<<<<<< Updated upstream
 					State = 203; edgeDcls();
 					{
 					State = 204; Match(SC);
+=======
+					State = 222; edgeDcls();
+					{
+					State = 223; Match(SC);
+>>>>>>> Stashed changes
 					}
 					}
 					}
@@ -610,11 +850,19 @@ public partial class GiraphParser : Parser {
 					throw new NoViableAltException(this);
 				}
 				}
+<<<<<<< Updated upstream
 				State = 210;
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
 			}
 			State = 211; Match(RCB);
+=======
+				State = 229;
+				ErrorHandler.Sync(this);
+				_la = TokenStream.LA(1);
+			}
+			State = 230; Match(RCB);
+>>>>>>> Stashed changes
 			}
 		}
 		catch (RecognitionException re) {
@@ -645,11 +893,14 @@ public partial class GiraphParser : Parser {
 		{
 		}
 		public override int RuleIndex { get { return RULE_vertexDcls; } }
+<<<<<<< Updated upstream
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IGiraphParserVisitor<TResult> typedVisitor = visitor as IGiraphParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitVertexDcls(this);
 			else return visitor.VisitChildren(this);
 		}
+=======
+>>>>>>> Stashed changes
 	}
 
 	[RuleVersion(0)]
@@ -660,19 +911,33 @@ public partial class GiraphParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
+<<<<<<< Updated upstream
 			State = 213; Match(VERTEXOBJ);
 			State = 214; vertexDcl();
 			State = 219;
+=======
+			State = 232; Match(VERTEXOBJ);
+			State = 233; vertexDcl();
+			State = 238;
+>>>>>>> Stashed changes
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
 			while (_la==COMMA) {
 				{
 				{
+<<<<<<< Updated upstream
 				State = 215; Match(COMMA);
 				State = 216; vertexDcl();
 				}
 				}
 				State = 221;
+=======
+				State = 234; Match(COMMA);
+				State = 235; vertexDcl();
+				}
+				}
+				State = 240;
+>>>>>>> Stashed changes
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
 			}
@@ -710,11 +975,14 @@ public partial class GiraphParser : Parser {
 		{
 		}
 		public override int RuleIndex { get { return RULE_vertexDcl; } }
+<<<<<<< Updated upstream
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IGiraphParserVisitor<TResult> typedVisitor = visitor as IGiraphParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitVertexDcl(this);
 			else return visitor.VisitChildren(this);
 		}
+=======
+>>>>>>> Stashed changes
 	}
 
 	[RuleVersion(0)]
@@ -725,16 +993,25 @@ public partial class GiraphParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
+<<<<<<< Updated upstream
 			State = 223;
+=======
+			State = 242;
+>>>>>>> Stashed changes
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
 			if (_la==VARIABLENAME) {
 				{
+<<<<<<< Updated upstream
 				State = 222; variable();
+=======
+				State = 241; variable();
+>>>>>>> Stashed changes
 				}
 			}
 
 			{
+<<<<<<< Updated upstream
 			State = 225; Match(LP);
 			State = 234;
 			ErrorHandler.Sync(this);
@@ -743,23 +1020,45 @@ public partial class GiraphParser : Parser {
 				{
 				State = 226; assignment();
 				State = 231;
+=======
+			State = 244; Match(LP);
+			State = 253;
+			ErrorHandler.Sync(this);
+			_la = TokenStream.LA(1);
+			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << TYPE) | (1L << GRAPHOBJ) | (1L << VERTEXOBJ) | (1L << EDGEOBJ))) != 0) || _la==VARIABLENAME) {
+				{
+				State = 245; assignment();
+				State = 250;
+>>>>>>> Stashed changes
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
 				while (_la==COMMA) {
 					{
 					{
+<<<<<<< Updated upstream
 					State = 227; Match(COMMA);
 					State = 228; assignment();
 					}
 					}
 					State = 233;
+=======
+					State = 246; Match(COMMA);
+					State = 247; assignment();
+					}
+					}
+					State = 252;
+>>>>>>> Stashed changes
 					ErrorHandler.Sync(this);
 					_la = TokenStream.LA(1);
 				}
 				}
 			}
 
+<<<<<<< Updated upstream
 			State = 236; Match(RP);
+=======
+			State = 255; Match(RP);
+>>>>>>> Stashed changes
 			}
 			}
 		}
@@ -791,11 +1090,14 @@ public partial class GiraphParser : Parser {
 		{
 		}
 		public override int RuleIndex { get { return RULE_edgeDcls; } }
+<<<<<<< Updated upstream
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IGiraphParserVisitor<TResult> typedVisitor = visitor as IGiraphParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitEdgeDcls(this);
 			else return visitor.VisitChildren(this);
 		}
+=======
+>>>>>>> Stashed changes
 	}
 
 	[RuleVersion(0)]
@@ -806,19 +1108,33 @@ public partial class GiraphParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
+<<<<<<< Updated upstream
 			State = 238; Match(EDGEOBJ);
 			State = 239; edgeDcl();
 			State = 244;
+=======
+			State = 257; Match(EDGEOBJ);
+			State = 258; edgeDcl();
+			State = 263;
+>>>>>>> Stashed changes
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
 			while (_la==COMMA) {
 				{
 				{
+<<<<<<< Updated upstream
 				State = 240; Match(COMMA);
 				State = 241; edgeDcl();
 				}
 				}
 				State = 246;
+=======
+				State = 259; Match(COMMA);
+				State = 260; edgeDcl();
+				}
+				}
+				State = 265;
+>>>>>>> Stashed changes
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
 			}
@@ -859,11 +1175,14 @@ public partial class GiraphParser : Parser {
 		{
 		}
 		public override int RuleIndex { get { return RULE_edgeDcl; } }
+<<<<<<< Updated upstream
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IGiraphParserVisitor<TResult> typedVisitor = visitor as IGiraphParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitEdgeDcl(this);
 			else return visitor.VisitChildren(this);
 		}
+=======
+>>>>>>> Stashed changes
 	}
 
 	[RuleVersion(0)]
@@ -874,16 +1193,25 @@ public partial class GiraphParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
+<<<<<<< Updated upstream
 			State = 248;
+=======
+			State = 267;
+>>>>>>> Stashed changes
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
 			if (_la==VARIABLENAME) {
 				{
+<<<<<<< Updated upstream
 				State = 247; variable();
+=======
+				State = 266; variable();
+>>>>>>> Stashed changes
 				}
 			}
 
 			{
+<<<<<<< Updated upstream
 			State = 250; Match(LP);
 			State = 251; variable();
 			{
@@ -891,11 +1219,21 @@ public partial class GiraphParser : Parser {
 			}
 			State = 253; variable();
 			State = 258;
+=======
+			State = 269; Match(LP);
+			State = 270; variable();
+			{
+			State = 271; Match(COMMA);
+			}
+			State = 272; variable();
+			State = 277;
+>>>>>>> Stashed changes
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
 			while (_la==COMMA) {
 				{
 				{
+<<<<<<< Updated upstream
 				State = 254; Match(COMMA);
 				State = 255; assignment();
 				}
@@ -905,6 +1243,17 @@ public partial class GiraphParser : Parser {
 				_la = TokenStream.LA(1);
 			}
 			State = 261; Match(RP);
+=======
+				State = 273; Match(COMMA);
+				State = 274; assignment();
+				}
+				}
+				State = 279;
+				ErrorHandler.Sync(this);
+				_la = TokenStream.LA(1);
+			}
+			State = 280; Match(RP);
+>>>>>>> Stashed changes
 			}
 			}
 		}
@@ -930,15 +1279,25 @@ public partial class GiraphParser : Parser {
 		public RunFunctionContext runFunction() {
 			return GetRuleContext<RunFunctionContext>(0);
 		}
+<<<<<<< Updated upstream
 		public VarOrConstContext varOrConst() {
 			return GetRuleContext<VarOrConstContext>(0);
+=======
+		public VariableFuncContext variableFunc() {
+			return GetRuleContext<VariableFuncContext>(0);
+>>>>>>> Stashed changes
 		}
 		public ITerminalNode SC() { return GetToken(GiraphParser.SC, 0); }
 		public OperatorContext @operator() {
 			return GetRuleContext<OperatorContext>(0);
 		}
+<<<<<<< Updated upstream
 		public EqualCompContext equalComp() {
 			return GetRuleContext<EqualCompContext>(0);
+=======
+		public CompoundAssignContext compoundAssign() {
+			return GetRuleContext<CompoundAssignContext>(0);
+>>>>>>> Stashed changes
 		}
 		public AllTypeContext allType() {
 			return GetRuleContext<AllTypeContext>(0);
@@ -948,11 +1307,14 @@ public partial class GiraphParser : Parser {
 		{
 		}
 		public override int RuleIndex { get { return RULE_assignment; } }
+<<<<<<< Updated upstream
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IGiraphParserVisitor<TResult> typedVisitor = visitor as IGiraphParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitAssignment(this);
 			else return visitor.VisitChildren(this);
 		}
+=======
+>>>>>>> Stashed changes
 	}
 
 	[RuleVersion(0)]
@@ -961,49 +1323,82 @@ public partial class GiraphParser : Parser {
 		EnterRule(_localctx, 22, RULE_assignment);
 		int _la;
 		try {
+<<<<<<< Updated upstream
 			State = 282;
+=======
+			State = 301;
+>>>>>>> Stashed changes
 			ErrorHandler.Sync(this);
 			switch ( Interpreter.AdaptivePredict(TokenStream,17,Context) ) {
 			case 1:
 				EnterOuterAlt(_localctx, 1);
 				{
+<<<<<<< Updated upstream
 				State = 263; variable();
 				State = 264; Match(EQUALS);
 				State = 265; expression();
+=======
+				State = 282; variable();
+				State = 283; Match(EQUALS);
+				State = 284; expression();
+>>>>>>> Stashed changes
 				}
 				break;
 			case 2:
 				EnterOuterAlt(_localctx, 2);
 				{
 				{
+<<<<<<< Updated upstream
 				State = 267; varOrConst();
 				}
 				State = 269;
+=======
+				State = 286; variableFunc();
+				}
+				State = 288;
+>>>>>>> Stashed changes
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
 				if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << PLUS) | (1L << MINUS) | (1L << DIVIDE) | (1L << MULT) | (1L << MODULO))) != 0)) {
 					{
+<<<<<<< Updated upstream
 					State = 268; @operator();
+=======
+					State = 287; @operator();
+>>>>>>> Stashed changes
 					}
 				}
 
 				{
+<<<<<<< Updated upstream
 				State = 271; Match(EQUALS);
 				}
 				State = 272; runFunction();
 				{
 				State = 273; Match(SC);
+=======
+				State = 290; Match(EQUALS);
+				}
+				State = 291; runFunction();
+				{
+				State = 292; Match(SC);
+>>>>>>> Stashed changes
 				}
 				}
 				break;
 			case 3:
 				EnterOuterAlt(_localctx, 3);
 				{
+<<<<<<< Updated upstream
 				State = 276;
+=======
+				State = 295;
+>>>>>>> Stashed changes
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
 				if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << TYPE) | (1L << GRAPHOBJ) | (1L << VERTEXOBJ) | (1L << EDGEOBJ))) != 0)) {
 					{
+<<<<<<< Updated upstream
 					State = 275; allType();
 					}
 				}
@@ -1011,6 +1406,15 @@ public partial class GiraphParser : Parser {
 				State = 278; variable();
 				State = 279; equalComp();
 				State = 280; expression();
+=======
+					State = 294; allType();
+					}
+				}
+
+				State = 297; variable();
+				State = 298; compoundAssign();
+				State = 299; expression();
+>>>>>>> Stashed changes
 				}
 				break;
 			}
@@ -1045,9 +1449,12 @@ public partial class GiraphParser : Parser {
 		public CollReturnOpsContext collReturnOps() {
 			return GetRuleContext<CollReturnOpsContext>(0);
 		}
+<<<<<<< Updated upstream
 		public PredicateCallContext predicateCall() {
 			return GetRuleContext<PredicateCallContext>(0);
 		}
+=======
+>>>>>>> Stashed changes
 		public AttributeContext attribute() {
 			return GetRuleContext<AttributeContext>(0);
 		}
@@ -1056,11 +1463,14 @@ public partial class GiraphParser : Parser {
 		{
 		}
 		public override int RuleIndex { get { return RULE_expression; } }
+<<<<<<< Updated upstream
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IGiraphParserVisitor<TResult> typedVisitor = visitor as IGiraphParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitExpression(this);
 			else return visitor.VisitChildren(this);
 		}
+=======
+>>>>>>> Stashed changes
 	}
 
 	[RuleVersion(0)]
@@ -1069,18 +1479,30 @@ public partial class GiraphParser : Parser {
 		EnterRule(_localctx, 24, RULE_expression);
 		try {
 			int _alt;
+<<<<<<< Updated upstream
 			State = 298;
+=======
+			State = 316;
+>>>>>>> Stashed changes
 			ErrorHandler.Sync(this);
 			switch ( Interpreter.AdaptivePredict(TokenStream,20,Context) ) {
 			case 1:
 				EnterOuterAlt(_localctx, 1);
 				{
+<<<<<<< Updated upstream
 				State = 286;
+=======
+				State = 305;
+>>>>>>> Stashed changes
 				ErrorHandler.Sync(this);
 				switch (TokenStream.LA(1)) {
 				case VARIABLENAME:
 					{
+<<<<<<< Updated upstream
 					State = 284; variableFunc();
+=======
+					State = 303; variableFunc();
+>>>>>>> Stashed changes
 					}
 					break;
 				case INF:
@@ -1089,24 +1511,40 @@ public partial class GiraphParser : Parser {
 				case FLOATNUM:
 				case STRING:
 					{
+<<<<<<< Updated upstream
 					State = 285; constant();
+=======
+					State = 304; constant();
+>>>>>>> Stashed changes
 					}
 					break;
 				default:
 					throw new NoViableAltException(this);
 				}
+<<<<<<< Updated upstream
 				State = 291;
+=======
+				State = 310;
+>>>>>>> Stashed changes
 				ErrorHandler.Sync(this);
 				_alt = Interpreter.AdaptivePredict(TokenStream,19,Context);
 				while ( _alt!=2 && _alt!=global::Antlr4.Runtime.Atn.ATN.INVALID_ALT_NUMBER ) {
 					if ( _alt==1 ) {
 						{
 						{
+<<<<<<< Updated upstream
 						State = 288; expressionExtension();
 						}
 						} 
 					}
 					State = 293;
+=======
+						State = 307; expressionExtension();
+						}
+						} 
+					}
+					State = 312;
+>>>>>>> Stashed changes
 					ErrorHandler.Sync(this);
 					_alt = Interpreter.AdaptivePredict(TokenStream,19,Context);
 				}
@@ -1115,18 +1553,27 @@ public partial class GiraphParser : Parser {
 			case 2:
 				EnterOuterAlt(_localctx, 2);
 				{
+<<<<<<< Updated upstream
 				State = 294; returnQuery();
+=======
+				State = 313; returnQuery();
+>>>>>>> Stashed changes
 				}
 				break;
 			case 3:
 				EnterOuterAlt(_localctx, 3);
 				{
+<<<<<<< Updated upstream
 				State = 295; collReturnOps();
+=======
+				State = 314; collReturnOps();
+>>>>>>> Stashed changes
 				}
 				break;
 			case 4:
 				EnterOuterAlt(_localctx, 4);
 				{
+<<<<<<< Updated upstream
 				State = 296; predicateCall();
 				}
 				break;
@@ -1134,6 +1581,9 @@ public partial class GiraphParser : Parser {
 				EnterOuterAlt(_localctx, 5);
 				{
 				State = 297; attribute();
+=======
+				State = 315; attribute();
+>>>>>>> Stashed changes
 				}
 				break;
 			}
@@ -1161,11 +1611,14 @@ public partial class GiraphParser : Parser {
 		{
 		}
 		public override int RuleIndex { get { return RULE_expressionExtension; } }
+<<<<<<< Updated upstream
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IGiraphParserVisitor<TResult> typedVisitor = visitor as IGiraphParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitExpressionExtension(this);
 			else return visitor.VisitChildren(this);
 		}
+=======
+>>>>>>> Stashed changes
 	}
 
 	[RuleVersion(0)]
@@ -1175,8 +1628,13 @@ public partial class GiraphParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
+<<<<<<< Updated upstream
 			State = 300; @operator();
 			State = 301; varOrConst();
+=======
+			State = 318; @operator();
+			State = 319; varOrConst();
+>>>>>>> Stashed changes
 			}
 		}
 		catch (RecognitionException re) {
@@ -1202,11 +1660,14 @@ public partial class GiraphParser : Parser {
 		{
 		}
 		public override int RuleIndex { get { return RULE_query; } }
+<<<<<<< Updated upstream
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IGiraphParserVisitor<TResult> typedVisitor = visitor as IGiraphParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitQuery(this);
 			else return visitor.VisitChildren(this);
 		}
+=======
+>>>>>>> Stashed changes
 	}
 
 	[RuleVersion(0)]
@@ -1214,21 +1675,98 @@ public partial class GiraphParser : Parser {
 		QueryContext _localctx = new QueryContext(Context, State);
 		EnterRule(_localctx, 28, RULE_query);
 		try {
+<<<<<<< Updated upstream
 			State = 305;
+=======
+			State = 323;
 			ErrorHandler.Sync(this);
 			switch (TokenStream.LA(1)) {
 			case SET:
 			case ADD:
 				EnterOuterAlt(_localctx, 1);
 				{
-				State = 303; noReturnQuery();
+				State = 321; noReturnQuery();
 				}
 				break;
 			case SELECT:
 			case SELECTALL:
+			case POP:
+			case DEQUEUE:
+			case EXTRACTMIN:
+			case EXTRACTMAX:
+				EnterOuterAlt(_localctx, 2);
+				{
+				State = 322; returnQuery();
+				}
+				break;
+			default:
+				throw new NoViableAltException(this);
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			ErrorHandler.ReportError(this, re);
+			ErrorHandler.Recover(this, re);
+		}
+		finally {
+			ExitRule();
+		}
+		return _localctx;
+	}
+
+	public partial class QuerySCContext : ParserRuleContext {
+		public NoReturnQueryContext noReturnQuery() {
+			return GetRuleContext<NoReturnQueryContext>(0);
+		}
+		public ReturnQueryContext returnQuery() {
+			return GetRuleContext<ReturnQueryContext>(0);
+		}
+		public ITerminalNode SC() { return GetToken(GiraphParser.SC, 0); }
+		public QuerySCContext(ParserRuleContext parent, int invokingState)
+			: base(parent, invokingState)
+		{
+		}
+		public override int RuleIndex { get { return RULE_querySC; } }
+	}
+
+	[RuleVersion(0)]
+	public QuerySCContext querySC() {
+		QuerySCContext _localctx = new QuerySCContext(Context, State);
+		EnterRule(_localctx, 30, RULE_querySC);
+		try {
+			State = 329;
+>>>>>>> Stashed changes
+			ErrorHandler.Sync(this);
+			switch (TokenStream.LA(1)) {
+			case SET:
+			case ADD:
+				EnterOuterAlt(_localctx, 1);
+				{
+<<<<<<< Updated upstream
+				State = 303; noReturnQuery();
+=======
+				State = 325; noReturnQuery();
+>>>>>>> Stashed changes
+				}
+				break;
+			case SELECT:
+			case SELECTALL:
+<<<<<<< Updated upstream
 				EnterOuterAlt(_localctx, 2);
 				{
 				State = 304; returnQuery();
+=======
+			case POP:
+			case DEQUEUE:
+			case EXTRACTMIN:
+			case EXTRACTMAX:
+				EnterOuterAlt(_localctx, 2);
+				{
+				State = 326; returnQuery();
+				{
+				State = 327; Match(SC);
+				}
+>>>>>>> Stashed changes
 				}
 				break;
 			default:
@@ -1258,31 +1796,48 @@ public partial class GiraphParser : Parser {
 		{
 		}
 		public override int RuleIndex { get { return RULE_noReturnQuery; } }
+<<<<<<< Updated upstream
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IGiraphParserVisitor<TResult> typedVisitor = visitor as IGiraphParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitNoReturnQuery(this);
 			else return visitor.VisitChildren(this);
 		}
+=======
+>>>>>>> Stashed changes
 	}
 
 	[RuleVersion(0)]
 	public NoReturnQueryContext noReturnQuery() {
 		NoReturnQueryContext _localctx = new NoReturnQueryContext(Context, State);
+<<<<<<< Updated upstream
 		EnterRule(_localctx, 30, RULE_noReturnQuery);
 		try {
 			State = 309;
+=======
+		EnterRule(_localctx, 32, RULE_noReturnQuery);
+		try {
+			State = 333;
+>>>>>>> Stashed changes
 			ErrorHandler.Sync(this);
 			switch (TokenStream.LA(1)) {
 			case SET:
 				EnterOuterAlt(_localctx, 1);
 				{
+<<<<<<< Updated upstream
 				State = 307; setQuery();
+=======
+				State = 331; setQuery();
+>>>>>>> Stashed changes
 				}
 				break;
 			case ADD:
 				EnterOuterAlt(_localctx, 2);
 				{
+<<<<<<< Updated upstream
 				State = 308; addQuery();
+=======
+				State = 332; addQuery();
+>>>>>>> Stashed changes
 				}
 				break;
 			default:
@@ -1304,35 +1859,54 @@ public partial class GiraphParser : Parser {
 		public SelectContext select() {
 			return GetRuleContext<SelectContext>(0);
 		}
+<<<<<<< Updated upstream
 		public WhereContext where() {
 			return GetRuleContext<WhereContext>(0);
 		}
 		public SelectAllContext selectAll() {
 			return GetRuleContext<SelectAllContext>(0);
 		}
+=======
+		public SelectAllContext selectAll() {
+			return GetRuleContext<SelectAllContext>(0);
+		}
+		public CollReturnOpsContext collReturnOps() {
+			return GetRuleContext<CollReturnOpsContext>(0);
+		}
+>>>>>>> Stashed changes
 		public ReturnQueryContext(ParserRuleContext parent, int invokingState)
 			: base(parent, invokingState)
 		{
 		}
 		public override int RuleIndex { get { return RULE_returnQuery; } }
+<<<<<<< Updated upstream
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IGiraphParserVisitor<TResult> typedVisitor = visitor as IGiraphParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitReturnQuery(this);
 			else return visitor.VisitChildren(this);
 		}
+=======
+>>>>>>> Stashed changes
 	}
 
 	[RuleVersion(0)]
 	public ReturnQueryContext returnQuery() {
 		ReturnQueryContext _localctx = new ReturnQueryContext(Context, State);
+<<<<<<< Updated upstream
 		EnterRule(_localctx, 32, RULE_returnQuery);
 		try {
 			State = 319;
+=======
+		EnterRule(_localctx, 34, RULE_returnQuery);
+		try {
+			State = 338;
+>>>>>>> Stashed changes
 			ErrorHandler.Sync(this);
 			switch (TokenStream.LA(1)) {
 			case SELECT:
 				EnterOuterAlt(_localctx, 1);
 				{
+<<<<<<< Updated upstream
 				State = 311; select();
 				State = 313;
 				ErrorHandler.Sync(this);
@@ -1343,11 +1917,15 @@ public partial class GiraphParser : Parser {
 					}
 					break;
 				}
+=======
+				State = 335; select();
+>>>>>>> Stashed changes
 				}
 				break;
 			case SELECTALL:
 				EnterOuterAlt(_localctx, 2);
 				{
+<<<<<<< Updated upstream
 				State = 315; selectAll();
 				State = 317;
 				ErrorHandler.Sync(this);
@@ -1358,6 +1936,18 @@ public partial class GiraphParser : Parser {
 					}
 					break;
 				}
+=======
+				State = 336; selectAll();
+				}
+				break;
+			case POP:
+			case DEQUEUE:
+			case EXTRACTMIN:
+			case EXTRACTMAX:
+				EnterOuterAlt(_localctx, 3);
+				{
+				State = 337; collReturnOps();
+>>>>>>> Stashed changes
 				}
 				break;
 			default:
@@ -1387,26 +1977,39 @@ public partial class GiraphParser : Parser {
 		{
 		}
 		public override int RuleIndex { get { return RULE_operator; } }
+<<<<<<< Updated upstream
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IGiraphParserVisitor<TResult> typedVisitor = visitor as IGiraphParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitOperator(this);
 			else return visitor.VisitChildren(this);
 		}
+=======
+>>>>>>> Stashed changes
 	}
 
 	[RuleVersion(0)]
 	public OperatorContext @operator() {
 		OperatorContext _localctx = new OperatorContext(Context, State);
+<<<<<<< Updated upstream
 		EnterRule(_localctx, 34, RULE_operator);
 		try {
 			State = 323;
+=======
+		EnterRule(_localctx, 36, RULE_operator);
+		try {
+			State = 342;
+>>>>>>> Stashed changes
 			ErrorHandler.Sync(this);
 			switch (TokenStream.LA(1)) {
 			case PLUS:
 			case MINUS:
 				EnterOuterAlt(_localctx, 1);
 				{
+<<<<<<< Updated upstream
 				State = 321; simpleOperators();
+=======
+				State = 340; simpleOperators();
+>>>>>>> Stashed changes
 				}
 				break;
 			case DIVIDE:
@@ -1414,7 +2017,11 @@ public partial class GiraphParser : Parser {
 			case MODULO:
 				EnterOuterAlt(_localctx, 2);
 				{
+<<<<<<< Updated upstream
 				State = 322; advancedOperators();
+=======
+				State = 341; advancedOperators();
+>>>>>>> Stashed changes
 				}
 				break;
 			default:
@@ -1440,22 +2047,33 @@ public partial class GiraphParser : Parser {
 		{
 		}
 		public override int RuleIndex { get { return RULE_simpleOperators; } }
+<<<<<<< Updated upstream
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IGiraphParserVisitor<TResult> typedVisitor = visitor as IGiraphParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitSimpleOperators(this);
 			else return visitor.VisitChildren(this);
 		}
+=======
+>>>>>>> Stashed changes
 	}
 
 	[RuleVersion(0)]
 	public SimpleOperatorsContext simpleOperators() {
 		SimpleOperatorsContext _localctx = new SimpleOperatorsContext(Context, State);
+<<<<<<< Updated upstream
 		EnterRule(_localctx, 36, RULE_simpleOperators);
+=======
+		EnterRule(_localctx, 38, RULE_simpleOperators);
+>>>>>>> Stashed changes
 		int _la;
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
+<<<<<<< Updated upstream
 			State = 325;
+=======
+			State = 344;
+>>>>>>> Stashed changes
 			_la = TokenStream.LA(1);
 			if ( !(_la==PLUS || _la==MINUS) ) {
 			ErrorHandler.RecoverInline(this);
@@ -1486,22 +2104,33 @@ public partial class GiraphParser : Parser {
 		{
 		}
 		public override int RuleIndex { get { return RULE_advancedOperators; } }
+<<<<<<< Updated upstream
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IGiraphParserVisitor<TResult> typedVisitor = visitor as IGiraphParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitAdvancedOperators(this);
 			else return visitor.VisitChildren(this);
 		}
+=======
+>>>>>>> Stashed changes
 	}
 
 	[RuleVersion(0)]
 	public AdvancedOperatorsContext advancedOperators() {
 		AdvancedOperatorsContext _localctx = new AdvancedOperatorsContext(Context, State);
+<<<<<<< Updated upstream
 		EnterRule(_localctx, 38, RULE_advancedOperators);
+=======
+		EnterRule(_localctx, 40, RULE_advancedOperators);
+>>>>>>> Stashed changes
 		int _la;
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
+<<<<<<< Updated upstream
 			State = 327;
+=======
+			State = 346;
+>>>>>>> Stashed changes
 			_la = TokenStream.LA(1);
 			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << DIVIDE) | (1L << MULT) | (1L << MODULO))) != 0)) ) {
 			ErrorHandler.RecoverInline(this);
@@ -1539,33 +2168,53 @@ public partial class GiraphParser : Parser {
 		{
 		}
 		public override int RuleIndex { get { return RULE_formalParams; } }
+<<<<<<< Updated upstream
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IGiraphParserVisitor<TResult> typedVisitor = visitor as IGiraphParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitFormalParams(this);
 			else return visitor.VisitChildren(this);
 		}
+=======
+>>>>>>> Stashed changes
 	}
 
 	[RuleVersion(0)]
 	public FormalParamsContext formalParams() {
 		FormalParamsContext _localctx = new FormalParamsContext(Context, State);
+<<<<<<< Updated upstream
 		EnterRule(_localctx, 40, RULE_formalParams);
+=======
+		EnterRule(_localctx, 42, RULE_formalParams);
+>>>>>>> Stashed changes
 		int _la;
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
+<<<<<<< Updated upstream
 			State = 329; formalParam();
 			State = 334;
+=======
+			State = 348; formalParam();
+			State = 353;
+>>>>>>> Stashed changes
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
 			while (_la==COMMA) {
 				{
 				{
+<<<<<<< Updated upstream
 				State = 330; Match(COMMA);
 				State = 331; formalParam();
 				}
 				}
 				State = 336;
+=======
+				State = 349; Match(COMMA);
+				State = 350; formalParam();
+				}
+				}
+				State = 355;
+>>>>>>> Stashed changes
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
 			}
@@ -1594,22 +2243,34 @@ public partial class GiraphParser : Parser {
 		{
 		}
 		public override int RuleIndex { get { return RULE_formalParam; } }
+<<<<<<< Updated upstream
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IGiraphParserVisitor<TResult> typedVisitor = visitor as IGiraphParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitFormalParam(this);
 			else return visitor.VisitChildren(this);
 		}
+=======
+>>>>>>> Stashed changes
 	}
 
 	[RuleVersion(0)]
 	public FormalParamContext formalParam() {
 		FormalParamContext _localctx = new FormalParamContext(Context, State);
+<<<<<<< Updated upstream
 		EnterRule(_localctx, 42, RULE_formalParam);
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
 			State = 337; allType();
 			State = 338; variable();
+=======
+		EnterRule(_localctx, 44, RULE_formalParam);
+		try {
+			EnterOuterAlt(_localctx, 1);
+			{
+			State = 356; allType();
+			State = 357; variable();
+>>>>>>> Stashed changes
 			}
 		}
 		catch (RecognitionException re) {
@@ -1644,36 +2305,60 @@ public partial class GiraphParser : Parser {
 		{
 		}
 		public override int RuleIndex { get { return RULE_functionDcl; } }
+<<<<<<< Updated upstream
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IGiraphParserVisitor<TResult> typedVisitor = visitor as IGiraphParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitFunctionDcl(this);
 			else return visitor.VisitChildren(this);
 		}
+=======
+>>>>>>> Stashed changes
 	}
 
 	[RuleVersion(0)]
 	public FunctionDclContext functionDcl() {
 		FunctionDclContext _localctx = new FunctionDclContext(Context, State);
+<<<<<<< Updated upstream
 		EnterRule(_localctx, 44, RULE_functionDcl);
+=======
+		EnterRule(_localctx, 46, RULE_functionDcl);
+>>>>>>> Stashed changes
 		int _la;
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
+<<<<<<< Updated upstream
 			State = 340; variable();
 			State = 341; Match(RIGHTARROW);
 			State = 342; allTypeWithColl();
 			State = 343; Match(LP);
 			State = 345;
+=======
+			State = 359; variable();
+			State = 360; Match(RIGHTARROW);
+			State = 361; allTypeWithColl();
+			State = 362; Match(LP);
+			State = 364;
+>>>>>>> Stashed changes
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
 			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << TYPE) | (1L << GRAPHOBJ) | (1L << VERTEXOBJ) | (1L << EDGEOBJ))) != 0)) {
 				{
+<<<<<<< Updated upstream
 				State = 344; formalParams();
 				}
 			}
 
 			State = 347; Match(RP);
 			State = 348; codeBlock();
+=======
+				State = 363; formalParams();
+				}
+			}
+
+			State = 366; Match(RP);
+			State = 367; codeBlock();
+>>>>>>> Stashed changes
 			}
 		}
 		catch (RecognitionException re) {
@@ -1701,21 +2386,29 @@ public partial class GiraphParser : Parser {
 		{
 		}
 		public override int RuleIndex { get { return RULE_codeBlock; } }
+<<<<<<< Updated upstream
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IGiraphParserVisitor<TResult> typedVisitor = visitor as IGiraphParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitCodeBlock(this);
 			else return visitor.VisitChildren(this);
 		}
+=======
+>>>>>>> Stashed changes
 	}
 
 	[RuleVersion(0)]
 	public CodeBlockContext codeBlock() {
 		CodeBlockContext _localctx = new CodeBlockContext(Context, State);
+<<<<<<< Updated upstream
 		EnterRule(_localctx, 46, RULE_codeBlock);
+=======
+		EnterRule(_localctx, 48, RULE_codeBlock);
+>>>>>>> Stashed changes
 		int _la;
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
+<<<<<<< Updated upstream
 			State = 350; Match(LCB);
 			State = 354;
 			ErrorHandler.Sync(this);
@@ -1731,6 +2424,23 @@ public partial class GiraphParser : Parser {
 				_la = TokenStream.LA(1);
 			}
 			State = 357; Match(RCB);
+=======
+			State = 369; Match(LCB);
+			State = 373;
+			ErrorHandler.Sync(this);
+			_la = TokenStream.LA(1);
+			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << TYPE) | (1L << GRAPHOBJ) | (1L << VERTEXOBJ) | (1L << EDGEOBJ) | (1L << IF) | (1L << FOR) | (1L << FOREACH) | (1L << RETURN) | (1L << WHILE) | (1L << DO) | (1L << SET) | (1L << SELECT) | (1L << SELECTALL) | (1L << ADD) | (1L << COLLECTION) | (1L << RUN) | (1L << PREDICATE) | (1L << POP) | (1L << PUSH) | (1L << ENQUEUE) | (1L << DEQUEUE) | (1L << EXTRACTMIN) | (1L << EXTRACTMAX) | (1L << PRINT) | (1L << COMMENTSTART))) != 0)) {
+				{
+				{
+				State = 370; codeBlockContent();
+				}
+				}
+				State = 375;
+				ErrorHandler.Sync(this);
+				_la = TokenStream.LA(1);
+			}
+			State = 376; Match(RCB);
+>>>>>>> Stashed changes
 			}
 		}
 		catch (RecognitionException re) {
@@ -1761,16 +2471,20 @@ public partial class GiraphParser : Parser {
 		{
 		}
 		public override int RuleIndex { get { return RULE_returnBlock; } }
+<<<<<<< Updated upstream
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IGiraphParserVisitor<TResult> typedVisitor = visitor as IGiraphParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitReturnBlock(this);
 			else return visitor.VisitChildren(this);
 		}
+=======
+>>>>>>> Stashed changes
 	}
 
 	[RuleVersion(0)]
 	public ReturnBlockContext returnBlock() {
 		ReturnBlockContext _localctx = new ReturnBlockContext(Context, State);
+<<<<<<< Updated upstream
 		EnterRule(_localctx, 48, RULE_returnBlock);
 		try {
 			State = 369;
@@ -1783,23 +2497,49 @@ public partial class GiraphParser : Parser {
 				State = 360; variable();
 				{
 				State = 361; Match(SC);
+=======
+		EnterRule(_localctx, 50, RULE_returnBlock);
+		try {
+			State = 388;
+			ErrorHandler.Sync(this);
+			switch ( Interpreter.AdaptivePredict(TokenStream,29,Context) ) {
+			case 1:
+				EnterOuterAlt(_localctx, 1);
+				{
+				State = 378; Match(RETURN);
+				State = 379; variable();
+				{
+				State = 380; Match(SC);
+>>>>>>> Stashed changes
 				}
 				}
 				break;
 			case 2:
 				EnterOuterAlt(_localctx, 2);
 				{
+<<<<<<< Updated upstream
 				State = 363; Match(RETURN);
 				State = 364; runFunction();
+=======
+				State = 382; Match(RETURN);
+				State = 383; runFunction();
+>>>>>>> Stashed changes
 				}
 				break;
 			case 3:
 				EnterOuterAlt(_localctx, 3);
 				{
+<<<<<<< Updated upstream
 				State = 365; Match(RETURN);
 				State = 366; boolComparisons(0);
 				{
 				State = 367; Match(SC);
+=======
+				State = 384; Match(RETURN);
+				State = 385; boolComparisons(0);
+				{
+				State = 386; Match(SC);
+>>>>>>> Stashed changes
 				}
 				}
 				break;
@@ -1840,37 +2580,58 @@ public partial class GiraphParser : Parser {
 		{
 		}
 		public override int RuleIndex { get { return RULE_runFunction; } }
+<<<<<<< Updated upstream
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IGiraphParserVisitor<TResult> typedVisitor = visitor as IGiraphParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitRunFunction(this);
 			else return visitor.VisitChildren(this);
 		}
+=======
+>>>>>>> Stashed changes
 	}
 
 	[RuleVersion(0)]
 	public RunFunctionContext runFunction() {
 		RunFunctionContext _localctx = new RunFunctionContext(Context, State);
+<<<<<<< Updated upstream
 		EnterRule(_localctx, 50, RULE_runFunction);
+=======
+		EnterRule(_localctx, 52, RULE_runFunction);
+>>>>>>> Stashed changes
 		int _la;
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
+<<<<<<< Updated upstream
 			State = 371; Match(RUN);
 			State = 372; variable();
 			State = 385;
+=======
+			State = 390; Match(RUN);
+			State = 391; variable();
+			State = 404;
+>>>>>>> Stashed changes
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
 			if (_la==WITH) {
 				{
+<<<<<<< Updated upstream
 				State = 373; Match(WITH);
 				State = 374; Match(LP);
 				State = 375; varOrConst();
 				State = 380;
+=======
+				State = 392; Match(WITH);
+				State = 393; Match(LP);
+				State = 394; varOrConst();
+				State = 399;
+>>>>>>> Stashed changes
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
 				while (_la==COMMA) {
 					{
 					{
+<<<<<<< Updated upstream
 					State = 376; Match(COMMA);
 					State = 377; varOrConst();
 					}
@@ -1880,11 +2641,26 @@ public partial class GiraphParser : Parser {
 					_la = TokenStream.LA(1);
 				}
 				State = 383; Match(RP);
+=======
+					State = 395; Match(COMMA);
+					State = 396; varOrConst();
+					}
+					}
+					State = 401;
+					ErrorHandler.Sync(this);
+					_la = TokenStream.LA(1);
+				}
+				State = 402; Match(RP);
+>>>>>>> Stashed changes
 				}
 			}
 
 			{
+<<<<<<< Updated upstream
 			State = 387; Match(SC);
+=======
+			State = 406; Match(SC);
+>>>>>>> Stashed changes
 			}
 			}
 		}
@@ -1915,8 +2691,13 @@ public partial class GiraphParser : Parser {
 		public ReturnBlockContext returnBlock() {
 			return GetRuleContext<ReturnBlockContext>(0);
 		}
+<<<<<<< Updated upstream
 		public QueryContext query() {
 			return GetRuleContext<QueryContext>(0);
+=======
+		public QuerySCContext querySC() {
+			return GetRuleContext<QuerySCContext>(0);
+>>>>>>> Stashed changes
 		}
 		public CollNoReturnOpsContext collNoReturnOps() {
 			return GetRuleContext<CollNoReturnOpsContext>(0);
@@ -1938,16 +2719,20 @@ public partial class GiraphParser : Parser {
 		{
 		}
 		public override int RuleIndex { get { return RULE_codeBlockContent; } }
+<<<<<<< Updated upstream
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IGiraphParserVisitor<TResult> typedVisitor = visitor as IGiraphParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitCodeBlockContent(this);
 			else return visitor.VisitChildren(this);
 		}
+=======
+>>>>>>> Stashed changes
 	}
 
 	[RuleVersion(0)]
 	public CodeBlockContentContext codeBlockContent() {
 		CodeBlockContentContext _localctx = new CodeBlockContentContext(Context, State);
+<<<<<<< Updated upstream
 		EnterRule(_localctx, 52, RULE_codeBlockContent);
 		try {
 			State = 400;
@@ -2032,6 +2817,79 @@ public partial class GiraphParser : Parser {
 				break;
 			default:
 				throw new NoViableAltException(this);
+=======
+		EnterRule(_localctx, 54, RULE_codeBlockContent);
+		try {
+			State = 419;
+			ErrorHandler.Sync(this);
+			switch ( Interpreter.AdaptivePredict(TokenStream,32,Context) ) {
+			case 1:
+				EnterOuterAlt(_localctx, 1);
+				{
+				State = 408; ifElseIfElse();
+				}
+				break;
+			case 2:
+				EnterOuterAlt(_localctx, 2);
+				{
+				State = 409; dcls();
+				}
+				break;
+			case 3:
+				EnterOuterAlt(_localctx, 3);
+				{
+				State = 410; loopDcl();
+				}
+				break;
+			case 4:
+				EnterOuterAlt(_localctx, 4);
+				{
+				State = 411; predicate();
+				}
+				break;
+			case 5:
+				EnterOuterAlt(_localctx, 5);
+				{
+				State = 412; returnBlock();
+				}
+				break;
+			case 6:
+				EnterOuterAlt(_localctx, 6);
+				{
+				State = 413; querySC();
+				}
+				break;
+			case 7:
+				EnterOuterAlt(_localctx, 7);
+				{
+				State = 414; collNoReturnOps();
+				}
+				break;
+			case 8:
+				EnterOuterAlt(_localctx, 8);
+				{
+				State = 415; dequeueOPOneLine();
+				}
+				break;
+			case 9:
+				EnterOuterAlt(_localctx, 9);
+				{
+				State = 416; runFunction();
+				}
+				break;
+			case 10:
+				EnterOuterAlt(_localctx, 10);
+				{
+				State = 417; print();
+				}
+				break;
+			case 11:
+				EnterOuterAlt(_localctx, 11);
+				{
+				State = 418; comments();
+				}
+				break;
+>>>>>>> Stashed changes
 			}
 		}
 		catch (RecognitionException re) {
@@ -2057,25 +2915,38 @@ public partial class GiraphParser : Parser {
 		{
 		}
 		public override int RuleIndex { get { return RULE_varOrConst; } }
+<<<<<<< Updated upstream
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IGiraphParserVisitor<TResult> typedVisitor = visitor as IGiraphParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitVarOrConst(this);
 			else return visitor.VisitChildren(this);
 		}
+=======
+>>>>>>> Stashed changes
 	}
 
 	[RuleVersion(0)]
 	public VarOrConstContext varOrConst() {
 		VarOrConstContext _localctx = new VarOrConstContext(Context, State);
+<<<<<<< Updated upstream
 		EnterRule(_localctx, 54, RULE_varOrConst);
 		try {
 			State = 404;
+=======
+		EnterRule(_localctx, 56, RULE_varOrConst);
+		try {
+			State = 423;
+>>>>>>> Stashed changes
 			ErrorHandler.Sync(this);
 			switch (TokenStream.LA(1)) {
 			case VARIABLENAME:
 				EnterOuterAlt(_localctx, 1);
 				{
+<<<<<<< Updated upstream
 				State = 402; variable();
+=======
+				State = 421; variable();
+>>>>>>> Stashed changes
 				}
 				break;
 			case INF:
@@ -2085,7 +2956,11 @@ public partial class GiraphParser : Parser {
 			case STRING:
 				EnterOuterAlt(_localctx, 2);
 				{
+<<<<<<< Updated upstream
 				State = 403; constant();
+=======
+				State = 422; constant();
+>>>>>>> Stashed changes
 				}
 				break;
 			default:
@@ -2115,19 +2990,28 @@ public partial class GiraphParser : Parser {
 		{
 		}
 		public override int RuleIndex { get { return RULE_varOrFuncOrConst; } }
+<<<<<<< Updated upstream
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IGiraphParserVisitor<TResult> typedVisitor = visitor as IGiraphParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitVarOrFuncOrConst(this);
 			else return visitor.VisitChildren(this);
 		}
+=======
+>>>>>>> Stashed changes
 	}
 
 	[RuleVersion(0)]
 	public VarOrFuncOrConstContext varOrFuncOrConst() {
 		VarOrFuncOrConstContext _localctx = new VarOrFuncOrConstContext(Context, State);
+<<<<<<< Updated upstream
 		EnterRule(_localctx, 56, RULE_varOrFuncOrConst);
 		try {
 			State = 408;
+=======
+		EnterRule(_localctx, 58, RULE_varOrFuncOrConst);
+		try {
+			State = 427;
+>>>>>>> Stashed changes
 			ErrorHandler.Sync(this);
 			switch (TokenStream.LA(1)) {
 			case INF:
@@ -2137,13 +3021,21 @@ public partial class GiraphParser : Parser {
 			case STRING:
 				EnterOuterAlt(_localctx, 1);
 				{
+<<<<<<< Updated upstream
 				State = 406; constant();
+=======
+				State = 425; constant();
+>>>>>>> Stashed changes
 				}
 				break;
 			case VARIABLENAME:
 				EnterOuterAlt(_localctx, 2);
 				{
+<<<<<<< Updated upstream
 				State = 407; variableFunc();
+=======
+				State = 426; variableFunc();
+>>>>>>> Stashed changes
 				}
 				break;
 			default:
@@ -2175,39 +3067,65 @@ public partial class GiraphParser : Parser {
 		{
 		}
 		public override int RuleIndex { get { return RULE_variable; } }
+<<<<<<< Updated upstream
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IGiraphParserVisitor<TResult> typedVisitor = visitor as IGiraphParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitVariable(this);
 			else return visitor.VisitChildren(this);
 		}
+=======
+>>>>>>> Stashed changes
 	}
 
 	[RuleVersion(0)]
 	public VariableContext variable() {
 		VariableContext _localctx = new VariableContext(Context, State);
+<<<<<<< Updated upstream
 		EnterRule(_localctx, 58, RULE_variable);
+=======
+		EnterRule(_localctx, 60, RULE_variable);
+>>>>>>> Stashed changes
 		try {
 			int _alt;
 			EnterOuterAlt(_localctx, 1);
 			{
+<<<<<<< Updated upstream
 			State = 410; Match(VARIABLENAME);
 			State = 415;
 			ErrorHandler.Sync(this);
 			_alt = Interpreter.AdaptivePredict(TokenStream,36,Context);
+=======
+			State = 429; Match(VARIABLENAME);
+			State = 434;
+			ErrorHandler.Sync(this);
+			_alt = Interpreter.AdaptivePredict(TokenStream,35,Context);
+>>>>>>> Stashed changes
 			while ( _alt!=2 && _alt!=global::Antlr4.Runtime.Atn.ATN.INVALID_ALT_NUMBER ) {
 				if ( _alt==1 ) {
 					{
 					{
+<<<<<<< Updated upstream
 					State = 411; Match(DOT);
 					{
 					State = 412; Match(VARIABLENAME);
+=======
+					State = 430; Match(DOT);
+					{
+					State = 431; Match(VARIABLENAME);
+>>>>>>> Stashed changes
 					}
 					}
 					} 
 				}
+<<<<<<< Updated upstream
 				State = 417;
 				ErrorHandler.Sync(this);
 				_alt = Interpreter.AdaptivePredict(TokenStream,36,Context);
+=======
+				State = 436;
+				ErrorHandler.Sync(this);
+				_alt = Interpreter.AdaptivePredict(TokenStream,35,Context);
+>>>>>>> Stashed changes
 			}
 			}
 		}
@@ -2234,16 +3152,20 @@ public partial class GiraphParser : Parser {
 		{
 		}
 		public override int RuleIndex { get { return RULE_variableFunc; } }
+<<<<<<< Updated upstream
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IGiraphParserVisitor<TResult> typedVisitor = visitor as IGiraphParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitVariableFunc(this);
 			else return visitor.VisitChildren(this);
 		}
+=======
+>>>>>>> Stashed changes
 	}
 
 	[RuleVersion(0)]
 	public VariableFuncContext variableFunc() {
 		VariableFuncContext _localctx = new VariableFuncContext(Context, State);
+<<<<<<< Updated upstream
 		EnterRule(_localctx, 60, RULE_variableFunc);
 		try {
 			EnterOuterAlt(_localctx, 1);
@@ -2255,6 +3177,19 @@ public partial class GiraphParser : Parser {
 			case 1:
 				{
 				State = 419; dotFunction();
+=======
+		EnterRule(_localctx, 62, RULE_variableFunc);
+		try {
+			EnterOuterAlt(_localctx, 1);
+			{
+			State = 437; variable();
+			State = 439;
+			ErrorHandler.Sync(this);
+			switch ( Interpreter.AdaptivePredict(TokenStream,36,Context) ) {
+			case 1:
+				{
+				State = 438; dotFunction();
+>>>>>>> Stashed changes
 				}
 				break;
 			}
@@ -2291,22 +3226,30 @@ public partial class GiraphParser : Parser {
 		{
 		}
 		public override int RuleIndex { get { return RULE_dotFunction; } }
+<<<<<<< Updated upstream
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IGiraphParserVisitor<TResult> typedVisitor = visitor as IGiraphParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitDotFunction(this);
 			else return visitor.VisitChildren(this);
 		}
+=======
+>>>>>>> Stashed changes
 	}
 
 	[RuleVersion(0)]
 	public DotFunctionContext dotFunction() {
 		DotFunctionContext _localctx = new DotFunctionContext(Context, State);
+<<<<<<< Updated upstream
 		EnterRule(_localctx, 62, RULE_dotFunction);
+=======
+		EnterRule(_localctx, 64, RULE_dotFunction);
+>>>>>>> Stashed changes
 		int _la;
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
 			{
+<<<<<<< Updated upstream
 			State = 422; Match(DOT);
 			}
 			State = 423; Match(RESERVEDFUNC);
@@ -2314,22 +3257,44 @@ public partial class GiraphParser : Parser {
 			State = 424; Match(LP);
 			}
 			State = 433;
+=======
+			State = 441; Match(DOT);
+			}
+			State = 442; Match(RESERVEDFUNC);
+			{
+			State = 443; Match(LP);
+			}
+			State = 452;
+>>>>>>> Stashed changes
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
 			if (((((_la - 61)) & ~0x3f) == 0 && ((1L << (_la - 61)) & ((1L << (INF - 61)) | (1L << (BOOL - 61)) | (1L << (INTEGER - 61)) | (1L << (FLOATNUM - 61)) | (1L << (VARIABLENAME - 61)) | (1L << (STRING - 61)))) != 0)) {
 				{
+<<<<<<< Updated upstream
 				State = 425; varOrConst();
 				State = 430;
+=======
+				State = 444; varOrConst();
+				State = 449;
+>>>>>>> Stashed changes
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
 				while (_la==COMMA) {
 					{
 					{
+<<<<<<< Updated upstream
 					State = 426; Match(COMMA);
 					State = 427; varOrConst();
 					}
 					}
 					State = 432;
+=======
+					State = 445; Match(COMMA);
+					State = 446; varOrConst();
+					}
+					}
+					State = 451;
+>>>>>>> Stashed changes
 					ErrorHandler.Sync(this);
 					_la = TokenStream.LA(1);
 				}
@@ -2337,7 +3302,11 @@ public partial class GiraphParser : Parser {
 			}
 
 			{
+<<<<<<< Updated upstream
 			State = 435; Match(RP);
+=======
+			State = 454; Match(RP);
+>>>>>>> Stashed changes
 			}
 			}
 		}
@@ -2371,49 +3340,78 @@ public partial class GiraphParser : Parser {
 		{
 		}
 		public override int RuleIndex { get { return RULE_constant; } }
+<<<<<<< Updated upstream
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IGiraphParserVisitor<TResult> typedVisitor = visitor as IGiraphParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitConstant(this);
 			else return visitor.VisitChildren(this);
 		}
+=======
+>>>>>>> Stashed changes
 	}
 
 	[RuleVersion(0)]
 	public ConstantContext constant() {
 		ConstantContext _localctx = new ConstantContext(Context, State);
+<<<<<<< Updated upstream
 		EnterRule(_localctx, 64, RULE_constant);
 		try {
 			State = 442;
+=======
+		EnterRule(_localctx, 66, RULE_constant);
+		try {
+			State = 461;
+>>>>>>> Stashed changes
 			ErrorHandler.Sync(this);
 			switch (TokenStream.LA(1)) {
 			case INTEGER:
 				EnterOuterAlt(_localctx, 1);
 				{
+<<<<<<< Updated upstream
 				State = 437; integer();
+=======
+				State = 456; integer();
+>>>>>>> Stashed changes
 				}
 				break;
 			case FLOATNUM:
 				EnterOuterAlt(_localctx, 2);
 				{
+<<<<<<< Updated upstream
 				State = 438; floatnum();
+=======
+				State = 457; floatnum();
+>>>>>>> Stashed changes
 				}
 				break;
 			case BOOL:
 				EnterOuterAlt(_localctx, 3);
 				{
+<<<<<<< Updated upstream
 				State = 439; @bool();
+=======
+				State = 458; @bool();
+>>>>>>> Stashed changes
 				}
 				break;
 			case STRING:
 				EnterOuterAlt(_localctx, 4);
 				{
+<<<<<<< Updated upstream
 				State = 440; @string();
+=======
+				State = 459; @string();
+>>>>>>> Stashed changes
 				}
 				break;
 			case INF:
 				EnterOuterAlt(_localctx, 5);
 				{
+<<<<<<< Updated upstream
 				State = 441; Match(INF);
+=======
+				State = 460; Match(INF);
+>>>>>>> Stashed changes
 				}
 				break;
 			default:
@@ -2438,21 +3436,32 @@ public partial class GiraphParser : Parser {
 		{
 		}
 		public override int RuleIndex { get { return RULE_string; } }
+<<<<<<< Updated upstream
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IGiraphParserVisitor<TResult> typedVisitor = visitor as IGiraphParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitString(this);
 			else return visitor.VisitChildren(this);
 		}
+=======
+>>>>>>> Stashed changes
 	}
 
 	[RuleVersion(0)]
 	public StringContext @string() {
 		StringContext _localctx = new StringContext(Context, State);
+<<<<<<< Updated upstream
 		EnterRule(_localctx, 66, RULE_string);
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
 			State = 444; Match(STRING);
+=======
+		EnterRule(_localctx, 68, RULE_string);
+		try {
+			EnterOuterAlt(_localctx, 1);
+			{
+			State = 463; Match(STRING);
+>>>>>>> Stashed changes
 			}
 		}
 		catch (RecognitionException re) {
@@ -2473,21 +3482,32 @@ public partial class GiraphParser : Parser {
 		{
 		}
 		public override int RuleIndex { get { return RULE_integer; } }
+<<<<<<< Updated upstream
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IGiraphParserVisitor<TResult> typedVisitor = visitor as IGiraphParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitInteger(this);
 			else return visitor.VisitChildren(this);
 		}
+=======
+>>>>>>> Stashed changes
 	}
 
 	[RuleVersion(0)]
 	public IntegerContext integer() {
 		IntegerContext _localctx = new IntegerContext(Context, State);
+<<<<<<< Updated upstream
 		EnterRule(_localctx, 68, RULE_integer);
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
 			State = 446; Match(INTEGER);
+=======
+		EnterRule(_localctx, 70, RULE_integer);
+		try {
+			EnterOuterAlt(_localctx, 1);
+			{
+			State = 465; Match(INTEGER);
+>>>>>>> Stashed changes
 			}
 		}
 		catch (RecognitionException re) {
@@ -2508,21 +3528,32 @@ public partial class GiraphParser : Parser {
 		{
 		}
 		public override int RuleIndex { get { return RULE_floatnum; } }
+<<<<<<< Updated upstream
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IGiraphParserVisitor<TResult> typedVisitor = visitor as IGiraphParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitFloatnum(this);
 			else return visitor.VisitChildren(this);
 		}
+=======
+>>>>>>> Stashed changes
 	}
 
 	[RuleVersion(0)]
 	public FloatnumContext floatnum() {
 		FloatnumContext _localctx = new FloatnumContext(Context, State);
+<<<<<<< Updated upstream
 		EnterRule(_localctx, 70, RULE_floatnum);
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
 			State = 448; Match(FLOATNUM);
+=======
+		EnterRule(_localctx, 72, RULE_floatnum);
+		try {
+			EnterOuterAlt(_localctx, 1);
+			{
+			State = 467; Match(FLOATNUM);
+>>>>>>> Stashed changes
 			}
 		}
 		catch (RecognitionException re) {
@@ -2543,21 +3574,32 @@ public partial class GiraphParser : Parser {
 		{
 		}
 		public override int RuleIndex { get { return RULE_bool; } }
+<<<<<<< Updated upstream
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IGiraphParserVisitor<TResult> typedVisitor = visitor as IGiraphParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitBool(this);
 			else return visitor.VisitChildren(this);
 		}
+=======
+>>>>>>> Stashed changes
 	}
 
 	[RuleVersion(0)]
 	public BoolContext @bool() {
 		BoolContext _localctx = new BoolContext(Context, State);
+<<<<<<< Updated upstream
 		EnterRule(_localctx, 72, RULE_bool);
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
 			State = 450; Match(BOOL);
+=======
+		EnterRule(_localctx, 74, RULE_bool);
+		try {
+			EnterOuterAlt(_localctx, 1);
+			{
+			State = 469; Match(BOOL);
+>>>>>>> Stashed changes
 			}
 		}
 		catch (RecognitionException re) {
@@ -2580,22 +3622,33 @@ public partial class GiraphParser : Parser {
 		{
 		}
 		public override int RuleIndex { get { return RULE_objects; } }
+<<<<<<< Updated upstream
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IGiraphParserVisitor<TResult> typedVisitor = visitor as IGiraphParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitObjects(this);
 			else return visitor.VisitChildren(this);
 		}
+=======
+>>>>>>> Stashed changes
 	}
 
 	[RuleVersion(0)]
 	public ObjectsContext objects() {
 		ObjectsContext _localctx = new ObjectsContext(Context, State);
+<<<<<<< Updated upstream
 		EnterRule(_localctx, 74, RULE_objects);
+=======
+		EnterRule(_localctx, 76, RULE_objects);
+>>>>>>> Stashed changes
 		int _la;
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
+<<<<<<< Updated upstream
 			State = 452;
+=======
+			State = 471;
+>>>>>>> Stashed changes
 			_la = TokenStream.LA(1);
 			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << GRAPHOBJ) | (1L << VERTEXOBJ) | (1L << EDGEOBJ))) != 0)) ) {
 			ErrorHandler.RecoverInline(this);
@@ -2649,32 +3702,49 @@ public partial class GiraphParser : Parser {
 		{
 		}
 		public override int RuleIndex { get { return RULE_ifElseIfElse; } }
+<<<<<<< Updated upstream
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IGiraphParserVisitor<TResult> typedVisitor = visitor as IGiraphParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitIfElseIfElse(this);
 			else return visitor.VisitChildren(this);
 		}
+=======
+>>>>>>> Stashed changes
 	}
 
 	[RuleVersion(0)]
 	public IfElseIfElseContext ifElseIfElse() {
 		IfElseIfElseContext _localctx = new IfElseIfElseContext(Context, State);
+<<<<<<< Updated upstream
 		EnterRule(_localctx, 76, RULE_ifElseIfElse);
+=======
+		EnterRule(_localctx, 78, RULE_ifElseIfElse);
+>>>>>>> Stashed changes
 		int _la;
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
+<<<<<<< Updated upstream
 			State = 454; Match(IF);
 			State = 455; Match(LP);
 			State = 456; boolComparisons(0);
 			State = 457; Match(RP);
 			State = 458; codeBlock();
 			State = 467;
+=======
+			State = 473; Match(IF);
+			State = 474; Match(LP);
+			State = 475; boolComparisons(0);
+			State = 476; Match(RP);
+			State = 477; codeBlock();
+			State = 486;
+>>>>>>> Stashed changes
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
 			while (_la==ELSEIF) {
 				{
 				{
+<<<<<<< Updated upstream
 				State = 459; Match(ELSEIF);
 				State = 460; Match(LP);
 				State = 461; boolComparisons(0);
@@ -2687,12 +3757,31 @@ public partial class GiraphParser : Parser {
 				_la = TokenStream.LA(1);
 			}
 			State = 472;
+=======
+				State = 478; Match(ELSEIF);
+				State = 479; Match(LP);
+				State = 480; boolComparisons(0);
+				State = 481; Match(RP);
+				State = 482; codeBlock();
+				}
+				}
+				State = 488;
+				ErrorHandler.Sync(this);
+				_la = TokenStream.LA(1);
+			}
+			State = 491;
+>>>>>>> Stashed changes
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
 			if (_la==ELSE) {
 				{
+<<<<<<< Updated upstream
 				State = 470; Match(ELSE);
 				State = 471; codeBlock();
+=======
+				State = 489; Match(ELSE);
+				State = 490; codeBlock();
+>>>>>>> Stashed changes
 				}
 			}
 
@@ -2724,6 +3813,12 @@ public partial class GiraphParser : Parser {
 		public ExpressionContext expression() {
 			return GetRuleContext<ExpressionContext>(0);
 		}
+<<<<<<< Updated upstream
+=======
+		public PredicateCallContext predicateCall() {
+			return GetRuleContext<PredicateCallContext>(0);
+		}
+>>>>>>> Stashed changes
 		public ITerminalNode BOOLOPERATOR() { return GetToken(GiraphParser.BOOLOPERATOR, 0); }
 		public AndOrContext andOr() {
 			return GetRuleContext<AndOrContext>(0);
@@ -2734,11 +3829,14 @@ public partial class GiraphParser : Parser {
 		{
 		}
 		public override int RuleIndex { get { return RULE_boolComparisons; } }
+<<<<<<< Updated upstream
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IGiraphParserVisitor<TResult> typedVisitor = visitor as IGiraphParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitBoolComparisons(this);
 			else return visitor.VisitChildren(this);
 		}
+=======
+>>>>>>> Stashed changes
 	}
 
 	[RuleVersion(0)]
@@ -2751,12 +3849,18 @@ public partial class GiraphParser : Parser {
 		int _parentState = State;
 		BoolComparisonsContext _localctx = new BoolComparisonsContext(Context, _parentState);
 		BoolComparisonsContext _prevctx = _localctx;
+<<<<<<< Updated upstream
 		int _startState = 78;
 		EnterRecursionRule(_localctx, 78, RULE_boolComparisons, _p);
+=======
+		int _startState = 80;
+		EnterRecursionRule(_localctx, 80, RULE_boolComparisons, _p);
+>>>>>>> Stashed changes
 		try {
 			int _alt;
 			EnterOuterAlt(_localctx, 1);
 			{
+<<<<<<< Updated upstream
 			State = 482;
 			ErrorHandler.Sync(this);
 			switch (TokenStream.LA(1)) {
@@ -2797,57 +3901,126 @@ public partial class GiraphParser : Parser {
 			State = 494;
 			ErrorHandler.Sync(this);
 			_alt = Interpreter.AdaptivePredict(TokenStream,46,Context);
+=======
+			State = 502;
+			ErrorHandler.Sync(this);
+			switch ( Interpreter.AdaptivePredict(TokenStream,42,Context) ) {
+			case 1:
+				{
+				State = 494; Match(LP);
+				State = 495; boolComparisons(0);
+				State = 496; Match(RP);
+				}
+				break;
+			case 2:
+				{
+				State = 498; Match(NOT);
+				State = 499; boolComparisons(5);
+				}
+				break;
+			case 3:
+				{
+				State = 500; expression();
+				}
+				break;
+			case 4:
+				{
+				State = 501; predicateCall();
+				}
+				break;
+			}
+			Context.Stop = TokenStream.LT(-1);
+			State = 514;
+			ErrorHandler.Sync(this);
+			_alt = Interpreter.AdaptivePredict(TokenStream,45,Context);
+>>>>>>> Stashed changes
 			while ( _alt!=2 && _alt!=global::Antlr4.Runtime.Atn.ATN.INVALID_ALT_NUMBER ) {
 				if ( _alt==1 ) {
 					if ( ParseListeners!=null )
 						TriggerExitRuleEvent();
 					_prevctx = _localctx;
 					{
+<<<<<<< Updated upstream
 					State = 492;
 					ErrorHandler.Sync(this);
 					switch ( Interpreter.AdaptivePredict(TokenStream,45,Context) ) {
+=======
+					State = 512;
+					ErrorHandler.Sync(this);
+					switch ( Interpreter.AdaptivePredict(TokenStream,44,Context) ) {
+>>>>>>> Stashed changes
 					case 1:
 						{
 						_localctx = new BoolComparisonsContext(_parentctx, _parentState);
 						_localctx.left = _prevctx;
 						PushNewRecursionContext(_localctx, _startState, RULE_boolComparisons);
+<<<<<<< Updated upstream
 						State = 484;
 						if (!(Precpred(Context, 2))) throw new FailedPredicateException(this, "Precpred(Context, 2)");
 						State = 487;
+=======
+						State = 504;
+						if (!(Precpred(Context, 3))) throw new FailedPredicateException(this, "Precpred(Context, 3)");
+						State = 507;
+>>>>>>> Stashed changes
 						ErrorHandler.Sync(this);
 						switch (TokenStream.LA(1)) {
 						case BOOLOPERATOR:
 							{
+<<<<<<< Updated upstream
 							State = 485; Match(BOOLOPERATOR);
+=======
+							State = 505; Match(BOOLOPERATOR);
+>>>>>>> Stashed changes
 							}
 							break;
 						case AND:
 						case OR:
 							{
+<<<<<<< Updated upstream
 							State = 486; andOr();
+=======
+							State = 506; andOr();
+>>>>>>> Stashed changes
 							}
 							break;
 						default:
 							throw new NoViableAltException(this);
 						}
+<<<<<<< Updated upstream
 						State = 489; _localctx.right = boolComparisons(3);
+=======
+						State = 509; _localctx.right = boolComparisons(4);
+>>>>>>> Stashed changes
 						}
 						break;
 					case 2:
 						{
 						_localctx = new BoolComparisonsContext(_parentctx, _parentState);
 						PushNewRecursionContext(_localctx, _startState, RULE_boolComparisons);
+<<<<<<< Updated upstream
 						State = 490;
 						if (!(Precpred(Context, 3))) throw new FailedPredicateException(this, "Precpred(Context, 3)");
 						State = 491; Match(ISEMPTY);
+=======
+						State = 510;
+						if (!(Precpred(Context, 4))) throw new FailedPredicateException(this, "Precpred(Context, 4)");
+						State = 511; Match(ISEMPTY);
+>>>>>>> Stashed changes
 						}
 						break;
 					}
 					} 
 				}
+<<<<<<< Updated upstream
 				State = 496;
 				ErrorHandler.Sync(this);
 				_alt = Interpreter.AdaptivePredict(TokenStream,46,Context);
+=======
+				State = 516;
+				ErrorHandler.Sync(this);
+				_alt = Interpreter.AdaptivePredict(TokenStream,45,Context);
+>>>>>>> Stashed changes
 			}
 			}
 		}
@@ -2884,16 +4057,20 @@ public partial class GiraphParser : Parser {
 		{
 		}
 		public override int RuleIndex { get { return RULE_predicate; } }
+<<<<<<< Updated upstream
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IGiraphParserVisitor<TResult> typedVisitor = visitor as IGiraphParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitPredicate(this);
 			else return visitor.VisitChildren(this);
 		}
+=======
+>>>>>>> Stashed changes
 	}
 
 	[RuleVersion(0)]
 	public PredicateContext predicate() {
 		PredicateContext _localctx = new PredicateContext(Context, State);
+<<<<<<< Updated upstream
 		EnterRule(_localctx, 80, RULE_predicate);
 		try {
 			EnterOuterAlt(_localctx, 1);
@@ -2909,6 +4086,23 @@ public partial class GiraphParser : Parser {
 			State = 505; Match(RCB);
 			{
 			State = 506; Match(SC);
+=======
+		EnterRule(_localctx, 82, RULE_predicate);
+		try {
+			EnterOuterAlt(_localctx, 1);
+			{
+			State = 517; Match(PREDICATE);
+			State = 518; variable();
+			State = 519; Match(LP);
+			State = 520; formalParams();
+			State = 521; Match(RP);
+			State = 522; Match(COLON);
+			State = 523; Match(LCB);
+			State = 524; boolComparisons(0);
+			State = 525; Match(RCB);
+			{
+			State = 526; Match(SC);
+>>>>>>> Stashed changes
 			}
 			}
 		}
@@ -2937,16 +4131,20 @@ public partial class GiraphParser : Parser {
 		{
 		}
 		public override int RuleIndex { get { return RULE_predicateCall; } }
+<<<<<<< Updated upstream
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IGiraphParserVisitor<TResult> typedVisitor = visitor as IGiraphParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitPredicateCall(this);
 			else return visitor.VisitChildren(this);
 		}
+=======
+>>>>>>> Stashed changes
 	}
 
 	[RuleVersion(0)]
 	public PredicateCallContext predicateCall() {
 		PredicateCallContext _localctx = new PredicateCallContext(Context, State);
+<<<<<<< Updated upstream
 		EnterRule(_localctx, 82, RULE_predicateCall);
 		try {
 			EnterOuterAlt(_localctx, 1);
@@ -2958,6 +4156,19 @@ public partial class GiraphParser : Parser {
 			State = 510; parameters();
 			{
 			State = 511; Match(RP);
+=======
+		EnterRule(_localctx, 84, RULE_predicateCall);
+		try {
+			EnterOuterAlt(_localctx, 1);
+			{
+			State = 528; variable();
+			{
+			State = 529; Match(LP);
+			}
+			State = 530; parameters();
+			{
+			State = 531; Match(RP);
+>>>>>>> Stashed changes
 			}
 			}
 		}
@@ -2984,16 +4195,20 @@ public partial class GiraphParser : Parser {
 		{
 		}
 		public override int RuleIndex { get { return RULE_where; } }
+<<<<<<< Updated upstream
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IGiraphParserVisitor<TResult> typedVisitor = visitor as IGiraphParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitWhere(this);
 			else return visitor.VisitChildren(this);
 		}
+=======
+>>>>>>> Stashed changes
 	}
 
 	[RuleVersion(0)]
 	public WhereContext where() {
 		WhereContext _localctx = new WhereContext(Context, State);
+<<<<<<< Updated upstream
 		EnterRule(_localctx, 84, RULE_where);
 		try {
 			State = 520;
@@ -3006,13 +4221,32 @@ public partial class GiraphParser : Parser {
 				State = 514; Match(LP);
 				State = 515; boolComparisons(0);
 				State = 516; Match(RP);
+=======
+		EnterRule(_localctx, 86, RULE_where);
+		try {
+			State = 540;
+			ErrorHandler.Sync(this);
+			switch ( Interpreter.AdaptivePredict(TokenStream,46,Context) ) {
+			case 1:
+				EnterOuterAlt(_localctx, 1);
+				{
+				State = 533; Match(WHERE);
+				State = 534; Match(LP);
+				State = 535; boolComparisons(0);
+				State = 536; Match(RP);
+>>>>>>> Stashed changes
 				}
 				break;
 			case 2:
 				EnterOuterAlt(_localctx, 2);
 				{
+<<<<<<< Updated upstream
 				State = 518; Match(WHERE);
 				State = 519; boolComparisons(0);
+=======
+				State = 538; Match(WHERE);
+				State = 539; boolComparisons(0);
+>>>>>>> Stashed changes
 				}
 				break;
 			}
@@ -3036,22 +4270,33 @@ public partial class GiraphParser : Parser {
 		{
 		}
 		public override int RuleIndex { get { return RULE_andOr; } }
+<<<<<<< Updated upstream
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IGiraphParserVisitor<TResult> typedVisitor = visitor as IGiraphParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitAndOr(this);
 			else return visitor.VisitChildren(this);
 		}
+=======
+>>>>>>> Stashed changes
 	}
 
 	[RuleVersion(0)]
 	public AndOrContext andOr() {
 		AndOrContext _localctx = new AndOrContext(Context, State);
+<<<<<<< Updated upstream
 		EnterRule(_localctx, 86, RULE_andOr);
+=======
+		EnterRule(_localctx, 88, RULE_andOr);
+>>>>>>> Stashed changes
 		int _la;
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
+<<<<<<< Updated upstream
 			State = 522;
+=======
+			State = 542;
+>>>>>>> Stashed changes
 			_la = TokenStream.LA(1);
 			if ( !(_la==AND || _la==OR) ) {
 			ErrorHandler.RecoverInline(this);
@@ -3078,7 +4323,13 @@ public partial class GiraphParser : Parser {
 		public ObjectsContext objects() {
 			return GetRuleContext<ObjectsContext>(0);
 		}
+<<<<<<< Updated upstream
 		public ITerminalNode TYPE() { return GetToken(GiraphParser.TYPE, 0); }
+=======
+		public AllTypeWithCollContext allTypeWithColl() {
+			return GetRuleContext<AllTypeWithCollContext>(0);
+		}
+>>>>>>> Stashed changes
 		public VariableContext[] variable() {
 			return GetRuleContexts<VariableContext>();
 		}
@@ -3100,21 +4351,29 @@ public partial class GiraphParser : Parser {
 		{
 		}
 		public override int RuleIndex { get { return RULE_extend; } }
+<<<<<<< Updated upstream
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IGiraphParserVisitor<TResult> typedVisitor = visitor as IGiraphParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitExtend(this);
 			else return visitor.VisitChildren(this);
 		}
+=======
+>>>>>>> Stashed changes
 	}
 
 	[RuleVersion(0)]
 	public ExtendContext extend() {
 		ExtendContext _localctx = new ExtendContext(Context, State);
+<<<<<<< Updated upstream
 		EnterRule(_localctx, 88, RULE_extend);
+=======
+		EnterRule(_localctx, 90, RULE_extend);
+>>>>>>> Stashed changes
 		int _la;
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
+<<<<<<< Updated upstream
 			State = 524; Match(EXTEND);
 			State = 525; objects();
 			State = 526; Match(TYPE);
@@ -3126,45 +4385,90 @@ public partial class GiraphParser : Parser {
 			State = 529; Match(SINGLEQUOTE);
 			}
 			State = 539;
+=======
+			State = 544; Match(EXTEND);
+			State = 545; objects();
+			State = 546; allTypeWithColl();
+			{
+			State = 547; Match(SINGLEQUOTE);
+			}
+			State = 548; variable();
+			{
+			State = 549; Match(SINGLEQUOTE);
+			}
+			State = 559;
+>>>>>>> Stashed changes
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
 			if (_la==COLON) {
 				{
+<<<<<<< Updated upstream
 				State = 530; Match(COLON);
 				{
 				State = 531; Match(SINGLEQUOTE);
 				}
 				State = 533;
+=======
+				State = 550; Match(COLON);
+				{
+				State = 551; Match(SINGLEQUOTE);
+				}
+				State = 553;
+>>>>>>> Stashed changes
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
 				do {
 					{
 					{
+<<<<<<< Updated upstream
 					State = 532; variable();
 					}
 					}
 					State = 535;
+=======
+					State = 552; variable();
+					}
+					}
+					State = 555;
+>>>>>>> Stashed changes
 					ErrorHandler.Sync(this);
 					_la = TokenStream.LA(1);
 				} while ( _la==VARIABLENAME );
 				{
+<<<<<<< Updated upstream
 				State = 537; Match(SINGLEQUOTE);
+=======
+				State = 557; Match(SINGLEQUOTE);
+>>>>>>> Stashed changes
 				}
 				}
 			}
 
+<<<<<<< Updated upstream
 			State = 543;
+=======
+			State = 563;
+>>>>>>> Stashed changes
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
 			if (_la==EQUALS) {
 				{
+<<<<<<< Updated upstream
 				State = 541; Match(EQUALS);
 				State = 542; constant();
+=======
+				State = 561; Match(EQUALS);
+				State = 562; constant();
+>>>>>>> Stashed changes
 				}
 			}
 
 			{
+<<<<<<< Updated upstream
 			State = 545; Match(SC);
+=======
+			State = 565; Match(SC);
+>>>>>>> Stashed changes
 			}
 			}
 		}
@@ -3188,21 +4492,31 @@ public partial class GiraphParser : Parser {
 		public VariableFuncContext variableFunc() {
 			return GetRuleContext<VariableFuncContext>(0);
 		}
+<<<<<<< Updated upstream
+=======
+		public WhereContext where() {
+			return GetRuleContext<WhereContext>(0);
+		}
+>>>>>>> Stashed changes
 		public SelectContext(ParserRuleContext parent, int invokingState)
 			: base(parent, invokingState)
 		{
 		}
 		public override int RuleIndex { get { return RULE_select; } }
+<<<<<<< Updated upstream
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IGiraphParserVisitor<TResult> typedVisitor = visitor as IGiraphParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitSelect(this);
 			else return visitor.VisitChildren(this);
 		}
+=======
+>>>>>>> Stashed changes
 	}
 
 	[RuleVersion(0)]
 	public SelectContext select() {
 		SelectContext _localctx = new SelectContext(Context, State);
+<<<<<<< Updated upstream
 		EnterRule(_localctx, 90, RULE_select);
 		try {
 			EnterOuterAlt(_localctx, 1);
@@ -3211,6 +4525,25 @@ public partial class GiraphParser : Parser {
 			State = 548; allTypeWithColl();
 			State = 549; Match(FROM);
 			State = 550; variableFunc();
+=======
+		EnterRule(_localctx, 92, RULE_select);
+		try {
+			EnterOuterAlt(_localctx, 1);
+			{
+			State = 567; Match(SELECT);
+			State = 568; allTypeWithColl();
+			State = 569; Match(FROM);
+			State = 570; variableFunc();
+			State = 572;
+			ErrorHandler.Sync(this);
+			switch ( Interpreter.AdaptivePredict(TokenStream,50,Context) ) {
+			case 1:
+				{
+				State = 571; where();
+				}
+				break;
+			}
+>>>>>>> Stashed changes
 			}
 		}
 		catch (RecognitionException re) {
@@ -3233,21 +4566,31 @@ public partial class GiraphParser : Parser {
 		public VariableFuncContext variableFunc() {
 			return GetRuleContext<VariableFuncContext>(0);
 		}
+<<<<<<< Updated upstream
+=======
+		public WhereContext where() {
+			return GetRuleContext<WhereContext>(0);
+		}
+>>>>>>> Stashed changes
 		public SelectAllContext(ParserRuleContext parent, int invokingState)
 			: base(parent, invokingState)
 		{
 		}
 		public override int RuleIndex { get { return RULE_selectAll; } }
+<<<<<<< Updated upstream
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IGiraphParserVisitor<TResult> typedVisitor = visitor as IGiraphParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitSelectAll(this);
 			else return visitor.VisitChildren(this);
 		}
+=======
+>>>>>>> Stashed changes
 	}
 
 	[RuleVersion(0)]
 	public SelectAllContext selectAll() {
 		SelectAllContext _localctx = new SelectAllContext(Context, State);
+<<<<<<< Updated upstream
 		EnterRule(_localctx, 92, RULE_selectAll);
 		try {
 			EnterOuterAlt(_localctx, 1);
@@ -3256,6 +4599,25 @@ public partial class GiraphParser : Parser {
 			State = 553; allTypeWithColl();
 			State = 554; Match(FROM);
 			State = 555; variableFunc();
+=======
+		EnterRule(_localctx, 94, RULE_selectAll);
+		try {
+			EnterOuterAlt(_localctx, 1);
+			{
+			State = 574; Match(SELECTALL);
+			State = 575; allTypeWithColl();
+			State = 576; Match(FROM);
+			State = 577; variableFunc();
+			State = 579;
+			ErrorHandler.Sync(this);
+			switch ( Interpreter.AdaptivePredict(TokenStream,51,Context) ) {
+			case 1:
+				{
+				State = 578; where();
+				}
+				break;
+			}
+>>>>>>> Stashed changes
 			}
 		}
 		catch (RecognitionException re) {
@@ -3281,16 +4643,20 @@ public partial class GiraphParser : Parser {
 		{
 		}
 		public override int RuleIndex { get { return RULE_addQuery; } }
+<<<<<<< Updated upstream
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IGiraphParserVisitor<TResult> typedVisitor = visitor as IGiraphParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitAddQuery(this);
 			else return visitor.VisitChildren(this);
 		}
+=======
+>>>>>>> Stashed changes
 	}
 
 	[RuleVersion(0)]
 	public AddQueryContext addQuery() {
 		AddQueryContext _localctx = new AddQueryContext(Context, State);
+<<<<<<< Updated upstream
 		EnterRule(_localctx, 94, RULE_addQuery);
 		try {
 			State = 559;
@@ -3300,12 +4666,27 @@ public partial class GiraphParser : Parser {
 				EnterOuterAlt(_localctx, 1);
 				{
 				State = 557; addToGraph();
+=======
+		EnterRule(_localctx, 96, RULE_addQuery);
+		try {
+			State = 583;
+			ErrorHandler.Sync(this);
+			switch ( Interpreter.AdaptivePredict(TokenStream,52,Context) ) {
+			case 1:
+				EnterOuterAlt(_localctx, 1);
+				{
+				State = 581; addToGraph();
+>>>>>>> Stashed changes
 				}
 				break;
 			case 2:
 				EnterOuterAlt(_localctx, 2);
 				{
+<<<<<<< Updated upstream
 				State = 558; addToColl();
+=======
+				State = 582; addToColl();
+>>>>>>> Stashed changes
 				}
 				break;
 			}
@@ -3342,53 +4723,88 @@ public partial class GiraphParser : Parser {
 		{
 		}
 		public override int RuleIndex { get { return RULE_addToGraph; } }
+<<<<<<< Updated upstream
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IGiraphParserVisitor<TResult> typedVisitor = visitor as IGiraphParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitAddToGraph(this);
 			else return visitor.VisitChildren(this);
 		}
+=======
+>>>>>>> Stashed changes
 	}
 
 	[RuleVersion(0)]
 	public AddToGraphContext addToGraph() {
 		AddToGraphContext _localctx = new AddToGraphContext(Context, State);
+<<<<<<< Updated upstream
 		EnterRule(_localctx, 96, RULE_addToGraph);
+=======
+		EnterRule(_localctx, 98, RULE_addToGraph);
+>>>>>>> Stashed changes
 		int _la;
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
+<<<<<<< Updated upstream
 			State = 561; Match(ADD);
 			State = 564;
+=======
+			State = 585; Match(ADD);
+			State = 588;
+>>>>>>> Stashed changes
 			ErrorHandler.Sync(this);
 			switch (TokenStream.LA(1)) {
 			case VERTEXOBJ:
 				{
+<<<<<<< Updated upstream
 				State = 562; vertexDcls();
+=======
+				State = 586; vertexDcls();
+>>>>>>> Stashed changes
 				}
 				break;
 			case EDGEOBJ:
 				{
+<<<<<<< Updated upstream
 				State = 563; edgeDcls();
+=======
+				State = 587; edgeDcls();
+>>>>>>> Stashed changes
 				}
 				break;
 			default:
 				throw new NoViableAltException(this);
 			}
+<<<<<<< Updated upstream
 			State = 566; Match(TO);
 			State = 567; variable();
 			{
 			State = 569;
+=======
+			State = 590; Match(TO);
+			State = 591; variable();
+			{
+			State = 593;
+>>>>>>> Stashed changes
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
 			if (_la==WHERE) {
 				{
+<<<<<<< Updated upstream
 				State = 568; where();
+=======
+				State = 592; where();
+>>>>>>> Stashed changes
 				}
 			}
 
 			}
 			{
+<<<<<<< Updated upstream
 			State = 571; Match(SC);
+=======
+			State = 595; Match(SC);
+>>>>>>> Stashed changes
 			}
 			}
 		}
@@ -3405,55 +4821,166 @@ public partial class GiraphParser : Parser {
 
 	public partial class AddToCollContext : ParserRuleContext {
 		public ITerminalNode ADD() { return GetToken(GiraphParser.ADD, 0); }
+<<<<<<< Updated upstream
+=======
+		public ITerminalNode TO() { return GetToken(GiraphParser.TO, 0); }
+>>>>>>> Stashed changes
 		public VariableContext[] variable() {
 			return GetRuleContexts<VariableContext>();
 		}
 		public VariableContext variable(int i) {
 			return GetRuleContext<VariableContext>(i);
 		}
+<<<<<<< Updated upstream
 		public ITerminalNode TO() { return GetToken(GiraphParser.TO, 0); }
+=======
+		public AllTypeContext allType() {
+			return GetRuleContext<AllTypeContext>(0);
+		}
+		public ReturnQueryContext returnQuery() {
+			return GetRuleContext<ReturnQueryContext>(0);
+		}
+>>>>>>> Stashed changes
 		public ITerminalNode SC() { return GetToken(GiraphParser.SC, 0); }
 		public WhereContext where() {
 			return GetRuleContext<WhereContext>(0);
 		}
+<<<<<<< Updated upstream
+=======
+		public ITerminalNode LP() { return GetToken(GiraphParser.LP, 0); }
+		public ITerminalNode RP() { return GetToken(GiraphParser.RP, 0); }
+>>>>>>> Stashed changes
 		public AddToCollContext(ParserRuleContext parent, int invokingState)
 			: base(parent, invokingState)
 		{
 		}
 		public override int RuleIndex { get { return RULE_addToColl; } }
+<<<<<<< Updated upstream
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IGiraphParserVisitor<TResult> typedVisitor = visitor as IGiraphParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitAddToColl(this);
 			else return visitor.VisitChildren(this);
 		}
+=======
+>>>>>>> Stashed changes
 	}
 
 	[RuleVersion(0)]
 	public AddToCollContext addToColl() {
 		AddToCollContext _localctx = new AddToCollContext(Context, State);
+<<<<<<< Updated upstream
 		EnterRule(_localctx, 98, RULE_addToColl);
+=======
+		EnterRule(_localctx, 100, RULE_addToColl);
 		int _la;
 		try {
-			EnterOuterAlt(_localctx, 1);
-			{
-			State = 573; Match(ADD);
-			State = 574; variable();
-			State = 575; Match(TO);
-			State = 576; variable();
-			{
-			State = 578;
+			State = 625;
 			ErrorHandler.Sync(this);
-			_la = TokenStream.LA(1);
-			if (_la==WHERE) {
+			switch ( Interpreter.AdaptivePredict(TokenStream,59,Context) ) {
+			case 1:
+				EnterOuterAlt(_localctx, 1);
 				{
-				State = 577; where();
+				State = 597; Match(ADD);
+				State = 601;
+				ErrorHandler.Sync(this);
+				switch (TokenStream.LA(1)) {
+				case VARIABLENAME:
+					{
+					State = 598; variable();
+					}
+					break;
+				case TYPE:
+				case GRAPHOBJ:
+				case VERTEXOBJ:
+				case EDGEOBJ:
+					{
+					State = 599; allType();
+					}
+					break;
+				case SELECT:
+				case SELECTALL:
+				case POP:
+				case DEQUEUE:
+				case EXTRACTMIN:
+				case EXTRACTMAX:
+					{
+					State = 600; returnQuery();
+					}
+					break;
+				default:
+					throw new NoViableAltException(this);
 				}
-			}
+				State = 603; Match(TO);
+				State = 604; variable();
+				{
+				State = 606;
+				ErrorHandler.Sync(this);
+				_la = TokenStream.LA(1);
+				if (_la==WHERE) {
+					{
+					State = 605; where();
+					}
+				}
 
-			}
-			{
-			State = 580; Match(SC);
-			}
+				}
+				{
+				State = 608; Match(SC);
+				}
+				}
+				break;
+			case 2:
+				EnterOuterAlt(_localctx, 2);
+				{
+				State = 610; Match(ADD);
+				State = 611; Match(LP);
+				State = 615;
+				ErrorHandler.Sync(this);
+				switch (TokenStream.LA(1)) {
+				case VARIABLENAME:
+					{
+					State = 612; variable();
+					}
+					break;
+				case TYPE:
+				case GRAPHOBJ:
+				case VERTEXOBJ:
+				case EDGEOBJ:
+					{
+					State = 613; allType();
+					}
+					break;
+				case SELECT:
+				case SELECTALL:
+				case POP:
+				case DEQUEUE:
+				case EXTRACTMIN:
+				case EXTRACTMAX:
+					{
+					State = 614; returnQuery();
+					}
+					break;
+				default:
+					throw new NoViableAltException(this);
+				}
+				State = 617; Match(RP);
+				State = 618; Match(TO);
+				State = 619; variable();
+				{
+				State = 621;
+				ErrorHandler.Sync(this);
+				_la = TokenStream.LA(1);
+				if (_la==WHERE) {
+					{
+					State = 620; where();
+					}
+				}
+
+				}
+				{
+				State = 623; Match(SC);
+				}
+				}
+				break;
 			}
 		}
 		catch (RecognitionException re) {
@@ -3468,6 +4995,227 @@ public partial class GiraphParser : Parser {
 	}
 
 	public partial class LoopDclContext : ParserRuleContext {
+		public ForeachLoopContext foreachLoop() {
+			return GetRuleContext<ForeachLoopContext>(0);
+		}
+		public WhileLoopContext whileLoop() {
+			return GetRuleContext<WhileLoopContext>(0);
+		}
+		public DoWhileLoopContext doWhileLoop() {
+			return GetRuleContext<DoWhileLoopContext>(0);
+		}
+		public ForLoopContext forLoop() {
+			return GetRuleContext<ForLoopContext>(0);
+		}
+		public LoopDclContext(ParserRuleContext parent, int invokingState)
+			: base(parent, invokingState)
+		{
+		}
+		public override int RuleIndex { get { return RULE_loopDcl; } }
+	}
+
+	[RuleVersion(0)]
+	public LoopDclContext loopDcl() {
+		LoopDclContext _localctx = new LoopDclContext(Context, State);
+		EnterRule(_localctx, 102, RULE_loopDcl);
+		try {
+			State = 631;
+			ErrorHandler.Sync(this);
+			switch (TokenStream.LA(1)) {
+			case FOREACH:
+				EnterOuterAlt(_localctx, 1);
+				{
+				State = 627; foreachLoop();
+				}
+				break;
+			case WHILE:
+				EnterOuterAlt(_localctx, 2);
+				{
+				State = 628; whileLoop();
+				}
+				break;
+			case DO:
+				EnterOuterAlt(_localctx, 3);
+				{
+				State = 629; doWhileLoop();
+				}
+				break;
+			case FOR:
+				EnterOuterAlt(_localctx, 4);
+				{
+				State = 630; forLoop();
+				}
+				break;
+			default:
+				throw new NoViableAltException(this);
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			ErrorHandler.ReportError(this, re);
+			ErrorHandler.Recover(this, re);
+		}
+		finally {
+			ExitRule();
+		}
+		return _localctx;
+	}
+
+	public partial class ForeachLoopContext : ParserRuleContext {
+		public ITerminalNode FOREACH() { return GetToken(GiraphParser.FOREACH, 0); }
+		public ForeachConditionContext foreachCondition() {
+			return GetRuleContext<ForeachConditionContext>(0);
+		}
+		public CodeBlockContext codeBlock() {
+			return GetRuleContext<CodeBlockContext>(0);
+		}
+		public WhereContext where() {
+			return GetRuleContext<WhereContext>(0);
+		}
+		public ForeachLoopContext(ParserRuleContext parent, int invokingState)
+			: base(parent, invokingState)
+		{
+		}
+		public override int RuleIndex { get { return RULE_foreachLoop; } }
+	}
+
+	[RuleVersion(0)]
+	public ForeachLoopContext foreachLoop() {
+		ForeachLoopContext _localctx = new ForeachLoopContext(Context, State);
+		EnterRule(_localctx, 104, RULE_foreachLoop);
+>>>>>>> Stashed changes
+		int _la;
+		try {
+			EnterOuterAlt(_localctx, 1);
+			{
+<<<<<<< Updated upstream
+			State = 573; Match(ADD);
+			State = 574; variable();
+			State = 575; Match(TO);
+			State = 576; variable();
+			{
+			State = 578;
+=======
+			State = 633; Match(FOREACH);
+			State = 634; foreachCondition();
+			State = 636;
+>>>>>>> Stashed changes
+			ErrorHandler.Sync(this);
+			_la = TokenStream.LA(1);
+			if (_la==WHERE) {
+				{
+<<<<<<< Updated upstream
+				State = 577; where();
+				}
+			}
+
+			}
+			{
+			State = 580; Match(SC);
+			}
+=======
+				State = 635; where();
+				}
+			}
+
+			State = 638; codeBlock();
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			ErrorHandler.ReportError(this, re);
+			ErrorHandler.Recover(this, re);
+		}
+		finally {
+			ExitRule();
+		}
+		return _localctx;
+	}
+
+	public partial class WhileLoopContext : ParserRuleContext {
+		public ITerminalNode WHILE() { return GetToken(GiraphParser.WHILE, 0); }
+		public BoolComparisonsContext boolComparisons() {
+			return GetRuleContext<BoolComparisonsContext>(0);
+		}
+		public CodeBlockContext codeBlock() {
+			return GetRuleContext<CodeBlockContext>(0);
+		}
+		public WhileLoopContext(ParserRuleContext parent, int invokingState)
+			: base(parent, invokingState)
+		{
+		}
+		public override int RuleIndex { get { return RULE_whileLoop; } }
+	}
+
+	[RuleVersion(0)]
+	public WhileLoopContext whileLoop() {
+		WhileLoopContext _localctx = new WhileLoopContext(Context, State);
+		EnterRule(_localctx, 106, RULE_whileLoop);
+		try {
+			EnterOuterAlt(_localctx, 1);
+			{
+			State = 640; Match(WHILE);
+			State = 641; boolComparisons(0);
+			State = 642; codeBlock();
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			ErrorHandler.ReportError(this, re);
+			ErrorHandler.Recover(this, re);
+		}
+		finally {
+			ExitRule();
+		}
+		return _localctx;
+	}
+
+	public partial class DoWhileLoopContext : ParserRuleContext {
+		public ITerminalNode DO() { return GetToken(GiraphParser.DO, 0); }
+		public CodeBlockContext codeBlock() {
+			return GetRuleContext<CodeBlockContext>(0);
+		}
+		public ITerminalNode WHILE() { return GetToken(GiraphParser.WHILE, 0); }
+		public BoolComparisonsContext boolComparisons() {
+			return GetRuleContext<BoolComparisonsContext>(0);
+		}
+		public DoWhileLoopContext(ParserRuleContext parent, int invokingState)
+			: base(parent, invokingState)
+		{
+		}
+		public override int RuleIndex { get { return RULE_doWhileLoop; } }
+	}
+
+	[RuleVersion(0)]
+	public DoWhileLoopContext doWhileLoop() {
+		DoWhileLoopContext _localctx = new DoWhileLoopContext(Context, State);
+		EnterRule(_localctx, 108, RULE_doWhileLoop);
+		try {
+			EnterOuterAlt(_localctx, 1);
+			{
+			State = 644; Match(DO);
+			State = 645; codeBlock();
+			State = 646; Match(WHILE);
+			State = 647; boolComparisons(0);
+>>>>>>> Stashed changes
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			ErrorHandler.ReportError(this, re);
+			ErrorHandler.Recover(this, re);
+		}
+		finally {
+			ExitRule();
+		}
+		return _localctx;
+	}
+
+<<<<<<< Updated upstream
+	public partial class LoopDclContext : ParserRuleContext {
+=======
+	public partial class ForLoopContext : ParserRuleContext {
+>>>>>>> Stashed changes
 		public ITerminalNode FOR() { return GetToken(GiraphParser.FOR, 0); }
 		public ForConditionContext forCondition() {
 			return GetRuleContext<ForConditionContext>(0);
@@ -3475,6 +5223,7 @@ public partial class GiraphParser : Parser {
 		public CodeBlockContext codeBlock() {
 			return GetRuleContext<CodeBlockContext>(0);
 		}
+<<<<<<< Updated upstream
 		public ITerminalNode DO() { return GetToken(GiraphParser.DO, 0); }
 		public ITerminalNode WHILE() { return GetToken(GiraphParser.WHILE, 0); }
 		public BoolComparisonsContext boolComparisons() {
@@ -3548,6 +5297,79 @@ public partial class GiraphParser : Parser {
 				}
 
 				State = 600; codeBlock();
+=======
+		public ForLoopContext(ParserRuleContext parent, int invokingState)
+			: base(parent, invokingState)
+		{
+		}
+		public override int RuleIndex { get { return RULE_forLoop; } }
+	}
+
+	[RuleVersion(0)]
+	public ForLoopContext forLoop() {
+		ForLoopContext _localctx = new ForLoopContext(Context, State);
+		EnterRule(_localctx, 110, RULE_forLoop);
+		try {
+			EnterOuterAlt(_localctx, 1);
+			{
+			State = 649; Match(FOR);
+			State = 650; forCondition();
+			State = 651; codeBlock();
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			ErrorHandler.ReportError(this, re);
+			ErrorHandler.Recover(this, re);
+		}
+		finally {
+			ExitRule();
+		}
+		return _localctx;
+	}
+
+	public partial class ForConditionContext : ParserRuleContext {
+		public ITerminalNode LP() { return GetToken(GiraphParser.LP, 0); }
+		public ForConditionInsideContext forConditionInside() {
+			return GetRuleContext<ForConditionInsideContext>(0);
+		}
+		public ITerminalNode RP() { return GetToken(GiraphParser.RP, 0); }
+		public ForConditionContext(ParserRuleContext parent, int invokingState)
+			: base(parent, invokingState)
+		{
+		}
+		public override int RuleIndex { get { return RULE_forCondition; } }
+	}
+
+	[RuleVersion(0)]
+	public ForConditionContext forCondition() {
+		ForConditionContext _localctx = new ForConditionContext(Context, State);
+		EnterRule(_localctx, 112, RULE_forCondition);
+		try {
+			State = 658;
+			ErrorHandler.Sync(this);
+			switch (TokenStream.LA(1)) {
+			case LP:
+				EnterOuterAlt(_localctx, 1);
+				{
+				State = 653; Match(LP);
+				State = 654; forConditionInside();
+				State = 655; Match(RP);
+				}
+				break;
+			case TYPE:
+			case GRAPHOBJ:
+			case VERTEXOBJ:
+			case EDGEOBJ:
+			case INF:
+			case BOOL:
+			case INTEGER:
+			case FLOATNUM:
+			case VARIABLENAME:
+			case STRING:
+				EnterOuterAlt(_localctx, 2);
+				{
+				State = 657; forConditionInside();
 				}
 				break;
 			default:
@@ -3565,16 +5387,80 @@ public partial class GiraphParser : Parser {
 		return _localctx;
 	}
 
+	public partial class AssignmentParantContext : ParserRuleContext {
+		public AssignmentContext assignment() {
+			return GetRuleContext<AssignmentContext>(0);
+		}
+		public ITerminalNode LP() { return GetToken(GiraphParser.LP, 0); }
+		public ITerminalNode RP() { return GetToken(GiraphParser.RP, 0); }
+		public AssignmentParantContext(ParserRuleContext parent, int invokingState)
+			: base(parent, invokingState)
+		{
+		}
+		public override int RuleIndex { get { return RULE_assignmentParant; } }
+	}
+
+	[RuleVersion(0)]
+	public AssignmentParantContext assignmentParant() {
+		AssignmentParantContext _localctx = new AssignmentParantContext(Context, State);
+		EnterRule(_localctx, 114, RULE_assignmentParant);
+		try {
+			State = 665;
+			ErrorHandler.Sync(this);
+			switch (TokenStream.LA(1)) {
+			case TYPE:
+			case GRAPHOBJ:
+			case VERTEXOBJ:
+			case EDGEOBJ:
+			case VARIABLENAME:
+				EnterOuterAlt(_localctx, 1);
+				{
+				State = 660; assignment();
+				}
+				break;
+			case LP:
+				EnterOuterAlt(_localctx, 2);
+				{
+				State = 661; Match(LP);
+				State = 662; assignment();
+				State = 663; Match(RP);
+>>>>>>> Stashed changes
+				}
+				break;
+			default:
+				throw new NoViableAltException(this);
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			ErrorHandler.ReportError(this, re);
+			ErrorHandler.Recover(this, re);
+		}
+		finally {
+			ExitRule();
+		}
+		return _localctx;
+	}
+
+<<<<<<< Updated upstream
 	public partial class ForConditionContext : ParserRuleContext {
 		public ITerminalNode LP() { return GetToken(GiraphParser.LP, 0); }
 		public ITerminalNode TO() { return GetToken(GiraphParser.TO, 0); }
 		public ITerminalNode RP() { return GetToken(GiraphParser.RP, 0); }
+=======
+	public partial class ForConditionInsideContext : ParserRuleContext {
+		public ITerminalNode TO() { return GetToken(GiraphParser.TO, 0); }
+		public InlineDclContext inlineDcl() {
+			return GetRuleContext<InlineDclContext>(0);
+		}
+>>>>>>> Stashed changes
 		public VarOrConstContext[] varOrConst() {
 			return GetRuleContexts<VarOrConstContext>();
 		}
 		public VarOrConstContext varOrConst(int i) {
 			return GetRuleContext<VarOrConstContext>(i);
 		}
+<<<<<<< Updated upstream
 		public AssignmentContext[] assignment() {
 			return GetRuleContexts<AssignmentContext>();
 		}
@@ -3679,12 +5565,145 @@ public partial class GiraphParser : Parser {
 			case VERTEXOBJ:
 			case EDGEOBJ:
 			case COLLECTION:
+=======
+		public OperationContext[] operation() {
+			return GetRuleContexts<OperationContext>();
+		}
+		public OperationContext operation(int i) {
+			return GetRuleContext<OperationContext>(i);
+		}
+		public ITerminalNode COLON() { return GetToken(GiraphParser.COLON, 0); }
+		public ForConditionInsideContext(ParserRuleContext parent, int invokingState)
+			: base(parent, invokingState)
+		{
+		}
+		public override int RuleIndex { get { return RULE_forConditionInside; } }
+	}
+
+	[RuleVersion(0)]
+	public ForConditionInsideContext forConditionInside() {
+		ForConditionInsideContext _localctx = new ForConditionInsideContext(Context, State);
+		EnterRule(_localctx, 116, RULE_forConditionInside);
+		int _la;
+		try {
+			EnterOuterAlt(_localctx, 1);
+			{
+			State = 669;
+			ErrorHandler.Sync(this);
+			switch (TokenStream.LA(1)) {
+			case TYPE:
+			case GRAPHOBJ:
+			case VERTEXOBJ:
+			case EDGEOBJ:
+				{
+				State = 667; inlineDcl();
+				}
+				break;
 			case INF:
 			case BOOL:
 			case INTEGER:
 			case FLOATNUM:
 			case VARIABLENAME:
 			case STRING:
+				{
+				State = 668; varOrConst();
+				}
+				break;
+			default:
+				throw new NoViableAltException(this);
+			}
+			State = 671; Match(TO);
+			State = 674;
+			ErrorHandler.Sync(this);
+			switch ( Interpreter.AdaptivePredict(TokenStream,65,Context) ) {
+			case 1:
+				{
+				State = 672; varOrConst();
+				}
+				break;
+			case 2:
+				{
+				State = 673; operation();
+				}
+				break;
+			}
+			State = 681;
+			ErrorHandler.Sync(this);
+			_la = TokenStream.LA(1);
+			if (_la==COLON) {
+				{
+				State = 676; Match(COLON);
+				State = 679;
+				ErrorHandler.Sync(this);
+				switch ( Interpreter.AdaptivePredict(TokenStream,66,Context) ) {
+				case 1:
+					{
+					State = 677; varOrConst();
+					}
+					break;
+				case 2:
+					{
+					State = 678; operation();
+					}
+					break;
+				}
+				}
+			}
+
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			ErrorHandler.ReportError(this, re);
+			ErrorHandler.Recover(this, re);
+		}
+		finally {
+			ExitRule();
+		}
+		return _localctx;
+	}
+
+	public partial class OperationContext : ParserRuleContext {
+		public VarOrConstContext[] varOrConst() {
+			return GetRuleContexts<VarOrConstContext>();
+		}
+		public VarOrConstContext varOrConst(int i) {
+			return GetRuleContext<VarOrConstContext>(i);
+		}
+		public OperatorContext[] @operator() {
+			return GetRuleContexts<OperatorContext>();
+		}
+		public OperatorContext @operator(int i) {
+			return GetRuleContext<OperatorContext>(i);
+		}
+		public ITerminalNode[] RP() { return GetTokens(GiraphParser.RP); }
+		public ITerminalNode RP(int i) {
+			return GetToken(GiraphParser.RP, i);
+		}
+		public OperationContext(ParserRuleContext parent, int invokingState)
+			: base(parent, invokingState)
+		{
+		}
+		public override int RuleIndex { get { return RULE_operation; } }
+	}
+
+	[RuleVersion(0)]
+	public OperationContext operation() {
+		OperationContext _localctx = new OperationContext(Context, State);
+		EnterRule(_localctx, 118, RULE_operation);
+		int _la;
+		try {
+			State = 704;
+			ErrorHandler.Sync(this);
+			switch (TokenStream.LA(1)) {
+>>>>>>> Stashed changes
+			case INF:
+			case BOOL:
+			case INTEGER:
+			case FLOATNUM:
+			case VARIABLENAME:
+			case STRING:
+<<<<<<< Updated upstream
 				EnterOuterAlt(_localctx, 2);
 				{
 				State = 627;
@@ -3748,6 +5767,51 @@ public partial class GiraphParser : Parser {
 					}
 				}
 
+=======
+				EnterOuterAlt(_localctx, 1);
+				{
+				{
+				State = 683; varOrConst();
+				State = 689;
+				ErrorHandler.Sync(this);
+				_la = TokenStream.LA(1);
+				while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << PLUS) | (1L << MINUS) | (1L << DIVIDE) | (1L << MULT) | (1L << MODULO))) != 0)) {
+					{
+					{
+					State = 684; @operator();
+					State = 685; varOrConst();
+					}
+					}
+					State = 691;
+					ErrorHandler.Sync(this);
+					_la = TokenStream.LA(1);
+				}
+				}
+				}
+				break;
+			case RP:
+				EnterOuterAlt(_localctx, 2);
+				{
+				State = 692; Match(RP);
+				{
+				State = 693; varOrConst();
+				State = 699;
+				ErrorHandler.Sync(this);
+				_la = TokenStream.LA(1);
+				while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << PLUS) | (1L << MINUS) | (1L << DIVIDE) | (1L << MULT) | (1L << MODULO))) != 0)) {
+					{
+					{
+					State = 694; @operator();
+					State = 695; varOrConst();
+					}
+					}
+					State = 701;
+					ErrorHandler.Sync(this);
+					_la = TokenStream.LA(1);
+				}
+				}
+				State = 702; Match(RP);
+>>>>>>> Stashed changes
 				}
 				break;
 			default:
@@ -3766,26 +5830,41 @@ public partial class GiraphParser : Parser {
 	}
 
 	public partial class InlineDclContext : ParserRuleContext {
+<<<<<<< Updated upstream
 		public AllTypeWithCollContext allTypeWithColl() {
 			return GetRuleContext<AllTypeWithCollContext>(0);
 		}
 		public ITerminalNode VARIABLENAME() { return GetToken(GiraphParser.VARIABLENAME, 0); }
 		public ITerminalNode EQUALS() { return GetToken(GiraphParser.EQUALS, 0); }
+=======
+		public AllTypeContext allType() {
+			return GetRuleContext<AllTypeContext>(0);
+		}
+		public ITerminalNode VARIABLENAME() { return GetToken(GiraphParser.VARIABLENAME, 0); }
+		public ITerminalNode EQUALS() { return GetToken(GiraphParser.EQUALS, 0); }
+		public OperationContext operation() {
+			return GetRuleContext<OperationContext>(0);
+		}
+>>>>>>> Stashed changes
 		public InlineDclContext(ParserRuleContext parent, int invokingState)
 			: base(parent, invokingState)
 		{
 		}
 		public override int RuleIndex { get { return RULE_inlineDcl; } }
+<<<<<<< Updated upstream
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IGiraphParserVisitor<TResult> typedVisitor = visitor as IGiraphParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitInlineDcl(this);
 			else return visitor.VisitChildren(this);
 		}
+=======
+>>>>>>> Stashed changes
 	}
 
 	[RuleVersion(0)]
 	public InlineDclContext inlineDcl() {
 		InlineDclContext _localctx = new InlineDclContext(Context, State);
+<<<<<<< Updated upstream
 		EnterRule(_localctx, 104, RULE_inlineDcl);
 		try {
 			EnterOuterAlt(_localctx, 1);
@@ -3793,6 +5872,16 @@ public partial class GiraphParser : Parser {
 			State = 647; allTypeWithColl();
 			State = 648; Match(VARIABLENAME);
 			State = 649; Match(EQUALS);
+=======
+		EnterRule(_localctx, 120, RULE_inlineDcl);
+		try {
+			EnterOuterAlt(_localctx, 1);
+			{
+			State = 706; allType();
+			State = 707; Match(VARIABLENAME);
+			State = 708; Match(EQUALS);
+			State = 709; operation();
+>>>>>>> Stashed changes
 			}
 		}
 		catch (RecognitionException re) {
@@ -3824,30 +5913,48 @@ public partial class GiraphParser : Parser {
 		{
 		}
 		public override int RuleIndex { get { return RULE_foreachCondition; } }
+<<<<<<< Updated upstream
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IGiraphParserVisitor<TResult> typedVisitor = visitor as IGiraphParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitForeachCondition(this);
 			else return visitor.VisitChildren(this);
 		}
+=======
+>>>>>>> Stashed changes
 	}
 
 	[RuleVersion(0)]
 	public ForeachConditionContext foreachCondition() {
 		ForeachConditionContext _localctx = new ForeachConditionContext(Context, State);
+<<<<<<< Updated upstream
 		EnterRule(_localctx, 106, RULE_foreachCondition);
 		try {
 			State = 663;
+=======
+		EnterRule(_localctx, 122, RULE_foreachCondition);
+		try {
+			State = 723;
+>>>>>>> Stashed changes
 			ErrorHandler.Sync(this);
 			switch (TokenStream.LA(1)) {
 			case LP:
 				EnterOuterAlt(_localctx, 1);
 				{
+<<<<<<< Updated upstream
 				State = 651; Match(LP);
 				State = 652; allType();
 				State = 653; variable();
 				State = 654; Match(IN);
 				State = 655; variableFunc();
 				State = 656; Match(RP);
+=======
+				State = 711; Match(LP);
+				State = 712; allType();
+				State = 713; variable();
+				State = 714; Match(IN);
+				State = 715; variableFunc();
+				State = 716; Match(RP);
+>>>>>>> Stashed changes
 				}
 				break;
 			case TYPE:
@@ -3856,10 +5963,17 @@ public partial class GiraphParser : Parser {
 			case EDGEOBJ:
 				EnterOuterAlt(_localctx, 2);
 				{
+<<<<<<< Updated upstream
 				State = 658; allType();
 				State = 659; variable();
 				State = 660; Match(IN);
 				State = 661; variableFunc();
+=======
+				State = 718; allType();
+				State = 719; variable();
+				State = 720; Match(IN);
+				State = 721; variableFunc();
+>>>>>>> Stashed changes
 				}
 				break;
 			default:
@@ -3887,25 +6001,38 @@ public partial class GiraphParser : Parser {
 		{
 		}
 		public override int RuleIndex { get { return RULE_allType; } }
+<<<<<<< Updated upstream
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IGiraphParserVisitor<TResult> typedVisitor = visitor as IGiraphParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitAllType(this);
 			else return visitor.VisitChildren(this);
 		}
+=======
+>>>>>>> Stashed changes
 	}
 
 	[RuleVersion(0)]
 	public AllTypeContext allType() {
 		AllTypeContext _localctx = new AllTypeContext(Context, State);
+<<<<<<< Updated upstream
 		EnterRule(_localctx, 108, RULE_allType);
 		try {
 			State = 667;
+=======
+		EnterRule(_localctx, 124, RULE_allType);
+		try {
+			State = 727;
+>>>>>>> Stashed changes
 			ErrorHandler.Sync(this);
 			switch (TokenStream.LA(1)) {
 			case TYPE:
 				EnterOuterAlt(_localctx, 1);
 				{
+<<<<<<< Updated upstream
 				State = 665; Match(TYPE);
+=======
+				State = 725; Match(TYPE);
+>>>>>>> Stashed changes
 				}
 				break;
 			case GRAPHOBJ:
@@ -3913,7 +6040,11 @@ public partial class GiraphParser : Parser {
 			case EDGEOBJ:
 				EnterOuterAlt(_localctx, 2);
 				{
+<<<<<<< Updated upstream
 				State = 666; objects();
+=======
+				State = 726; objects();
+>>>>>>> Stashed changes
 				}
 				break;
 			default:
@@ -3941,19 +6072,28 @@ public partial class GiraphParser : Parser {
 		{
 		}
 		public override int RuleIndex { get { return RULE_allTypeWithColl; } }
+<<<<<<< Updated upstream
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IGiraphParserVisitor<TResult> typedVisitor = visitor as IGiraphParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitAllTypeWithColl(this);
 			else return visitor.VisitChildren(this);
 		}
+=======
+>>>>>>> Stashed changes
 	}
 
 	[RuleVersion(0)]
 	public AllTypeWithCollContext allTypeWithColl() {
 		AllTypeWithCollContext _localctx = new AllTypeWithCollContext(Context, State);
+<<<<<<< Updated upstream
 		EnterRule(_localctx, 110, RULE_allTypeWithColl);
 		try {
 			State = 672;
+=======
+		EnterRule(_localctx, 126, RULE_allTypeWithColl);
+		try {
+			State = 732;
+>>>>>>> Stashed changes
 			ErrorHandler.Sync(this);
 			switch (TokenStream.LA(1)) {
 			case TYPE:
@@ -3962,14 +6102,23 @@ public partial class GiraphParser : Parser {
 			case EDGEOBJ:
 				EnterOuterAlt(_localctx, 1);
 				{
+<<<<<<< Updated upstream
 				State = 669; allType();
+=======
+				State = 729; allType();
+>>>>>>> Stashed changes
 				}
 				break;
 			case COLLECTION:
 				EnterOuterAlt(_localctx, 2);
 				{
+<<<<<<< Updated upstream
 				State = 670; Match(COLLECTION);
 				State = 671; allType();
+=======
+				State = 730; Match(COLLECTION);
+				State = 731; allType();
+>>>>>>> Stashed changes
 				}
 				break;
 			default:
@@ -3989,6 +6138,7 @@ public partial class GiraphParser : Parser {
 
 	public partial class CollectionDclContext : ParserRuleContext {
 		public ITerminalNode COLLECTION() { return GetToken(GiraphParser.COLLECTION, 0); }
+<<<<<<< Updated upstream
 		public AllTypeWithCollContext allTypeWithColl() {
 			return GetRuleContext<AllTypeWithCollContext>(0);
 		}
@@ -3997,21 +6147,36 @@ public partial class GiraphParser : Parser {
 			return GetRuleContext<AssignmentContext>(0);
 		}
 		public ITerminalNode SC() { return GetToken(GiraphParser.SC, 0); }
+=======
+		public AllTypeContext allType() {
+			return GetRuleContext<AllTypeContext>(0);
+		}
+		public ITerminalNode VARIABLENAME() { return GetToken(GiraphParser.VARIABLENAME, 0); }
+		public ITerminalNode SC() { return GetToken(GiraphParser.SC, 0); }
+		public ITerminalNode EQUALS() { return GetToken(GiraphParser.EQUALS, 0); }
+		public CollectionAssignmentContext collectionAssignment() {
+			return GetRuleContext<CollectionAssignmentContext>(0);
+		}
+>>>>>>> Stashed changes
 		public CollectionDclContext(ParserRuleContext parent, int invokingState)
 			: base(parent, invokingState)
 		{
 		}
 		public override int RuleIndex { get { return RULE_collectionDcl; } }
+<<<<<<< Updated upstream
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IGiraphParserVisitor<TResult> typedVisitor = visitor as IGiraphParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitCollectionDcl(this);
 			else return visitor.VisitChildren(this);
 		}
+=======
+>>>>>>> Stashed changes
 	}
 
 	[RuleVersion(0)]
 	public CollectionDclContext collectionDcl() {
 		CollectionDclContext _localctx = new CollectionDclContext(Context, State);
+<<<<<<< Updated upstream
 		EnterRule(_localctx, 112, RULE_collectionDcl);
 		try {
 			EnterOuterAlt(_localctx, 1);
@@ -4036,6 +6201,85 @@ public partial class GiraphParser : Parser {
 			State = 680; Match(SC);
 			}
 			}
+=======
+		EnterRule(_localctx, 128, RULE_collectionDcl);
+		int _la;
+		try {
+			EnterOuterAlt(_localctx, 1);
+			{
+			State = 734; Match(COLLECTION);
+			State = 735; allType();
+			{
+			State = 736; Match(VARIABLENAME);
+			}
+			State = 739;
+			ErrorHandler.Sync(this);
+			_la = TokenStream.LA(1);
+			if (_la==EQUALS) {
+				{
+				State = 737; Match(EQUALS);
+				State = 738; collectionAssignment();
+				}
+			}
+
+			{
+			State = 741; Match(SC);
+			}
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			ErrorHandler.ReportError(this, re);
+			ErrorHandler.Recover(this, re);
+		}
+		finally {
+			ExitRule();
+		}
+		return _localctx;
+	}
+
+	public partial class CollectionAssignmentContext : ParserRuleContext {
+		public ReturnQueryContext returnQuery() {
+			return GetRuleContext<ReturnQueryContext>(0);
+		}
+		public VariableFuncContext variableFunc() {
+			return GetRuleContext<VariableFuncContext>(0);
+		}
+		public CollectionAssignmentContext(ParserRuleContext parent, int invokingState)
+			: base(parent, invokingState)
+		{
+		}
+		public override int RuleIndex { get { return RULE_collectionAssignment; } }
+	}
+
+	[RuleVersion(0)]
+	public CollectionAssignmentContext collectionAssignment() {
+		CollectionAssignmentContext _localctx = new CollectionAssignmentContext(Context, State);
+		EnterRule(_localctx, 130, RULE_collectionAssignment);
+		try {
+			State = 745;
+			ErrorHandler.Sync(this);
+			switch (TokenStream.LA(1)) {
+			case SELECT:
+			case SELECTALL:
+			case POP:
+			case DEQUEUE:
+			case EXTRACTMIN:
+			case EXTRACTMAX:
+				EnterOuterAlt(_localctx, 1);
+				{
+				State = 743; returnQuery();
+				}
+				break;
+			case VARIABLENAME:
+				EnterOuterAlt(_localctx, 2);
+				{
+				State = 744; variableFunc();
+				}
+				break;
+			default:
+				throw new NoViableAltException(this);
+			}
 		}
 		catch (RecognitionException re) {
 			_localctx.exception = re;
@@ -4050,17 +6294,152 @@ public partial class GiraphParser : Parser {
 
 	public partial class SetQueryContext : ParserRuleContext {
 		public ITerminalNode SET() { return GetToken(GiraphParser.SET, 0); }
-		public SetExpressionContext[] setExpression() {
-			return GetRuleContexts<SetExpressionContext>();
+		public SetExpressionAtriContext[] setExpressionAtri() {
+			return GetRuleContexts<SetExpressionAtriContext>();
 		}
-		public SetExpressionContext setExpression(int i) {
-			return GetRuleContext<SetExpressionContext>(i);
+		public SetExpressionAtriContext setExpressionAtri(int i) {
+			return GetRuleContext<SetExpressionAtriContext>(i);
+		}
+		public ITerminalNode IN() { return GetToken(GiraphParser.IN, 0); }
+		public VariableContext variable() {
+			return GetRuleContext<VariableContext>(0);
 		}
 		public ITerminalNode SC() { return GetToken(GiraphParser.SC, 0); }
 		public ITerminalNode[] COMMA() { return GetTokens(GiraphParser.COMMA); }
 		public ITerminalNode COMMA(int i) {
 			return GetToken(GiraphParser.COMMA, i);
 		}
+		public WhereContext where() {
+			return GetRuleContext<WhereContext>(0);
+		}
+		public SetExpressionVariContext[] setExpressionVari() {
+			return GetRuleContexts<SetExpressionVariContext>();
+		}
+		public SetExpressionVariContext setExpressionVari(int i) {
+			return GetRuleContext<SetExpressionVariContext>(i);
+		}
+		public SetQueryContext(ParserRuleContext parent, int invokingState)
+			: base(parent, invokingState)
+		{
+		}
+		public override int RuleIndex { get { return RULE_setQuery; } }
+	}
+
+	[RuleVersion(0)]
+	public SetQueryContext setQuery() {
+		SetQueryContext _localctx = new SetQueryContext(Context, State);
+		EnterRule(_localctx, 132, RULE_setQuery);
+		int _la;
+		try {
+			State = 777;
+			ErrorHandler.Sync(this);
+			switch ( Interpreter.AdaptivePredict(TokenStream,80,Context) ) {
+			case 1:
+				EnterOuterAlt(_localctx, 1);
+				{
+				State = 747; Match(SET);
+				State = 748; setExpressionAtri();
+				State = 753;
+				ErrorHandler.Sync(this);
+				_la = TokenStream.LA(1);
+				while (_la==COMMA) {
+					{
+					{
+					State = 749; Match(COMMA);
+					State = 750; setExpressionAtri();
+					}
+					}
+					State = 755;
+					ErrorHandler.Sync(this);
+					_la = TokenStream.LA(1);
+				}
+				State = 756; Match(IN);
+				State = 757; variable();
+				State = 759;
+				ErrorHandler.Sync(this);
+				_la = TokenStream.LA(1);
+				if (_la==WHERE) {
+					{
+					State = 758; where();
+					}
+				}
+
+				{
+				State = 761; Match(SC);
+				}
+				}
+				break;
+			case 2:
+				EnterOuterAlt(_localctx, 2);
+				{
+				State = 763; Match(SET);
+				State = 764; setExpressionVari();
+				State = 769;
+				ErrorHandler.Sync(this);
+				_la = TokenStream.LA(1);
+				while (_la==COMMA) {
+					{
+					{
+					State = 765; Match(COMMA);
+					State = 766; setExpressionVari();
+					}
+					}
+					State = 771;
+					ErrorHandler.Sync(this);
+					_la = TokenStream.LA(1);
+				}
+				State = 773;
+				ErrorHandler.Sync(this);
+				_la = TokenStream.LA(1);
+				if (_la==WHERE) {
+					{
+					State = 772; where();
+					}
+				}
+
+				{
+				State = 775; Match(SC);
+				}
+				}
+				break;
+			}
+>>>>>>> Stashed changes
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			ErrorHandler.ReportError(this, re);
+			ErrorHandler.Recover(this, re);
+		}
+		finally {
+			ExitRule();
+		}
+		return _localctx;
+	}
+
+<<<<<<< Updated upstream
+	public partial class SetQueryContext : ParserRuleContext {
+		public ITerminalNode SET() { return GetToken(GiraphParser.SET, 0); }
+		public SetExpressionContext[] setExpression() {
+			return GetRuleContexts<SetExpressionContext>();
+		}
+		public SetExpressionContext setExpression(int i) {
+			return GetRuleContext<SetExpressionContext>(i);
+=======
+	public partial class GraphSetQueryContext : ParserRuleContext {
+		public ITerminalNode SET() { return GetToken(GiraphParser.SET, 0); }
+		public SetExpressionAtriContext[] setExpressionAtri() {
+			return GetRuleContexts<SetExpressionAtriContext>();
+		}
+		public SetExpressionAtriContext setExpressionAtri(int i) {
+			return GetRuleContext<SetExpressionAtriContext>(i);
+>>>>>>> Stashed changes
+		}
+		public ITerminalNode SC() { return GetToken(GiraphParser.SC, 0); }
+		public ITerminalNode[] COMMA() { return GetTokens(GiraphParser.COMMA); }
+		public ITerminalNode COMMA(int i) {
+			return GetToken(GiraphParser.COMMA, i);
+		}
+<<<<<<< Updated upstream
 		public ITerminalNode IN() { return GetToken(GiraphParser.IN, 0); }
 		public VariableContext variable() {
 			return GetRuleContext<VariableContext>(0);
@@ -4084,18 +6463,41 @@ public partial class GiraphParser : Parser {
 	public SetQueryContext setQuery() {
 		SetQueryContext _localctx = new SetQueryContext(Context, State);
 		EnterRule(_localctx, 114, RULE_setQuery);
+=======
+		public WhereContext where() {
+			return GetRuleContext<WhereContext>(0);
+		}
+		public GraphSetQueryContext(ParserRuleContext parent, int invokingState)
+			: base(parent, invokingState)
+		{
+		}
+		public override int RuleIndex { get { return RULE_graphSetQuery; } }
+	}
+
+	[RuleVersion(0)]
+	public GraphSetQueryContext graphSetQuery() {
+		GraphSetQueryContext _localctx = new GraphSetQueryContext(Context, State);
+		EnterRule(_localctx, 134, RULE_graphSetQuery);
+>>>>>>> Stashed changes
 		int _la;
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
+<<<<<<< Updated upstream
 			State = 682; Match(SET);
 			State = 683; setExpression();
 			State = 688;
+=======
+			State = 779; Match(SET);
+			State = 780; setExpressionAtri();
+			State = 785;
+>>>>>>> Stashed changes
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
 			while (_la==COMMA) {
 				{
 				{
+<<<<<<< Updated upstream
 				State = 684; Match(COMMA);
 				State = 685; setExpression();
 				}
@@ -4115,16 +6517,35 @@ public partial class GiraphParser : Parser {
 			}
 
 			State = 696;
+=======
+				State = 781; Match(COMMA);
+				State = 782; setExpressionAtri();
+				}
+				}
+				State = 787;
+				ErrorHandler.Sync(this);
+				_la = TokenStream.LA(1);
+			}
+			State = 789;
+>>>>>>> Stashed changes
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
 			if (_la==WHERE) {
 				{
+<<<<<<< Updated upstream
 				State = 695; where();
+=======
+				State = 788; where();
+>>>>>>> Stashed changes
 				}
 			}
 
 			{
+<<<<<<< Updated upstream
 			State = 698; Match(SC);
+=======
+			State = 791; Match(SC);
+>>>>>>> Stashed changes
 			}
 			}
 		}
@@ -4139,10 +6560,14 @@ public partial class GiraphParser : Parser {
 		return _localctx;
 	}
 
+<<<<<<< Updated upstream
 	public partial class SetExpressionContext : ParserRuleContext {
 		public VariableContext variable() {
 			return GetRuleContext<VariableContext>(0);
 		}
+=======
+	public partial class SetExpressionAtriContext : ParserRuleContext {
+>>>>>>> Stashed changes
 		public AttributeContext attribute() {
 			return GetRuleContext<AttributeContext>(0);
 		}
@@ -4160,6 +6585,7 @@ public partial class GiraphParser : Parser {
 		public ExpressionExtensionContext expressionExtension(int i) {
 			return GetRuleContext<ExpressionExtensionContext>(i);
 		}
+<<<<<<< Updated upstream
 		public SetExpressionContext(ParserRuleContext parent, int invokingState)
 			: base(parent, invokingState)
 		{
@@ -4176,10 +6602,24 @@ public partial class GiraphParser : Parser {
 	public SetExpressionContext setExpression() {
 		SetExpressionContext _localctx = new SetExpressionContext(Context, State);
 		EnterRule(_localctx, 116, RULE_setExpression);
+=======
+		public SetExpressionAtriContext(ParserRuleContext parent, int invokingState)
+			: base(parent, invokingState)
+		{
+		}
+		public override int RuleIndex { get { return RULE_setExpressionAtri; } }
+	}
+
+	[RuleVersion(0)]
+	public SetExpressionAtriContext setExpressionAtri() {
+		SetExpressionAtriContext _localctx = new SetExpressionAtriContext(Context, State);
+		EnterRule(_localctx, 136, RULE_setExpressionAtri);
+>>>>>>> Stashed changes
 		int _la;
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
+<<<<<<< Updated upstream
 			State = 702;
 			ErrorHandler.Sync(this);
 			switch (TokenStream.LA(1)) {
@@ -4200,19 +6640,35 @@ public partial class GiraphParser : Parser {
 			State = 704; compoundAssign();
 			}
 			State = 722;
+=======
+			{
+			State = 793; attribute();
+			}
+			{
+			State = 794; compoundAssign();
+			}
+			State = 812;
+>>>>>>> Stashed changes
 			ErrorHandler.Sync(this);
 			switch (TokenStream.LA(1)) {
 			case LP:
 				{
 				{
+<<<<<<< Updated upstream
 				State = 705; Match(LP);
 				State = 706; varOrConst();
 				State = 710;
+=======
+				State = 795; Match(LP);
+				State = 796; varOrConst();
+				State = 800;
+>>>>>>> Stashed changes
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
 				while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << PLUS) | (1L << MINUS) | (1L << DIVIDE) | (1L << MULT) | (1L << MODULO))) != 0)) {
 					{
 					{
+<<<<<<< Updated upstream
 					State = 707; expressionExtension();
 					}
 					}
@@ -4221,6 +6677,16 @@ public partial class GiraphParser : Parser {
 					_la = TokenStream.LA(1);
 				}
 				State = 713; Match(RP);
+=======
+					State = 797; expressionExtension();
+					}
+					}
+					State = 802;
+					ErrorHandler.Sync(this);
+					_la = TokenStream.LA(1);
+				}
+				State = 803; Match(RP);
+>>>>>>> Stashed changes
 				}
 				}
 				break;
@@ -4232,17 +6698,29 @@ public partial class GiraphParser : Parser {
 			case STRING:
 				{
 				{
+<<<<<<< Updated upstream
 				State = 715; varOrConst();
 				State = 719;
+=======
+				State = 805; varOrConst();
+				State = 809;
+>>>>>>> Stashed changes
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
 				while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << PLUS) | (1L << MINUS) | (1L << DIVIDE) | (1L << MULT) | (1L << MODULO))) != 0)) {
 					{
 					{
+<<<<<<< Updated upstream
 					State = 716; expressionExtension();
 					}
 					}
 					State = 721;
+=======
+					State = 806; expressionExtension();
+					}
+					}
+					State = 811;
+>>>>>>> Stashed changes
 					ErrorHandler.Sync(this);
 					_la = TokenStream.LA(1);
 				}
@@ -4265,6 +6743,7 @@ public partial class GiraphParser : Parser {
 		return _localctx;
 	}
 
+<<<<<<< Updated upstream
 	public partial class CompoundAssignContext : ParserRuleContext {
 		public ITerminalNode EQUALS() { return GetToken(GiraphParser.EQUALS, 0); }
 		public ITerminalNode PLUS() { return GetToken(GiraphParser.PLUS, 0); }
@@ -4338,12 +6817,144 @@ public partial class GiraphParser : Parser {
 				}
 				{
 				State = 732; Match(EQUALS);
+=======
+	public partial class SetExpressionVariContext : ParserRuleContext {
+		public VariableContext variable() {
+			return GetRuleContext<VariableContext>(0);
+		}
+		public CompoundAssignContext compoundAssign() {
+			return GetRuleContext<CompoundAssignContext>(0);
+		}
+		public ITerminalNode LP() { return GetToken(GiraphParser.LP, 0); }
+		public VarOrConstContext varOrConst() {
+			return GetRuleContext<VarOrConstContext>(0);
+		}
+		public ITerminalNode RP() { return GetToken(GiraphParser.RP, 0); }
+		public ExpressionExtensionContext[] expressionExtension() {
+			return GetRuleContexts<ExpressionExtensionContext>();
+		}
+		public ExpressionExtensionContext expressionExtension(int i) {
+			return GetRuleContext<ExpressionExtensionContext>(i);
+		}
+		public SetExpressionVariContext(ParserRuleContext parent, int invokingState)
+			: base(parent, invokingState)
+		{
+		}
+		public override int RuleIndex { get { return RULE_setExpressionVari; } }
+	}
+
+	[RuleVersion(0)]
+	public SetExpressionVariContext setExpressionVari() {
+		SetExpressionVariContext _localctx = new SetExpressionVariContext(Context, State);
+		EnterRule(_localctx, 138, RULE_setExpressionVari);
+		int _la;
+		try {
+			EnterOuterAlt(_localctx, 1);
+			{
+			{
+			State = 814; variable();
+			}
+			{
+			State = 815; compoundAssign();
+			}
+			State = 833;
+			ErrorHandler.Sync(this);
+			switch (TokenStream.LA(1)) {
+			case LP:
+				{
+				{
+				State = 816; Match(LP);
+				State = 817; varOrConst();
+				State = 821;
+				ErrorHandler.Sync(this);
+				_la = TokenStream.LA(1);
+				while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << PLUS) | (1L << MINUS) | (1L << DIVIDE) | (1L << MULT) | (1L << MODULO))) != 0)) {
+					{
+					{
+					State = 818; expressionExtension();
+					}
+					}
+					State = 823;
+					ErrorHandler.Sync(this);
+					_la = TokenStream.LA(1);
+				}
+				State = 824; Match(RP);
+				}
+				}
+				break;
+			case INF:
+			case BOOL:
+			case INTEGER:
+			case FLOATNUM:
+			case VARIABLENAME:
+			case STRING:
+				{
+				{
+				State = 826; varOrConst();
+				State = 830;
+				ErrorHandler.Sync(this);
+				_la = TokenStream.LA(1);
+				while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << PLUS) | (1L << MINUS) | (1L << DIVIDE) | (1L << MULT) | (1L << MODULO))) != 0)) {
+					{
+					{
+					State = 827; expressionExtension();
+					}
+					}
+					State = 832;
+					ErrorHandler.Sync(this);
+					_la = TokenStream.LA(1);
+				}
+>>>>>>> Stashed changes
 				}
 				}
 				break;
 			default:
 				throw new NoViableAltException(this);
 			}
+<<<<<<< Updated upstream
+=======
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			ErrorHandler.ReportError(this, re);
+			ErrorHandler.Recover(this, re);
+		}
+		finally {
+			ExitRule();
+		}
+		return _localctx;
+	}
+
+	public partial class CompoundAssignContext : ParserRuleContext {
+		public ITerminalNode EQUALS() { return GetToken(GiraphParser.EQUALS, 0); }
+		public ITerminalNode COMPOUNDASSIGN() { return GetToken(GiraphParser.COMPOUNDASSIGN, 0); }
+		public CompoundAssignContext(ParserRuleContext parent, int invokingState)
+			: base(parent, invokingState)
+		{
+		}
+		public override int RuleIndex { get { return RULE_compoundAssign; } }
+	}
+
+	[RuleVersion(0)]
+	public CompoundAssignContext compoundAssign() {
+		CompoundAssignContext _localctx = new CompoundAssignContext(Context, State);
+		EnterRule(_localctx, 140, RULE_compoundAssign);
+		int _la;
+		try {
+			EnterOuterAlt(_localctx, 1);
+			{
+			State = 835;
+			_la = TokenStream.LA(1);
+			if ( !(_la==EQUALS || _la==COMPOUNDASSIGN) ) {
+			ErrorHandler.RecoverInline(this);
+			}
+			else {
+				ErrorHandler.ReportMatch(this);
+			    Consume();
+			}
+			}
+>>>>>>> Stashed changes
 		}
 		catch (RecognitionException re) {
 			_localctx.exception = re;
@@ -4369,26 +6980,41 @@ public partial class GiraphParser : Parser {
 		{
 		}
 		public override int RuleIndex { get { return RULE_attribute; } }
+<<<<<<< Updated upstream
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IGiraphParserVisitor<TResult> typedVisitor = visitor as IGiraphParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitAttribute(this);
 			else return visitor.VisitChildren(this);
 		}
+=======
+>>>>>>> Stashed changes
 	}
 
 	[RuleVersion(0)]
 	public AttributeContext attribute() {
 		AttributeContext _localctx = new AttributeContext(Context, State);
+<<<<<<< Updated upstream
 		EnterRule(_localctx, 120, RULE_attribute);
+=======
+		EnterRule(_localctx, 142, RULE_attribute);
+>>>>>>> Stashed changes
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
 			{
+<<<<<<< Updated upstream
 			State = 735; Match(SINGLEQUOTE);
 			}
 			State = 736; variable();
 			{
 			State = 737; Match(SINGLEQUOTE);
+=======
+			State = 837; Match(SINGLEQUOTE);
+			}
+			State = 838; variable();
+			{
+			State = 839; Match(SINGLEQUOTE);
+>>>>>>> Stashed changes
 			}
 			}
 		}
@@ -4418,16 +7044,20 @@ public partial class GiraphParser : Parser {
 		{
 		}
 		public override int RuleIndex { get { return RULE_setOneAttri; } }
+<<<<<<< Updated upstream
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IGiraphParserVisitor<TResult> typedVisitor = visitor as IGiraphParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitSetOneAttri(this);
 			else return visitor.VisitChildren(this);
 		}
+=======
+>>>>>>> Stashed changes
 	}
 
 	[RuleVersion(0)]
 	public SetOneAttriContext setOneAttri() {
 		SetOneAttriContext _localctx = new SetOneAttriContext(Context, State);
+<<<<<<< Updated upstream
 		EnterRule(_localctx, 122, RULE_setOneAttri);
 		try {
 			EnterOuterAlt(_localctx, 1);
@@ -4438,6 +7068,18 @@ public partial class GiraphParser : Parser {
 			}
 			{
 			State = 741; varOrConst();
+=======
+		EnterRule(_localctx, 144, RULE_setOneAttri);
+		try {
+			EnterOuterAlt(_localctx, 1);
+			{
+			State = 841; attribute();
+			{
+			State = 842; compoundAssign();
+			}
+			{
+			State = 843; varOrConst();
+>>>>>>> Stashed changes
 			}
 			}
 		}
@@ -4464,31 +7106,48 @@ public partial class GiraphParser : Parser {
 		{
 		}
 		public override int RuleIndex { get { return RULE_collNoReturnOps; } }
+<<<<<<< Updated upstream
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IGiraphParserVisitor<TResult> typedVisitor = visitor as IGiraphParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitCollNoReturnOps(this);
 			else return visitor.VisitChildren(this);
 		}
+=======
+>>>>>>> Stashed changes
 	}
 
 	[RuleVersion(0)]
 	public CollNoReturnOpsContext collNoReturnOps() {
 		CollNoReturnOpsContext _localctx = new CollNoReturnOpsContext(Context, State);
+<<<<<<< Updated upstream
 		EnterRule(_localctx, 124, RULE_collNoReturnOps);
 		try {
 			State = 745;
+=======
+		EnterRule(_localctx, 146, RULE_collNoReturnOps);
+		try {
+			State = 847;
+>>>>>>> Stashed changes
 			ErrorHandler.Sync(this);
 			switch (TokenStream.LA(1)) {
 			case ENQUEUE:
 				EnterOuterAlt(_localctx, 1);
 				{
+<<<<<<< Updated upstream
 				State = 743; enqueueOP();
+=======
+				State = 845; enqueueOP();
+>>>>>>> Stashed changes
 				}
 				break;
 			case PUSH:
 				EnterOuterAlt(_localctx, 2);
 				{
+<<<<<<< Updated upstream
 				State = 744; pushOP();
+=======
+				State = 846; pushOP();
+>>>>>>> Stashed changes
 				}
 				break;
 			default:
@@ -4524,43 +7183,68 @@ public partial class GiraphParser : Parser {
 		{
 		}
 		public override int RuleIndex { get { return RULE_collReturnOps; } }
+<<<<<<< Updated upstream
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IGiraphParserVisitor<TResult> typedVisitor = visitor as IGiraphParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitCollReturnOps(this);
 			else return visitor.VisitChildren(this);
 		}
+=======
+>>>>>>> Stashed changes
 	}
 
 	[RuleVersion(0)]
 	public CollReturnOpsContext collReturnOps() {
 		CollReturnOpsContext _localctx = new CollReturnOpsContext(Context, State);
+<<<<<<< Updated upstream
 		EnterRule(_localctx, 126, RULE_collReturnOps);
 		try {
 			State = 751;
+=======
+		EnterRule(_localctx, 148, RULE_collReturnOps);
+		try {
+			State = 853;
+>>>>>>> Stashed changes
 			ErrorHandler.Sync(this);
 			switch (TokenStream.LA(1)) {
 			case DEQUEUE:
 				EnterOuterAlt(_localctx, 1);
 				{
+<<<<<<< Updated upstream
 				State = 747; dequeueOP();
+=======
+				State = 849; dequeueOP();
+>>>>>>> Stashed changes
 				}
 				break;
 			case POP:
 				EnterOuterAlt(_localctx, 2);
 				{
+<<<<<<< Updated upstream
 				State = 748; popOP();
+=======
+				State = 850; popOP();
+>>>>>>> Stashed changes
 				}
 				break;
 			case EXTRACTMIN:
 				EnterOuterAlt(_localctx, 3);
 				{
+<<<<<<< Updated upstream
 				State = 749; extractMinOP();
+=======
+				State = 851; extractMinOP();
+>>>>>>> Stashed changes
 				}
 				break;
 			case EXTRACTMAX:
 				EnterOuterAlt(_localctx, 4);
 				{
+<<<<<<< Updated upstream
 				State = 750; extractMaxOP();
+=======
+				State = 852; extractMaxOP();
+>>>>>>> Stashed changes
 				}
 				break;
 			default:
@@ -4596,36 +7280,59 @@ public partial class GiraphParser : Parser {
 		{
 		}
 		public override int RuleIndex { get { return RULE_enqueueOP; } }
+<<<<<<< Updated upstream
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IGiraphParserVisitor<TResult> typedVisitor = visitor as IGiraphParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitEnqueueOP(this);
 			else return visitor.VisitChildren(this);
 		}
+=======
+>>>>>>> Stashed changes
 	}
 
 	[RuleVersion(0)]
 	public EnqueueOPContext enqueueOP() {
 		EnqueueOPContext _localctx = new EnqueueOPContext(Context, State);
+<<<<<<< Updated upstream
 		EnterRule(_localctx, 128, RULE_enqueueOP);
+=======
+		EnterRule(_localctx, 150, RULE_enqueueOP);
+>>>>>>> Stashed changes
 		int _la;
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
+<<<<<<< Updated upstream
 			State = 753; Match(ENQUEUE);
 			State = 754; variable();
 			State = 755; Match(TO);
 			State = 756; variable();
 			State = 758;
+=======
+			State = 855; Match(ENQUEUE);
+			State = 856; variable();
+			State = 857; Match(TO);
+			State = 858; variable();
+			State = 860;
+>>>>>>> Stashed changes
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
 			if (_la==WHERE) {
 				{
+<<<<<<< Updated upstream
 				State = 757; where();
+=======
+				State = 859; where();
+>>>>>>> Stashed changes
 				}
 			}
 
 			{
+<<<<<<< Updated upstream
 			State = 760; Match(SC);
+=======
+			State = 862; Match(SC);
+>>>>>>> Stashed changes
 			}
 			}
 		}
@@ -4654,16 +7361,20 @@ public partial class GiraphParser : Parser {
 		{
 		}
 		public override int RuleIndex { get { return RULE_dequeueOP; } }
+<<<<<<< Updated upstream
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IGiraphParserVisitor<TResult> typedVisitor = visitor as IGiraphParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitDequeueOP(this);
 			else return visitor.VisitChildren(this);
 		}
+=======
+>>>>>>> Stashed changes
 	}
 
 	[RuleVersion(0)]
 	public DequeueOPContext dequeueOP() {
 		DequeueOPContext _localctx = new DequeueOPContext(Context, State);
+<<<<<<< Updated upstream
 		EnterRule(_localctx, 130, RULE_dequeueOP);
 		try {
 			EnterOuterAlt(_localctx, 1);
@@ -4677,6 +7388,21 @@ public partial class GiraphParser : Parser {
 			case 1:
 				{
 				State = 765; where();
+=======
+		EnterRule(_localctx, 152, RULE_dequeueOP);
+		try {
+			EnterOuterAlt(_localctx, 1);
+			{
+			State = 864; Match(DEQUEUE);
+			State = 865; Match(FROM);
+			State = 866; variable();
+			State = 868;
+			ErrorHandler.Sync(this);
+			switch ( Interpreter.AdaptivePredict(TokenStream,92,Context) ) {
+			case 1:
+				{
+				State = 867; where();
+>>>>>>> Stashed changes
 				}
 				break;
 			}
@@ -4708,35 +7434,57 @@ public partial class GiraphParser : Parser {
 		{
 		}
 		public override int RuleIndex { get { return RULE_popOP; } }
+<<<<<<< Updated upstream
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IGiraphParserVisitor<TResult> typedVisitor = visitor as IGiraphParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitPopOP(this);
 			else return visitor.VisitChildren(this);
 		}
+=======
+>>>>>>> Stashed changes
 	}
 
 	[RuleVersion(0)]
 	public PopOPContext popOP() {
 		PopOPContext _localctx = new PopOPContext(Context, State);
+<<<<<<< Updated upstream
 		EnterRule(_localctx, 132, RULE_popOP);
+=======
+		EnterRule(_localctx, 154, RULE_popOP);
+>>>>>>> Stashed changes
 		int _la;
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
+<<<<<<< Updated upstream
 			State = 768; Match(POP);
 			State = 769; Match(FROM);
 			State = 770; variable();
 			State = 772;
+=======
+			State = 870; Match(POP);
+			State = 871; Match(FROM);
+			State = 872; variable();
+			State = 874;
+>>>>>>> Stashed changes
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
 			if (_la==WHERE) {
 				{
+<<<<<<< Updated upstream
 				State = 771; where();
+=======
+				State = 873; where();
+>>>>>>> Stashed changes
 				}
 			}
 
 			{
+<<<<<<< Updated upstream
 			State = 774; Match(SC);
+=======
+			State = 876; Match(SC);
+>>>>>>> Stashed changes
 			}
 			}
 		}
@@ -4769,36 +7517,59 @@ public partial class GiraphParser : Parser {
 		{
 		}
 		public override int RuleIndex { get { return RULE_pushOP; } }
+<<<<<<< Updated upstream
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IGiraphParserVisitor<TResult> typedVisitor = visitor as IGiraphParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitPushOP(this);
 			else return visitor.VisitChildren(this);
 		}
+=======
+>>>>>>> Stashed changes
 	}
 
 	[RuleVersion(0)]
 	public PushOPContext pushOP() {
 		PushOPContext _localctx = new PushOPContext(Context, State);
+<<<<<<< Updated upstream
 		EnterRule(_localctx, 134, RULE_pushOP);
+=======
+		EnterRule(_localctx, 156, RULE_pushOP);
+>>>>>>> Stashed changes
 		int _la;
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
+<<<<<<< Updated upstream
 			State = 776; Match(PUSH);
 			State = 777; variable();
 			State = 778; Match(TO);
 			State = 779; variable();
 			State = 781;
+=======
+			State = 878; Match(PUSH);
+			State = 879; variable();
+			State = 880; Match(TO);
+			State = 881; variable();
+			State = 883;
+>>>>>>> Stashed changes
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
 			if (_la==WHERE) {
 				{
+<<<<<<< Updated upstream
 				State = 780; where();
+=======
+				State = 882; where();
+>>>>>>> Stashed changes
 				}
 			}
 
 			{
+<<<<<<< Updated upstream
 			State = 783; Match(SC);
+=======
+			State = 885; Match(SC);
+>>>>>>> Stashed changes
 			}
 			}
 		}
@@ -4830,27 +7601,40 @@ public partial class GiraphParser : Parser {
 		{
 		}
 		public override int RuleIndex { get { return RULE_extractMinOP; } }
+<<<<<<< Updated upstream
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IGiraphParserVisitor<TResult> typedVisitor = visitor as IGiraphParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitExtractMinOP(this);
 			else return visitor.VisitChildren(this);
 		}
+=======
+>>>>>>> Stashed changes
 	}
 
 	[RuleVersion(0)]
 	public ExtractMinOPContext extractMinOP() {
 		ExtractMinOPContext _localctx = new ExtractMinOPContext(Context, State);
+<<<<<<< Updated upstream
 		EnterRule(_localctx, 136, RULE_extractMinOP);
+=======
+		EnterRule(_localctx, 158, RULE_extractMinOP);
+>>>>>>> Stashed changes
 		int _la;
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
+<<<<<<< Updated upstream
 			State = 785; Match(EXTRACTMIN);
 			State = 787;
+=======
+			State = 887; Match(EXTRACTMIN);
+			State = 889;
+>>>>>>> Stashed changes
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
 			if (_la==SINGLEQUOTE) {
 				{
+<<<<<<< Updated upstream
 				State = 786; attribute();
 				}
 			}
@@ -4863,6 +7647,20 @@ public partial class GiraphParser : Parser {
 			case 1:
 				{
 				State = 791; where();
+=======
+				State = 888; attribute();
+				}
+			}
+
+			State = 891; Match(FROM);
+			State = 892; variable();
+			State = 894;
+			ErrorHandler.Sync(this);
+			switch ( Interpreter.AdaptivePredict(TokenStream,96,Context) ) {
+			case 1:
+				{
+				State = 893; where();
+>>>>>>> Stashed changes
 				}
 				break;
 			}
@@ -4896,27 +7694,40 @@ public partial class GiraphParser : Parser {
 		{
 		}
 		public override int RuleIndex { get { return RULE_extractMaxOP; } }
+<<<<<<< Updated upstream
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IGiraphParserVisitor<TResult> typedVisitor = visitor as IGiraphParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitExtractMaxOP(this);
 			else return visitor.VisitChildren(this);
 		}
+=======
+>>>>>>> Stashed changes
 	}
 
 	[RuleVersion(0)]
 	public ExtractMaxOPContext extractMaxOP() {
 		ExtractMaxOPContext _localctx = new ExtractMaxOPContext(Context, State);
+<<<<<<< Updated upstream
 		EnterRule(_localctx, 138, RULE_extractMaxOP);
+=======
+		EnterRule(_localctx, 160, RULE_extractMaxOP);
+>>>>>>> Stashed changes
 		int _la;
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
+<<<<<<< Updated upstream
 			State = 794; Match(EXTRACTMAX);
 			State = 796;
+=======
+			State = 896; Match(EXTRACTMAX);
+			State = 898;
+>>>>>>> Stashed changes
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
 			if (_la==SINGLEQUOTE) {
 				{
+<<<<<<< Updated upstream
 				State = 795; attribute();
 				}
 			}
@@ -4929,6 +7740,20 @@ public partial class GiraphParser : Parser {
 			case 1:
 				{
 				State = 800; where();
+=======
+				State = 897; attribute();
+				}
+			}
+
+			State = 900; Match(FROM);
+			State = 901; variable();
+			State = 903;
+			ErrorHandler.Sync(this);
+			switch ( Interpreter.AdaptivePredict(TokenStream,98,Context) ) {
+			case 1:
+				{
+				State = 902; where();
+>>>>>>> Stashed changes
 				}
 				break;
 			}
@@ -4945,6 +7770,7 @@ public partial class GiraphParser : Parser {
 		return _localctx;
 	}
 
+<<<<<<< Updated upstream
 	public partial class EqualCompContext : ParserRuleContext {
 		public ITerminalNode PLUS() { return GetToken(GiraphParser.PLUS, 0); }
 		public ITerminalNode EQUALS() { return GetToken(GiraphParser.EQUALS, 0); }
@@ -5032,6 +7858,8 @@ public partial class GiraphParser : Parser {
 		return _localctx;
 	}
 
+=======
+>>>>>>> Stashed changes
 	public partial class ParametersContext : ParserRuleContext {
 		public VarOrConstContext[] varOrConst() {
 			return GetRuleContexts<VarOrConstContext>();
@@ -5048,33 +7876,53 @@ public partial class GiraphParser : Parser {
 		{
 		}
 		public override int RuleIndex { get { return RULE_parameters; } }
+<<<<<<< Updated upstream
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IGiraphParserVisitor<TResult> typedVisitor = visitor as IGiraphParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitParameters(this);
 			else return visitor.VisitChildren(this);
 		}
+=======
+>>>>>>> Stashed changes
 	}
 
 	[RuleVersion(0)]
 	public ParametersContext parameters() {
 		ParametersContext _localctx = new ParametersContext(Context, State);
+<<<<<<< Updated upstream
 		EnterRule(_localctx, 142, RULE_parameters);
+=======
+		EnterRule(_localctx, 162, RULE_parameters);
+>>>>>>> Stashed changes
 		int _la;
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
+<<<<<<< Updated upstream
 			State = 815; varOrConst();
 			State = 820;
+=======
+			State = 905; varOrConst();
+			State = 910;
+>>>>>>> Stashed changes
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
 			while (_la==COMMA) {
 				{
 				{
+<<<<<<< Updated upstream
 				State = 816; Match(COMMA);
 				State = 817; varOrConst();
 				}
 				}
 				State = 822;
+=======
+				State = 906; Match(COMMA);
+				State = 907; varOrConst();
+				}
+				}
+				State = 912;
+>>>>>>> Stashed changes
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
 			}
@@ -5107,35 +7955,56 @@ public partial class GiraphParser : Parser {
 		{
 		}
 		public override int RuleIndex { get { return RULE_printOptions; } }
+<<<<<<< Updated upstream
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IGiraphParserVisitor<TResult> typedVisitor = visitor as IGiraphParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitPrintOptions(this);
 			else return visitor.VisitChildren(this);
 		}
+=======
+>>>>>>> Stashed changes
 	}
 
 	[RuleVersion(0)]
 	public PrintOptionsContext printOptions() {
 		PrintOptionsContext _localctx = new PrintOptionsContext(Context, State);
+<<<<<<< Updated upstream
 		EnterRule(_localctx, 144, RULE_printOptions);
+=======
+		EnterRule(_localctx, 164, RULE_printOptions);
+>>>>>>> Stashed changes
 		int _la;
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
+<<<<<<< Updated upstream
 			State = 823; printOption();
 			State = 828;
+=======
+			State = 913; printOption();
+			State = 918;
+>>>>>>> Stashed changes
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
 			while (_la==COMMA) {
 				{
 				{
 				{
+<<<<<<< Updated upstream
 				State = 824; Match(COMMA);
 				}
 				State = 825; printOption();
 				}
 				}
 				State = 830;
+=======
+				State = 914; Match(COMMA);
+				}
+				State = 915; printOption();
+				}
+				}
+				State = 920;
+>>>>>>> Stashed changes
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
 			}
@@ -5176,16 +8045,20 @@ public partial class GiraphParser : Parser {
 		{
 		}
 		public override int RuleIndex { get { return RULE_printOption; } }
+<<<<<<< Updated upstream
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IGiraphParserVisitor<TResult> typedVisitor = visitor as IGiraphParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitPrintOption(this);
 			else return visitor.VisitChildren(this);
 		}
+=======
+>>>>>>> Stashed changes
 	}
 
 	[RuleVersion(0)]
 	public PrintOptionContext printOption() {
 		PrintOptionContext _localctx = new PrintOptionContext(Context, State);
+<<<<<<< Updated upstream
 		EnterRule(_localctx, 146, RULE_printOption);
 		int _la;
 		try {
@@ -5197,21 +8070,47 @@ public partial class GiraphParser : Parser {
 				{
 				State = 831; Match(VARIABLENAME);
 				State = 837;
+=======
+		EnterRule(_localctx, 166, RULE_printOption);
+		int _la;
+		try {
+			State = 933;
+			ErrorHandler.Sync(this);
+			switch ( Interpreter.AdaptivePredict(TokenStream,103,Context) ) {
+			case 1:
+				EnterOuterAlt(_localctx, 1);
+				{
+				State = 921; Match(VARIABLENAME);
+				State = 927;
+>>>>>>> Stashed changes
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
 				if (_la==LP) {
 					{
+<<<<<<< Updated upstream
 					State = 832; Match(LP);
 					State = 834;
+=======
+					State = 922; Match(LP);
+					State = 924;
+>>>>>>> Stashed changes
 					ErrorHandler.Sync(this);
 					_la = TokenStream.LA(1);
 					if (((((_la - 61)) & ~0x3f) == 0 && ((1L << (_la - 61)) & ((1L << (INF - 61)) | (1L << (BOOL - 61)) | (1L << (INTEGER - 61)) | (1L << (FLOATNUM - 61)) | (1L << (VARIABLENAME - 61)) | (1L << (STRING - 61)))) != 0)) {
 						{
+<<<<<<< Updated upstream
 						State = 833; parameters();
 						}
 					}
 
 					State = 836; Match(RP);
+=======
+						State = 923; parameters();
+						}
+					}
+
+					State = 926; Match(RP);
+>>>>>>> Stashed changes
 					}
 				}
 
@@ -5220,25 +8119,41 @@ public partial class GiraphParser : Parser {
 			case 2:
 				EnterOuterAlt(_localctx, 2);
 				{
+<<<<<<< Updated upstream
 				State = 839; varOrConst();
+=======
+				State = 929; varOrConst();
+>>>>>>> Stashed changes
 				}
 				break;
 			case 3:
 				EnterOuterAlt(_localctx, 3);
 				{
+<<<<<<< Updated upstream
 				State = 840; returnQuery();
+=======
+				State = 930; returnQuery();
+>>>>>>> Stashed changes
 				}
 				break;
 			case 4:
 				EnterOuterAlt(_localctx, 4);
 				{
+<<<<<<< Updated upstream
 				State = 841; runFunction();
+=======
+				State = 931; runFunction();
+>>>>>>> Stashed changes
 				}
 				break;
 			case 5:
 				EnterOuterAlt(_localctx, 5);
 				{
+<<<<<<< Updated upstream
 				State = 842; dotFunction();
+=======
+				State = 932; dotFunction();
+>>>>>>> Stashed changes
 				}
 				break;
 			}
@@ -5265,16 +8180,20 @@ public partial class GiraphParser : Parser {
 		{
 		}
 		public override int RuleIndex { get { return RULE_print; } }
+<<<<<<< Updated upstream
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IGiraphParserVisitor<TResult> typedVisitor = visitor as IGiraphParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitPrint(this);
 			else return visitor.VisitChildren(this);
 		}
+=======
+>>>>>>> Stashed changes
 	}
 
 	[RuleVersion(0)]
 	public PrintContext print() {
 		PrintContext _localctx = new PrintContext(Context, State);
+<<<<<<< Updated upstream
 		EnterRule(_localctx, 148, RULE_print);
 		try {
 			EnterOuterAlt(_localctx, 1);
@@ -5283,6 +8202,16 @@ public partial class GiraphParser : Parser {
 			State = 846; printOptions();
 			{
 			State = 847; Match(SC);
+=======
+		EnterRule(_localctx, 168, RULE_print);
+		try {
+			EnterOuterAlt(_localctx, 1);
+			{
+			State = 935; Match(PRINT);
+			State = 936; printOptions();
+			{
+			State = 937; Match(SC);
+>>>>>>> Stashed changes
 			}
 			}
 		}
@@ -5312,35 +8241,57 @@ public partial class GiraphParser : Parser {
 		{
 		}
 		public override int RuleIndex { get { return RULE_dequeueOPOneLine; } }
+<<<<<<< Updated upstream
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IGiraphParserVisitor<TResult> typedVisitor = visitor as IGiraphParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitDequeueOPOneLine(this);
 			else return visitor.VisitChildren(this);
 		}
+=======
+>>>>>>> Stashed changes
 	}
 
 	[RuleVersion(0)]
 	public DequeueOPOneLineContext dequeueOPOneLine() {
 		DequeueOPOneLineContext _localctx = new DequeueOPOneLineContext(Context, State);
+<<<<<<< Updated upstream
 		EnterRule(_localctx, 150, RULE_dequeueOPOneLine);
+=======
+		EnterRule(_localctx, 170, RULE_dequeueOPOneLine);
+>>>>>>> Stashed changes
 		int _la;
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
+<<<<<<< Updated upstream
 			State = 849; Match(DEQUEUE);
 			State = 850; Match(FROM);
 			State = 851; variable();
 			State = 853;
+=======
+			State = 939; Match(DEQUEUE);
+			State = 940; Match(FROM);
+			State = 941; variable();
+			State = 943;
+>>>>>>> Stashed changes
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
 			if (_la==WHERE) {
 				{
+<<<<<<< Updated upstream
 				State = 852; where();
+=======
+				State = 942; where();
+>>>>>>> Stashed changes
 				}
 			}
 
 			{
+<<<<<<< Updated upstream
 			State = 855; Match(SC);
+=======
+			State = 945; Match(SC);
+>>>>>>> Stashed changes
 			}
 			}
 		}
@@ -5356,26 +8307,34 @@ public partial class GiraphParser : Parser {
 	}
 
 	public partial class CommentLineContext : ParserRuleContext {
+<<<<<<< Updated upstream
 		public ITerminalNode[] DIVIDE() { return GetTokens(GiraphParser.DIVIDE); }
 		public ITerminalNode DIVIDE(int i) {
 			return GetToken(GiraphParser.DIVIDE, i);
 		}
+=======
+		public ITerminalNode COMMENTSTART() { return GetToken(GiraphParser.COMMENTSTART, 0); }
+>>>>>>> Stashed changes
 		public ITerminalNode STRING() { return GetToken(GiraphParser.STRING, 0); }
 		public CommentLineContext(ParserRuleContext parent, int invokingState)
 			: base(parent, invokingState)
 		{
 		}
 		public override int RuleIndex { get { return RULE_commentLine; } }
+<<<<<<< Updated upstream
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IGiraphParserVisitor<TResult> typedVisitor = visitor as IGiraphParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitCommentLine(this);
 			else return visitor.VisitChildren(this);
 		}
+=======
+>>>>>>> Stashed changes
 	}
 
 	[RuleVersion(0)]
 	public CommentLineContext commentLine() {
 		CommentLineContext _localctx = new CommentLineContext(Context, State);
+<<<<<<< Updated upstream
 		EnterRule(_localctx, 152, RULE_commentLine);
 		try {
 			EnterOuterAlt(_localctx, 1);
@@ -5385,6 +8344,14 @@ public partial class GiraphParser : Parser {
 			State = 858; Match(DIVIDE);
 			}
 			State = 859; Match(STRING);
+=======
+		EnterRule(_localctx, 172, RULE_commentLine);
+		try {
+			EnterOuterAlt(_localctx, 1);
+			{
+			State = 947; Match(COMMENTSTART);
+			State = 948; Match(STRING);
+>>>>>>> Stashed changes
 			}
 		}
 		catch (RecognitionException re) {
@@ -5407,21 +8374,32 @@ public partial class GiraphParser : Parser {
 		{
 		}
 		public override int RuleIndex { get { return RULE_comments; } }
+<<<<<<< Updated upstream
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IGiraphParserVisitor<TResult> typedVisitor = visitor as IGiraphParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitComments(this);
 			else return visitor.VisitChildren(this);
 		}
+=======
+>>>>>>> Stashed changes
 	}
 
 	[RuleVersion(0)]
 	public CommentsContext comments() {
 		CommentsContext _localctx = new CommentsContext(Context, State);
+<<<<<<< Updated upstream
 		EnterRule(_localctx, 154, RULE_comments);
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
 			State = 861; commentLine();
+=======
+		EnterRule(_localctx, 174, RULE_comments);
+		try {
+			EnterOuterAlt(_localctx, 1);
+			{
+			State = 950; commentLine();
+>>>>>>> Stashed changes
 			}
 		}
 		catch (RecognitionException re) {
@@ -5437,21 +8415,34 @@ public partial class GiraphParser : Parser {
 
 	public override bool Sempred(RuleContext _localctx, int ruleIndex, int predIndex) {
 		switch (ruleIndex) {
+<<<<<<< Updated upstream
 		case 39: return boolComparisons_sempred((BoolComparisonsContext)_localctx, predIndex);
+=======
+		case 40: return boolComparisons_sempred((BoolComparisonsContext)_localctx, predIndex);
+>>>>>>> Stashed changes
 		}
 		return true;
 	}
 	private bool boolComparisons_sempred(BoolComparisonsContext _localctx, int predIndex) {
 		switch (predIndex) {
+<<<<<<< Updated upstream
 		case 0: return Precpred(Context, 2);
 		case 1: return Precpred(Context, 3);
+=======
+		case 0: return Precpred(Context, 3);
+		case 1: return Precpred(Context, 4);
+>>>>>>> Stashed changes
 		}
 		return true;
 	}
 
 	private static char[] _serializedATN = {
 		'\x3', '\x608B', '\xA72A', '\x8133', '\xB9ED', '\x417C', '\x3BE7', '\x7786', 
+<<<<<<< Updated upstream
 		'\x5964', '\x3', 'O', '\x362', '\x4', '\x2', '\t', '\x2', '\x4', '\x3', 
+=======
+		'\x5964', '\x3', 'P', '\x3BB', '\x4', '\x2', '\t', '\x2', '\x4', '\x3', 
+>>>>>>> Stashed changes
 		'\t', '\x3', '\x4', '\x4', '\t', '\x4', '\x4', '\x5', '\t', '\x5', '\x4', 
 		'\x6', '\t', '\x6', '\x4', '\a', '\t', '\a', '\x4', '\b', '\t', '\b', 
 		'\x4', '\t', '\t', '\t', '\x4', '\n', '\t', '\n', '\x4', '\v', '\t', '\v', 
@@ -5479,6 +8470,7 @@ public partial class GiraphParser : Parser {
 		'\x45', '\x4', '\x46', '\t', '\x46', '\x4', 'G', '\t', 'G', '\x4', 'H', 
 		'\t', 'H', '\x4', 'I', '\t', 'I', '\x4', 'J', '\t', 'J', '\x4', 'K', '\t', 
 		'K', '\x4', 'L', '\t', 'L', '\x4', 'M', '\t', 'M', '\x4', 'N', '\t', 'N', 
+<<<<<<< Updated upstream
 		'\x4', 'O', '\t', 'O', '\x3', '\x2', '\x6', '\x2', '\xA0', '\n', '\x2', 
 		'\r', '\x2', '\xE', '\x2', '\xA1', '\x3', '\x2', '\x3', '\x2', '\x3', 
 		'\x3', '\x3', '\x3', '\x3', '\x3', '\x3', '\x3', '\x3', '\x3', '\x5', 
@@ -6205,6 +9197,803 @@ public partial class GiraphParser : Parser {
 		'\x2D1', '\x2D4', '\x2DF', '\x2EB', '\x2F1', '\x2F8', '\x300', '\x306', 
 		'\x30F', '\x315', '\x31A', '\x31E', '\x323', '\x32F', '\x336', '\x33E', 
 		'\x344', '\x347', '\x34D', '\x357',
+=======
+		'\x4', 'O', '\t', 'O', '\x4', 'P', '\t', 'P', '\x4', 'Q', '\t', 'Q', '\x4', 
+		'R', '\t', 'R', '\x4', 'S', '\t', 'S', '\x4', 'T', '\t', 'T', '\x4', 'U', 
+		'\t', 'U', '\x4', 'V', '\t', 'V', '\x4', 'W', '\t', 'W', '\x4', 'X', '\t', 
+		'X', '\x4', 'Y', '\t', 'Y', '\x3', '\x2', '\x3', '\x2', '\x3', '\x2', 
+		'\x3', '\x3', '\x3', '\x3', '\x3', '\x3', '\x3', '\x3', '\x3', '\x3', 
+		'\x5', '\x3', '\xBB', '\n', '\x3', '\x3', '\x4', '\x3', '\x4', '\x3', 
+		'\x4', '\x5', '\x4', '\xC0', '\n', '\x4', '\x3', '\x5', '\x3', '\x5', 
+		'\x3', '\x5', '\x3', '\x5', '\x3', '\x5', '\x5', '\x5', '\xC7', '\n', 
+		'\x5', '\x5', '\x5', '\xC9', '\n', '\x5', '\x3', '\x5', '\x3', '\x5', 
+		'\x3', '\x5', '\x5', '\x5', '\xCE', '\n', '\x5', '\x3', '\x6', '\x3', 
+		'\x6', '\x3', '\x6', '\x3', '\x6', '\x5', '\x6', '\xD4', '\n', '\x6', 
+		'\x3', '\x6', '\x3', '\x6', '\x3', '\a', '\x3', '\a', '\x3', '\a', '\x3', 
+		'\a', '\x3', '\b', '\x3', '\b', '\x3', '\b', '\x3', '\b', '\x3', '\b', 
+		'\x3', '\b', '\x3', '\b', '\x3', '\b', '\a', '\b', '\xE4', '\n', '\b', 
+		'\f', '\b', '\xE', '\b', '\xE7', '\v', '\b', '\x3', '\b', '\x3', '\b', 
+		'\x3', '\t', '\x3', '\t', '\x3', '\t', '\x3', '\t', '\a', '\t', '\xEF', 
+		'\n', '\t', '\f', '\t', '\xE', '\t', '\xF2', '\v', '\t', '\x3', '\n', 
+		'\x5', '\n', '\xF5', '\n', '\n', '\x3', '\n', '\x3', '\n', '\x3', '\n', 
+		'\x3', '\n', '\a', '\n', '\xFB', '\n', '\n', '\f', '\n', '\xE', '\n', 
+		'\xFE', '\v', '\n', '\x5', '\n', '\x100', '\n', '\n', '\x3', '\n', '\x3', 
+		'\n', '\x3', '\v', '\x3', '\v', '\x3', '\v', '\x3', '\v', '\a', '\v', 
+		'\x108', '\n', '\v', '\f', '\v', '\xE', '\v', '\x10B', '\v', '\v', '\x3', 
+		'\f', '\x5', '\f', '\x10E', '\n', '\f', '\x3', '\f', '\x3', '\f', '\x3', 
+		'\f', '\x3', '\f', '\x3', '\f', '\x3', '\f', '\a', '\f', '\x116', '\n', 
+		'\f', '\f', '\f', '\xE', '\f', '\x119', '\v', '\f', '\x3', '\f', '\x3', 
+		'\f', '\x3', '\r', '\x3', '\r', '\x3', '\r', '\x3', '\r', '\x3', '\r', 
+		'\x3', '\r', '\x5', '\r', '\x123', '\n', '\r', '\x3', '\r', '\x3', '\r', 
+		'\x3', '\r', '\x3', '\r', '\x3', '\r', '\x5', '\r', '\x12A', '\n', '\r', 
+		'\x3', '\r', '\x3', '\r', '\x3', '\r', '\x3', '\r', '\x5', '\r', '\x130', 
+		'\n', '\r', '\x3', '\xE', '\x3', '\xE', '\x5', '\xE', '\x134', '\n', '\xE', 
+		'\x3', '\xE', '\a', '\xE', '\x137', '\n', '\xE', '\f', '\xE', '\xE', '\xE', 
+		'\x13A', '\v', '\xE', '\x3', '\xE', '\x3', '\xE', '\x3', '\xE', '\x5', 
+		'\xE', '\x13F', '\n', '\xE', '\x3', '\xF', '\x3', '\xF', '\x3', '\xF', 
+		'\x3', '\x10', '\x3', '\x10', '\x5', '\x10', '\x146', '\n', '\x10', '\x3', 
+		'\x11', '\x3', '\x11', '\x3', '\x11', '\x3', '\x11', '\x5', '\x11', '\x14C', 
+		'\n', '\x11', '\x3', '\x12', '\x3', '\x12', '\x5', '\x12', '\x150', '\n', 
+		'\x12', '\x3', '\x13', '\x3', '\x13', '\x3', '\x13', '\x5', '\x13', '\x155', 
+		'\n', '\x13', '\x3', '\x14', '\x3', '\x14', '\x5', '\x14', '\x159', '\n', 
+		'\x14', '\x3', '\x15', '\x3', '\x15', '\x3', '\x16', '\x3', '\x16', '\x3', 
+		'\x17', '\x3', '\x17', '\x3', '\x17', '\a', '\x17', '\x162', '\n', '\x17', 
+		'\f', '\x17', '\xE', '\x17', '\x165', '\v', '\x17', '\x3', '\x18', '\x3', 
+		'\x18', '\x3', '\x18', '\x3', '\x19', '\x3', '\x19', '\x3', '\x19', '\x3', 
+		'\x19', '\x3', '\x19', '\x5', '\x19', '\x16F', '\n', '\x19', '\x3', '\x19', 
+		'\x3', '\x19', '\x3', '\x19', '\x3', '\x1A', '\x3', '\x1A', '\a', '\x1A', 
+		'\x176', '\n', '\x1A', '\f', '\x1A', '\xE', '\x1A', '\x179', '\v', '\x1A', 
+		'\x3', '\x1A', '\x3', '\x1A', '\x3', '\x1B', '\x3', '\x1B', '\x3', '\x1B', 
+		'\x3', '\x1B', '\x3', '\x1B', '\x3', '\x1B', '\x3', '\x1B', '\x3', '\x1B', 
+		'\x3', '\x1B', '\x3', '\x1B', '\x5', '\x1B', '\x187', '\n', '\x1B', '\x3', 
+		'\x1C', '\x3', '\x1C', '\x3', '\x1C', '\x3', '\x1C', '\x3', '\x1C', '\x3', 
+		'\x1C', '\x3', '\x1C', '\a', '\x1C', '\x190', '\n', '\x1C', '\f', '\x1C', 
+		'\xE', '\x1C', '\x193', '\v', '\x1C', '\x3', '\x1C', '\x3', '\x1C', '\x5', 
+		'\x1C', '\x197', '\n', '\x1C', '\x3', '\x1C', '\x3', '\x1C', '\x3', '\x1D', 
+		'\x3', '\x1D', '\x3', '\x1D', '\x3', '\x1D', '\x3', '\x1D', '\x3', '\x1D', 
+		'\x3', '\x1D', '\x3', '\x1D', '\x3', '\x1D', '\x3', '\x1D', '\x3', '\x1D', 
+		'\x5', '\x1D', '\x1A6', '\n', '\x1D', '\x3', '\x1E', '\x3', '\x1E', '\x5', 
+		'\x1E', '\x1AA', '\n', '\x1E', '\x3', '\x1F', '\x3', '\x1F', '\x5', '\x1F', 
+		'\x1AE', '\n', '\x1F', '\x3', ' ', '\x3', ' ', '\x3', ' ', '\a', ' ', 
+		'\x1B3', '\n', ' ', '\f', ' ', '\xE', ' ', '\x1B6', '\v', ' ', '\x3', 
+		'!', '\x3', '!', '\x5', '!', '\x1BA', '\n', '!', '\x3', '\"', '\x3', '\"', 
+		'\x3', '\"', '\x3', '\"', '\x3', '\"', '\x3', '\"', '\a', '\"', '\x1C2', 
+		'\n', '\"', '\f', '\"', '\xE', '\"', '\x1C5', '\v', '\"', '\x5', '\"', 
+		'\x1C7', '\n', '\"', '\x3', '\"', '\x3', '\"', '\x3', '#', '\x3', '#', 
+		'\x3', '#', '\x3', '#', '\x3', '#', '\x5', '#', '\x1D0', '\n', '#', '\x3', 
+		'$', '\x3', '$', '\x3', '%', '\x3', '%', '\x3', '&', '\x3', '&', '\x3', 
+		'\'', '\x3', '\'', '\x3', '(', '\x3', '(', '\x3', ')', '\x3', ')', '\x3', 
+		')', '\x3', ')', '\x3', ')', '\x3', ')', '\x3', ')', '\x3', ')', '\x3', 
+		')', '\x3', ')', '\x3', ')', '\a', ')', '\x1E7', '\n', ')', '\f', ')', 
+		'\xE', ')', '\x1EA', '\v', ')', '\x3', ')', '\x3', ')', '\x5', ')', '\x1EE', 
+		'\n', ')', '\x3', '*', '\x3', '*', '\x3', '*', '\x3', '*', '\x3', '*', 
+		'\x3', '*', '\x3', '*', '\x3', '*', '\x3', '*', '\x5', '*', '\x1F9', '\n', 
+		'*', '\x3', '*', '\x3', '*', '\x3', '*', '\x5', '*', '\x1FE', '\n', '*', 
+		'\x3', '*', '\x3', '*', '\x3', '*', '\a', '*', '\x203', '\n', '*', '\f', 
+		'*', '\xE', '*', '\x206', '\v', '*', '\x3', '+', '\x3', '+', '\x3', '+', 
+		'\x3', '+', '\x3', '+', '\x3', '+', '\x3', '+', '\x3', '+', '\x3', '+', 
+		'\x3', '+', '\x3', '+', '\x3', ',', '\x3', ',', '\x3', ',', '\x3', ',', 
+		'\x3', ',', '\x3', '-', '\x3', '-', '\x3', '-', '\x3', '-', '\x3', '-', 
+		'\x3', '-', '\x3', '-', '\x5', '-', '\x21F', '\n', '-', '\x3', '.', '\x3', 
+		'.', '\x3', '/', '\x3', '/', '\x3', '/', '\x3', '/', '\x3', '/', '\x3', 
+		'/', '\x3', '/', '\x3', '/', '\x3', '/', '\x6', '/', '\x22C', '\n', '/', 
+		'\r', '/', '\xE', '/', '\x22D', '\x3', '/', '\x3', '/', '\x5', '/', '\x232', 
+		'\n', '/', '\x3', '/', '\x3', '/', '\x5', '/', '\x236', '\n', '/', '\x3', 
+		'/', '\x3', '/', '\x3', '\x30', '\x3', '\x30', '\x3', '\x30', '\x3', '\x30', 
+		'\x3', '\x30', '\x5', '\x30', '\x23F', '\n', '\x30', '\x3', '\x31', '\x3', 
+		'\x31', '\x3', '\x31', '\x3', '\x31', '\x3', '\x31', '\x5', '\x31', '\x246', 
+		'\n', '\x31', '\x3', '\x32', '\x3', '\x32', '\x5', '\x32', '\x24A', '\n', 
+		'\x32', '\x3', '\x33', '\x3', '\x33', '\x3', '\x33', '\x5', '\x33', '\x24F', 
+		'\n', '\x33', '\x3', '\x33', '\x3', '\x33', '\x3', '\x33', '\x5', '\x33', 
+		'\x254', '\n', '\x33', '\x3', '\x33', '\x3', '\x33', '\x3', '\x34', '\x3', 
+		'\x34', '\x3', '\x34', '\x3', '\x34', '\x5', '\x34', '\x25C', '\n', '\x34', 
+		'\x3', '\x34', '\x3', '\x34', '\x3', '\x34', '\x5', '\x34', '\x261', '\n', 
+		'\x34', '\x3', '\x34', '\x3', '\x34', '\x3', '\x34', '\x3', '\x34', '\x3', 
+		'\x34', '\x3', '\x34', '\x3', '\x34', '\x5', '\x34', '\x26A', '\n', '\x34', 
+		'\x3', '\x34', '\x3', '\x34', '\x3', '\x34', '\x3', '\x34', '\x5', '\x34', 
+		'\x270', '\n', '\x34', '\x3', '\x34', '\x3', '\x34', '\x5', '\x34', '\x274', 
+		'\n', '\x34', '\x3', '\x35', '\x3', '\x35', '\x3', '\x35', '\x3', '\x35', 
+		'\x5', '\x35', '\x27A', '\n', '\x35', '\x3', '\x36', '\x3', '\x36', '\x3', 
+		'\x36', '\x5', '\x36', '\x27F', '\n', '\x36', '\x3', '\x36', '\x3', '\x36', 
+		'\x3', '\x37', '\x3', '\x37', '\x3', '\x37', '\x3', '\x37', '\x3', '\x38', 
+		'\x3', '\x38', '\x3', '\x38', '\x3', '\x38', '\x3', '\x38', '\x3', '\x39', 
+		'\x3', '\x39', '\x3', '\x39', '\x3', '\x39', '\x3', ':', '\x3', ':', '\x3', 
+		':', '\x3', ':', '\x3', ':', '\x5', ':', '\x295', '\n', ':', '\x3', ';', 
+		'\x3', ';', '\x3', ';', '\x3', ';', '\x3', ';', '\x5', ';', '\x29C', '\n', 
+		';', '\x3', '<', '\x3', '<', '\x5', '<', '\x2A0', '\n', '<', '\x3', '<', 
+		'\x3', '<', '\x3', '<', '\x5', '<', '\x2A5', '\n', '<', '\x3', '<', '\x3', 
+		'<', '\x3', '<', '\x5', '<', '\x2AA', '\n', '<', '\x5', '<', '\x2AC', 
+		'\n', '<', '\x3', '=', '\x3', '=', '\x3', '=', '\x3', '=', '\a', '=', 
+		'\x2B2', '\n', '=', '\f', '=', '\xE', '=', '\x2B5', '\v', '=', '\x3', 
+		'=', '\x3', '=', '\x3', '=', '\x3', '=', '\x3', '=', '\a', '=', '\x2BC', 
+		'\n', '=', '\f', '=', '\xE', '=', '\x2BF', '\v', '=', '\x3', '=', '\x3', 
+		'=', '\x5', '=', '\x2C3', '\n', '=', '\x3', '>', '\x3', '>', '\x3', '>', 
+		'\x3', '>', '\x3', '>', '\x3', '?', '\x3', '?', '\x3', '?', '\x3', '?', 
+		'\x3', '?', '\x3', '?', '\x3', '?', '\x3', '?', '\x3', '?', '\x3', '?', 
+		'\x3', '?', '\x3', '?', '\x5', '?', '\x2D6', '\n', '?', '\x3', '@', '\x3', 
+		'@', '\x5', '@', '\x2DA', '\n', '@', '\x3', '\x41', '\x3', '\x41', '\x3', 
+		'\x41', '\x5', '\x41', '\x2DF', '\n', '\x41', '\x3', '\x42', '\x3', '\x42', 
+		'\x3', '\x42', '\x3', '\x42', '\x3', '\x42', '\x5', '\x42', '\x2E6', '\n', 
+		'\x42', '\x3', '\x42', '\x3', '\x42', '\x3', '\x43', '\x3', '\x43', '\x5', 
+		'\x43', '\x2EC', '\n', '\x43', '\x3', '\x44', '\x3', '\x44', '\x3', '\x44', 
+		'\x3', '\x44', '\a', '\x44', '\x2F2', '\n', '\x44', '\f', '\x44', '\xE', 
+		'\x44', '\x2F5', '\v', '\x44', '\x3', '\x44', '\x3', '\x44', '\x3', '\x44', 
+		'\x5', '\x44', '\x2FA', '\n', '\x44', '\x3', '\x44', '\x3', '\x44', '\x3', 
+		'\x44', '\x3', '\x44', '\x3', '\x44', '\x3', '\x44', '\a', '\x44', '\x302', 
+		'\n', '\x44', '\f', '\x44', '\xE', '\x44', '\x305', '\v', '\x44', '\x3', 
+		'\x44', '\x5', '\x44', '\x308', '\n', '\x44', '\x3', '\x44', '\x3', '\x44', 
+		'\x5', '\x44', '\x30C', '\n', '\x44', '\x3', '\x45', '\x3', '\x45', '\x3', 
+		'\x45', '\x3', '\x45', '\a', '\x45', '\x312', '\n', '\x45', '\f', '\x45', 
+		'\xE', '\x45', '\x315', '\v', '\x45', '\x3', '\x45', '\x5', '\x45', '\x318', 
+		'\n', '\x45', '\x3', '\x45', '\x3', '\x45', '\x3', '\x46', '\x3', '\x46', 
+		'\x3', '\x46', '\x3', '\x46', '\x3', '\x46', '\a', '\x46', '\x321', '\n', 
+		'\x46', '\f', '\x46', '\xE', '\x46', '\x324', '\v', '\x46', '\x3', '\x46', 
+		'\x3', '\x46', '\x3', '\x46', '\x3', '\x46', '\a', '\x46', '\x32A', '\n', 
+		'\x46', '\f', '\x46', '\xE', '\x46', '\x32D', '\v', '\x46', '\x5', '\x46', 
+		'\x32F', '\n', '\x46', '\x3', 'G', '\x3', 'G', '\x3', 'G', '\x3', 'G', 
+		'\x3', 'G', '\a', 'G', '\x336', '\n', 'G', '\f', 'G', '\xE', 'G', '\x339', 
+		'\v', 'G', '\x3', 'G', '\x3', 'G', '\x3', 'G', '\x3', 'G', '\a', 'G', 
+		'\x33F', '\n', 'G', '\f', 'G', '\xE', 'G', '\x342', '\v', 'G', '\x5', 
+		'G', '\x344', '\n', 'G', '\x3', 'H', '\x3', 'H', '\x3', 'I', '\x3', 'I', 
+		'\x3', 'I', '\x3', 'I', '\x3', 'J', '\x3', 'J', '\x3', 'J', '\x3', 'J', 
+		'\x3', 'K', '\x3', 'K', '\x5', 'K', '\x352', '\n', 'K', '\x3', 'L', '\x3', 
+		'L', '\x3', 'L', '\x3', 'L', '\x5', 'L', '\x358', '\n', 'L', '\x3', 'M', 
+		'\x3', 'M', '\x3', 'M', '\x3', 'M', '\x3', 'M', '\x5', 'M', '\x35F', '\n', 
+		'M', '\x3', 'M', '\x3', 'M', '\x3', 'N', '\x3', 'N', '\x3', 'N', '\x3', 
+		'N', '\x5', 'N', '\x367', '\n', 'N', '\x3', 'O', '\x3', 'O', '\x3', 'O', 
+		'\x3', 'O', '\x5', 'O', '\x36D', '\n', 'O', '\x3', 'O', '\x3', 'O', '\x3', 
+		'P', '\x3', 'P', '\x3', 'P', '\x3', 'P', '\x3', 'P', '\x5', 'P', '\x376', 
+		'\n', 'P', '\x3', 'P', '\x3', 'P', '\x3', 'Q', '\x3', 'Q', '\x5', 'Q', 
+		'\x37C', '\n', 'Q', '\x3', 'Q', '\x3', 'Q', '\x3', 'Q', '\x5', 'Q', '\x381', 
+		'\n', 'Q', '\x3', 'R', '\x3', 'R', '\x5', 'R', '\x385', '\n', 'R', '\x3', 
+		'R', '\x3', 'R', '\x3', 'R', '\x5', 'R', '\x38A', '\n', 'R', '\x3', 'S', 
+		'\x3', 'S', '\x3', 'S', '\a', 'S', '\x38F', '\n', 'S', '\f', 'S', '\xE', 
+		'S', '\x392', '\v', 'S', '\x3', 'T', '\x3', 'T', '\x3', 'T', '\a', 'T', 
+		'\x397', '\n', 'T', '\f', 'T', '\xE', 'T', '\x39A', '\v', 'T', '\x3', 
+		'U', '\x3', 'U', '\x3', 'U', '\x5', 'U', '\x39F', '\n', 'U', '\x3', 'U', 
+		'\x5', 'U', '\x3A2', '\n', 'U', '\x3', 'U', '\x3', 'U', '\x3', 'U', '\x3', 
+		'U', '\x5', 'U', '\x3A8', '\n', 'U', '\x3', 'V', '\x3', 'V', '\x3', 'V', 
+		'\x3', 'V', '\x3', 'W', '\x3', 'W', '\x3', 'W', '\x3', 'W', '\x5', 'W', 
+		'\x3B2', '\n', 'W', '\x3', 'W', '\x3', 'W', '\x3', 'X', '\x3', 'X', '\x3', 
+		'X', '\x3', 'Y', '\x3', 'Y', '\x3', 'Y', '\x2', '\x3', 'R', 'Z', '\x2', 
+		'\x4', '\x6', '\b', '\n', '\f', '\xE', '\x10', '\x12', '\x14', '\x16', 
+		'\x18', '\x1A', '\x1C', '\x1E', ' ', '\"', '$', '&', '(', '*', ',', '.', 
+		'\x30', '\x32', '\x34', '\x36', '\x38', ':', '<', '>', '@', '\x42', '\x44', 
+		'\x46', 'H', 'J', 'L', 'N', 'P', 'R', 'T', 'V', 'X', 'Z', '\\', '^', '`', 
+		'\x62', '\x64', '\x66', 'h', 'j', 'l', 'n', 'p', 'r', 't', 'v', 'x', 'z', 
+		'|', '~', '\x80', '\x82', '\x84', '\x86', '\x88', '\x8A', '\x8C', '\x8E', 
+		'\x90', '\x92', '\x94', '\x96', '\x98', '\x9A', '\x9C', '\x9E', '\xA0', 
+		'\xA2', '\xA4', '\xA6', '\xA8', '\xAA', '\xAC', '\xAE', '\xB0', '\x2', 
+		'\a', '\x3', '\x2', '\n', '\v', '\x3', '\x2', '\f', '\xE', '\x3', '\x2', 
+		'\x5', '\a', '\x3', '\x2', '\x10', '\x11', '\x4', '\x2', '\x1E', '\x1E', 
+		'\x43', '\x43', '\x2', '\x3EC', '\x2', '\xB2', '\x3', '\x2', '\x2', '\x2', 
+		'\x4', '\xBA', '\x3', '\x2', '\x2', '\x2', '\x6', '\xBF', '\x3', '\x2', 
+		'\x2', '\x2', '\b', '\xCD', '\x3', '\x2', '\x2', '\x2', '\n', '\xCF', 
+		'\x3', '\x2', '\x2', '\x2', '\f', '\xD7', '\x3', '\x2', '\x2', '\x2', 
+		'\xE', '\xDB', '\x3', '\x2', '\x2', '\x2', '\x10', '\xEA', '\x3', '\x2', 
+		'\x2', '\x2', '\x12', '\xF4', '\x3', '\x2', '\x2', '\x2', '\x14', '\x103', 
+		'\x3', '\x2', '\x2', '\x2', '\x16', '\x10D', '\x3', '\x2', '\x2', '\x2', 
+		'\x18', '\x12F', '\x3', '\x2', '\x2', '\x2', '\x1A', '\x13E', '\x3', '\x2', 
+		'\x2', '\x2', '\x1C', '\x140', '\x3', '\x2', '\x2', '\x2', '\x1E', '\x145', 
+		'\x3', '\x2', '\x2', '\x2', ' ', '\x14B', '\x3', '\x2', '\x2', '\x2', 
+		'\"', '\x14F', '\x3', '\x2', '\x2', '\x2', '$', '\x154', '\x3', '\x2', 
+		'\x2', '\x2', '&', '\x158', '\x3', '\x2', '\x2', '\x2', '(', '\x15A', 
+		'\x3', '\x2', '\x2', '\x2', '*', '\x15C', '\x3', '\x2', '\x2', '\x2', 
+		',', '\x15E', '\x3', '\x2', '\x2', '\x2', '.', '\x166', '\x3', '\x2', 
+		'\x2', '\x2', '\x30', '\x169', '\x3', '\x2', '\x2', '\x2', '\x32', '\x173', 
+		'\x3', '\x2', '\x2', '\x2', '\x34', '\x186', '\x3', '\x2', '\x2', '\x2', 
+		'\x36', '\x188', '\x3', '\x2', '\x2', '\x2', '\x38', '\x1A5', '\x3', '\x2', 
+		'\x2', '\x2', ':', '\x1A9', '\x3', '\x2', '\x2', '\x2', '<', '\x1AD', 
+		'\x3', '\x2', '\x2', '\x2', '>', '\x1AF', '\x3', '\x2', '\x2', '\x2', 
+		'@', '\x1B7', '\x3', '\x2', '\x2', '\x2', '\x42', '\x1BB', '\x3', '\x2', 
+		'\x2', '\x2', '\x44', '\x1CF', '\x3', '\x2', '\x2', '\x2', '\x46', '\x1D1', 
+		'\x3', '\x2', '\x2', '\x2', 'H', '\x1D3', '\x3', '\x2', '\x2', '\x2', 
+		'J', '\x1D5', '\x3', '\x2', '\x2', '\x2', 'L', '\x1D7', '\x3', '\x2', 
+		'\x2', '\x2', 'N', '\x1D9', '\x3', '\x2', '\x2', '\x2', 'P', '\x1DB', 
+		'\x3', '\x2', '\x2', '\x2', 'R', '\x1F8', '\x3', '\x2', '\x2', '\x2', 
+		'T', '\x207', '\x3', '\x2', '\x2', '\x2', 'V', '\x212', '\x3', '\x2', 
+		'\x2', '\x2', 'X', '\x21E', '\x3', '\x2', '\x2', '\x2', 'Z', '\x220', 
+		'\x3', '\x2', '\x2', '\x2', '\\', '\x222', '\x3', '\x2', '\x2', '\x2', 
+		'^', '\x239', '\x3', '\x2', '\x2', '\x2', '`', '\x240', '\x3', '\x2', 
+		'\x2', '\x2', '\x62', '\x249', '\x3', '\x2', '\x2', '\x2', '\x64', '\x24B', 
+		'\x3', '\x2', '\x2', '\x2', '\x66', '\x273', '\x3', '\x2', '\x2', '\x2', 
+		'h', '\x279', '\x3', '\x2', '\x2', '\x2', 'j', '\x27B', '\x3', '\x2', 
+		'\x2', '\x2', 'l', '\x282', '\x3', '\x2', '\x2', '\x2', 'n', '\x286', 
+		'\x3', '\x2', '\x2', '\x2', 'p', '\x28B', '\x3', '\x2', '\x2', '\x2', 
+		'r', '\x294', '\x3', '\x2', '\x2', '\x2', 't', '\x29B', '\x3', '\x2', 
+		'\x2', '\x2', 'v', '\x29F', '\x3', '\x2', '\x2', '\x2', 'x', '\x2C2', 
+		'\x3', '\x2', '\x2', '\x2', 'z', '\x2C4', '\x3', '\x2', '\x2', '\x2', 
+		'|', '\x2D5', '\x3', '\x2', '\x2', '\x2', '~', '\x2D9', '\x3', '\x2', 
+		'\x2', '\x2', '\x80', '\x2DE', '\x3', '\x2', '\x2', '\x2', '\x82', '\x2E0', 
+		'\x3', '\x2', '\x2', '\x2', '\x84', '\x2EB', '\x3', '\x2', '\x2', '\x2', 
+		'\x86', '\x30B', '\x3', '\x2', '\x2', '\x2', '\x88', '\x30D', '\x3', '\x2', 
+		'\x2', '\x2', '\x8A', '\x31B', '\x3', '\x2', '\x2', '\x2', '\x8C', '\x330', 
+		'\x3', '\x2', '\x2', '\x2', '\x8E', '\x345', '\x3', '\x2', '\x2', '\x2', 
+		'\x90', '\x347', '\x3', '\x2', '\x2', '\x2', '\x92', '\x34B', '\x3', '\x2', 
+		'\x2', '\x2', '\x94', '\x351', '\x3', '\x2', '\x2', '\x2', '\x96', '\x357', 
+		'\x3', '\x2', '\x2', '\x2', '\x98', '\x359', '\x3', '\x2', '\x2', '\x2', 
+		'\x9A', '\x362', '\x3', '\x2', '\x2', '\x2', '\x9C', '\x368', '\x3', '\x2', 
+		'\x2', '\x2', '\x9E', '\x370', '\x3', '\x2', '\x2', '\x2', '\xA0', '\x379', 
+		'\x3', '\x2', '\x2', '\x2', '\xA2', '\x382', '\x3', '\x2', '\x2', '\x2', 
+		'\xA4', '\x38B', '\x3', '\x2', '\x2', '\x2', '\xA6', '\x393', '\x3', '\x2', 
+		'\x2', '\x2', '\xA8', '\x3A7', '\x3', '\x2', '\x2', '\x2', '\xAA', '\x3A9', 
+		'\x3', '\x2', '\x2', '\x2', '\xAC', '\x3AD', '\x3', '\x2', '\x2', '\x2', 
+		'\xAE', '\x3B5', '\x3', '\x2', '\x2', '\x2', '\xB0', '\x3B8', '\x3', '\x2', 
+		'\x2', '\x2', '\xB2', '\xB3', '\x5', '\x4', '\x3', '\x2', '\xB3', '\xB4', 
+		'\a', '\x2', '\x2', '\x3', '\xB4', '\x3', '\x3', '\x2', '\x2', '\x2', 
+		'\xB5', '\xBB', '\x5', '\x30', '\x19', '\x2', '\xB6', '\xBB', '\x5', '\x6', 
+		'\x4', '\x2', '\xB7', '\xBB', '\x5', '\\', '/', '\x2', '\xB8', '\xBB', 
+		'\x5', '\x1E', '\x10', '\x2', '\xB9', '\xBB', '\x5', '\xB0', 'Y', '\x2', 
+		'\xBA', '\xB5', '\x3', '\x2', '\x2', '\x2', '\xBA', '\xB6', '\x3', '\x2', 
+		'\x2', '\x2', '\xBA', '\xB7', '\x3', '\x2', '\x2', '\x2', '\xBA', '\xB8', 
+		'\x3', '\x2', '\x2', '\x2', '\xBA', '\xB9', '\x3', '\x2', '\x2', '\x2', 
+		'\xBB', '\x5', '\x3', '\x2', '\x2', '\x2', '\xBC', '\xC0', '\x5', '\b', 
+		'\x5', '\x2', '\xBD', '\xC0', '\x5', '\x82', '\x42', '\x2', '\xBE', '\xC0', 
+		'\x5', '\n', '\x6', '\x2', '\xBF', '\xBC', '\x3', '\x2', '\x2', '\x2', 
+		'\xBF', '\xBD', '\x3', '\x2', '\x2', '\x2', '\xBF', '\xBE', '\x3', '\x2', 
+		'\x2', '\x2', '\xC0', '\a', '\x3', '\x2', '\x2', '\x2', '\xC1', '\xC2', 
+		'\x5', 'N', '(', '\x2', '\xC2', '\xC8', '\x5', '>', ' ', '\x2', '\xC3', 
+		'\xC6', '\a', '\x1E', '\x2', '\x2', '\xC4', '\xC7', '\x5', '\x1A', '\xE', 
+		'\x2', '\xC5', '\xC7', '\x5', '@', '!', '\x2', '\xC6', '\xC4', '\x3', 
+		'\x2', '\x2', '\x2', '\xC6', '\xC5', '\x3', '\x2', '\x2', '\x2', '\xC7', 
+		'\xC9', '\x3', '\x2', '\x2', '\x2', '\xC8', '\xC3', '\x3', '\x2', '\x2', 
+		'\x2', '\xC8', '\xC9', '\x3', '\x2', '\x2', '\x2', '\xC9', '\xCA', '\x3', 
+		'\x2', '\x2', '\x2', '\xCA', '\xCB', '\a', '\x12', '\x2', '\x2', '\xCB', 
+		'\xCE', '\x3', '\x2', '\x2', '\x2', '\xCC', '\xCE', '\x5', '\f', '\a', 
+		'\x2', '\xCD', '\xC1', '\x3', '\x2', '\x2', '\x2', '\xCD', '\xCC', '\x3', 
+		'\x2', '\x2', '\x2', '\xCE', '\t', '\x3', '\x2', '\x2', '\x2', '\xCF', 
+		'\xD0', '\a', '\x4', '\x2', '\x2', '\xD0', '\xD3', '\x5', '>', ' ', '\x2', 
+		'\xD1', '\xD2', '\a', '\x1E', '\x2', '\x2', '\xD2', '\xD4', '\x5', '\x1A', 
+		'\xE', '\x2', '\xD3', '\xD1', '\x3', '\x2', '\x2', '\x2', '\xD3', '\xD4', 
+		'\x3', '\x2', '\x2', '\x2', '\xD4', '\xD5', '\x3', '\x2', '\x2', '\x2', 
+		'\xD5', '\xD6', '\a', '\x12', '\x2', '\x2', '\xD6', '\v', '\x3', '\x2', 
+		'\x2', '\x2', '\xD7', '\xD8', '\a', '\x5', '\x2', '\x2', '\xD8', '\xD9', 
+		'\x5', '>', ' ', '\x2', '\xD9', '\xDA', '\x5', '\xE', '\b', '\x2', '\xDA', 
+		'\r', '\x3', '\x2', '\x2', '\x2', '\xDB', '\xE5', '\a', '\x18', '\x2', 
+		'\x2', '\xDC', '\xE4', '\x5', '\x88', '\x45', '\x2', '\xDD', '\xDE', '\x5', 
+		'\x10', '\t', '\x2', '\xDE', '\xDF', '\a', '\x12', '\x2', '\x2', '\xDF', 
+		'\xE4', '\x3', '\x2', '\x2', '\x2', '\xE0', '\xE1', '\x5', '\x14', '\v', 
+		'\x2', '\xE1', '\xE2', '\a', '\x12', '\x2', '\x2', '\xE2', '\xE4', '\x3', 
+		'\x2', '\x2', '\x2', '\xE3', '\xDC', '\x3', '\x2', '\x2', '\x2', '\xE3', 
+		'\xDD', '\x3', '\x2', '\x2', '\x2', '\xE3', '\xE0', '\x3', '\x2', '\x2', 
+		'\x2', '\xE4', '\xE7', '\x3', '\x2', '\x2', '\x2', '\xE5', '\xE3', '\x3', 
+		'\x2', '\x2', '\x2', '\xE5', '\xE6', '\x3', '\x2', '\x2', '\x2', '\xE6', 
+		'\xE8', '\x3', '\x2', '\x2', '\x2', '\xE7', '\xE5', '\x3', '\x2', '\x2', 
+		'\x2', '\xE8', '\xE9', '\a', '\x19', '\x2', '\x2', '\xE9', '\xF', '\x3', 
+		'\x2', '\x2', '\x2', '\xEA', '\xEB', '\a', '\x6', '\x2', '\x2', '\xEB', 
+		'\xF0', '\x5', '\x12', '\n', '\x2', '\xEC', '\xED', '\a', '\x13', '\x2', 
+		'\x2', '\xED', '\xEF', '\x5', '\x12', '\n', '\x2', '\xEE', '\xEC', '\x3', 
+		'\x2', '\x2', '\x2', '\xEF', '\xF2', '\x3', '\x2', '\x2', '\x2', '\xF0', 
+		'\xEE', '\x3', '\x2', '\x2', '\x2', '\xF0', '\xF1', '\x3', '\x2', '\x2', 
+		'\x2', '\xF1', '\x11', '\x3', '\x2', '\x2', '\x2', '\xF2', '\xF0', '\x3', 
+		'\x2', '\x2', '\x2', '\xF3', '\xF5', '\x5', '>', ' ', '\x2', '\xF4', '\xF3', 
+		'\x3', '\x2', '\x2', '\x2', '\xF4', '\xF5', '\x3', '\x2', '\x2', '\x2', 
+		'\xF5', '\xF6', '\x3', '\x2', '\x2', '\x2', '\xF6', '\xFF', '\a', '\x16', 
+		'\x2', '\x2', '\xF7', '\xFC', '\x5', '\x18', '\r', '\x2', '\xF8', '\xF9', 
+		'\a', '\x13', '\x2', '\x2', '\xF9', '\xFB', '\x5', '\x18', '\r', '\x2', 
+		'\xFA', '\xF8', '\x3', '\x2', '\x2', '\x2', '\xFB', '\xFE', '\x3', '\x2', 
+		'\x2', '\x2', '\xFC', '\xFA', '\x3', '\x2', '\x2', '\x2', '\xFC', '\xFD', 
+		'\x3', '\x2', '\x2', '\x2', '\xFD', '\x100', '\x3', '\x2', '\x2', '\x2', 
+		'\xFE', '\xFC', '\x3', '\x2', '\x2', '\x2', '\xFF', '\xF7', '\x3', '\x2', 
+		'\x2', '\x2', '\xFF', '\x100', '\x3', '\x2', '\x2', '\x2', '\x100', '\x101', 
+		'\x3', '\x2', '\x2', '\x2', '\x101', '\x102', '\a', '\x17', '\x2', '\x2', 
+		'\x102', '\x13', '\x3', '\x2', '\x2', '\x2', '\x103', '\x104', '\a', '\a', 
+		'\x2', '\x2', '\x104', '\x109', '\x5', '\x16', '\f', '\x2', '\x105', '\x106', 
+		'\a', '\x13', '\x2', '\x2', '\x106', '\x108', '\x5', '\x16', '\f', '\x2', 
+		'\x107', '\x105', '\x3', '\x2', '\x2', '\x2', '\x108', '\x10B', '\x3', 
+		'\x2', '\x2', '\x2', '\x109', '\x107', '\x3', '\x2', '\x2', '\x2', '\x109', 
+		'\x10A', '\x3', '\x2', '\x2', '\x2', '\x10A', '\x15', '\x3', '\x2', '\x2', 
+		'\x2', '\x10B', '\x109', '\x3', '\x2', '\x2', '\x2', '\x10C', '\x10E', 
+		'\x5', '>', ' ', '\x2', '\x10D', '\x10C', '\x3', '\x2', '\x2', '\x2', 
+		'\x10D', '\x10E', '\x3', '\x2', '\x2', '\x2', '\x10E', '\x10F', '\x3', 
+		'\x2', '\x2', '\x2', '\x10F', '\x110', '\a', '\x16', '\x2', '\x2', '\x110', 
+		'\x111', '\x5', '>', ' ', '\x2', '\x111', '\x112', '\a', '\x13', '\x2', 
+		'\x2', '\x112', '\x117', '\x5', '>', ' ', '\x2', '\x113', '\x114', '\a', 
+		'\x13', '\x2', '\x2', '\x114', '\x116', '\x5', '\x18', '\r', '\x2', '\x115', 
+		'\x113', '\x3', '\x2', '\x2', '\x2', '\x116', '\x119', '\x3', '\x2', '\x2', 
+		'\x2', '\x117', '\x115', '\x3', '\x2', '\x2', '\x2', '\x117', '\x118', 
+		'\x3', '\x2', '\x2', '\x2', '\x118', '\x11A', '\x3', '\x2', '\x2', '\x2', 
+		'\x119', '\x117', '\x3', '\x2', '\x2', '\x2', '\x11A', '\x11B', '\a', 
+		'\x17', '\x2', '\x2', '\x11B', '\x17', '\x3', '\x2', '\x2', '\x2', '\x11C', 
+		'\x11D', '\x5', '>', ' ', '\x2', '\x11D', '\x11E', '\a', '\x1E', '\x2', 
+		'\x2', '\x11E', '\x11F', '\x5', '\x1A', '\xE', '\x2', '\x11F', '\x130', 
+		'\x3', '\x2', '\x2', '\x2', '\x120', '\x122', '\x5', '@', '!', '\x2', 
+		'\x121', '\x123', '\x5', '&', '\x14', '\x2', '\x122', '\x121', '\x3', 
+		'\x2', '\x2', '\x2', '\x122', '\x123', '\x3', '\x2', '\x2', '\x2', '\x123', 
+		'\x124', '\x3', '\x2', '\x2', '\x2', '\x124', '\x125', '\a', '\x1E', '\x2', 
+		'\x2', '\x125', '\x126', '\x5', '\x36', '\x1C', '\x2', '\x126', '\x127', 
+		'\a', '\x12', '\x2', '\x2', '\x127', '\x130', '\x3', '\x2', '\x2', '\x2', 
+		'\x128', '\x12A', '\x5', '~', '@', '\x2', '\x129', '\x128', '\x3', '\x2', 
+		'\x2', '\x2', '\x129', '\x12A', '\x3', '\x2', '\x2', '\x2', '\x12A', '\x12B', 
+		'\x3', '\x2', '\x2', '\x2', '\x12B', '\x12C', '\x5', '>', ' ', '\x2', 
+		'\x12C', '\x12D', '\x5', '\x8E', 'H', '\x2', '\x12D', '\x12E', '\x5', 
+		'\x1A', '\xE', '\x2', '\x12E', '\x130', '\x3', '\x2', '\x2', '\x2', '\x12F', 
+		'\x11C', '\x3', '\x2', '\x2', '\x2', '\x12F', '\x120', '\x3', '\x2', '\x2', 
+		'\x2', '\x12F', '\x129', '\x3', '\x2', '\x2', '\x2', '\x130', '\x19', 
+		'\x3', '\x2', '\x2', '\x2', '\x131', '\x134', '\x5', '@', '!', '\x2', 
+		'\x132', '\x134', '\x5', '\x44', '#', '\x2', '\x133', '\x131', '\x3', 
+		'\x2', '\x2', '\x2', '\x133', '\x132', '\x3', '\x2', '\x2', '\x2', '\x134', 
+		'\x138', '\x3', '\x2', '\x2', '\x2', '\x135', '\x137', '\x5', '\x1C', 
+		'\xF', '\x2', '\x136', '\x135', '\x3', '\x2', '\x2', '\x2', '\x137', '\x13A', 
+		'\x3', '\x2', '\x2', '\x2', '\x138', '\x136', '\x3', '\x2', '\x2', '\x2', 
+		'\x138', '\x139', '\x3', '\x2', '\x2', '\x2', '\x139', '\x13F', '\x3', 
+		'\x2', '\x2', '\x2', '\x13A', '\x138', '\x3', '\x2', '\x2', '\x2', '\x13B', 
+		'\x13F', '\x5', '$', '\x13', '\x2', '\x13C', '\x13F', '\x5', '\x96', 'L', 
+		'\x2', '\x13D', '\x13F', '\x5', '\x90', 'I', '\x2', '\x13E', '\x133', 
+		'\x3', '\x2', '\x2', '\x2', '\x13E', '\x13B', '\x3', '\x2', '\x2', '\x2', 
+		'\x13E', '\x13C', '\x3', '\x2', '\x2', '\x2', '\x13E', '\x13D', '\x3', 
+		'\x2', '\x2', '\x2', '\x13F', '\x1B', '\x3', '\x2', '\x2', '\x2', '\x140', 
+		'\x141', '\x5', '&', '\x14', '\x2', '\x141', '\x142', '\x5', ':', '\x1E', 
+		'\x2', '\x142', '\x1D', '\x3', '\x2', '\x2', '\x2', '\x143', '\x146', 
+		'\x5', '\"', '\x12', '\x2', '\x144', '\x146', '\x5', '$', '\x13', '\x2', 
+		'\x145', '\x143', '\x3', '\x2', '\x2', '\x2', '\x145', '\x144', '\x3', 
+		'\x2', '\x2', '\x2', '\x146', '\x1F', '\x3', '\x2', '\x2', '\x2', '\x147', 
+		'\x14C', '\x5', '\"', '\x12', '\x2', '\x148', '\x149', '\x5', '$', '\x13', 
+		'\x2', '\x149', '\x14A', '\a', '\x12', '\x2', '\x2', '\x14A', '\x14C', 
+		'\x3', '\x2', '\x2', '\x2', '\x14B', '\x147', '\x3', '\x2', '\x2', '\x2', 
+		'\x14B', '\x148', '\x3', '\x2', '\x2', '\x2', '\x14C', '!', '\x3', '\x2', 
+		'\x2', '\x2', '\x14D', '\x150', '\x5', '\x86', '\x44', '\x2', '\x14E', 
+		'\x150', '\x5', '\x62', '\x32', '\x2', '\x14F', '\x14D', '\x3', '\x2', 
+		'\x2', '\x2', '\x14F', '\x14E', '\x3', '\x2', '\x2', '\x2', '\x150', '#', 
+		'\x3', '\x2', '\x2', '\x2', '\x151', '\x155', '\x5', '^', '\x30', '\x2', 
+		'\x152', '\x155', '\x5', '`', '\x31', '\x2', '\x153', '\x155', '\x5', 
+		'\x96', 'L', '\x2', '\x154', '\x151', '\x3', '\x2', '\x2', '\x2', '\x154', 
+		'\x152', '\x3', '\x2', '\x2', '\x2', '\x154', '\x153', '\x3', '\x2', '\x2', 
+		'\x2', '\x155', '%', '\x3', '\x2', '\x2', '\x2', '\x156', '\x159', '\x5', 
+		'(', '\x15', '\x2', '\x157', '\x159', '\x5', '*', '\x16', '\x2', '\x158', 
+		'\x156', '\x3', '\x2', '\x2', '\x2', '\x158', '\x157', '\x3', '\x2', '\x2', 
+		'\x2', '\x159', '\'', '\x3', '\x2', '\x2', '\x2', '\x15A', '\x15B', '\t', 
+		'\x2', '\x2', '\x2', '\x15B', ')', '\x3', '\x2', '\x2', '\x2', '\x15C', 
+		'\x15D', '\t', '\x3', '\x2', '\x2', '\x15D', '+', '\x3', '\x2', '\x2', 
+		'\x2', '\x15E', '\x163', '\x5', '.', '\x18', '\x2', '\x15F', '\x160', 
+		'\a', '\x13', '\x2', '\x2', '\x160', '\x162', '\x5', '.', '\x18', '\x2', 
+		'\x161', '\x15F', '\x3', '\x2', '\x2', '\x2', '\x162', '\x165', '\x3', 
+		'\x2', '\x2', '\x2', '\x163', '\x161', '\x3', '\x2', '\x2', '\x2', '\x163', 
+		'\x164', '\x3', '\x2', '\x2', '\x2', '\x164', '-', '\x3', '\x2', '\x2', 
+		'\x2', '\x165', '\x163', '\x3', '\x2', '\x2', '\x2', '\x166', '\x167', 
+		'\x5', '~', '@', '\x2', '\x167', '\x168', '\x5', '>', ' ', '\x2', '\x168', 
+		'/', '\x3', '\x2', '\x2', '\x2', '\x169', '\x16A', '\x5', '>', ' ', '\x2', 
+		'\x16A', '\x16B', '\a', '\x30', '\x2', '\x2', '\x16B', '\x16C', '\x5', 
+		'\x80', '\x41', '\x2', '\x16C', '\x16E', '\a', '\x16', '\x2', '\x2', '\x16D', 
+		'\x16F', '\x5', ',', '\x17', '\x2', '\x16E', '\x16D', '\x3', '\x2', '\x2', 
+		'\x2', '\x16E', '\x16F', '\x3', '\x2', '\x2', '\x2', '\x16F', '\x170', 
+		'\x3', '\x2', '\x2', '\x2', '\x170', '\x171', '\a', '\x17', '\x2', '\x2', 
+		'\x171', '\x172', '\x5', '\x32', '\x1A', '\x2', '\x172', '\x31', '\x3', 
+		'\x2', '\x2', '\x2', '\x173', '\x177', '\a', '\x18', '\x2', '\x2', '\x174', 
+		'\x176', '\x5', '\x38', '\x1D', '\x2', '\x175', '\x174', '\x3', '\x2', 
+		'\x2', '\x2', '\x176', '\x179', '\x3', '\x2', '\x2', '\x2', '\x177', '\x175', 
+		'\x3', '\x2', '\x2', '\x2', '\x177', '\x178', '\x3', '\x2', '\x2', '\x2', 
+		'\x178', '\x17A', '\x3', '\x2', '\x2', '\x2', '\x179', '\x177', '\x3', 
+		'\x2', '\x2', '\x2', '\x17A', '\x17B', '\a', '\x19', '\x2', '\x2', '\x17B', 
+		'\x33', '\x3', '\x2', '\x2', '\x2', '\x17C', '\x17D', '\a', '&', '\x2', 
+		'\x2', '\x17D', '\x17E', '\x5', '>', ' ', '\x2', '\x17E', '\x17F', '\a', 
+		'\x12', '\x2', '\x2', '\x17F', '\x187', '\x3', '\x2', '\x2', '\x2', '\x180', 
+		'\x181', '\a', '&', '\x2', '\x2', '\x181', '\x187', '\x5', '\x36', '\x1C', 
+		'\x2', '\x182', '\x183', '\a', '&', '\x2', '\x2', '\x183', '\x184', '\x5', 
+		'R', '*', '\x2', '\x184', '\x185', '\a', '\x12', '\x2', '\x2', '\x185', 
+		'\x187', '\x3', '\x2', '\x2', '\x2', '\x186', '\x17C', '\x3', '\x2', '\x2', 
+		'\x2', '\x186', '\x180', '\x3', '\x2', '\x2', '\x2', '\x186', '\x182', 
+		'\x3', '\x2', '\x2', '\x2', '\x187', '\x35', '\x3', '\x2', '\x2', '\x2', 
+		'\x188', '\x189', '\a', '\x31', '\x2', '\x2', '\x189', '\x196', '\x5', 
+		'>', ' ', '\x2', '\x18A', '\x18B', '\a', '\x32', '\x2', '\x2', '\x18B', 
+		'\x18C', '\a', '\x16', '\x2', '\x2', '\x18C', '\x191', '\x5', ':', '\x1E', 
+		'\x2', '\x18D', '\x18E', '\a', '\x13', '\x2', '\x2', '\x18E', '\x190', 
+		'\x5', ':', '\x1E', '\x2', '\x18F', '\x18D', '\x3', '\x2', '\x2', '\x2', 
+		'\x190', '\x193', '\x3', '\x2', '\x2', '\x2', '\x191', '\x18F', '\x3', 
+		'\x2', '\x2', '\x2', '\x191', '\x192', '\x3', '\x2', '\x2', '\x2', '\x192', 
+		'\x194', '\x3', '\x2', '\x2', '\x2', '\x193', '\x191', '\x3', '\x2', '\x2', 
+		'\x2', '\x194', '\x195', '\a', '\x17', '\x2', '\x2', '\x195', '\x197', 
+		'\x3', '\x2', '\x2', '\x2', '\x196', '\x18A', '\x3', '\x2', '\x2', '\x2', 
+		'\x196', '\x197', '\x3', '\x2', '\x2', '\x2', '\x197', '\x198', '\x3', 
+		'\x2', '\x2', '\x2', '\x198', '\x199', '\a', '\x12', '\x2', '\x2', '\x199', 
+		'\x37', '\x3', '\x2', '\x2', '\x2', '\x19A', '\x1A6', '\x5', 'P', ')', 
+		'\x2', '\x19B', '\x1A6', '\x5', '\x6', '\x4', '\x2', '\x19C', '\x1A6', 
+		'\x5', 'h', '\x35', '\x2', '\x19D', '\x1A6', '\x5', 'T', '+', '\x2', '\x19E', 
+		'\x1A6', '\x5', '\x34', '\x1B', '\x2', '\x19F', '\x1A6', '\x5', ' ', '\x11', 
+		'\x2', '\x1A0', '\x1A6', '\x5', '\x94', 'K', '\x2', '\x1A1', '\x1A6', 
+		'\x5', '\xAC', 'W', '\x2', '\x1A2', '\x1A6', '\x5', '\x36', '\x1C', '\x2', 
+		'\x1A3', '\x1A6', '\x5', '\xAA', 'V', '\x2', '\x1A4', '\x1A6', '\x5', 
+		'\xB0', 'Y', '\x2', '\x1A5', '\x19A', '\x3', '\x2', '\x2', '\x2', '\x1A5', 
+		'\x19B', '\x3', '\x2', '\x2', '\x2', '\x1A5', '\x19C', '\x3', '\x2', '\x2', 
+		'\x2', '\x1A5', '\x19D', '\x3', '\x2', '\x2', '\x2', '\x1A5', '\x19E', 
+		'\x3', '\x2', '\x2', '\x2', '\x1A5', '\x19F', '\x3', '\x2', '\x2', '\x2', 
+		'\x1A5', '\x1A0', '\x3', '\x2', '\x2', '\x2', '\x1A5', '\x1A1', '\x3', 
+		'\x2', '\x2', '\x2', '\x1A5', '\x1A2', '\x3', '\x2', '\x2', '\x2', '\x1A5', 
+		'\x1A3', '\x3', '\x2', '\x2', '\x2', '\x1A5', '\x1A4', '\x3', '\x2', '\x2', 
+		'\x2', '\x1A6', '\x39', '\x3', '\x2', '\x2', '\x2', '\x1A7', '\x1AA', 
+		'\x5', '>', ' ', '\x2', '\x1A8', '\x1AA', '\x5', '\x44', '#', '\x2', '\x1A9', 
+		'\x1A7', '\x3', '\x2', '\x2', '\x2', '\x1A9', '\x1A8', '\x3', '\x2', '\x2', 
+		'\x2', '\x1AA', ';', '\x3', '\x2', '\x2', '\x2', '\x1AB', '\x1AE', '\x5', 
+		'\x44', '#', '\x2', '\x1AC', '\x1AE', '\x5', '@', '!', '\x2', '\x1AD', 
+		'\x1AB', '\x3', '\x2', '\x2', '\x2', '\x1AD', '\x1AC', '\x3', '\x2', '\x2', 
+		'\x2', '\x1AE', '=', '\x3', '\x2', '\x2', '\x2', '\x1AF', '\x1B4', '\a', 
+		'\x46', '\x2', '\x2', '\x1B0', '\x1B1', '\a', '\x1C', '\x2', '\x2', '\x1B1', 
+		'\x1B3', '\a', '\x46', '\x2', '\x2', '\x1B2', '\x1B0', '\x3', '\x2', '\x2', 
+		'\x2', '\x1B3', '\x1B6', '\x3', '\x2', '\x2', '\x2', '\x1B4', '\x1B2', 
+		'\x3', '\x2', '\x2', '\x2', '\x1B4', '\x1B5', '\x3', '\x2', '\x2', '\x2', 
+		'\x1B5', '?', '\x3', '\x2', '\x2', '\x2', '\x1B6', '\x1B4', '\x3', '\x2', 
+		'\x2', '\x2', '\x1B7', '\x1B9', '\x5', '>', ' ', '\x2', '\x1B8', '\x1BA', 
+		'\x5', '\x42', '\"', '\x2', '\x1B9', '\x1B8', '\x3', '\x2', '\x2', '\x2', 
+		'\x1B9', '\x1BA', '\x3', '\x2', '\x2', '\x2', '\x1BA', '\x41', '\x3', 
+		'\x2', '\x2', '\x2', '\x1BB', '\x1BC', '\a', '\x1C', '\x2', '\x2', '\x1BC', 
+		'\x1BD', '\a', '\b', '\x2', '\x2', '\x1BD', '\x1C6', '\a', '\x16', '\x2', 
+		'\x2', '\x1BE', '\x1C3', '\x5', ':', '\x1E', '\x2', '\x1BF', '\x1C0', 
+		'\a', '\x13', '\x2', '\x2', '\x1C0', '\x1C2', '\x5', ':', '\x1E', '\x2', 
+		'\x1C1', '\x1BF', '\x3', '\x2', '\x2', '\x2', '\x1C2', '\x1C5', '\x3', 
+		'\x2', '\x2', '\x2', '\x1C3', '\x1C1', '\x3', '\x2', '\x2', '\x2', '\x1C3', 
+		'\x1C4', '\x3', '\x2', '\x2', '\x2', '\x1C4', '\x1C7', '\x3', '\x2', '\x2', 
+		'\x2', '\x1C5', '\x1C3', '\x3', '\x2', '\x2', '\x2', '\x1C6', '\x1BE', 
+		'\x3', '\x2', '\x2', '\x2', '\x1C6', '\x1C7', '\x3', '\x2', '\x2', '\x2', 
+		'\x1C7', '\x1C8', '\x3', '\x2', '\x2', '\x2', '\x1C8', '\x1C9', '\a', 
+		'\x17', '\x2', '\x2', '\x1C9', '\x43', '\x3', '\x2', '\x2', '\x2', '\x1CA', 
+		'\x1D0', '\x5', 'H', '%', '\x2', '\x1CB', '\x1D0', '\x5', 'J', '&', '\x2', 
+		'\x1CC', '\x1D0', '\x5', 'L', '\'', '\x2', '\x1CD', '\x1D0', '\x5', '\x46', 
+		'$', '\x2', '\x1CE', '\x1D0', '\a', '?', '\x2', '\x2', '\x1CF', '\x1CA', 
+		'\x3', '\x2', '\x2', '\x2', '\x1CF', '\x1CB', '\x3', '\x2', '\x2', '\x2', 
+		'\x1CF', '\x1CC', '\x3', '\x2', '\x2', '\x2', '\x1CF', '\x1CD', '\x3', 
+		'\x2', '\x2', '\x2', '\x1CF', '\x1CE', '\x3', '\x2', '\x2', '\x2', '\x1D0', 
+		'\x45', '\x3', '\x2', '\x2', '\x2', '\x1D1', '\x1D2', '\a', 'O', '\x2', 
+		'\x2', '\x1D2', 'G', '\x3', '\x2', '\x2', '\x2', '\x1D3', '\x1D4', '\a', 
+		'\x44', '\x2', '\x2', '\x1D4', 'I', '\x3', '\x2', '\x2', '\x2', '\x1D5', 
+		'\x1D6', '\a', '\x45', '\x2', '\x2', '\x1D6', 'K', '\x3', '\x2', '\x2', 
+		'\x2', '\x1D7', '\x1D8', '\a', '\x42', '\x2', '\x2', '\x1D8', 'M', '\x3', 
+		'\x2', '\x2', '\x2', '\x1D9', '\x1DA', '\t', '\x4', '\x2', '\x2', '\x1DA', 
+		'O', '\x3', '\x2', '\x2', '\x2', '\x1DB', '\x1DC', '\a', '\x15', '\x2', 
+		'\x2', '\x1DC', '\x1DD', '\a', '\x16', '\x2', '\x2', '\x1DD', '\x1DE', 
+		'\x5', 'R', '*', '\x2', '\x1DE', '\x1DF', '\a', '\x17', '\x2', '\x2', 
+		'\x1DF', '\x1E8', '\x5', '\x32', '\x1A', '\x2', '\x1E0', '\x1E1', '\a', 
+		' ', '\x2', '\x2', '\x1E1', '\x1E2', '\a', '\x16', '\x2', '\x2', '\x1E2', 
+		'\x1E3', '\x5', 'R', '*', '\x2', '\x1E3', '\x1E4', '\a', '\x17', '\x2', 
+		'\x2', '\x1E4', '\x1E5', '\x5', '\x32', '\x1A', '\x2', '\x1E5', '\x1E7', 
+		'\x3', '\x2', '\x2', '\x2', '\x1E6', '\x1E0', '\x3', '\x2', '\x2', '\x2', 
+		'\x1E7', '\x1EA', '\x3', '\x2', '\x2', '\x2', '\x1E8', '\x1E6', '\x3', 
+		'\x2', '\x2', '\x2', '\x1E8', '\x1E9', '\x3', '\x2', '\x2', '\x2', '\x1E9', 
+		'\x1ED', '\x3', '\x2', '\x2', '\x2', '\x1EA', '\x1E8', '\x3', '\x2', '\x2', 
+		'\x2', '\x1EB', '\x1EC', '\a', '!', '\x2', '\x2', '\x1EC', '\x1EE', '\x5', 
+		'\x32', '\x1A', '\x2', '\x1ED', '\x1EB', '\x3', '\x2', '\x2', '\x2', '\x1ED', 
+		'\x1EE', '\x3', '\x2', '\x2', '\x2', '\x1EE', 'Q', '\x3', '\x2', '\x2', 
+		'\x2', '\x1EF', '\x1F0', '\b', '*', '\x1', '\x2', '\x1F0', '\x1F1', '\a', 
+		'\x16', '\x2', '\x2', '\x1F1', '\x1F2', '\x5', 'R', '*', '\x2', '\x1F2', 
+		'\x1F3', '\a', '\x17', '\x2', '\x2', '\x1F3', '\x1F9', '\x3', '\x2', '\x2', 
+		'\x2', '\x1F4', '\x1F5', '\a', '\xF', '\x2', '\x2', '\x1F5', '\x1F9', 
+		'\x5', 'R', '*', '\a', '\x1F6', '\x1F9', '\x5', '\x1A', '\xE', '\x2', 
+		'\x1F7', '\x1F9', '\x5', 'V', ',', '\x2', '\x1F8', '\x1EF', '\x3', '\x2', 
+		'\x2', '\x2', '\x1F8', '\x1F4', '\x3', '\x2', '\x2', '\x2', '\x1F8', '\x1F6', 
+		'\x3', '\x2', '\x2', '\x2', '\x1F8', '\x1F7', '\x3', '\x2', '\x2', '\x2', 
+		'\x1F9', '\x204', '\x3', '\x2', '\x2', '\x2', '\x1FA', '\x1FD', '\f', 
+		'\x5', '\x2', '\x2', '\x1FB', '\x1FE', '\a', '\x3', '\x2', '\x2', '\x1FC', 
+		'\x1FE', '\x5', 'Z', '.', '\x2', '\x1FD', '\x1FB', '\x3', '\x2', '\x2', 
+		'\x2', '\x1FD', '\x1FC', '\x3', '\x2', '\x2', '\x2', '\x1FE', '\x1FF', 
+		'\x3', '\x2', '\x2', '\x2', '\x1FF', '\x203', '\x5', 'R', '*', '\x6', 
+		'\x200', '\x201', '\f', '\x6', '\x2', '\x2', '\x201', '\x203', '\a', '\t', 
+		'\x2', '\x2', '\x202', '\x1FA', '\x3', '\x2', '\x2', '\x2', '\x202', '\x200', 
+		'\x3', '\x2', '\x2', '\x2', '\x203', '\x206', '\x3', '\x2', '\x2', '\x2', 
+		'\x204', '\x202', '\x3', '\x2', '\x2', '\x2', '\x204', '\x205', '\x3', 
+		'\x2', '\x2', '\x2', '\x205', 'S', '\x3', '\x2', '\x2', '\x2', '\x206', 
+		'\x204', '\x3', '\x2', '\x2', '\x2', '\x207', '\x208', '\a', '\x34', '\x2', 
+		'\x2', '\x208', '\x209', '\x5', '>', ' ', '\x2', '\x209', '\x20A', '\a', 
+		'\x16', '\x2', '\x2', '\x20A', '\x20B', '\x5', ',', '\x17', '\x2', '\x20B', 
+		'\x20C', '\a', '\x17', '\x2', '\x2', '\x20C', '\x20D', '\a', '\x14', '\x2', 
+		'\x2', '\x20D', '\x20E', '\a', '\x18', '\x2', '\x2', '\x20E', '\x20F', 
+		'\x5', 'R', '*', '\x2', '\x20F', '\x210', '\a', '\x19', '\x2', '\x2', 
+		'\x210', '\x211', '\a', '\x12', '\x2', '\x2', '\x211', 'U', '\x3', '\x2', 
+		'\x2', '\x2', '\x212', '\x213', '\x5', '>', ' ', '\x2', '\x213', '\x214', 
+		'\a', '\x16', '\x2', '\x2', '\x214', '\x215', '\x5', '\xA4', 'S', '\x2', 
+		'\x215', '\x216', '\a', '\x17', '\x2', '\x2', '\x216', 'W', '\x3', '\x2', 
+		'\x2', '\x2', '\x217', '\x218', '\a', '-', '\x2', '\x2', '\x218', '\x219', 
+		'\a', '\x16', '\x2', '\x2', '\x219', '\x21A', '\x5', 'R', '*', '\x2', 
+		'\x21A', '\x21B', '\a', '\x17', '\x2', '\x2', '\x21B', '\x21F', '\x3', 
+		'\x2', '\x2', '\x2', '\x21C', '\x21D', '\a', '-', '\x2', '\x2', '\x21D', 
+		'\x21F', '\x5', 'R', '*', '\x2', '\x21E', '\x217', '\x3', '\x2', '\x2', 
+		'\x2', '\x21E', '\x21C', '\x3', '\x2', '\x2', '\x2', '\x21F', 'Y', '\x3', 
+		'\x2', '\x2', '\x2', '\x220', '\x221', '\t', '\x5', '\x2', '\x2', '\x221', 
+		'[', '\x3', '\x2', '\x2', '\x2', '\x222', '\x223', '\a', '\x33', '\x2', 
+		'\x2', '\x223', '\x224', '\x5', 'N', '(', '\x2', '\x224', '\x225', '\x5', 
+		'\x80', '\x41', '\x2', '\x225', '\x226', '\a', '\x1D', '\x2', '\x2', '\x226', 
+		'\x227', '\x5', '>', ' ', '\x2', '\x227', '\x231', '\a', '\x1D', '\x2', 
+		'\x2', '\x228', '\x229', '\a', '\x14', '\x2', '\x2', '\x229', '\x22B', 
+		'\a', '\x1D', '\x2', '\x2', '\x22A', '\x22C', '\x5', '>', ' ', '\x2', 
+		'\x22B', '\x22A', '\x3', '\x2', '\x2', '\x2', '\x22C', '\x22D', '\x3', 
+		'\x2', '\x2', '\x2', '\x22D', '\x22B', '\x3', '\x2', '\x2', '\x2', '\x22D', 
+		'\x22E', '\x3', '\x2', '\x2', '\x2', '\x22E', '\x22F', '\x3', '\x2', '\x2', 
+		'\x2', '\x22F', '\x230', '\a', '\x1D', '\x2', '\x2', '\x230', '\x232', 
+		'\x3', '\x2', '\x2', '\x2', '\x231', '\x228', '\x3', '\x2', '\x2', '\x2', 
+		'\x231', '\x232', '\x3', '\x2', '\x2', '\x2', '\x232', '\x235', '\x3', 
+		'\x2', '\x2', '\x2', '\x233', '\x234', '\a', '\x1E', '\x2', '\x2', '\x234', 
+		'\x236', '\x5', '\x44', '#', '\x2', '\x235', '\x233', '\x3', '\x2', '\x2', 
+		'\x2', '\x235', '\x236', '\x3', '\x2', '\x2', '\x2', '\x236', '\x237', 
+		'\x3', '\x2', '\x2', '\x2', '\x237', '\x238', '\a', '\x12', '\x2', '\x2', 
+		'\x238', ']', '\x3', '\x2', '\x2', '\x2', '\x239', '\x23A', '\a', '*', 
+		'\x2', '\x2', '\x23A', '\x23B', '\x5', '\x80', '\x41', '\x2', '\x23B', 
+		'\x23C', '\a', ',', '\x2', '\x2', '\x23C', '\x23E', '\x5', '@', '!', '\x2', 
+		'\x23D', '\x23F', '\x5', 'X', '-', '\x2', '\x23E', '\x23D', '\x3', '\x2', 
+		'\x2', '\x2', '\x23E', '\x23F', '\x3', '\x2', '\x2', '\x2', '\x23F', '_', 
+		'\x3', '\x2', '\x2', '\x2', '\x240', '\x241', '\a', '+', '\x2', '\x2', 
+		'\x241', '\x242', '\x5', '\x80', '\x41', '\x2', '\x242', '\x243', '\a', 
+		',', '\x2', '\x2', '\x243', '\x245', '\x5', '@', '!', '\x2', '\x244', 
+		'\x246', '\x5', 'X', '-', '\x2', '\x245', '\x244', '\x3', '\x2', '\x2', 
+		'\x2', '\x245', '\x246', '\x3', '\x2', '\x2', '\x2', '\x246', '\x61', 
+		'\x3', '\x2', '\x2', '\x2', '\x247', '\x24A', '\x5', '\x64', '\x33', '\x2', 
+		'\x248', '\x24A', '\x5', '\x66', '\x34', '\x2', '\x249', '\x247', '\x3', 
+		'\x2', '\x2', '\x2', '\x249', '\x248', '\x3', '\x2', '\x2', '\x2', '\x24A', 
+		'\x63', '\x3', '\x2', '\x2', '\x2', '\x24B', '\x24E', '\a', '.', '\x2', 
+		'\x2', '\x24C', '\x24F', '\x5', '\x10', '\t', '\x2', '\x24D', '\x24F', 
+		'\x5', '\x14', '\v', '\x2', '\x24E', '\x24C', '\x3', '\x2', '\x2', '\x2', 
+		'\x24E', '\x24D', '\x3', '\x2', '\x2', '\x2', '\x24F', '\x250', '\x3', 
+		'\x2', '\x2', '\x2', '\x250', '\x251', '\a', '\"', '\x2', '\x2', '\x251', 
+		'\x253', '\x5', '>', ' ', '\x2', '\x252', '\x254', '\x5', 'X', '-', '\x2', 
+		'\x253', '\x252', '\x3', '\x2', '\x2', '\x2', '\x253', '\x254', '\x3', 
+		'\x2', '\x2', '\x2', '\x254', '\x255', '\x3', '\x2', '\x2', '\x2', '\x255', 
+		'\x256', '\a', '\x12', '\x2', '\x2', '\x256', '\x65', '\x3', '\x2', '\x2', 
+		'\x2', '\x257', '\x25B', '\a', '.', '\x2', '\x2', '\x258', '\x25C', '\x5', 
+		'>', ' ', '\x2', '\x259', '\x25C', '\x5', '~', '@', '\x2', '\x25A', '\x25C', 
+		'\x5', '$', '\x13', '\x2', '\x25B', '\x258', '\x3', '\x2', '\x2', '\x2', 
+		'\x25B', '\x259', '\x3', '\x2', '\x2', '\x2', '\x25B', '\x25A', '\x3', 
+		'\x2', '\x2', '\x2', '\x25C', '\x25D', '\x3', '\x2', '\x2', '\x2', '\x25D', 
+		'\x25E', '\a', '\"', '\x2', '\x2', '\x25E', '\x260', '\x5', '>', ' ', 
+		'\x2', '\x25F', '\x261', '\x5', 'X', '-', '\x2', '\x260', '\x25F', '\x3', 
+		'\x2', '\x2', '\x2', '\x260', '\x261', '\x3', '\x2', '\x2', '\x2', '\x261', 
+		'\x262', '\x3', '\x2', '\x2', '\x2', '\x262', '\x263', '\a', '\x12', '\x2', 
+		'\x2', '\x263', '\x274', '\x3', '\x2', '\x2', '\x2', '\x264', '\x265', 
+		'\a', '.', '\x2', '\x2', '\x265', '\x269', '\a', '\x16', '\x2', '\x2', 
+		'\x266', '\x26A', '\x5', '>', ' ', '\x2', '\x267', '\x26A', '\x5', '~', 
+		'@', '\x2', '\x268', '\x26A', '\x5', '$', '\x13', '\x2', '\x269', '\x266', 
+		'\x3', '\x2', '\x2', '\x2', '\x269', '\x267', '\x3', '\x2', '\x2', '\x2', 
+		'\x269', '\x268', '\x3', '\x2', '\x2', '\x2', '\x26A', '\x26B', '\x3', 
+		'\x2', '\x2', '\x2', '\x26B', '\x26C', '\a', '\x17', '\x2', '\x2', '\x26C', 
+		'\x26D', '\a', '\"', '\x2', '\x2', '\x26D', '\x26F', '\x5', '>', ' ', 
+		'\x2', '\x26E', '\x270', '\x5', 'X', '-', '\x2', '\x26F', '\x26E', '\x3', 
+		'\x2', '\x2', '\x2', '\x26F', '\x270', '\x3', '\x2', '\x2', '\x2', '\x270', 
+		'\x271', '\x3', '\x2', '\x2', '\x2', '\x271', '\x272', '\a', '\x12', '\x2', 
+		'\x2', '\x272', '\x274', '\x3', '\x2', '\x2', '\x2', '\x273', '\x257', 
+		'\x3', '\x2', '\x2', '\x2', '\x273', '\x264', '\x3', '\x2', '\x2', '\x2', 
+		'\x274', 'g', '\x3', '\x2', '\x2', '\x2', '\x275', '\x27A', '\x5', 'j', 
+		'\x36', '\x2', '\x276', '\x27A', '\x5', 'l', '\x37', '\x2', '\x277', '\x27A', 
+		'\x5', 'n', '\x38', '\x2', '\x278', '\x27A', '\x5', 'p', '\x39', '\x2', 
+		'\x279', '\x275', '\x3', '\x2', '\x2', '\x2', '\x279', '\x276', '\x3', 
+		'\x2', '\x2', '\x2', '\x279', '\x277', '\x3', '\x2', '\x2', '\x2', '\x279', 
+		'\x278', '\x3', '\x2', '\x2', '\x2', '\x27A', 'i', '\x3', '\x2', '\x2', 
+		'\x2', '\x27B', '\x27C', '\a', '%', '\x2', '\x2', '\x27C', '\x27E', '\x5', 
+		'|', '?', '\x2', '\x27D', '\x27F', '\x5', 'X', '-', '\x2', '\x27E', '\x27D', 
+		'\x3', '\x2', '\x2', '\x2', '\x27E', '\x27F', '\x3', '\x2', '\x2', '\x2', 
+		'\x27F', '\x280', '\x3', '\x2', '\x2', '\x2', '\x280', '\x281', '\x5', 
+		'\x32', '\x1A', '\x2', '\x281', 'k', '\x3', '\x2', '\x2', '\x2', '\x282', 
+		'\x283', '\a', '\'', '\x2', '\x2', '\x283', '\x284', '\x5', 'R', '*', 
+		'\x2', '\x284', '\x285', '\x5', '\x32', '\x1A', '\x2', '\x285', 'm', '\x3', 
+		'\x2', '\x2', '\x2', '\x286', '\x287', '\a', '(', '\x2', '\x2', '\x287', 
+		'\x288', '\x5', '\x32', '\x1A', '\x2', '\x288', '\x289', '\a', '\'', '\x2', 
+		'\x2', '\x289', '\x28A', '\x5', 'R', '*', '\x2', '\x28A', 'o', '\x3', 
+		'\x2', '\x2', '\x2', '\x28B', '\x28C', '\a', '$', '\x2', '\x2', '\x28C', 
+		'\x28D', '\x5', 'r', ':', '\x2', '\x28D', '\x28E', '\x5', '\x32', '\x1A', 
+		'\x2', '\x28E', 'q', '\x3', '\x2', '\x2', '\x2', '\x28F', '\x290', '\a', 
+		'\x16', '\x2', '\x2', '\x290', '\x291', '\x5', 'v', '<', '\x2', '\x291', 
+		'\x292', '\a', '\x17', '\x2', '\x2', '\x292', '\x295', '\x3', '\x2', '\x2', 
+		'\x2', '\x293', '\x295', '\x5', 'v', '<', '\x2', '\x294', '\x28F', '\x3', 
+		'\x2', '\x2', '\x2', '\x294', '\x293', '\x3', '\x2', '\x2', '\x2', '\x295', 
+		's', '\x3', '\x2', '\x2', '\x2', '\x296', '\x29C', '\x5', '\x18', '\r', 
+		'\x2', '\x297', '\x298', '\a', '\x16', '\x2', '\x2', '\x298', '\x299', 
+		'\x5', '\x18', '\r', '\x2', '\x299', '\x29A', '\a', '\x17', '\x2', '\x2', 
+		'\x29A', '\x29C', '\x3', '\x2', '\x2', '\x2', '\x29B', '\x296', '\x3', 
+		'\x2', '\x2', '\x2', '\x29B', '\x297', '\x3', '\x2', '\x2', '\x2', '\x29C', 
+		'u', '\x3', '\x2', '\x2', '\x2', '\x29D', '\x2A0', '\x5', 'z', '>', '\x2', 
+		'\x29E', '\x2A0', '\x5', ':', '\x1E', '\x2', '\x29F', '\x29D', '\x3', 
+		'\x2', '\x2', '\x2', '\x29F', '\x29E', '\x3', '\x2', '\x2', '\x2', '\x2A0', 
+		'\x2A1', '\x3', '\x2', '\x2', '\x2', '\x2A1', '\x2A4', '\a', '\"', '\x2', 
+		'\x2', '\x2A2', '\x2A5', '\x5', ':', '\x1E', '\x2', '\x2A3', '\x2A5', 
+		'\x5', 'x', '=', '\x2', '\x2A4', '\x2A2', '\x3', '\x2', '\x2', '\x2', 
+		'\x2A4', '\x2A3', '\x3', '\x2', '\x2', '\x2', '\x2A5', '\x2AB', '\x3', 
+		'\x2', '\x2', '\x2', '\x2A6', '\x2A9', '\a', '\x14', '\x2', '\x2', '\x2A7', 
+		'\x2AA', '\x5', ':', '\x1E', '\x2', '\x2A8', '\x2AA', '\x5', 'x', '=', 
+		'\x2', '\x2A9', '\x2A7', '\x3', '\x2', '\x2', '\x2', '\x2A9', '\x2A8', 
+		'\x3', '\x2', '\x2', '\x2', '\x2AA', '\x2AC', '\x3', '\x2', '\x2', '\x2', 
+		'\x2AB', '\x2A6', '\x3', '\x2', '\x2', '\x2', '\x2AB', '\x2AC', '\x3', 
+		'\x2', '\x2', '\x2', '\x2AC', 'w', '\x3', '\x2', '\x2', '\x2', '\x2AD', 
+		'\x2B3', '\x5', ':', '\x1E', '\x2', '\x2AE', '\x2AF', '\x5', '&', '\x14', 
+		'\x2', '\x2AF', '\x2B0', '\x5', ':', '\x1E', '\x2', '\x2B0', '\x2B2', 
+		'\x3', '\x2', '\x2', '\x2', '\x2B1', '\x2AE', '\x3', '\x2', '\x2', '\x2', 
+		'\x2B2', '\x2B5', '\x3', '\x2', '\x2', '\x2', '\x2B3', '\x2B1', '\x3', 
+		'\x2', '\x2', '\x2', '\x2B3', '\x2B4', '\x3', '\x2', '\x2', '\x2', '\x2B4', 
+		'\x2C3', '\x3', '\x2', '\x2', '\x2', '\x2B5', '\x2B3', '\x3', '\x2', '\x2', 
+		'\x2', '\x2B6', '\x2B7', '\a', '\x17', '\x2', '\x2', '\x2B7', '\x2BD', 
+		'\x5', ':', '\x1E', '\x2', '\x2B8', '\x2B9', '\x5', '&', '\x14', '\x2', 
+		'\x2B9', '\x2BA', '\x5', ':', '\x1E', '\x2', '\x2BA', '\x2BC', '\x3', 
+		'\x2', '\x2', '\x2', '\x2BB', '\x2B8', '\x3', '\x2', '\x2', '\x2', '\x2BC', 
+		'\x2BF', '\x3', '\x2', '\x2', '\x2', '\x2BD', '\x2BB', '\x3', '\x2', '\x2', 
+		'\x2', '\x2BD', '\x2BE', '\x3', '\x2', '\x2', '\x2', '\x2BE', '\x2C0', 
+		'\x3', '\x2', '\x2', '\x2', '\x2BF', '\x2BD', '\x3', '\x2', '\x2', '\x2', 
+		'\x2C0', '\x2C1', '\a', '\x17', '\x2', '\x2', '\x2C1', '\x2C3', '\x3', 
+		'\x2', '\x2', '\x2', '\x2C2', '\x2AD', '\x3', '\x2', '\x2', '\x2', '\x2C2', 
+		'\x2B6', '\x3', '\x2', '\x2', '\x2', '\x2C3', 'y', '\x3', '\x2', '\x2', 
+		'\x2', '\x2C4', '\x2C5', '\x5', '~', '@', '\x2', '\x2C5', '\x2C6', '\a', 
+		'\x46', '\x2', '\x2', '\x2C6', '\x2C7', '\a', '\x1E', '\x2', '\x2', '\x2C7', 
+		'\x2C8', '\x5', 'x', '=', '\x2', '\x2C8', '{', '\x3', '\x2', '\x2', '\x2', 
+		'\x2C9', '\x2CA', '\a', '\x16', '\x2', '\x2', '\x2CA', '\x2CB', '\x5', 
+		'~', '@', '\x2', '\x2CB', '\x2CC', '\x5', '>', ' ', '\x2', '\x2CC', '\x2CD', 
+		'\a', '#', '\x2', '\x2', '\x2CD', '\x2CE', '\x5', '@', '!', '\x2', '\x2CE', 
+		'\x2CF', '\a', '\x17', '\x2', '\x2', '\x2CF', '\x2D6', '\x3', '\x2', '\x2', 
+		'\x2', '\x2D0', '\x2D1', '\x5', '~', '@', '\x2', '\x2D1', '\x2D2', '\x5', 
+		'>', ' ', '\x2', '\x2D2', '\x2D3', '\a', '#', '\x2', '\x2', '\x2D3', '\x2D4', 
+		'\x5', '@', '!', '\x2', '\x2D4', '\x2D6', '\x3', '\x2', '\x2', '\x2', 
+		'\x2D5', '\x2C9', '\x3', '\x2', '\x2', '\x2', '\x2D5', '\x2D0', '\x3', 
+		'\x2', '\x2', '\x2', '\x2D6', '}', '\x3', '\x2', '\x2', '\x2', '\x2D7', 
+		'\x2DA', '\a', '\x4', '\x2', '\x2', '\x2D8', '\x2DA', '\x5', 'N', '(', 
+		'\x2', '\x2D9', '\x2D7', '\x3', '\x2', '\x2', '\x2', '\x2D9', '\x2D8', 
+		'\x3', '\x2', '\x2', '\x2', '\x2DA', '\x7F', '\x3', '\x2', '\x2', '\x2', 
+		'\x2DB', '\x2DF', '\x5', '~', '@', '\x2', '\x2DC', '\x2DD', '\a', '/', 
+		'\x2', '\x2', '\x2DD', '\x2DF', '\x5', '~', '@', '\x2', '\x2DE', '\x2DB', 
+		'\x3', '\x2', '\x2', '\x2', '\x2DE', '\x2DC', '\x3', '\x2', '\x2', '\x2', 
+		'\x2DF', '\x81', '\x3', '\x2', '\x2', '\x2', '\x2E0', '\x2E1', '\a', '/', 
+		'\x2', '\x2', '\x2E1', '\x2E2', '\x5', '~', '@', '\x2', '\x2E2', '\x2E5', 
+		'\a', '\x46', '\x2', '\x2', '\x2E3', '\x2E4', '\a', '\x1E', '\x2', '\x2', 
+		'\x2E4', '\x2E6', '\x5', '\x84', '\x43', '\x2', '\x2E5', '\x2E3', '\x3', 
+		'\x2', '\x2', '\x2', '\x2E5', '\x2E6', '\x3', '\x2', '\x2', '\x2', '\x2E6', 
+		'\x2E7', '\x3', '\x2', '\x2', '\x2', '\x2E7', '\x2E8', '\a', '\x12', '\x2', 
+		'\x2', '\x2E8', '\x83', '\x3', '\x2', '\x2', '\x2', '\x2E9', '\x2EC', 
+		'\x5', '$', '\x13', '\x2', '\x2EA', '\x2EC', '\x5', '@', '!', '\x2', '\x2EB', 
+		'\x2E9', '\x3', '\x2', '\x2', '\x2', '\x2EB', '\x2EA', '\x3', '\x2', '\x2', 
+		'\x2', '\x2EC', '\x85', '\x3', '\x2', '\x2', '\x2', '\x2ED', '\x2EE', 
+		'\a', ')', '\x2', '\x2', '\x2EE', '\x2F3', '\x5', '\x8A', '\x46', '\x2', 
+		'\x2EF', '\x2F0', '\a', '\x13', '\x2', '\x2', '\x2F0', '\x2F2', '\x5', 
+		'\x8A', '\x46', '\x2', '\x2F1', '\x2EF', '\x3', '\x2', '\x2', '\x2', '\x2F2', 
+		'\x2F5', '\x3', '\x2', '\x2', '\x2', '\x2F3', '\x2F1', '\x3', '\x2', '\x2', 
+		'\x2', '\x2F3', '\x2F4', '\x3', '\x2', '\x2', '\x2', '\x2F4', '\x2F6', 
+		'\x3', '\x2', '\x2', '\x2', '\x2F5', '\x2F3', '\x3', '\x2', '\x2', '\x2', 
+		'\x2F6', '\x2F7', '\a', '#', '\x2', '\x2', '\x2F7', '\x2F9', '\x5', '>', 
+		' ', '\x2', '\x2F8', '\x2FA', '\x5', 'X', '-', '\x2', '\x2F9', '\x2F8', 
+		'\x3', '\x2', '\x2', '\x2', '\x2F9', '\x2FA', '\x3', '\x2', '\x2', '\x2', 
+		'\x2FA', '\x2FB', '\x3', '\x2', '\x2', '\x2', '\x2FB', '\x2FC', '\a', 
+		'\x12', '\x2', '\x2', '\x2FC', '\x30C', '\x3', '\x2', '\x2', '\x2', '\x2FD', 
+		'\x2FE', '\a', ')', '\x2', '\x2', '\x2FE', '\x303', '\x5', '\x8C', 'G', 
+		'\x2', '\x2FF', '\x300', '\a', '\x13', '\x2', '\x2', '\x300', '\x302', 
+		'\x5', '\x8C', 'G', '\x2', '\x301', '\x2FF', '\x3', '\x2', '\x2', '\x2', 
+		'\x302', '\x305', '\x3', '\x2', '\x2', '\x2', '\x303', '\x301', '\x3', 
+		'\x2', '\x2', '\x2', '\x303', '\x304', '\x3', '\x2', '\x2', '\x2', '\x304', 
+		'\x307', '\x3', '\x2', '\x2', '\x2', '\x305', '\x303', '\x3', '\x2', '\x2', 
+		'\x2', '\x306', '\x308', '\x5', 'X', '-', '\x2', '\x307', '\x306', '\x3', 
+		'\x2', '\x2', '\x2', '\x307', '\x308', '\x3', '\x2', '\x2', '\x2', '\x308', 
+		'\x309', '\x3', '\x2', '\x2', '\x2', '\x309', '\x30A', '\a', '\x12', '\x2', 
+		'\x2', '\x30A', '\x30C', '\x3', '\x2', '\x2', '\x2', '\x30B', '\x2ED', 
+		'\x3', '\x2', '\x2', '\x2', '\x30B', '\x2FD', '\x3', '\x2', '\x2', '\x2', 
+		'\x30C', '\x87', '\x3', '\x2', '\x2', '\x2', '\x30D', '\x30E', '\a', ')', 
+		'\x2', '\x2', '\x30E', '\x313', '\x5', '\x8A', '\x46', '\x2', '\x30F', 
+		'\x310', '\a', '\x13', '\x2', '\x2', '\x310', '\x312', '\x5', '\x8A', 
+		'\x46', '\x2', '\x311', '\x30F', '\x3', '\x2', '\x2', '\x2', '\x312', 
+		'\x315', '\x3', '\x2', '\x2', '\x2', '\x313', '\x311', '\x3', '\x2', '\x2', 
+		'\x2', '\x313', '\x314', '\x3', '\x2', '\x2', '\x2', '\x314', '\x317', 
+		'\x3', '\x2', '\x2', '\x2', '\x315', '\x313', '\x3', '\x2', '\x2', '\x2', 
+		'\x316', '\x318', '\x5', 'X', '-', '\x2', '\x317', '\x316', '\x3', '\x2', 
+		'\x2', '\x2', '\x317', '\x318', '\x3', '\x2', '\x2', '\x2', '\x318', '\x319', 
+		'\x3', '\x2', '\x2', '\x2', '\x319', '\x31A', '\a', '\x12', '\x2', '\x2', 
+		'\x31A', '\x89', '\x3', '\x2', '\x2', '\x2', '\x31B', '\x31C', '\x5', 
+		'\x90', 'I', '\x2', '\x31C', '\x32E', '\x5', '\x8E', 'H', '\x2', '\x31D', 
+		'\x31E', '\a', '\x16', '\x2', '\x2', '\x31E', '\x322', '\x5', ':', '\x1E', 
+		'\x2', '\x31F', '\x321', '\x5', '\x1C', '\xF', '\x2', '\x320', '\x31F', 
+		'\x3', '\x2', '\x2', '\x2', '\x321', '\x324', '\x3', '\x2', '\x2', '\x2', 
+		'\x322', '\x320', '\x3', '\x2', '\x2', '\x2', '\x322', '\x323', '\x3', 
+		'\x2', '\x2', '\x2', '\x323', '\x325', '\x3', '\x2', '\x2', '\x2', '\x324', 
+		'\x322', '\x3', '\x2', '\x2', '\x2', '\x325', '\x326', '\a', '\x17', '\x2', 
+		'\x2', '\x326', '\x32F', '\x3', '\x2', '\x2', '\x2', '\x327', '\x32B', 
+		'\x5', ':', '\x1E', '\x2', '\x328', '\x32A', '\x5', '\x1C', '\xF', '\x2', 
+		'\x329', '\x328', '\x3', '\x2', '\x2', '\x2', '\x32A', '\x32D', '\x3', 
+		'\x2', '\x2', '\x2', '\x32B', '\x329', '\x3', '\x2', '\x2', '\x2', '\x32B', 
+		'\x32C', '\x3', '\x2', '\x2', '\x2', '\x32C', '\x32F', '\x3', '\x2', '\x2', 
+		'\x2', '\x32D', '\x32B', '\x3', '\x2', '\x2', '\x2', '\x32E', '\x31D', 
+		'\x3', '\x2', '\x2', '\x2', '\x32E', '\x327', '\x3', '\x2', '\x2', '\x2', 
+		'\x32F', '\x8B', '\x3', '\x2', '\x2', '\x2', '\x330', '\x331', '\x5', 
+		'>', ' ', '\x2', '\x331', '\x343', '\x5', '\x8E', 'H', '\x2', '\x332', 
+		'\x333', '\a', '\x16', '\x2', '\x2', '\x333', '\x337', '\x5', ':', '\x1E', 
+		'\x2', '\x334', '\x336', '\x5', '\x1C', '\xF', '\x2', '\x335', '\x334', 
+		'\x3', '\x2', '\x2', '\x2', '\x336', '\x339', '\x3', '\x2', '\x2', '\x2', 
+		'\x337', '\x335', '\x3', '\x2', '\x2', '\x2', '\x337', '\x338', '\x3', 
+		'\x2', '\x2', '\x2', '\x338', '\x33A', '\x3', '\x2', '\x2', '\x2', '\x339', 
+		'\x337', '\x3', '\x2', '\x2', '\x2', '\x33A', '\x33B', '\a', '\x17', '\x2', 
+		'\x2', '\x33B', '\x344', '\x3', '\x2', '\x2', '\x2', '\x33C', '\x340', 
+		'\x5', ':', '\x1E', '\x2', '\x33D', '\x33F', '\x5', '\x1C', '\xF', '\x2', 
+		'\x33E', '\x33D', '\x3', '\x2', '\x2', '\x2', '\x33F', '\x342', '\x3', 
+		'\x2', '\x2', '\x2', '\x340', '\x33E', '\x3', '\x2', '\x2', '\x2', '\x340', 
+		'\x341', '\x3', '\x2', '\x2', '\x2', '\x341', '\x344', '\x3', '\x2', '\x2', 
+		'\x2', '\x342', '\x340', '\x3', '\x2', '\x2', '\x2', '\x343', '\x332', 
+		'\x3', '\x2', '\x2', '\x2', '\x343', '\x33C', '\x3', '\x2', '\x2', '\x2', 
+		'\x344', '\x8D', '\x3', '\x2', '\x2', '\x2', '\x345', '\x346', '\t', '\x6', 
+		'\x2', '\x2', '\x346', '\x8F', '\x3', '\x2', '\x2', '\x2', '\x347', '\x348', 
+		'\a', '\x1D', '\x2', '\x2', '\x348', '\x349', '\x5', '>', ' ', '\x2', 
+		'\x349', '\x34A', '\a', '\x1D', '\x2', '\x2', '\x34A', '\x91', '\x3', 
+		'\x2', '\x2', '\x2', '\x34B', '\x34C', '\x5', '\x90', 'I', '\x2', '\x34C', 
+		'\x34D', '\x5', '\x8E', 'H', '\x2', '\x34D', '\x34E', '\x5', ':', '\x1E', 
+		'\x2', '\x34E', '\x93', '\x3', '\x2', '\x2', '\x2', '\x34F', '\x352', 
+		'\x5', '\x98', 'M', '\x2', '\x350', '\x352', '\x5', '\x9E', 'P', '\x2', 
+		'\x351', '\x34F', '\x3', '\x2', '\x2', '\x2', '\x351', '\x350', '\x3', 
+		'\x2', '\x2', '\x2', '\x352', '\x95', '\x3', '\x2', '\x2', '\x2', '\x353', 
+		'\x358', '\x5', '\x9A', 'N', '\x2', '\x354', '\x358', '\x5', '\x9C', 'O', 
+		'\x2', '\x355', '\x358', '\x5', '\xA0', 'Q', '\x2', '\x356', '\x358', 
+		'\x5', '\xA2', 'R', '\x2', '\x357', '\x353', '\x3', '\x2', '\x2', '\x2', 
+		'\x357', '\x354', '\x3', '\x2', '\x2', '\x2', '\x357', '\x355', '\x3', 
+		'\x2', '\x2', '\x2', '\x357', '\x356', '\x3', '\x2', '\x2', '\x2', '\x358', 
+		'\x97', '\x3', '\x2', '\x2', '\x2', '\x359', '\x35A', '\a', '\x38', '\x2', 
+		'\x2', '\x35A', '\x35B', '\x5', '>', ' ', '\x2', '\x35B', '\x35C', '\a', 
+		'\"', '\x2', '\x2', '\x35C', '\x35E', '\x5', '>', ' ', '\x2', '\x35D', 
+		'\x35F', '\x5', 'X', '-', '\x2', '\x35E', '\x35D', '\x3', '\x2', '\x2', 
+		'\x2', '\x35E', '\x35F', '\x3', '\x2', '\x2', '\x2', '\x35F', '\x360', 
+		'\x3', '\x2', '\x2', '\x2', '\x360', '\x361', '\a', '\x12', '\x2', '\x2', 
+		'\x361', '\x99', '\x3', '\x2', '\x2', '\x2', '\x362', '\x363', '\a', '\x39', 
+		'\x2', '\x2', '\x363', '\x364', '\a', ',', '\x2', '\x2', '\x364', '\x366', 
+		'\x5', '>', ' ', '\x2', '\x365', '\x367', '\x5', 'X', '-', '\x2', '\x366', 
+		'\x365', '\x3', '\x2', '\x2', '\x2', '\x366', '\x367', '\x3', '\x2', '\x2', 
+		'\x2', '\x367', '\x9B', '\x3', '\x2', '\x2', '\x2', '\x368', '\x369', 
+		'\a', '\x35', '\x2', '\x2', '\x369', '\x36A', '\a', ',', '\x2', '\x2', 
+		'\x36A', '\x36C', '\x5', '>', ' ', '\x2', '\x36B', '\x36D', '\x5', 'X', 
+		'-', '\x2', '\x36C', '\x36B', '\x3', '\x2', '\x2', '\x2', '\x36C', '\x36D', 
+		'\x3', '\x2', '\x2', '\x2', '\x36D', '\x36E', '\x3', '\x2', '\x2', '\x2', 
+		'\x36E', '\x36F', '\a', '\x12', '\x2', '\x2', '\x36F', '\x9D', '\x3', 
+		'\x2', '\x2', '\x2', '\x370', '\x371', '\a', '\x36', '\x2', '\x2', '\x371', 
+		'\x372', '\x5', '>', ' ', '\x2', '\x372', '\x373', '\a', '\"', '\x2', 
+		'\x2', '\x373', '\x375', '\x5', '>', ' ', '\x2', '\x374', '\x376', '\x5', 
+		'X', '-', '\x2', '\x375', '\x374', '\x3', '\x2', '\x2', '\x2', '\x375', 
+		'\x376', '\x3', '\x2', '\x2', '\x2', '\x376', '\x377', '\x3', '\x2', '\x2', 
+		'\x2', '\x377', '\x378', '\a', '\x12', '\x2', '\x2', '\x378', '\x9F', 
+		'\x3', '\x2', '\x2', '\x2', '\x379', '\x37B', '\a', '<', '\x2', '\x2', 
+		'\x37A', '\x37C', '\x5', '\x90', 'I', '\x2', '\x37B', '\x37A', '\x3', 
+		'\x2', '\x2', '\x2', '\x37B', '\x37C', '\x3', '\x2', '\x2', '\x2', '\x37C', 
+		'\x37D', '\x3', '\x2', '\x2', '\x2', '\x37D', '\x37E', '\a', ',', '\x2', 
+		'\x2', '\x37E', '\x380', '\x5', '>', ' ', '\x2', '\x37F', '\x381', '\x5', 
+		'X', '-', '\x2', '\x380', '\x37F', '\x3', '\x2', '\x2', '\x2', '\x380', 
+		'\x381', '\x3', '\x2', '\x2', '\x2', '\x381', '\xA1', '\x3', '\x2', '\x2', 
+		'\x2', '\x382', '\x384', '\a', '=', '\x2', '\x2', '\x383', '\x385', '\x5', 
+		'\x90', 'I', '\x2', '\x384', '\x383', '\x3', '\x2', '\x2', '\x2', '\x384', 
+		'\x385', '\x3', '\x2', '\x2', '\x2', '\x385', '\x386', '\x3', '\x2', '\x2', 
+		'\x2', '\x386', '\x387', '\a', ',', '\x2', '\x2', '\x387', '\x389', '\x5', 
+		'>', ' ', '\x2', '\x388', '\x38A', '\x5', 'X', '-', '\x2', '\x389', '\x388', 
+		'\x3', '\x2', '\x2', '\x2', '\x389', '\x38A', '\x3', '\x2', '\x2', '\x2', 
+		'\x38A', '\xA3', '\x3', '\x2', '\x2', '\x2', '\x38B', '\x390', '\x5', 
+		':', '\x1E', '\x2', '\x38C', '\x38D', '\a', '\x13', '\x2', '\x2', '\x38D', 
+		'\x38F', '\x5', ':', '\x1E', '\x2', '\x38E', '\x38C', '\x3', '\x2', '\x2', 
+		'\x2', '\x38F', '\x392', '\x3', '\x2', '\x2', '\x2', '\x390', '\x38E', 
+		'\x3', '\x2', '\x2', '\x2', '\x390', '\x391', '\x3', '\x2', '\x2', '\x2', 
+		'\x391', '\xA5', '\x3', '\x2', '\x2', '\x2', '\x392', '\x390', '\x3', 
+		'\x2', '\x2', '\x2', '\x393', '\x398', '\x5', '\xA8', 'U', '\x2', '\x394', 
+		'\x395', '\a', '\x13', '\x2', '\x2', '\x395', '\x397', '\x5', '\xA8', 
+		'U', '\x2', '\x396', '\x394', '\x3', '\x2', '\x2', '\x2', '\x397', '\x39A', 
+		'\x3', '\x2', '\x2', '\x2', '\x398', '\x396', '\x3', '\x2', '\x2', '\x2', 
+		'\x398', '\x399', '\x3', '\x2', '\x2', '\x2', '\x399', '\xA7', '\x3', 
+		'\x2', '\x2', '\x2', '\x39A', '\x398', '\x3', '\x2', '\x2', '\x2', '\x39B', 
+		'\x3A1', '\a', '\x46', '\x2', '\x2', '\x39C', '\x39E', '\a', '\x16', '\x2', 
+		'\x2', '\x39D', '\x39F', '\x5', '\xA4', 'S', '\x2', '\x39E', '\x39D', 
+		'\x3', '\x2', '\x2', '\x2', '\x39E', '\x39F', '\x3', '\x2', '\x2', '\x2', 
+		'\x39F', '\x3A0', '\x3', '\x2', '\x2', '\x2', '\x3A0', '\x3A2', '\a', 
+		'\x17', '\x2', '\x2', '\x3A1', '\x39C', '\x3', '\x2', '\x2', '\x2', '\x3A1', 
+		'\x3A2', '\x3', '\x2', '\x2', '\x2', '\x3A2', '\x3A8', '\x3', '\x2', '\x2', 
+		'\x2', '\x3A3', '\x3A8', '\x5', ':', '\x1E', '\x2', '\x3A4', '\x3A8', 
+		'\x5', '$', '\x13', '\x2', '\x3A5', '\x3A8', '\x5', '\x36', '\x1C', '\x2', 
+		'\x3A6', '\x3A8', '\x5', '\x42', '\"', '\x2', '\x3A7', '\x39B', '\x3', 
+		'\x2', '\x2', '\x2', '\x3A7', '\x3A3', '\x3', '\x2', '\x2', '\x2', '\x3A7', 
+		'\x3A4', '\x3', '\x2', '\x2', '\x2', '\x3A7', '\x3A5', '\x3', '\x2', '\x2', 
+		'\x2', '\x3A7', '\x3A6', '\x3', '\x2', '\x2', '\x2', '\x3A8', '\xA9', 
+		'\x3', '\x2', '\x2', '\x2', '\x3A9', '\x3AA', '\a', '>', '\x2', '\x2', 
+		'\x3AA', '\x3AB', '\x5', '\xA6', 'T', '\x2', '\x3AB', '\x3AC', '\a', '\x12', 
+		'\x2', '\x2', '\x3AC', '\xAB', '\x3', '\x2', '\x2', '\x2', '\x3AD', '\x3AE', 
+		'\a', '\x39', '\x2', '\x2', '\x3AE', '\x3AF', '\a', ',', '\x2', '\x2', 
+		'\x3AF', '\x3B1', '\x5', '>', ' ', '\x2', '\x3B0', '\x3B2', '\x5', 'X', 
+		'-', '\x2', '\x3B1', '\x3B0', '\x3', '\x2', '\x2', '\x2', '\x3B1', '\x3B2', 
+		'\x3', '\x2', '\x2', '\x2', '\x3B2', '\x3B3', '\x3', '\x2', '\x2', '\x2', 
+		'\x3B3', '\x3B4', '\a', '\x12', '\x2', '\x2', '\x3B4', '\xAD', '\x3', 
+		'\x2', '\x2', '\x2', '\x3B5', '\x3B6', '\a', '\x41', '\x2', '\x2', '\x3B6', 
+		'\x3B7', '\a', 'O', '\x2', '\x2', '\x3B7', '\xAF', '\x3', '\x2', '\x2', 
+		'\x2', '\x3B8', '\x3B9', '\x5', '\xAE', 'X', '\x2', '\x3B9', '\xB1', '\x3', 
+		'\x2', '\x2', '\x2', 'k', '\xBA', '\xBF', '\xC6', '\xC8', '\xCD', '\xD3', 
+		'\xE3', '\xE5', '\xF0', '\xF4', '\xFC', '\xFF', '\x109', '\x10D', '\x117', 
+		'\x122', '\x129', '\x12F', '\x133', '\x138', '\x13E', '\x145', '\x14B', 
+		'\x14F', '\x154', '\x158', '\x163', '\x16E', '\x177', '\x186', '\x191', 
+		'\x196', '\x1A5', '\x1A9', '\x1AD', '\x1B4', '\x1B9', '\x1C3', '\x1C6', 
+		'\x1CF', '\x1E8', '\x1ED', '\x1F8', '\x1FD', '\x202', '\x204', '\x21E', 
+		'\x22D', '\x231', '\x235', '\x23E', '\x245', '\x249', '\x24E', '\x253', 
+		'\x25B', '\x260', '\x269', '\x26F', '\x273', '\x279', '\x27E', '\x294', 
+		'\x29B', '\x29F', '\x2A4', '\x2A9', '\x2AB', '\x2B3', '\x2BD', '\x2C2', 
+		'\x2D5', '\x2D9', '\x2DE', '\x2E5', '\x2EB', '\x2F3', '\x2F9', '\x303', 
+		'\x307', '\x30B', '\x313', '\x317', '\x322', '\x32B', '\x32E', '\x337', 
+		'\x340', '\x343', '\x351', '\x357', '\x35E', '\x366', '\x36C', '\x375', 
+		'\x37B', '\x380', '\x384', '\x389', '\x390', '\x398', '\x39E', '\x3A1', 
+		'\x3A7', '\x3B1',
+>>>>>>> Stashed changes
 	};
 
 	public static readonly ATN _ATN =
