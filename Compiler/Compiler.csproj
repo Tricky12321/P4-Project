@@ -46,10 +46,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Antlr_Generated\GiraphLexer.cs" />
-    <Compile Include="Antlr_Generated\GiraphParser.cs" />
-    <Compile Include="Antlr_Generated\GiraphParserBaseVisitor.cs" />
-    <Compile Include="Antlr_Generated\GiraphParserVisitor.cs" />
     <Compile Include="Program\ASTTool.cs" />
     <Compile Include="Program\Program.cs" />
     <Compile Include="NewStuff\BuildAstVisitor.cs" />
@@ -79,6 +75,8 @@
     <Compile Include="NewStuff\NoReturnQuery.cs" />
     <Compile Include="NewStuff\AstVisitor.cs" />
     <Compile Include="NewStuff\EvaluateQuery.cs" />
+    <Compile Include="Antlr_Generated\GiraphLexer.cs" />
+    <Compile Include="Antlr_Generated\GiraphParser.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Program\App.config" />
