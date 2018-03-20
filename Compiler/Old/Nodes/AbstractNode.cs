@@ -38,6 +38,7 @@ namespace Compiler.Nodes
                 nodeY.LeftmostSibling = nodeX.LeftmostSibling;
                 nodeY.Parent = nodeX.Parent;
             }
+
         }
 
         public void AdoptChildren(AbstractNode node)
