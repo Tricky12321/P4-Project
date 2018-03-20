@@ -7,8 +7,9 @@ namespace Compiler.Nodes
 {
     class ExtensionNode : AbstractNode
     {
-        /*class
-        attribute
-        initializer*/
+        ObjectTypeNode TargetType;
+        TypeNode ExtentionType;
+        AttributeNode Attribute; 
+        //initializer
     }
 }

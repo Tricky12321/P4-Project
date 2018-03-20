@@ -5,11 +5,8 @@ using System.Text;
 
 namespace Compiler.Nodes
 {
-    class GraphDclNode : AbstractNode
+    class ModuloNode : OperatorNode
     {
-        /*name
-        vertexDclList
-        edgeDclList
-        setDirected*/
+
     }
 }

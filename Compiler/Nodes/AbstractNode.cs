@@ -5,6 +5,9 @@ using System.Text;
 
 namespace Compiler.Nodes
 {
+    enum PrimitiveType { BOOL, INT, DECIMAL, STRING };
+    enum ObjectType { GRAPH, EDGE, VERTEX };
+
     public class AbstractNode
     {
         AbstractNode Parent;

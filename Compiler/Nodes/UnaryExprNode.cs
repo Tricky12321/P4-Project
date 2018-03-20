@@ -9,6 +9,6 @@ namespace Compiler.Nodes
     {
         /*Type
         operator
-        subExpr*/
+        ExpressionNode SubExpr*/
     }
 }

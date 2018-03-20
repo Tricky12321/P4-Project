@@ -9,7 +9,7 @@ namespace Compiler.Nodes
     {
         /*Type
         operator
-        leftExpr
-        rightExpr*/
+        ExpressionNode LeftExpr
+        ExpressionNode RightExpr*/
     }
 }
