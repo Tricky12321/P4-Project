@@ -34,39 +34,17 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Antlr4.Runtime.Standard, Version=4.7.1.0, Culture=neutral, PublicKeyToken=e78b2c5abd1fcb3f, processorArchitecture=MSIL">
-      <HintPath>..\packages\Antlr4.Runtime.Standard.4.7.1.1\lib\net35\Antlr4.Runtime.Standard.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
+    <Reference Include="Antlr4.Runtime.Standard">
+      <HintPath>..\packages\Antlr4.Runtime.Standard.4.7.1.1\lib\net35\Antlr4.Runtime.Standard.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Nodes\AbstractNode.cs" />
-    <Compile Include="Nodes\AssignNode.cs" />
-    <Compile Include="Nodes\BinaryExprNode.cs" />
-    <Compile Include="Nodes\BoolExprNode.cs" />
-    <Compile Include="Nodes\ClassReferenceNode.cs" />
-    <Compile Include="Nodes\CodeBlockNode.cs" />
-    <Compile Include="Nodes\ExtensionNode.cs" />
-    <Compile Include="Nodes\ForLoopNode.cs" />
-    <Compile Include="Nodes\FunctionDclNode.cs" />
-    <Compile Include="Nodes\GraphDclNode.cs" />
-    <Compile Include="Nodes\IfNode.cs" />
-    <Compile Include="Nodes\IntNode.cs" />
-    <Compile Include="Nodes\ReturnNode.cs" />
-    <Compile Include="Nodes\RunFunctionNode.cs" />
-    <Compile Include="Nodes\StringNode.cs" />
-    <Compile Include="Nodes\UnaryExprNode.cs" />
-    <Compile Include="Nodes\ValueNode.cs" />
-    <Compile Include="Nodes\VariableNode.cs" />
-    <Compile Include="Nodes\WhileLoopNode.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Antlr_Generated\GiraphLexer.cs" />
     <Compile Include="Antlr_Generated\GiraphParser.cs" />
@@ -74,14 +52,45 @@
     <Compile Include="Antlr_Generated\GiraphParserVisitor.cs" />
     <Compile Include="Program\ASTTool.cs" />
     <Compile Include="Program\Program.cs" />
+    <Compile Include="NewStuff\BuildAstVisitor.cs" />
+    <Compile Include="Old\Nodes\AbstractNode.cs" />
+    <Compile Include="Old\Nodes\AssignNode.cs" />
+    <Compile Include="Old\Nodes\BinaryExprNode.cs" />
+    <Compile Include="Old\Nodes\BoolExprNode.cs" />
+    <Compile Include="Old\Nodes\ClassReferenceNode.cs" />
+    <Compile Include="Old\Nodes\CodeBlockNode.cs" />
+    <Compile Include="Old\Nodes\ExtensionNode.cs" />
+    <Compile Include="Old\Nodes\ForLoopNode.cs" />
+    <Compile Include="Old\Nodes\FunctionDclNode.cs" />
+    <Compile Include="Old\Nodes\GraphDclNode.cs" />
+    <Compile Include="Old\Nodes\IfNode.cs" />
+    <Compile Include="Old\Nodes\IntNode.cs" />
+    <Compile Include="Old\Nodes\ReturnNode.cs" />
+    <Compile Include="Old\Nodes\RunFunctionNode.cs" />
+    <Compile Include="Old\Nodes\StringNode.cs" />
+    <Compile Include="Old\Nodes\UnaryExprNode.cs" />
+    <Compile Include="Old\Nodes\ValueNode.cs" />
+    <Compile Include="Old\Nodes\VariableNode.cs" />
+    <Compile Include="Old\Nodes\WhileLoopNode.cs" />
+    <Compile Include="NewStuff\QueryNode.cs" />
+    <Compile Include="NewStuff\AbstractNode.cs" />
+    <Compile Include="NewStuff\RunQueryNode.cs" />
+    <Compile Include="NewStuff\ReturnQueryNode.cs" />
+    <Compile Include="NewStuff\NoReturnQuery.cs" />
+    <Compile Include="NewStuff\AstVisitor.cs" />
+    <Compile Include="NewStuff\EvaluateQuery.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Program\App.config" />
     <None Include="Program\packages.config" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Antlr_Generated\" />
     <Folder Include="Program\" />
+    <Folder Include="NewStuff\" />
+    <Folder Include="Old\" />
+    <Folder Include="Old\Nodes\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
