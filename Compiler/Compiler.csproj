@@ -48,25 +48,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program\ASTTool.cs" />
     <Compile Include="Program\Program.cs" />
-    <Compile Include="Old\Nodes\AbstractNode.cs" />
-    <Compile Include="Old\Nodes\AssignNode.cs" />
-    <Compile Include="Old\Nodes\BinaryExprNode.cs" />
-    <Compile Include="Old\Nodes\BoolExprNode.cs" />
-    <Compile Include="Old\Nodes\ClassReferenceNode.cs" />
-    <Compile Include="Old\Nodes\CodeBlockNode.cs" />
-    <Compile Include="Old\Nodes\ExtensionNode.cs" />
-    <Compile Include="Old\Nodes\ForLoopNode.cs" />
-    <Compile Include="Old\Nodes\FunctionDclNode.cs" />
-    <Compile Include="Old\Nodes\GraphDclNode.cs" />
-    <Compile Include="Old\Nodes\IfNode.cs" />
-    <Compile Include="Old\Nodes\IntNode.cs" />
-    <Compile Include="Old\Nodes\ReturnNode.cs" />
-    <Compile Include="Old\Nodes\RunFunctionNode.cs" />
-    <Compile Include="Old\Nodes\StringNode.cs" />
-    <Compile Include="Old\Nodes\UnaryExprNode.cs" />
-    <Compile Include="Old\Nodes\ValueNode.cs" />
-    <Compile Include="Old\Nodes\VariableNode.cs" />
-    <Compile Include="Old\Nodes\WhileLoopNode.cs" />
     <Compile Include="NewStuff\QueryNode.cs" />
     <Compile Include="NewStuff\AbstractNode.cs" />
     <Compile Include="NewStuff\RunQueryNode.cs" />
@@ -76,7 +57,6 @@
     <Compile Include="Antlr_Generated\GiraphParser.cs" />
     <Compile Include="Antlr_Generated\GiraphParserBaseVisitor.cs" />
     <Compile Include="Antlr_Generated\GiraphParserVisitor.cs" />
-    <Compile Include="Antlr_Generated\ASTCreatorVisitor.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Program\App.config" />
@@ -87,8 +67,6 @@
     <Folder Include="Antlr_Generated\" />
     <Folder Include="Program\" />
     <Folder Include="NewStuff\" />
-    <Folder Include="Old\" />
-    <Folder Include="Old\Nodes\" />
     <Folder Include="Antlr_Generated\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

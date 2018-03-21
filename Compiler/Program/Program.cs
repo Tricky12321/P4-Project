@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using Antlr4.Runtime;
 using Antlr4.Runtime.Tree;
-using Compiler.Nodes;
+//using Compiler.Nodes;
 
 namespace Compiler
 {
@@ -29,8 +29,8 @@ namespace Compiler
             parser.BuildParseTree = true;
             var cst = parser.start();
 
-            ASTCreator<AbstractNode> ASTCreator = new ASTCreator<AbstractNode>();
-            ASTCreator.VisitStart(cst);
+            //ASTCreator<AbstractNode> ASTCreator = new ASTCreator<AbstractNode>();
+            //ASTCreator.VisitStart(cst);
 
 
             Console.WriteLine();
