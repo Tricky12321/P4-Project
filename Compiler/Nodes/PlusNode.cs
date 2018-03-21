@@ -5,10 +5,7 @@ using System.Text;
 
 namespace Compiler.Nodes
 {
-    class AssignNode : AbstractNode
+    class PlusNode : OperatorNode
     {
-        /*Type
-        VariableNode Target;
-        ExpressionNode Value*/
     }
 }

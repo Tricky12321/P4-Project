@@ -5,10 +5,8 @@ using System.Text;
 
 namespace Compiler.Nodes
 {
-    class AssignNode : AbstractNode
+    class EdgeDclsNode : AbstractNode
     {
-        /*Type
-        VariableNode Target;
-        ExpressionNode Value*/
+        List<EdgeDclNode> EdgeDcls;
     }
 }

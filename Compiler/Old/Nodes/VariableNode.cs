@@ -8,7 +8,7 @@ namespace Compiler.Nodes
     class VariableNode : AbstractNode
     {
         string Name;
-        //Type
+        TypeNode Type;
         ValueNode Value;
     }
 }
