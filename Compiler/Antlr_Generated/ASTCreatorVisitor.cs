@@ -9,8 +9,8 @@ namespace Compiler
     {
         public override AbstractNode VisitStart([NotNull] GiraphParser.StartContext context)
 		{
-            return VisitChildren(context.program(0));
-		}
+            return VisitChildren(context);
+        }
 
         public override AbstractNode VisitProgram([NotNull] GiraphParser.ProgramContext context)
 		{
