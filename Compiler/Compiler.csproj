@@ -48,11 +48,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program\ASTTool.cs" />
     <Compile Include="Program\Program.cs" />
-    <Compile Include="NewStuff\QueryNode.cs" />
-    <Compile Include="NewStuff\AbstractNode.cs" />
-    <Compile Include="NewStuff\RunQueryNode.cs" />
-    <Compile Include="NewStuff\ReturnQueryNode.cs" />
-    <Compile Include="NewStuff\NoReturnQuery.cs" />
     <Compile Include="Antlr_Generated\GiraphLexer.cs" />
     <Compile Include="Antlr_Generated\GiraphParser.cs" />
     <Compile Include="Antlr_Generated\GiraphParserBaseVisitor.cs" />
@@ -66,7 +61,6 @@
   <ItemGroup>
     <Folder Include="Antlr_Generated\" />
     <Folder Include="Program\" />
-    <Folder Include="NewStuff\" />
     <Folder Include="Antlr_Generated\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
