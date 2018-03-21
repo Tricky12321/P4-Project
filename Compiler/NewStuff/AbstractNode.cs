@@ -1,7 +1,7 @@
 ﻿using System;
 namespace Compiler.NewStuff
 {
-    //Testing to see if GIT is working
+    //Testing to see if GIT is working12321
     internal class AbstractNode
     {
         public AbstractNode Parent;
