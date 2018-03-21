@@ -74,6 +74,9 @@
     <Compile Include="NewStuff\NoReturnQuery.cs" />
     <Compile Include="Antlr_Generated\GiraphLexer.cs" />
     <Compile Include="Antlr_Generated\GiraphParser.cs" />
+    <Compile Include="Antlr_Generated\GiraphParserBaseVisitor.cs" />
+    <Compile Include="Antlr_Generated\GiraphParserVisitor.cs" />
+    <Compile Include="Antlr_Generated\ASTCreatorVisitor.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Program\App.config" />
@@ -86,6 +89,7 @@
     <Folder Include="NewStuff\" />
     <Folder Include="Old\" />
     <Folder Include="Old\Nodes\" />
+    <Folder Include="Antlr_Generated\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

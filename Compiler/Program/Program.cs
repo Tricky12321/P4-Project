@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Antlr4.Runtime;
 using Antlr4.Runtime.Tree;
+using Compiler.Nodes;
 
 namespace Compiler
 {
@@ -20,23 +21,17 @@ namespace Compiler
 
         public static void MyParseMethod(string FilePath)
         {
-            String input = "RUN asdf WITH ();";
+            String input = "Main -> VOID () {} Main -> VOID () {}";
             ICharStream stream = CharStreams.fromstring(input);
             ITokenSource lexer = new GiraphLexer(stream);
             ITokenStream tokens = new CommonTokenStream(lexer);
             GiraphParser parser = new GiraphParser(tokens);
             parser.BuildParseTree = true;
-            //IParseTree tree = parser.start();
-            try
-            {
-                var cst = parser.start();
-                var ast = new NewStuff.BuildAstVisitor().VisitStart(cst);
-                var value = new NewStuff.EvaluateQuery().Visit(ast);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
+            var cst = parser.start();
+
+            ASTCreator<AbstractNode> ASTCreator = new ASTCreator<AbstractNode>();
+            ASTCreator.VisitStart(cst);
+
 
             Console.WriteLine();
         }
