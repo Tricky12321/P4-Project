@@ -4,7 +4,8 @@ using System.Linq;
 using System.Text;
 using Antlr4.Runtime;
 using Antlr4.Runtime.Tree;
-using System.IO; 
+using System.IO;
+using Compiler.AST;
 //using Compiler.Nodes;
 
 namespace Compiler
@@ -26,11 +27,14 @@ namespace Compiler
             GiraphParser parser = new GiraphParser(tokens);
             parser.BuildParseTree = true;
             var cst = parser.start();
-            var ast = new AST.AstBuilder().VisitStart(cst);
+            var ast = new AstBuilder().VisitStart(cst);
+
+
             //ASTCreator<AbstractNode> ASTCreator = new ASTCreator<AbstractNode>();
             //ASTCreator.VisitStart(cst);
 
-
+            var visitor = new AstVisitor();
+            visitor.VisitRoot(ast);
             Console.WriteLine();
         }
     }

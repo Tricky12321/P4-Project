@@ -21,10 +21,10 @@ namespace Compiler.AST.Nodes
         public void MakeSiblings(AbstractNode node)
         {
             AbstractNode RightMostChild = LeftmostChild;
-            AbstractNode NextChild = null;
-            while (RightMostChild.RightSibling != null)
+            AbstractNode NextChild = LeftmostChild.RightSibling;
+            while (NextChild.RightSibling != null)
             {
-                RightMostChild = LeftmostChild.RightSibling;
+                RightMostChild = NextChild.RightSibling;
             }
 
             RightMostChild.RightSibling = node;
@@ -33,13 +33,16 @@ namespace Compiler.AST.Nodes
 
         public void AdoptChildren(AbstractNode node)
         {
-            if (node != null) {
+            if (node != null)
+            {
                 node.Parent = this;
                 ChildCount++;
-                if (LeftmostChild == null) {
+                if (LeftmostChild == null)
+                {
                     LeftmostChild = node;
                 }
-                else {
+                else
+                {
                     MakeSiblings(node);
                 }
             }
