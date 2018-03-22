@@ -75,9 +75,11 @@ namespace Compiler.AST
             GNode.Name = context.GetChild(1).GetText();
             // Get into the the codeblocks children to find Vertices and Edges
             int childCounter = context.children[2].ChildCount;
+            // Skip VertexDcls (just go to each individual VertexDcl
             for (int i = 0; i < childCounter; i++)
             {
                 GNode.AdoptChildren(Visit(context.children[2].GetChild(i))); // Vertices, Edges, SetQuerys
+
             }
             return GNode;
 		}
@@ -85,8 +87,21 @@ namespace Compiler.AST
 		public override AbstractNode VisitVertexDcl([NotNull] GiraphParser.VertexDclContext context)
 		{
             VertexNode VertexDcl = new VertexNode();
+            bool VariableName = false; // If there is a name for the vertex or not. 
             if (context.GetChild(0).GetText() != "(") {
                 VertexDcl.Name = context.GetChild(0).GetChild(0).GetText();
+                VariableName = true;
+            }
+            // Checks if there is assignments in the Vertex (First child is either a varaiblename or a '('
+            if ((VariableName && context.ChildCount > 3) || (!VariableName && context.ChildCount > 2)) {
+                int i = 1;
+                if (VariableName) {
+                    i++;
+                }
+                for (;i < context.ChildCount-1; i++)
+                {
+                    var test = context.GetChild(i).GetText();
+                }
             }
             return VertexDcl;
 		}
