@@ -5,7 +5,7 @@ using Compiler.AST.Nodes;
 using Compiler.AST.Nodes.DatatypeNodes;
 namespace Compiler.AST
 {
-    internal class BuildAstVisitor : GiraphParserBaseVisitor<AbstractNode>
+    internal class AstBuilder : GiraphParserBaseVisitor<AbstractNode>
     {
         public AbstractNode root;
 		public override AbstractNode VisitStart([NotNull] GiraphParser.StartContext context)
@@ -100,7 +100,8 @@ namespace Compiler.AST
                 }
                 for (;i < context.ChildCount-1; i++)
                 {
-                    var test = context.GetChild(i).GetText();
+                    string varaibleName = context.GetChild(i).GetChild(0).GetText();
+                    string varaibleValue = context.GetChild(i).GetChild(2).GetText();
                 }
             }
             return VertexDcl;

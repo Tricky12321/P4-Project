@@ -26,7 +26,7 @@ namespace Compiler
             GiraphParser parser = new GiraphParser(tokens);
             parser.BuildParseTree = true;
             var cst = parser.start();
-            var ast = new AST.BuildAstVisitor().VisitStart(cst);
+            var ast = new AST.AstBuilder().VisitStart(cst);
             //ASTCreator<AbstractNode> ASTCreator = new ASTCreator<AbstractNode>();
             //ASTCreator.VisitStart(cst);
 
