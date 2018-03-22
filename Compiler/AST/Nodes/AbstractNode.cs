@@ -10,8 +10,9 @@ namespace Compiler.AST.Nodes
         AbstractNode LeftmostSibling;
         AbstractNode LeftmostChild;
         AbstractNode RightSibling;
-        int LineNumber;
+        //int LineNumber;
         public string Name;
+        public int ChildCount;
         public AbstractNode()
         {
 
@@ -43,11 +44,13 @@ namespace Compiler.AST.Nodes
 
             if (LeftmostChild != null)
             {
+                ChildCount++;
                 LeftmostChild.MakeSiblings(node);
             }
             else
             {
                 LeftmostChild = node;
+                ChildCount++;
                 //node.Parent = this;
 
                 //AbstractNode nodeY = node.LeftmostSibling;

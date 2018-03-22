@@ -59,11 +59,21 @@
     <Compile Include="AST\BuildAstVisitor.cs" />
     <Compile Include="AST\AstVisitor.cs" />
     <Compile Include="AST\Nodes\FunctionParameterNode.cs" />
+    <Compile Include="AST\Nodes\DatatypeNodes\EdgeNode.cs" />
+    <Compile Include="AST\Nodes\DatatypeNodes\GraphNode.cs" />
+    <Compile Include="AST\Nodes\DatatypeNodes\VertexNode.cs" />
+    <Compile Include="AST\Nodes\CodeBlock.cs" />
+    <Compile Include="AST\Nodes\CodeBlockContent.cs" />
+    <Compile Include="AST\Nodes\DatatypeNodes\VertexDclsNode.cs" />
+    <Compile Include="AST\Nodes\DatatypeNodes\EdgeDclsNode.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Program\App.config" />
     <None Include="Program\packages.config" />
     <None Include="packages.config" />
+    <None Include="code.giraph">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Antlr_Generated\" />
@@ -71,6 +81,7 @@
     <Folder Include="Antlr_Generated\" />
     <Folder Include="AST\" />
     <Folder Include="AST\Nodes\" />
+    <Folder Include="AST\Nodes\DatatypeNodes\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

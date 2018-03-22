@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Antlr4.Runtime;
 using Antlr4.Runtime.Tree;
+using System.IO;
 //using Compiler.Nodes;
 
 namespace Compiler
@@ -12,16 +13,13 @@ namespace Compiler
     {
         static void Main(string[] args)
         {
-            if (args.Length > 0) {
-				MyParseMethod(args[0]);
-            } else {
-                MyParseMethod("");
-            }
+            MyParseMethod("code.giraph");
         }
 
         public static void MyParseMethod(string FilePath)
         {
-            String input = "Main -> VOID (VERTEX TestV, VERTEX TestV2) {}";
+            //String input = "Main -> VOID (VERTEX TestV, VERTEX TestV2) {}";
+            string input = File.ReadAllText(FilePath);
             ICharStream stream = CharStreams.fromstring(input);
             ITokenSource lexer = new GiraphLexer(stream);
             ITokenStream tokens = new CommonTokenStream(lexer);
