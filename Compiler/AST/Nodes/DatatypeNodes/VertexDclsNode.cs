@@ -1,7 +1,7 @@
 ﻿using System;
 namespace Compiler.AST.Nodes.DatatypeNodes
 {
-    public class VertexDclsNode : AbstractNode
+    internal class VertexDclsNode : AbstractNode
     {
         public VertexDclsNode()
         {
