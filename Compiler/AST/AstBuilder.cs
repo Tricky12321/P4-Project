@@ -100,8 +100,12 @@ namespace Compiler.AST
                 }
                 for (;i < context.ChildCount-1; i++)
                 {
-                    string varaibleName = context.GetChild(i).GetChild(0).GetText();
-                    string varaibleValue = context.GetChild(i).GetChild(2).GetText();
+                    // Skip comma in VertexDcl Parameters
+                    if (context.GetChild(i).GetText() != ",") {
+                        string varaibleName = context.GetChild(i).GetChild(0).GetText();
+                        string varaibleValue = context.GetChild(i).GetChild(2).GetText();
+                        VertexDcl.ValueList.Add(varaibleName, varaibleValue);
+                    }
                 }
             }
             return VertexDcl;
