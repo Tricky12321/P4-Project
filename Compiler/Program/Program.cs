@@ -21,7 +21,7 @@ namespace Compiler
 
         public static void MyParseMethod(string FilePath)
         {
-            String input = "Main -> VOID () {}";
+            String input = "Main -> VOID (VERTEX TestV, VERTEX TestV2) {}";
             ICharStream stream = CharStreams.fromstring(input);
             ITokenSource lexer = new GiraphLexer(stream);
             ITokenStream tokens = new CommonTokenStream(lexer);

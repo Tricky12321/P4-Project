@@ -29,8 +29,18 @@ namespace Compiler.AST
 		{
             FunctionNode FNode = new FunctionNode();
             FNode.FunctionName = context.children[0].GetText();
-            FNode.FunctionReturnType = context.children[2].GetText();
-            return FNode;
-		}
+            FNode.ReturnType = context.children[2].GetText();
+            int i = 0;
+            while (context.children[i].GetText() != ")") {
+                var Child = context.children[4].GetChild(i);
+                if (Child != null && Child.GetText() != ",") {
+					var first = context.children[4].GetChild(i).GetChild(0).GetText();
+					var second = context.children[4].GetChild(i).GetChild(1).GetText();
+					FNode.AddParameter(first, second);
+                }
+                i++;
+            }
+			return FNode;
+        }
 	}
 }

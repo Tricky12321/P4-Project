@@ -58,6 +58,7 @@
     <Compile Include="AST\Nodes\StartNode.cs" />
     <Compile Include="AST\BuildAstVisitor.cs" />
     <Compile Include="AST\AstVisitor.cs" />
+    <Compile Include="AST\Nodes\FunctionParameterNode.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Program\App.config" />
