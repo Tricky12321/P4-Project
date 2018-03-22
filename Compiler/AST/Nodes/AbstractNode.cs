@@ -20,46 +20,28 @@ namespace Compiler.AST.Nodes
 
         public void MakeSiblings(AbstractNode node)
         {
-            if (node != null) {
-				AbstractNode nodeX = this;
-				while (nodeX.RightSibling != null)
-				{
-					nodeX = nodeX.RightSibling;
-				}
-				AbstractNode nodeY = node.LeftmostSibling;
-				nodeX.RightSibling = nodeY;
-				nodeY.LeftmostSibling = nodeX.LeftmostSibling;
-				nodeY.Parent = nodeX.Parent;
-				while (nodeY.RightSibling != null)
-				{
-					nodeY = nodeY.RightSibling;
-					nodeY.LeftmostSibling = nodeX.LeftmostSibling;
-					nodeY.Parent = nodeX.Parent;
-				}
+            AbstractNode RightMostChild = LeftmostChild;
+            AbstractNode NextChild = null;
+            while (RightMostChild.RightSibling != null)
+            {
+                RightMostChild = LeftmostChild.RightSibling;
             }
+
+            RightMostChild.RightSibling = node;
+            node.LeftmostSibling = LeftmostChild;
         }
 
         public void AdoptChildren(AbstractNode node)
         {
-
-            if (LeftmostChild != null)
-            {
+            if (node != null) {
+                node.Parent = this;
                 ChildCount++;
-                LeftmostChild.MakeSiblings(node);
-            }
-            else
-            {
-                LeftmostChild = node;
-                ChildCount++;
-                //node.Parent = this;
-
-                //AbstractNode nodeY = node.LeftmostSibling;
-                //LeftmostChild = nodeY;
-                //while (nodeY != null)
-                //{
-                //    nodeY.Parent = this;
-                //    nodeY = nodeY.RightSibling;
-                //}
+                if (LeftmostChild == null) {
+                    LeftmostChild = node;
+                }
+                else {
+                    MakeSiblings(node);
+                }
             }
         }
     }
