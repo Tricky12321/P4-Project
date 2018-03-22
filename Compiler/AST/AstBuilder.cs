@@ -88,6 +88,7 @@ namespace Compiler.AST
 		{
             VertexNode VertexDcl = new VertexNode();
             bool VariableName = false; // If there is a name for the vertex or not. 
+            // Check if there is a varaible Name 
             if (context.GetChild(0).GetText() != "(") {
                 VertexDcl.Name = context.GetChild(0).GetChild(0).GetText();
                 VariableName = true;
@@ -98,10 +99,12 @@ namespace Compiler.AST
                 if (VariableName) {
                     i++;
                 }
+                // Read all parameters, skip the last end ")" (therefore -1)
                 for (;i < context.ChildCount-1; i++)
                 {
                     // Skip comma in VertexDcl Parameters
                     if (context.GetChild(i).GetText() != ",") {
+                        // Read VariableName and Value from the parameters
                         string varaibleName = context.GetChild(i).GetChild(0).GetText();
                         string varaibleValue = context.GetChild(i).GetChild(2).GetText();
                         VertexDcl.ValueList.Add(varaibleName, varaibleValue);
@@ -109,6 +112,49 @@ namespace Compiler.AST
                 }
             }
             return VertexDcl;
+		}
+
+		public override AbstractNode VisitEdgeDcl([NotNull] GiraphParser.EdgeDclContext context)
+		{
+            EdgeNode EdgeDcl = new EdgeNode();
+            bool EdgeName = false; // If there is a name for the vertex or not. 
+            // Check if there is a varaible Name 
+            if (context.GetChild(0).GetText() != "(")
+            {
+                EdgeDcl.Name = context.GetChild(0).GetChild(0).GetText();
+                EdgeName = true;
+            }
+
+            int VertexNamingIndex = 1;
+            if (EdgeName) {
+                VertexNamingIndex++;
+            }
+            EdgeDcl.VertexNameFrom = context.GetChild(VertexNamingIndex).GetText();
+            EdgeDcl.VertexNameTo = context.GetChild(VertexNamingIndex+2).GetText();
+
+            // Checks if there is assignments in the Edge (First child is either a varaiblename or a '('
+            if ((EdgeName && context.ChildCount > 6) || (!EdgeName && context.ChildCount > 5))
+            {
+                int i = 4;
+                // If there is an Edgename move one token extra forward (to skip the "(")
+                if (EdgeName)
+                {
+                    i++;
+                }
+                // Read all parameters, skip the last end ")" (therefore -1)
+                for (; i < context.ChildCount - 1; i++)
+                {
+                    // Skip comma in VertexDcl Parameters
+                    if (context.GetChild(i).GetText() != ",")
+                    {
+                        // Read VariableName and Value from the parameters
+                        string varaibleName = context.GetChild(i).GetChild(0).GetText();
+                        string varaibleValue = context.GetChild(i).GetChild(2).GetText();
+                        EdgeDcl.ValueList.Add(varaibleName, varaibleValue);
+                    }
+                }
+            }
+            return EdgeDcl;
 		}
 
 		public override AbstractNode VisitGraphDclBlock([NotNull] GiraphParser.GraphDclBlockContext context)

@@ -1,6 +1,6 @@
 ﻿Main -> VOID (VERTEX Test) {
     GRAPH Graph1 {
         VERTEX va(w=12,v=1), vb(w=12,v=3), vc(w=12), vd(), ve();
-        EDGE x(vb, vd, v = 4), y(vd, ve, v = 7), z(va, vc, v = 10);
+        EDGE x(vb, vd), y(vd, ve, v = 7), z(va, vc, v = 10);
     }
 }   
