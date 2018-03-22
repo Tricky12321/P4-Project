@@ -11,7 +11,7 @@ namespace Compiler.AST.Nodes
         AbstractNode LeftmostChild;
         AbstractNode RightSibling;
         int LineNumber;
-
+        public string Name;
         public AbstractNode()
         {
 
@@ -19,22 +19,23 @@ namespace Compiler.AST.Nodes
 
         public void MakeSiblings(AbstractNode node)
         {
-            AbstractNode nodeX = this;
-            while (nodeX.RightSibling != null)
-            {
-                nodeX = nodeX.RightSibling;
+            if (node != null) {
+				AbstractNode nodeX = this;
+				while (nodeX.RightSibling != null)
+				{
+					nodeX = nodeX.RightSibling;
+				}
+				AbstractNode nodeY = node.LeftmostSibling;
+				nodeX.RightSibling = nodeY;
+				nodeY.LeftmostSibling = nodeX.LeftmostSibling;
+				nodeY.Parent = nodeX.Parent;
+				while (nodeY.RightSibling != null)
+				{
+					nodeY = nodeY.RightSibling;
+					nodeY.LeftmostSibling = nodeX.LeftmostSibling;
+					nodeY.Parent = nodeX.Parent;
+				}
             }
-            AbstractNode nodeY = node.LeftmostSibling;
-            nodeX.RightSibling = nodeY;
-            nodeY.LeftmostSibling = nodeX.LeftmostSibling;
-            nodeY.Parent = nodeX.Parent;
-            while (nodeY.RightSibling != null)
-            {
-                nodeY = nodeY.RightSibling;
-                nodeY.LeftmostSibling = nodeX.LeftmostSibling;
-                nodeY.Parent = nodeX.Parent;
-            }
-
         }
 
         public void AdoptChildren(AbstractNode node)

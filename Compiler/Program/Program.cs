@@ -21,7 +21,7 @@ namespace Compiler
 
         public static void MyParseMethod(string FilePath)
         {
-            String input = "Main -> VOID () {} Main -> VOID () {}";
+            String input = "Main -> VOID () {}";
             ICharStream stream = CharStreams.fromstring(input);
             ITokenSource lexer = new GiraphLexer(stream);
             ITokenStream tokens = new CommonTokenStream(lexer);
