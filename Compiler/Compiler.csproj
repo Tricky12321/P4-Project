@@ -66,6 +66,7 @@
     <Compile Include="AST\Nodes\CodeBlockContent.cs" />
     <Compile Include="AST\Nodes\DatatypeNodes\VertexDclsNode.cs" />
     <Compile Include="AST\Nodes\DatatypeNodes\EdgeDclsNode.cs" />
+    <Compile Include="AST\AstVisitor.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Program\App.config" />
