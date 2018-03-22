@@ -22,13 +22,13 @@ namespace Compiler.AST.Nodes
         {
             AbstractNode RightMostChild = LeftmostChild;
             AbstractNode NextChild = LeftmostChild.RightSibling;
-            while (RightMostChild.RightSibling != null)
+            while (NextChild != null)
             {
-				NextChild = RightMostChild.RightSibling;
-                RightMostChild = NextChild.RightSibling;
+				RightMostChild = NextChild;
+                NextChild = NextChild.RightSibling;
             }
 
-            NextChild.RightSibling = node;
+            RightMostChild.RightSibling = node;
             node.LeftmostSibling = LeftmostChild;
         }
 
