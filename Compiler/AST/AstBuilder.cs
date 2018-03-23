@@ -265,7 +265,7 @@ namespace Compiler.AST
 
 		public override AbstractNode VisitDcls([NotNull] GiraphParser.DclsContext context)
 		{
-            return Visit(context);
+            return Visit(context.GetChild(0));
 		}
 		public override AbstractNode VisitObjectDcl([NotNull] GiraphParser.ObjectDclContext context)
 		{
