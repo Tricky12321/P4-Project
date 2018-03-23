@@ -30,8 +30,8 @@ using ParserRuleContext = Antlr4.Runtime.ParserRuleContext;
 /// of the available methods.
 /// </summary>
 /// <typeparam name="Result">The return type of the visit operation.</typeparam>
-[System.CodeDom.Compiler.GeneratedCode("ANTLR", "4.7.1")]
-[System.CLSCompliant(false)]
+//[System.CodeDom.Compiler.GeneratedCode("ANTLR", "4.7.1")]
+//[System.CLSCompliant(false)]
 public partial class GiraphParserBaseVisitor<Result> : AbstractParseTreeVisitor<Result>, IGiraphParserVisitor<Result> {
 	/// <summary>
 	/// Visit a parse tree produced by <see cref="GiraphParser.start"/>.

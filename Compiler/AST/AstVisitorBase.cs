@@ -25,5 +25,7 @@ namespace Compiler.AST
         public abstract void Visit(ProgramNode node);
         public abstract void Visit(StartNode node);
         public abstract void Visit(GraphNode node);
+        public abstract void Visit(VertexNode node);
+        public abstract void Visit(EdgeNode node);
     }
 }

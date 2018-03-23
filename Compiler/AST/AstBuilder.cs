@@ -36,7 +36,7 @@ namespace Compiler.AST
         {
             FunctionNode FNode = new FunctionNode(context.Start.Line);
             // Extract the Name of the function, and the return type
-            FNode.FunctionName = context.children[0].GetText(); // Name
+            FNode.Name = context.children[0].GetText(); // Name
             FNode.ReturnType = context.children[2].GetText(); // Return Type
             int i = 0;
             // Extract the parameters from the function

@@ -1,7 +1,7 @@
-﻿Main -> VOID (VERTEX Test) {
+﻿Main -> VOID (INT Hej, INT Kurt) {
     GRAPH Graph1 {
-        VERTEX va(w = 3), vb(), vc(), vd(), ve();
-        EDGE x(vb, vd, v = 4), y(vd, ve, v = 7), z(va, vc, v = 10);
+        VERTEX va(w = 3), vb(w = 7, v = 3);
+        EDGE x(vb, va, v = 4), y(va, vb, v = 7, w = 29);
     }
     SET 'test' = "test", 'test2' = "test2" IN Graph1 WHERE asdf == asdf;
 }
