@@ -1,11 +1,11 @@
 ﻿using System;
 namespace Compiler.AST.Nodes
 {
-    public class FunctionParameterNode
+    public class FunctionParameterNode : AbstractNode
     {
         public string ParameterType;
         public string ParameterName;
-        public FunctionParameterNode()
+        public FunctionParameterNode(int LineNumber) : base(LineNumber)
         {
             
         }

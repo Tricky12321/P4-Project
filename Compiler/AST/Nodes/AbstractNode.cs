@@ -10,12 +10,12 @@ namespace Compiler.AST.Nodes
         AbstractNode LeftmostSibling;
         AbstractNode LeftmostChild;
         AbstractNode RightSibling;
-        //int LineNumber;
+        int LineNumber;
         public string Name;
         public int ChildCount;
-        public AbstractNode()
+        public AbstractNode(int LineNumber)
         {
-
+            this.LineNumber = LineNumber;
         }
 
         public void MakeSiblings(AbstractNode node)

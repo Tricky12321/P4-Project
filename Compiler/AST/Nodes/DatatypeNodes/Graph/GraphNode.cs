@@ -10,7 +10,7 @@ namespace Compiler.AST.Nodes
 
         public bool Directed = false;
 
-        public GraphNode()
+        public GraphNode(int LineNumber) : base(LineNumber)
         {
             
         }
