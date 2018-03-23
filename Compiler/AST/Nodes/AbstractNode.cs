@@ -5,6 +5,7 @@ namespace Compiler.AST.Nodes
     enum PrimitiveType { BOOL, INT, DECIMAL, STRING };
     enum ObjectType { GRAPH, EDGE, VERTEX };
     enum AllType { BOOL, INT, DECIMAL, STRING, GRAPH, EDGE, VERTEX }
+    enum FunctionTypes { BOOL, INT, DECIMAL, STRING, GRAPH, EDGE, VERTEX, VOID}
 
     public class AbstractNode
     {
@@ -15,6 +16,7 @@ namespace Compiler.AST.Nodes
         public int LineNumber;
         public string Name;
         public int ChildCount;
+
         public AbstractNode(int LineNumber)
         {
             this.LineNumber = LineNumber;

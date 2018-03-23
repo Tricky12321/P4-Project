@@ -267,13 +267,15 @@ namespace Compiler.AST
 		{
             return Visit(context.GetChild(0));
 		}
-		public override AbstractNode VisitObjectDcl([NotNull] GiraphParser.ObjectDclContext context)
+
+		public override AbstractNode VisitSingleObjectDcl([NotNull] GiraphParser.SingleObjectDclContext context)
 		{
             DeclarationNode DclNode = new DeclarationNode(context.Start.Line);
             DclNode.Type = context.objects().GetText();
             DclNode.Name = context.variable().GetText();
-            if (context.expression() != null) {
-				DclNode.Assignment = Visit(context.expression());
+            if (context.expression() != null)
+            {
+                DclNode.Assignment = Visit(context.expression());
             }
             return DclNode;
 		}
