@@ -1,10 +1,10 @@
 ﻿using System;
 namespace Compiler.AST.Nodes.QueryNodes
 {
-    public class WhereNode
+    public class WhereNode : AbstractNode
     {
-        
-        public WhereNode()
+
+        public WhereNode(int LineNumber) : base(LineNumber)
         {
         }
     }
