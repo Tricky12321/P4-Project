@@ -1,5 +1,7 @@
 ﻿using System;
 using Compiler.AST.Nodes;
+using Compiler.AST.Nodes.DatatypeNodes;
+
 namespace Compiler.AST
 {
     public abstract class AstVisitorBase

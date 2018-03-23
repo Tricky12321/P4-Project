@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Compiler.AST.Nodes;
+using Compiler.AST.Nodes.DatatypeNodes;
 
 namespace Compiler.AST
 {
@@ -46,7 +47,9 @@ namespace Compiler.AST
             throw new NotImplementedException();
         }
 
-
-
+        public override void Visit(GraphNode node)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

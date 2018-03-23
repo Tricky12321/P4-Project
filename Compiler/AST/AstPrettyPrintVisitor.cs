@@ -1,7 +1,6 @@
 ﻿using System;
-using Compiler.AST;
 using Compiler.AST.Nodes;
-
+using Compiler.AST.Nodes.DatatypeNodes;
 
 namespace Compiler.AST
 {
