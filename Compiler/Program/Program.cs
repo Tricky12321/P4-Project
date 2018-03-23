@@ -32,9 +32,9 @@ namespace Compiler
             //ASTCreator<AbstractNode> ASTCreator = new ASTCreator<AbstractNode>();
             //ASTCreator.VisitStart(cst);
 
-            var visitor = new AstVisitor();
+            var visitor = new AstPrettyPrintVisitor();
             visitor.VisitRoot(ast);
-            Console.WriteLine();
+            Console.WriteLine(visitor.ProgramCode);
         }
     }
 }
