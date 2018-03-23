@@ -44,6 +44,7 @@
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AST\AstSymbolTableCreatorVisitor.cs" />
     <Compile Include="AST\Nodes\TerminalNode.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program\ASTTool.cs" />
@@ -83,15 +84,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Antlr_Generated\" />
-    <Folder Include="Program\" />
-    <Folder Include="Antlr_Generated\" />
-    <Folder Include="AST\" />
-    <Folder Include="AST\Nodes\" />
-    <Folder Include="AST\Nodes\DatatypeNodes\" />
-    <Folder Include="AST\Nodes\DatatypeNodes\Graph\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
