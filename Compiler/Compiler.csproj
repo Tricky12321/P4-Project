@@ -44,6 +44,7 @@
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AST\AstSymbolTableCreatorVisitor.cs" />
     <Compile Include="AST\Nodes\TerminalNode.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program\ASTTool.cs" />
