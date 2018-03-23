@@ -65,7 +65,6 @@
     <Compile Include="AST\Nodes\CodeBlockContentNode.cs" />
     <Compile Include="AST\Nodes\DatatypeNodes\VertexDclsNode.cs" />
     <Compile Include="AST\Nodes\DatatypeNodes\EdgeDclsNode.cs" />
-    <Compile Include="AST\AstVisitor.cs" />
     <Compile Include="AST\Nodes\DatatypeNodes\Graph\GraphNode.cs" />
     <Compile Include="AST\Nodes\DatatypeNodes\Graph\GraphSetQuery.cs" />
     <Compile Include="AST\Nodes\WhileLoopNode.cs" />
@@ -83,15 +82,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Antlr_Generated\" />
-    <Folder Include="Program\" />
-    <Folder Include="Antlr_Generated\" />
-    <Folder Include="AST\" />
-    <Folder Include="AST\Nodes\" />
-    <Folder Include="AST\Nodes\DatatypeNodes\" />
-    <Folder Include="AST\Nodes\DatatypeNodes\Graph\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
