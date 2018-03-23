@@ -75,7 +75,7 @@
     <Compile Include="AST\Nodes\QueryNodes\WhereNode.cs" />
     <Compile Include="AST\Exceptions\NoAttributeByThisNameException.cs" />
     <Compile Include="AST\Nodes\QueryNodes\ExtendNode.cs" />
-    <Compile Include="AST\Nodes\DatatypeNodes\DeclartionNode.cs" />
+    <Compile Include="AST\Nodes\DatatypeNodes\DeclarationNode.cs" />
     <Compile Include="Antlr_Generated\GiraphLexer.cs" />
     <Compile Include="Antlr_Generated\GiraphParser.cs" />
     <Compile Include="Antlr_Generated\GiraphParserBaseVisitor.cs" />
@@ -90,11 +90,7 @@
     </None>
   </ItemGroup>
   <ItemGroup />
-  <ItemGroup>
-    <Folder Include="AST\Nodes\QueryNodes\" />
-    <Folder Include="AST\Exceptions\" />
-    <Folder Include="Antlr_Generated\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

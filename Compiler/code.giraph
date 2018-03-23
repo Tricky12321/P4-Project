@@ -1,5 +1,7 @@
-﻿EXTEND EDGE INT 'weight':'w' = 0;
-Main -> VOID (VERTEX Test) {
-    VERTEX v = Test1;
+﻿Main -> VOID (INT Hej, INT Kurt) {
+    GRAPH Graph1 {
+        VERTEX va(w = 3), vb(w = 7, v = 3);
+        EDGE x(vb, va, v = 4), y(va, vb, v = 7, w = 29);
+    }
     SET 'test' = "test", 'test2' = "test2" IN Graph1 WHERE asdf == asdf;
 }
