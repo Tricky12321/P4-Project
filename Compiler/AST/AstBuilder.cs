@@ -272,7 +272,9 @@ namespace Compiler.AST
             DeclarationNode DclNode = new DeclarationNode(context.Start.Line);
             DclNode.Type = context.objects().GetText();
             DclNode.Name = context.variable().GetText();
-            DclNode.Assignment = Visit(context.expression());
+            if (context.expression() != null) {
+				DclNode.Assignment = Visit(context.expression());
+            }
             return DclNode;
 		}
 	}
