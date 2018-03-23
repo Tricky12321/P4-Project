@@ -66,7 +66,6 @@
     <Compile Include="AST\Nodes\CodeBlockContentNode.cs" />
     <Compile Include="AST\Nodes\DatatypeNodes\VertexDclsNode.cs" />
     <Compile Include="AST\Nodes\DatatypeNodes\EdgeDclsNode.cs" />
-    <Compile Include="AST\AstVisitor.cs" />
     <Compile Include="AST\Nodes\DatatypeNodes\Graph\GraphNode.cs" />
     <Compile Include="AST\Nodes\DatatypeNodes\Graph\GraphSetQuery.cs" />
     <Compile Include="AST\Nodes\WhileLoopNode.cs" />
