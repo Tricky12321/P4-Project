@@ -12,7 +12,7 @@ namespace Compiler.AST.Nodes
         AbstractNode LeftmostSibling;
         AbstractNode LeftmostChild;
         AbstractNode RightSibling;
-        int LineNumber;
+        public int LineNumber;
         public string Name;
         public int ChildCount;
         public AbstractNode(int LineNumber)
@@ -20,7 +20,7 @@ namespace Compiler.AST.Nodes
             this.LineNumber = LineNumber;
         }
 
-        public virtual void Accept(IAstVisitorBase astVisitor)
+        public virtual void Accept(AstVisitorBase astVisitor)
         {
             astVisitor.Visit(this);
         }

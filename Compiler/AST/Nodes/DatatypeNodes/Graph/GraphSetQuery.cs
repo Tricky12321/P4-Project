@@ -1,5 +1,5 @@
 ﻿using System;
-namespace Compiler.AST.Nodes.DatatypeNodes.Graph
+namespace Compiler.AST.Nodes.DatatypeNodes
 {
     public class GraphSetQuery : AbstractNode
     {

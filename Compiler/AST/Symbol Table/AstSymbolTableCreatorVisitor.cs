@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Compiler.AST.Nodes;
+using Compiler.AST.Nodes.DatatypeNodes;
 
 namespace Compiler.AST.Symbol_Table
 {
-    class AstSymbolTableCreatorVisitor : IAstVisitorBase
+    class AstSymbolTableCreatorVisitor : AstVisitorBase
     {
         private Dictionary<string, List<SymbolTableEntry>> _symbolTable = new Dictionary<string, List<SymbolTableEntry>>();
         private uint _globalDepth;
@@ -51,12 +52,12 @@ namespace Compiler.AST.Symbol_Table
         }
 
         //All the visit stuff-----------------------------------------
-        public void Visit(AbstractNode node)
+        public override void Visit(AbstractNode node)
         {
             throw new NotImplementedException();
         }
 
-        public void VisitChildren(AbstractNode node)
+        public override void VisitChildren(AbstractNode node)
         {
             foreach (AbstractNode child in node.GetChildren())
             {
@@ -64,32 +65,34 @@ namespace Compiler.AST.Symbol_Table
             }
         }
 
-        public void VisitRoot(AbstractNode root)
+        public override void VisitRoot(AbstractNode root)
         {
             root.Accept(this);
         }
 
-        public void Visit(FunctionNode node)
+        public override void Visit(FunctionNode node)
         {
             throw new NotImplementedException();
         }
 
-        public void Visit(FunctionParameterNode node)
+        public override void Visit(FunctionParameterNode node)
         {
             throw new NotImplementedException();
         }
 
-        public void Visit(StartNode node)
+        public override void Visit(StartNode node)
         {
             throw new NotImplementedException();
         }
 
-        public void Visit(ProgramNode node)
+        public override void Visit(ProgramNode node)
         {
             throw new NotImplementedException();
         }
 
-
-
+        public override void Visit(GraphNode node)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

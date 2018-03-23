@@ -3,7 +3,8 @@ using Antlr4.Runtime.Misc;
 using Antlr4.Runtime.Tree;
 using Compiler.AST.Nodes;
 using Compiler.AST.Nodes.DatatypeNodes;
-using Compiler.AST.Nodes.DatatypeNodes.Graph;
+using Compiler.AST.Nodes.QueryNodes;
+using Compiler.AST.Exceptions;
 using Antlr4.Runtime;
 using System.Text.RegularExpressions;
 namespace Compiler.AST
@@ -46,7 +47,7 @@ namespace Compiler.AST
                 {
                     var first = context.children[4].GetChild(i).GetChild(0).GetText(); // Parameter Type
                     var second = context.children[4].GetChild(i).GetChild(1).GetText(); // Parameter Name
-                    FNode.AddParameter(first, second,context.Start.Line);
+                    FNode.AddParameter(first, second, context.Start.Line);
                 }
                 i++;
             }
@@ -91,85 +92,46 @@ namespace Compiler.AST
         public override AbstractNode VisitGraphInitDcl([NotNull] GiraphParser.GraphInitDclContext context)
         {
             GraphNode GNode = new GraphNode(context.Start.Line);
-            GNode.Name = context.GetChild(1).GetText();
-            // Get into the the codeblocks children to find Vertices and Edges
-            int childCounter = context.children[2].ChildCount;
-            // Skip VertexDcls (just go to each individual VertexDcl
-            for (int i = 0; i < childCounter; i++)
+            GNode.Name = context.variable().GetText();
+            // Handle all VetexDcl's and add them to the list in the GraphNode
+            foreach (var Child in context.graphDclBlock().vertexDcls())
             {
-                GNode.AdoptChildren(Visit(context.children[2].GetChild(i))); // Vertices, Edges, SetQuerys
+                foreach (var NestedChild in Child.vertexDcl())
+                {
+                    VertexNode VNode = new VertexNode(context.Start.Line);
+                    VNode.Name = NestedChild.variable().GetText();
+                    foreach (var Attribute in NestedChild.assignment())
+                    {
+                        VNode.ValueList.Add(Attribute.variable().GetText(), Attribute.expression().GetText());
+                    }
+                    GNode.Vertices.Add(VNode);
+                }
+            }
+            // Handle all edgeDcl's and add them to the list in the GraphNode
+            foreach (var Child in context.graphDclBlock().edgeDcls())
+            {
+                foreach (var NestedChild in Child.edgeDcl())
+                {
+                    EdgeNode ENode = new EdgeNode(context.Start.Line);
+                    ENode.Name = NestedChild.variable(0).GetText();
+                    ENode.VertexNameFrom = NestedChild.variable(1).GetText();
+                    ENode.VertexNameTo = NestedChild.variable(2).GetText();
+                    foreach (var Attribute in NestedChild.assignment())
+                    {
+                        ENode.ValueList.Add(Attribute.variable().GetText(), Attribute.expression().GetText());
+                    }
+                    GNode.Edges.Add(ENode);
+                }
+            }
+            // Handle the setQuery Nodes, if there are any
+            foreach (var Child in context.graphDclBlock().graphSetQuery())
+            {
+                foreach (var NestedChild in Child.children)
+                {
+                    GNode.AdoptChildren(Visit(NestedChild)); // Vertices, Edges, SetQuerys
+                }
             }
             return GNode;
-        }
-
-        public override AbstractNode VisitVertexDcl([NotNull] GiraphParser.VertexDclContext context)
-        {
-            VertexNode VertexDcl = new VertexNode(context.Start.Line);
-            bool VariableName = false; // If there is a name for the vertex or not. 
-            // Check if there is a varaible Name 
-            if (context.GetChild(0).GetText() != "(")
-            {
-                VertexDcl.Name = context.GetChild(0).GetChild(0).GetText();
-                VariableName = true;
-            }
-            // Checks if there is assignments in the Vertex (First child is either a varaiblename or a '('
-            if ((VariableName && context.ChildCount > 3) || (!VariableName && context.ChildCount > 2))
-            {
-                int i = VariableName ? 2 : 1;
-                // Read all parameters, skip the last end ")" (therefore -1)
-                for (; i < context.ChildCount - 1; i++)
-                {
-                    // Skip comma in VertexDcl Parameters
-                    if (context.GetChild(i).GetText() != ",")
-                    {
-                        // Read VariableName and Value from the parameters
-                        string varaibleName = context.GetChild(i).GetChild(0).GetText();
-                        string varaibleValue = context.GetChild(i).GetChild(2).GetText();
-                        VertexDcl.ValueList.Add(varaibleName, varaibleValue);
-                    }
-                }
-            }
-            return VertexDcl;
-        }
-
-        public override AbstractNode VisitEdgeDcl([NotNull] GiraphParser.EdgeDclContext context)
-        {
-            EdgeNode EdgeDcl = new EdgeNode(context.Start.Line);
-            bool EdgeName = false; // If there is a name for the vertex or not. 
-            // Check if there is a varaible Name 
-            if (context.GetChild(0).GetText() != "(")
-            {
-                EdgeDcl.Name = context.GetChild(0).GetChild(0).GetText();
-                EdgeName = true;
-            }
-
-            int VertexNamingIndex = 1;
-            if (EdgeName)
-            {
-                VertexNamingIndex++;
-            }
-            EdgeDcl.VertexNameFrom = context.GetChild(VertexNamingIndex).GetText();
-            EdgeDcl.VertexNameTo = context.GetChild(VertexNamingIndex + 2).GetText();
-
-            // Checks if there is assignments in the Edge (First child is either a varaiblename or a '('
-            if ((EdgeName && context.ChildCount > 6) || (!EdgeName && context.ChildCount > 5))
-            {
-                // If there is an Edgename move one token extra forward (to skip the "(")
-                int i = EdgeName ? 5 : 4;
-                // Read all parameters, skip the last end ")" (therefore -1)
-                for (; i < context.ChildCount - 1; i++)
-                {
-                    // Skip comma in VertexDcl Parameters
-                    if (context.GetChild(i).GetText() != ",")
-                    {
-                        // Read VariableName and Value from the parameters
-                        string varaibleName = context.GetChild(i).GetChild(0).GetText();
-                        string varaibleValue = context.GetChild(i).GetChild(2).GetText();
-                        EdgeDcl.ValueList.Add(varaibleName, varaibleValue);
-                    }
-                }
-            }
-            return EdgeDcl;
         }
 
         public override AbstractNode VisitGraphSetQuery([NotNull] GiraphParser.GraphSetQueryContext context)
@@ -245,5 +207,73 @@ namespace Compiler.AST
 
             return Visit(context.GetChild(0));
         }
-    }
+
+		public override AbstractNode VisitQuery([NotNull] GiraphParser.QueryContext context)
+		{
+            return Visit(context.GetChild(0));
+		}
+
+		public override AbstractNode VisitNoReturnQuery([NotNull] GiraphParser.NoReturnQueryContext context)
+		{
+            return Visit(context.GetChild(0));
+		}
+
+		public override AbstractNode VisitReturnQuery([NotNull] GiraphParser.ReturnQueryContext context)
+		{
+            return Visit(context.GetChild(0));
+		}
+
+		public override AbstractNode VisitSetQuery([NotNull] GiraphParser.SetQueryContext context)
+		{
+            SetQueryNode SetNode = new SetQueryNode(context.Start.Line);
+            foreach (var setAtri in context.setExpressionAtri())
+            {
+                string AttributeName = setAtri.attribute().GetChild(1).GetText();
+                string AttributeValue = setAtri.varOrConst().GetChild(0).GetText();
+                SetNode.Attributes.Add(AttributeName, AttributeValue);
+            }
+            SetNode.Name = context.variable().GetText();
+            SetNode.WhereCondition = Visit(context.where());
+
+            return SetNode;
+		}
+
+		public override AbstractNode VisitWhere([NotNull] GiraphParser.WhereContext context)
+		{
+            WhereNode WNode = new WhereNode(context.Start.Line);
+            foreach (var Child in context.boolComparisons().children) 
+            {
+                WNode.AdoptChildren(Visit(Child));
+            }
+            return WNode;
+		}
+
+		public override AbstractNode VisitExtend([NotNull] GiraphParser.ExtendContext context)
+		{
+            ExtendNode ENode = new ExtendNode(context.Start.Line);
+            ENode.ExtensionName = context.variable(0).GetText();
+            if (context.variable().Length == 2) {
+                ENode.ExtensionShortName = context.variable(1).GetText();
+            }
+            ENode.ExtendWithType = context.allTypeWithColl().GetText();
+            ENode.ClassToExtend = context.objects().GetText();
+            if (context.constant() != null) {
+				ENode.ExtensionDefaultValue = context.constant().GetText();
+            }
+			return ENode;
+		}
+
+		public override AbstractNode VisitDcls([NotNull] GiraphParser.DclsContext context)
+		{
+            return Visit(context);
+		}
+		public override AbstractNode VisitObjectDcl([NotNull] GiraphParser.ObjectDclContext context)
+		{
+            DeclartionNode DclNode = new DeclartionNode(context.Start.Line);
+            DclNode.Type = context.objects().GetText();
+            DclNode.Name = context.variable().GetText();
+            DclNode.Assignment = Visit(context.expression());
+            return DclNode;
+		}
+	}
 }
