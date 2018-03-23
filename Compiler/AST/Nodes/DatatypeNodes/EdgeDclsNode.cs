@@ -3,7 +3,7 @@ namespace Compiler.AST.Nodes.DatatypeNodes
 {
     public class EdgeDclsNode : AbstractNode
     {
-        public EdgeDclsNode()
+        public EdgeDclsNode(int LineNumber) : base(LineNumber)
         {
         }
     }

@@ -7,13 +7,13 @@ namespace Compiler.AST.Nodes
         public string FunctionName;
         public string ReturnType;
         public List<FunctionParameterNode> Parameters = new List<FunctionParameterNode>();
-        public FunctionNode()
+        public FunctionNode(int LineNumber) : base(LineNumber)
         {
             
         }
 
-        public void AddParameter(string ParameterType, string ParameterName) {
-            FunctionParameterNode NewParameter = new FunctionParameterNode();
+        public void AddParameter(string ParameterType, string ParameterName, int LineNumber) {
+            FunctionParameterNode NewParameter = new FunctionParameterNode(LineNumber);
             NewParameter.ParameterName = ParameterName;
             NewParameter.ParameterType = ParameterType;
             Parameters.Add(NewParameter);

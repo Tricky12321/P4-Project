@@ -9,7 +9,6 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Compiler</RootNamespace>
     <AssemblyName>Compiler</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <TargetFrameworkProfile />
@@ -61,16 +60,22 @@
     <Compile Include="AST\IAstVisitorBase.cs" />
     <Compile Include="AST\Nodes\FunctionParameterNode.cs" />
     <Compile Include="AST\Nodes\DatatypeNodes\EdgeNode.cs" />
-    <Compile Include="AST\Nodes\DatatypeNodes\GraphNode.cs" />
     <Compile Include="AST\Nodes\DatatypeNodes\VertexNode.cs" />
-    <Compile Include="AST\Nodes\CodeBlock.cs" />
-    <Compile Include="AST\Nodes\CodeBlockContent.cs" />
+    <Compile Include="AST\Nodes\CodeBlockNode.cs" />
+    <Compile Include="AST\Nodes\CodeBlockContentNode.cs" />
     <Compile Include="AST\Nodes\DatatypeNodes\VertexDclsNode.cs" />
     <Compile Include="AST\Nodes\DatatypeNodes\EdgeDclsNode.cs" />
+    <Compile Include="AST\AstVisitor.cs" />
+    <Compile Include="AST\Nodes\DatatypeNodes\Graph\GraphNode.cs" />
+    <Compile Include="AST\Nodes\DatatypeNodes\Graph\GraphSetQuery.cs" />
+    <Compile Include="AST\Nodes\WhileLoopNode.cs" />
+    <Compile Include="AST\Nodes\BoolComparisonNode.cs" />
+    <Compile Include="AST\Nodes\ExpressionNode.cs" />
+    <Compile Include="AST\Nodes\DatatypeNodes\VariableNode.cs" />
+    <Compile Include="AST\Nodes\DatatypeNodes\ConstantNode.cs" />
     <Compile Include="AST\AstPrettyPrintVisitor.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
     <None Include="Program\App.config" />
     <None Include="Program\packages.config" />
     <None Include="packages.config" />
@@ -78,7 +83,15 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Antlr_Generated\" />
+    <Folder Include="Program\" />
+    <Folder Include="Antlr_Generated\" />
+    <Folder Include="AST\" />
+    <Folder Include="AST\Nodes\" />
+    <Folder Include="AST\Nodes\DatatypeNodes\" />
+    <Folder Include="AST\Nodes\DatatypeNodes\Graph\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

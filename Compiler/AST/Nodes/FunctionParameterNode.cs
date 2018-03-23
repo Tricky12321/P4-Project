@@ -5,7 +5,7 @@ namespace Compiler.AST.Nodes
     {
         public string ParameterType;
         public string ParameterName;
-        public FunctionParameterNode()
+        public FunctionParameterNode(int LineNumber) : base(LineNumber)
         {
             
         }

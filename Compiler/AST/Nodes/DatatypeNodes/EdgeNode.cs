@@ -11,7 +11,7 @@ namespace Compiler.AST.Nodes
 
         public Dictionary<string, string> ValueList = new Dictionary<string, string>();
 
-        public EdgeNode()
+        public EdgeNode(int LineNumber) : base(LineNumber)
         {
         }
     }
