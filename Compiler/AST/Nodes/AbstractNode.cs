@@ -18,6 +18,11 @@ namespace Compiler.AST.Nodes
             this.LineNumber = LineNumber;
         }
 
+        public virtual void Accept(AstVisitor astVisitor)
+        {
+            astVisitor.Visit(this);
+        }
+
         public void MakeSiblings(AbstractNode node)
         {
             AbstractNode RightMostChild = LeftmostChild;
