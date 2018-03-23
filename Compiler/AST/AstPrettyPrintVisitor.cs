@@ -5,24 +5,11 @@ using Compiler.AST.Nodes;
 
 namespace Compiler.AST
 {
-    public class AstPrettyPrintVisitor : IAstVisitorBase
+    public class AstPrettyPrintVisitor : AstVisitorBase
     {
         public string ProgramCode;
 
-        public void VisitChildren(AbstractNode node)
-        {
-            foreach (AbstractNode child in node.GetChildren())
-            {
-                child.Accept(this);
-            }
-        }
-
-        public void VisitRoot(AbstractNode root)
-        {
-            root.Accept(this);
-        }
-
-        public void Visit(FunctionNode node)
+        public override void Visit(FunctionNode node)
         {
             Console.WriteLine("FunctionNode");
             ProgramCode += $"{node.FunctionName} -> {node.ReturnType}(";
@@ -42,24 +29,24 @@ namespace Compiler.AST
 
         }
 
-        public void Visit(FunctionParameterNode node)
+        public override void Visit(FunctionParameterNode node)
         {
             ProgramCode += $"{node.ParameterType} {node.ParameterName}";
         }
 
-        public void Visit(ProgramNode node)
+        public override void Visit(ProgramNode node)
         {
             Console.WriteLine("ProgramNode");
             VisitChildren(node);
         }
 
-        public void Visit(StartNode node)
+        public override void Visit(StartNode node)
         {
             Console.WriteLine("StartNode");
             VisitChildren(node);
         }
 
-        public void Visit(AbstractNode node)
+        public override void Visit(AbstractNode node)
         {
             throw new NotImplementedException();
         }
