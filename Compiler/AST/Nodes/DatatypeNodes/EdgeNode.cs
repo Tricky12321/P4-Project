@@ -4,8 +4,6 @@ namespace Compiler.AST.Nodes
 {
     public class EdgeNode : AbstractNode
     {
-        public string Name;
-
         public string VertexNameFrom;
         public string VertexNameTo;
 
@@ -13,6 +11,11 @@ namespace Compiler.AST.Nodes
 
         public EdgeNode(int LineNumber) : base(LineNumber)
         {
+        }
+
+        public override void Accept(AstVisitorBase astVisitor)
+        {
+            astVisitor.Visit(this);
         }
     }
 }

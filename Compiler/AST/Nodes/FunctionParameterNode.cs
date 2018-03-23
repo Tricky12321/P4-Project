@@ -3,8 +3,7 @@ namespace Compiler.AST.Nodes
 {
     public class FunctionParameterNode : TerminalNode
     {
-        public string ParameterType;
-        public string ParameterName;
+        public string Type;
         public FunctionParameterNode(int LineNumber) : base(LineNumber)
         {
             

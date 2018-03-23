@@ -36,7 +36,7 @@ namespace Compiler.AST
         {
             FunctionNode FNode = new FunctionNode(context.Start.Line);
             // Extract the Name of the function, and the return type
-            FNode.FunctionName = context.children[0].GetText(); // Name
+            FNode.Name = context.children[0].GetText(); // Name
             FNode.ReturnType = context.children[2].GetText(); // Return Type
             int i = 0;
             // Extract the parameters from the function
@@ -265,14 +265,18 @@ namespace Compiler.AST
 
 		public override AbstractNode VisitDcls([NotNull] GiraphParser.DclsContext context)
 		{
-            return Visit(context);
+            return Visit(context.GetChild(0));
 		}
-		public override AbstractNode VisitObjectDcl([NotNull] GiraphParser.ObjectDclContext context)
+
+		public override AbstractNode VisitSingleObjectDcl([NotNull] GiraphParser.SingleObjectDclContext context)
 		{
-            DeclartionNode DclNode = new DeclartionNode(context.Start.Line);
+            DeclarationNode DclNode = new DeclarationNode(context.Start.Line);
             DclNode.Type = context.objects().GetText();
             DclNode.Name = context.variable().GetText();
-            DclNode.Assignment = Visit(context.expression());
+            if (context.expression() != null)
+            {
+                DclNode.Assignment = Visit(context.expression());
+            }
             return DclNode;
 		}
 	}

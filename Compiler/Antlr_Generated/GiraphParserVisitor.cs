@@ -56,6 +56,12 @@ public interface IGiraphParserVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <return>The visitor result.</return>
 	Result VisitObjectDcl([NotNull] GiraphParser.ObjectDclContext context);
 	/// <summary>
+	/// Visit a parse tree produced by <see cref="GiraphParser.singleObjectDcl"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitSingleObjectDcl([NotNull] GiraphParser.SingleObjectDclContext context);
+	/// <summary>
 	/// Visit a parse tree produced by <see cref="GiraphParser.variableDcl"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>

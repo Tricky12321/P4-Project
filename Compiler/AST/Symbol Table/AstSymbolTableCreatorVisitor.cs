@@ -103,5 +103,15 @@ namespace Compiler.AST.Symbol_Table
         {
             throw new NotImplementedException();
         }
+
+        public override void Visit(VertexNode node)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void Visit(EdgeNode node)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

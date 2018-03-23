@@ -4,7 +4,6 @@ namespace Compiler.AST.Nodes.DatatypeNodes
 {
     public class GraphNode : AbstractNode
     {
-        public string Name;
         public List<EdgeNode> Edges = new List<EdgeNode>();
         public List<VertexNode> Vertices = new List<VertexNode>();
 
@@ -13,6 +12,11 @@ namespace Compiler.AST.Nodes.DatatypeNodes
         public GraphNode(int LineNumber) : base(LineNumber)
         {
             
+        }
+
+        public override void Accept(AstVisitorBase astVisitor)
+        {
+            astVisitor.Visit(this);
         }
     }
 }

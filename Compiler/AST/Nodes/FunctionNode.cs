@@ -4,7 +4,6 @@ namespace Compiler.AST.Nodes
 {
     public class FunctionNode : AbstractNode
     {
-        public string FunctionName;
         public string ReturnType;
         public List<FunctionParameterNode> Parameters = new List<FunctionParameterNode>();
         public FunctionNode(int LineNumber) : base(LineNumber)
@@ -14,8 +13,8 @@ namespace Compiler.AST.Nodes
 
         public void AddParameter(string ParameterType, string ParameterName, int LineNumber) {
             FunctionParameterNode NewParameter = new FunctionParameterNode(LineNumber);
-            NewParameter.ParameterName = ParameterName;
-            NewParameter.ParameterType = ParameterType;
+            NewParameter.Name = ParameterName;
+            NewParameter.Type = ParameterType;
             Parameters.Add(NewParameter);
         }
 
