@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 namespace Compiler.AST.Nodes
 {
     enum PrimitiveType { BOOL, INT, DECIMAL, STRING };
@@ -18,14 +18,11 @@ namespace Compiler.AST.Nodes
 
         }
 
-<<<<<<< HEAD
-=======
         public virtual void Accept(AstVisitor astVisitor)
         {
             astVisitor.Visit(this);
         }
 
->>>>>>> 6ac854b... sdfdsfsdfdsfjdslfjsdlkjflksjflkjdlfkjdsljflksdjflkjdslfkjldskjf  Please enter the commit message for your changes. Lines starting
         public void MakeSiblings(AbstractNode node)
         {
             AbstractNode RightMostChild = LeftmostChild;
@@ -44,7 +41,6 @@ namespace Compiler.AST.Nodes
         {
             if (node != null)
             {
-<<<<<<< HEAD
                 node.Parent = this;
                 ChildCount++;
                 if (LeftmostChild == null)
@@ -54,22 +50,6 @@ namespace Compiler.AST.Nodes
                 else
                 {
                     MakeSiblings(node);
-=======
-                if (this.LeftmostChild != null)
-                {
-                    ChildCount++;
-                    LeftmostChild.MakeSiblings(node);
-                }
-                else
-                {
-                    AbstractNode nodeY = node.LeftmostSibling;
-                    this.LeftmostChild = nodeY;
-                    while (nodeY != null)
-                    {
-                        nodeY.Parent = this;
-                        nodeY = nodeY.RightSibling;
-                    }
->>>>>>> 6ac854b... sdfdsfsdfdsfjdslfjsdlkjflksjflkjdlfkjdsljflksdjflkjdslfkjldskjf  Please enter the commit message for your changes. Lines starting
                 }
             }
         }

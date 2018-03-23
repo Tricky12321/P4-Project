@@ -9,7 +9,7 @@ namespace Compiler.AST
     {
         public override void VisitRoot(AbstractNode root)
         {
-            root.Visit(this);
+            //root.Visit(this);
         }
 
         public override AbstractNode Visit(FunctionNode node)
