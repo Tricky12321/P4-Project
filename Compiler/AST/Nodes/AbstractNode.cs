@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 namespace Compiler.AST.Nodes
 {
     enum PrimitiveType { BOOL, INT, DECIMAL, STRING };
@@ -18,9 +19,19 @@ namespace Compiler.AST.Nodes
 
         }
 
-        public virtual void Accept(AstVisitor astVisitor)
+        public virtual void Accept(IAstVisitorBase astVisitor)
         {
             astVisitor.Visit(this);
+        }
+
+        public virtual IEnumerable<AbstractNode> GetChildren()
+        {
+            AbstractNode childNode = LeftmostChild;
+            while(childNode != null)
+            {
+                yield return childNode;
+                childNode = childNode.RightSibling;
+            }
         }
 
         public void MakeSiblings(AbstractNode node)

@@ -18,5 +18,10 @@ namespace Compiler.AST.Nodes
             NewParameter.ParameterType = ParameterType;
             Parameters.Add(NewParameter);
         }
+
+        public override void Accept(IAstVisitorBase astVisitor)
+        {
+            astVisitor.Visit(this);
+        }
     }
 }
