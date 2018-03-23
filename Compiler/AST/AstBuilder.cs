@@ -230,14 +230,50 @@ namespace Compiler.AST
             {
                 string AttributeName = setAtri.attribute().GetChild(1).GetText();
                 string AttributeValue = setAtri.varOrConst().GetChild(0).GetText();
-                if (SetNode.Attributes.ContainsKey(AttributeName)) {
-                    SetNode.Attributes[AttributeName] = AttributeValue;
-                } else {
-                    //throw new NoAttributeByThisNameException();
-                }
+                SetNode.Attributes.Add(AttributeName, AttributeValue);
             }
+            SetNode.Name = context.variable().GetText();
+            SetNode.WhereCondition = Visit(context.where());
 
-            return base.VisitSetQuery(context);
+            return SetNode;
+		}
+
+		public override AbstractNode VisitWhere([NotNull] GiraphParser.WhereContext context)
+		{
+            WhereNode WNode = new WhereNode(context.Start.Line);
+            foreach (var Child in context.boolComparisons().children) 
+            {
+                WNode.AdoptChildren(Visit(Child));
+            }
+            return WNode;
+		}
+
+		public override AbstractNode VisitExtend([NotNull] GiraphParser.ExtendContext context)
+		{
+            ExtendNode ENode = new ExtendNode(context.Start.Line);
+            ENode.ExtensionName = context.variable(0).GetText();
+            if (context.variable().Length == 2) {
+                ENode.ExtensionShortName = context.variable(1).GetText();
+            }
+            ENode.ExtendWithType = context.allTypeWithColl().GetText();
+            ENode.ClassToExtend = context.objects().GetText();
+            if (context.constant() != null) {
+				ENode.ExtensionDefaultValue = context.constant().GetText();
+            }
+			return ENode;
+		}
+
+		public override AbstractNode VisitDcls([NotNull] GiraphParser.DclsContext context)
+		{
+            return Visit(context);
+		}
+		public override AbstractNode VisitObjectDcl([NotNull] GiraphParser.ObjectDclContext context)
+		{
+            DeclartionNode DclNode = new DeclartionNode(context.Start.Line);
+            DclNode.Type = context.objects().GetText();
+            DclNode.Name = context.variable().GetText();
+            DclNode.Assignment = Visit(context.expression());
+            return DclNode;
 		}
 	}
 }
