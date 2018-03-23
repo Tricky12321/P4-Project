@@ -4,6 +4,7 @@ namespace Compiler.AST.Nodes
 {
     enum PrimitiveType { BOOL, INT, DECIMAL, STRING };
     enum ObjectType { GRAPH, EDGE, VERTEX };
+    enum AllType { BOOL, INT, DECIMAL, STRING, GRAPH, EDGE, VERTEX }
 
     public class AbstractNode
     {
