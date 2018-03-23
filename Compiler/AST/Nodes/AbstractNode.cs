@@ -11,7 +11,7 @@ namespace Compiler.AST.Nodes
         AbstractNode LeftmostSibling;
         AbstractNode LeftmostChild;
         AbstractNode RightSibling;
-        int LineNumber;
+        public int LineNumber;
         public string Name;
         public int ChildCount;
         public AbstractNode(int LineNumber)

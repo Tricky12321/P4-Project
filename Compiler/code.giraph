@@ -1,13 +1,12 @@
-﻿Main -> VOID (VERTEX Test) {  asdf
-    GRAPH Graph1 {
-            VERTEX va(w=12,v=2), vb(w=12,v=1), vc(w=12,v=3), vd(), ve();
-            EDGE x(vb, vd, v = 4), y(vd, ve, v = 7), z(va, vc, v = 10);
-            SET 'Directed' = TRUE;
-        }
-    WHILE (asdf == asdf) {
-        GRAPH Graph1 {
-            VERTEX va(w=12,v=2), vb(w=12,v=1), vc(w=12,v=3), vd(), ve();
-            EDGE x(vb, vd, v = 4), y(vd, ve, v = 7), z(va, vc, v = 10);
-            SET 'Directed' = TRUE;
-        }
+﻿Main -> VOID (INT Hej, INT Kurt)
+{ 
+    
+}
+Main -> VOID (INT Hej, INT Kurt)
+{ 
+    
+}
+Main -> VOID (INT Hej, INT Kurt)
+{ 
+    
 }
