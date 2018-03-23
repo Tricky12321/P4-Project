@@ -19,7 +19,7 @@ namespace Compiler.AST.Nodes
             this.LineNumber = LineNumber;
         }
 
-        public virtual void Accept(IAstVisitorBase astVisitor)
+        public virtual void Accept(AstVisitorBase astVisitor)
         {
             astVisitor.Visit(this);
         }

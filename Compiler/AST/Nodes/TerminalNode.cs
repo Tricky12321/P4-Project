@@ -8,6 +8,6 @@ namespace Compiler.AST.Nodes
 {
     public class TerminalNode : AbstractNode
     {
-
+        public TerminalNode(int lineNumber) : base(lineNumber) { }
     }
 }
