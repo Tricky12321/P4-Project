@@ -269,7 +269,7 @@ namespace Compiler.AST
 		}
 		public override AbstractNode VisitObjectDcl([NotNull] GiraphParser.ObjectDclContext context)
 		{
-            DeclartionNode DclNode = new DeclartionNode(context.Start.Line);
+            DeclarationNode DclNode = new DeclarationNode(context.Start.Line);
             DclNode.Type = context.objects().GetText();
             DclNode.Name = context.variable().GetText();
             DclNode.Assignment = Visit(context.expression());

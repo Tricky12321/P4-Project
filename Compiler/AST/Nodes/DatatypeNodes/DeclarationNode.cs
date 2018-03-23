@@ -1,12 +1,11 @@
 ﻿using System;
 namespace Compiler.AST.Nodes.DatatypeNodes
 {
-    public class DeclartionNode : AbstractNode
+    public class DeclarationNode : AbstractNode
     {
         public string Type;
-        public string Name;
         public AbstractNode Assignment;
-        public DeclartionNode(int LineNumber) : base(LineNumber)
+        public DeclarationNode(int LineNumber) : base(LineNumber)
         {
         }
     }
