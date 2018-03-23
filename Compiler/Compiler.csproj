@@ -74,6 +74,9 @@
     <Compile Include="AST\Nodes\DatatypeNodes\VariableNode.cs" />
     <Compile Include="AST\Nodes\DatatypeNodes\ConstantNode.cs" />
     <Compile Include="AST\AstPrettyPrintVisitor.cs" />
+    <Compile Include="AST\Nodes\QueryNodes\SetQueryNode.cs" />
+    <Compile Include="AST\Nodes\QueryNodes\WhereNode.cs" />
+    <Compile Include="AST\Exceptions\NoAttributeByThisNameException.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Program\App.config" />
@@ -84,6 +87,10 @@
     </None>
   </ItemGroup>
   <ItemGroup />
+  <ItemGroup>
+    <Folder Include="AST\Nodes\QueryNodes\" />
+    <Folder Include="AST\Exceptions\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
