@@ -458,6 +458,12 @@ public interface IGiraphParserVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <return>The visitor result.</return>
 	Result VisitSetExpressionVari([NotNull] GiraphParser.SetExpressionVariContext context);
 	/// <summary>
+	/// Visit a parse tree produced by <see cref="GiraphParser.varOrconstExpressionExt"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitVarOrconstExpressionExt([NotNull] GiraphParser.VarOrconstExpressionExtContext context);
+	/// <summary>
 	/// Visit a parse tree produced by <see cref="GiraphParser.compoundAssign"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>

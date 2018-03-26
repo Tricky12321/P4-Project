@@ -81,6 +81,7 @@
     <Compile Include="Antlr_Generated\GiraphParserBaseVisitor.cs" />
     <Compile Include="Antlr_Generated\GiraphParserVisitor.cs" />
     <Compile Include="AST\Symbol Table\enums.cs" />
+    <Compile Include="AST\Nodes\QueryNodes\SetAtriQueryNode.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Program\App.config" />

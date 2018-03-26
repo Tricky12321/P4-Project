@@ -1,7 +1,8 @@
 ﻿Main -> VOID () {
     GRAPH G1 {
         VERTEX v1(),v2(),v3(),v4(),v5();
-        EDGE (v1,v2,),(v2,v3),(v3,v4),(v4,v5);
+        EDGE (v1,v2),(v2,v3),(v3,v4),(v4,v5);
+        SET 'directed' = FALSE;
     }
     WHILE(asdf == asdf) {
 

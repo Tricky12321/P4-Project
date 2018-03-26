@@ -118,19 +118,20 @@ namespace Compiler.AST
                 foreach (var NestedChild in Child.edgeDcl())
                 {
                     EdgeNode ENode = new EdgeNode(context.Start.Line);
-
+                    // If there is a name for the Edge
                     if (NestedChild.variable().GetLength(0) > 2) {
-						ENode.Name = NestedChild.variable(0).GetText();
-                        ENode.VertexNameFrom = NestedChild.variable(1).GetText();
-                        ENode.VertexNameTo = NestedChild.variable(2).GetText();
+						ENode.Name = NestedChild.variable(0).GetText(); // Edge Name
+                        ENode.VertexNameFrom = NestedChild.variable(1).GetText(); // Vertex From
+                        ENode.VertexNameTo = NestedChild.variable(2).GetText(); // Vertex To
                     } else {
-                        ENode.VertexNameFrom = NestedChild.variable(0).GetText();
-                        ENode.VertexNameTo = NestedChild.variable(1).GetText();
+                        ENode.VertexNameFrom = NestedChild.variable(0).GetText(); // Vertex From
+                        ENode.VertexNameTo = NestedChild.variable(1).GetText(); // Vertex To
                     }
-
+                    // Checks if there are any assignments
                     if (NestedChild.assignment() != null) {
                         foreach (var Attribute in NestedChild.assignment())
                         {
+                            // This is in order to ignore the attributes that are without 
                             if (Attribute.variable() != null) {
                                 ENode.ValueList.Add(Attribute.variable().GetText(), Attribute.expression().GetText());
                             }
@@ -257,15 +258,32 @@ namespace Compiler.AST
 		public override AbstractNode VisitSetQuery([NotNull] GiraphParser.SetQueryContext context)
 		{
             SetQueryNode SetNode = new SetQueryNode(context.Start.Line);
-            foreach (var setAtri in context.setExpressionAtri())
-            {
-                string AttributeName = setAtri.attribute().GetChild(1).GetText();
-                string AttributeValue = setAtri.varOrConst().GetChild(0).GetText();
-                SetNode.Attributes.Add(AttributeName, AttributeValue);
+            /*
+            if (context.setExpressionAtri() != null) {
+                foreach (var setAtri in context.setExpressionAtri())
+                {
+                    string AttributeName = setAtri.attribute()..GetText();
+                    string AttributeAssignmentOp = setAtri.compoundAssign().GetText();
+                    AbstractNode AttributeValue = setAtri.;
+                    SetNode.Attributes.Add(AttributeName, ());
+                }
+                SetNode.Name = context.variable().GetText();
+            } 
+            else if (context.setExpressionVari() != null) {
+                foreach (var setVari in context.setExpressionVari())
+                {
+                    string GetterVariable = setVari.variable().GetText();
+                    string Operator = setVari.compoundAssign().GetText();
+                    AbstractNode SetterVariable = setVari.varOrconstExpressionExt().GetText();
+                    SetNode.Attributes.Add(AttributeName, AttributeValue);
+                }
+                SetNode.Name = context.variable().GetText();
             }
-            SetNode.Name = context.variable().GetText();
-            SetNode.WhereCondition = Visit(context.where());
 
+            if (context.where() != null) {
+				SetNode.WhereCondition = Visit(context.where());
+            }
+            */
             return SetNode;
 		}
 
@@ -327,6 +345,5 @@ namespace Compiler.AST
         {
             return Visit(context.GetChild(0));
         }
-
-	}
+    }
 }
