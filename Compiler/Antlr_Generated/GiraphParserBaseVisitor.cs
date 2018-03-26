@@ -30,8 +30,7 @@ using ParserRuleContext = Antlr4.Runtime.ParserRuleContext;
 /// of the available methods.
 /// </summary>
 /// <typeparam name="Result">The return type of the visit operation.</typeparam>
-[System.CodeDom.Compiler.GeneratedCode("ANTLR", "4.7.1")]
-[System.CLSCompliant(false)]
+
 public partial class GiraphParserBaseVisitor<Result> : AbstractParseTreeVisitor<Result>, IGiraphParserVisitor<Result> {
 	/// <summary>
 	/// Visit a parse tree produced by <see cref="GiraphParser.start"/>.
@@ -743,6 +742,16 @@ public partial class GiraphParserBaseVisitor<Result> : AbstractParseTreeVisitor<
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
 	public virtual Result VisitSetExpressionVari([NotNull] GiraphParser.SetExpressionVariContext context) { return VisitChildren(context); }
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="GiraphParser.varOrconstExpressionExt"/>.
+	/// <para>
+	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
+	/// on <paramref name="context"/>.
+	/// </para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	public virtual Result VisitVarOrconstExpressionExt([NotNull] GiraphParser.VarOrconstExpressionExtContext context) { return VisitChildren(context); }
 	/// <summary>
 	/// Visit a parse tree produced by <see cref="GiraphParser.compoundAssign"/>.
 	/// <para>

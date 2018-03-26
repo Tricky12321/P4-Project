@@ -28,8 +28,7 @@ using IToken = Antlr4.Runtime.IToken;
 /// by <see cref="GiraphParser"/>.
 /// </summary>
 /// <typeparam name="Result">The return type of the visit operation.</typeparam>
-[System.CodeDom.Compiler.GeneratedCode("ANTLR", "4.7.1")]
-[System.CLSCompliant(false)]
+
 public interface IGiraphParserVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <summary>
 	/// Visit a parse tree produced by <see cref="GiraphParser.start"/>.
@@ -457,6 +456,12 @@ public interface IGiraphParserVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
 	Result VisitSetExpressionVari([NotNull] GiraphParser.SetExpressionVariContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="GiraphParser.varOrconstExpressionExt"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitVarOrconstExpressionExt([NotNull] GiraphParser.VarOrconstExpressionExtContext context);
 	/// <summary>
 	/// Visit a parse tree produced by <see cref="GiraphParser.compoundAssign"/>.
 	/// </summary>

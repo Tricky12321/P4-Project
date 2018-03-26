@@ -29,5 +29,6 @@ namespace Compiler.AST
         public abstract void Visit(VertexNode node);
         public abstract void Visit(EdgeNode node);
         public abstract void Visit(SetQueryNode node);
+        public abstract void Visit(WhereNode node);
     }
 }

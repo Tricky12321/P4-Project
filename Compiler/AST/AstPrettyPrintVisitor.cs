@@ -9,21 +9,12 @@ namespace Compiler.AST
     public class AstPrettyPrintVisitor : AstVisitorBase
     {
         public string ProgramCode;
-        int _currentLineNumber;
+        private int _currentLineNumber;
 
         public override void VisitRoot(AbstractNode root)
         {
             _currentLineNumber = root.LineNumber;
             base.VisitRoot(root);
-        }
-
-        private void CheckNewLine(int lineNumber)
-        {
-            if (_currentLineNumber != lineNumber)
-            {
-                ProgramCode += "\n";
-                _currentLineNumber = lineNumber;
-            }
         }
 
         private void InsertComma(ref int i)
@@ -37,7 +28,6 @@ namespace Compiler.AST
 
         public override void Visit(FunctionNode node)
         {
-            CheckNewLine(node.LineNumber);
             Console.WriteLine("FunctionNode");
             ProgramCode += $"{node.Name} -> {node.ReturnType}(";
             int i = 0;
@@ -46,27 +36,24 @@ namespace Compiler.AST
                 InsertComma(ref i);
                 Param.Accept(this);
             }
-            ProgramCode += ")\n{\n";
+            ProgramCode += $")\n{{\n";
             VisitChildren(node);
             ProgramCode += "\n}\n";
         }
 
         public override void Visit(FunctionParameterNode node)
         {
-            CheckNewLine(node.LineNumber);
             ProgramCode += $"{node.Type} {node.Name}";
         }
 
         public override void Visit(ProgramNode node)
         {
-            CheckNewLine(node.LineNumber);
             Console.WriteLine("ProgramNode");
             VisitChildren(node);
         }
 
         public override void Visit(StartNode node)
         {
-            CheckNewLine(node.LineNumber);
             Console.WriteLine("StartNode");
             VisitChildren(node);
         }
@@ -74,10 +61,11 @@ namespace Compiler.AST
         public override void Visit(GraphNode node)
         {
             Console.WriteLine("GraphNode");
-            ProgramCode += $"GRAPH {node.Name}\n" + "{\n";
+            ProgramCode += $"GRAPH {node.Name}\n{{\n";
+
             if (node.Vertices.Count != 0)
             {
-                ProgramCode += "VERTEX ";
+                ProgramCode += $"VERTEX ";
                 int i = 0;
                 foreach (VertexNode vertex in node.Vertices)
                 {
@@ -88,7 +76,7 @@ namespace Compiler.AST
             }
             if (node.Edges.Count != 0)
             {
-                ProgramCode += "EDGE ";
+                ProgramCode += $"EDGE ";
                 int i = 0;
                 foreach (EdgeNode edge in node.Edges)
                 {
@@ -97,7 +85,7 @@ namespace Compiler.AST
                 }
                 ProgramCode += ";\n";
             }
-            ProgramCode += "}";
+            ProgramCode += $"}}\n";
         }
 
         public override void Visit(VertexNode node)
@@ -105,7 +93,7 @@ namespace Compiler.AST
             Console.WriteLine("VertexNode");
             ProgramCode += $"{node.Name}(";
             int i = 0;
-            foreach (KeyValuePair<string,string> item in node.ValueList)
+            foreach (KeyValuePair<string, string> item in node.ValueList)
             {
                 InsertComma(ref i);
                 ProgramCode += $"{item.Key} = {item.Value}";
@@ -118,7 +106,12 @@ namespace Compiler.AST
             Console.WriteLine("EdgeNode");
             ProgramCode += $"{node.Name}(";
             int i = 0;
-            ProgramCode += $"{node.VertexNameFrom}, {node.VertexNameTo}, ";
+            ProgramCode += $"{node.VertexNameFrom}, {node.VertexNameTo}";
+            if (node.ValueList.Count > 0)
+            {
+                ProgramCode += ", ";
+            }
+
             foreach (KeyValuePair<string, string> item in node.ValueList)
             {
                 InsertComma(ref i);
@@ -129,7 +122,29 @@ namespace Compiler.AST
 
         public override void Visit(SetQueryNode node)
         {
+            Console.WriteLine("SetQueryNode");
+            ProgramCode += $"SET ";
+            int i = 0;
+            foreach (KeyValuePair<string, string> attribute in node.Attributes)
+            {
+                InsertComma(ref i);
+                ProgramCode += $"'{attribute.Key}' = {attribute.Value}";
+            }
+            ProgramCode += $" IN {node.Name}";
+            if (node.WhereCondition == null)
+            {
+                ProgramCode += $";";
+            }
+            else
+            {
+                node.WhereCondition.Accept(this);
+            }
+        }
 
+        public override void Visit(WhereNode node)
+        {
+            Console.WriteLine("WhereNode");
+            ProgramCode += $" WHERE A == A;";
         }
 
         public override void Visit(AbstractNode node)
