@@ -119,15 +119,22 @@ namespace Compiler.AST
                 {
                     EdgeNode ENode = new EdgeNode(context.Start.Line);
 
-                    if (NestedChild.variable(0) != null) {
+                    if (NestedChild.variable().GetLength(0) > 2) {
 						ENode.Name = NestedChild.variable(0).GetText();
+                        ENode.VertexNameFrom = NestedChild.variable(1).GetText();
+                        ENode.VertexNameTo = NestedChild.variable(2).GetText();
+                    } else {
+                        ENode.VertexNameFrom = NestedChild.variable(0).GetText();
+                        ENode.VertexNameTo = NestedChild.variable(1).GetText();
                     }
-                    ENode.VertexNameFrom = NestedChild.variable(1).GetText();
-                    ENode.VertexNameTo = NestedChild.variable(2).GetText();
+
                     if (NestedChild.assignment() != null) {
                         foreach (var Attribute in NestedChild.assignment())
                         {
-                            ENode.ValueList.Add(Attribute.variable().GetText(), Attribute.expression().GetText());
+                            if (Attribute.variable() != null) {
+                                ENode.ValueList.Add(Attribute.variable().GetText(), Attribute.expression().GetText());
+                            }
+
                         } 
                     }
                     GNode.Edges.Add(ENode);
