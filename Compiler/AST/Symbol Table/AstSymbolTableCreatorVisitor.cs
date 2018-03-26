@@ -13,6 +13,10 @@ namespace Compiler.AST.SymbolTable
         private Dictionary<string, List<SymbolTableEntry>> _symbolTable = new Dictionary<string, List<SymbolTableEntry>>();
         private uint _globalDepth;
 
+        protected AstSymbolTableCreatorVisitor()
+        {
+        }
+
         public AllType ResolveFuncType(string Type) {
             switch (Type)
             {
@@ -144,6 +148,11 @@ namespace Compiler.AST.SymbolTable
         }
 
         public override void Visit(SetQueryNode node)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void Visit(WhereNode node)
         {
             throw new NotImplementedException();
         }

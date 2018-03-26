@@ -1,9 +1,24 @@
+<<<<<<< HEAD
 ﻿Main -> VOID () {
     GRAPH G1 {
         VERTEX v1(),v2(),v3(),v4(),v5();
         EDGE (v1,v2,),(v2,v3),(v3,v4),(v4,v5);
     }
     WHILE(asdf == asdf) {
+=======
+﻿Main -> VOID (INT Hej, INT Kurt) {
+    GRAPH Graph1 
+    {
+        VERTEX va(w = 3), vb(w = 7, v = 3);
+        EDGE x(vb, va, v = 4), y(va, vb, v = 7, w = 29);
+    }
+    SET 'test' = "test", 'test2' = "test2" IN Graph1 WHERE asdf == asdf;
+}
+>>>>>>> e46ff84... Changes to ASTPPV
 
+test -> STRING (INT JEJH, INT JEKH){
+    GRAPH G2
+    {
+        EDGE e(v, q);
     }
 }

@@ -224,7 +224,7 @@ namespace Compiler.AST
         public override AbstractNode VisitVariable([NotNull] GiraphParser.VariableContext context)
         {
             VariableNode VarNode = new VariableNode(context.Start.Line);
-            VarNode.VariableName = context.GetChild(0).GetText();
+            VarNode.Name = context.GetChild(0).GetText();
             return VarNode;
         }
 
