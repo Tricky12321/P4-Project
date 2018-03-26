@@ -1,6 +1,7 @@
 ﻿using System;
 using Compiler.AST.Nodes;
 using Compiler.AST.Nodes.DatatypeNodes;
+using Compiler.AST.Nodes.QueryNodes;
 
 namespace Compiler.AST
 {
@@ -27,5 +28,6 @@ namespace Compiler.AST
         public abstract void Visit(GraphNode node);
         public abstract void Visit(VertexNode node);
         public abstract void Visit(EdgeNode node);
+        public abstract void Visit(SetQueryNode node);
     }
 }

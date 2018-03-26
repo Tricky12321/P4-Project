@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Compiler.AST.Nodes;
 using Compiler.AST.Nodes.DatatypeNodes;
+using Compiler.AST.Nodes.QueryNodes;
 
 namespace Compiler.AST.SymbolTable
 {
@@ -55,7 +56,7 @@ namespace Compiler.AST.SymbolTable
         private SymbolTableEntry RetrieveSymbol(string name)
         {
             List<SymbolTableEntry> entriesWithThisName = _symbolTable[name];
-            SymbolTableEntry result = entriesWithThisName.Where(x => x.Depth == _globalDepth).First();
+            SymbolTableEntry result = entriesWithThisName.Where(x => x.Reachable && x.Depth == _globalDepth).First();
             return result;
         }
 
@@ -71,6 +72,15 @@ namespace Compiler.AST.SymbolTable
 
         private void CloseScope()
         {
+            //Makes variables unreachable, when their scope is exited
+            foreach (List<SymbolTableEntry> list in _symbolTable.Values)
+            {
+                foreach(SymbolTableEntry entry in list)
+                {
+                    if (entry.Depth == _globalDepth)
+                        entry.Reachable = false;
+                }
+            }
             --_globalDepth;
         }
 
@@ -129,6 +139,11 @@ namespace Compiler.AST.SymbolTable
         }
 
         public override void Visit(EdgeNode node)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void Visit(SetQueryNode node)
         {
             throw new NotImplementedException();
         }
