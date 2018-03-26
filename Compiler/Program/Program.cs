@@ -29,8 +29,6 @@ namespace Compiler
             var cst = parser.start();
             var ast = new AstBuilder().VisitStart(cst);
 
-            //ASTCreator<AbstractNode> ASTCreator = new ASTCreator<AbstractNode>();
-            //ASTCreator.VisitStart(cst);
 
             var visitor = new AstPrettyPrintVisitor();
             visitor.VisitRoot(ast);
