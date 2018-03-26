@@ -5,12 +5,35 @@ using System.Text;
 using Compiler.AST.Nodes;
 using Compiler.AST.Nodes.DatatypeNodes;
 
-namespace Compiler.AST.Symbol_Table
+namespace Compiler.AST.SymbolTable
 {
     class AstSymbolTableCreatorVisitor : AstVisitorBase
     {
         private Dictionary<string, List<SymbolTableEntry>> _symbolTable = new Dictionary<string, List<SymbolTableEntry>>();
         private uint _globalDepth;
+
+        public AllType ResolveFuncType(string Type) {
+            switch (Type)
+            {
+                case "VOID":
+                    return AllType.VOID;
+                case "STRING":
+                    return AllType.STRING;
+                case "BOOL":
+                    return AllType.BOOL;
+                case "DECIMAL":
+                    return AllType.DECIMAL;
+                case "INT":
+                    return AllType.INT;
+                case "GRAPH":
+                    return AllType.GRAPH;
+                case "EDGE":
+                    return AllType.EDGE;
+                case "VERTEX":
+                    return AllType.VERTEX;
+            }
+            throw new Exception("Unknown type");
+        }
 
         public void BuildSymbolTable(AbstractNode root)
         {
@@ -72,7 +95,12 @@ namespace Compiler.AST.Symbol_Table
 
         public override void Visit(FunctionNode node)
         {
-            throw new NotImplementedException();
+            AllType Type = ResolveFuncType(node.ReturnType);
+            string FunctionName = node.Name;
+            EnterSymbol(FunctionName, Type);
+            OpenScope();
+            VisitChildren(node);
+            CloseScope();
         }
 
         public override void Visit(FunctionParameterNode node)

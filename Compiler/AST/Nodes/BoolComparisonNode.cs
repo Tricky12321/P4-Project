@@ -9,10 +9,11 @@ namespace Compiler.AST.Nodes
         public string ComparisonOperator;
         public AbstractNode Right;
         // If there is a ref, to the next node
-        public AbstractNode NextNode;
+        public string Prefix;
+        public string Suffix;
 
-        public bool NextNodeBool = false;
 
+        public bool InsideParentheses;
         public BoolComparisonNode(int LineNumber) : base(LineNumber)
         {
             

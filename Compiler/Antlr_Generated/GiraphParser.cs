@@ -2812,16 +2812,20 @@ public partial class GiraphParser : Parser {
 
 	public partial class BoolComparisonsContext : ParserRuleContext {
 		public BoolComparisonsContext left;
+		public IToken leftP;
+		public IToken rightP;
 		public IToken prefix;
+		public ExpressionContext exp;
+		public PredicateCallContext predi;
 		public BoolComparisonsContext right;
-		public IToken surfix;
-		public ITerminalNode LP() { return GetToken(GiraphParser.LP, 0); }
+		public IToken suffix;
 		public BoolComparisonsContext[] boolComparisons() {
 			return GetRuleContexts<BoolComparisonsContext>();
 		}
 		public BoolComparisonsContext boolComparisons(int i) {
 			return GetRuleContext<BoolComparisonsContext>(i);
 		}
+		public ITerminalNode LP() { return GetToken(GiraphParser.LP, 0); }
 		public ITerminalNode RP() { return GetToken(GiraphParser.RP, 0); }
 		public ITerminalNode NOT() { return GetToken(GiraphParser.NOT, 0); }
 		public ExpressionContext expression() {
@@ -2868,9 +2872,9 @@ public partial class GiraphParser : Parser {
 			switch ( Interpreter.AdaptivePredict(TokenStream,43,Context) ) {
 			case 1:
 				{
-				State = 501; Match(LP);
+				State = 501; _localctx.leftP = Match(LP);
 				State = 502; boolComparisons(0);
-				State = 503; Match(RP);
+				State = 503; _localctx.rightP = Match(RP);
 				}
 				break;
 			case 2:
@@ -2881,12 +2885,12 @@ public partial class GiraphParser : Parser {
 				break;
 			case 3:
 				{
-				State = 507; expression();
+				State = 507; _localctx.exp = expression();
 				}
 				break;
 			case 4:
 				{
-				State = 508; predicateCall();
+				State = 508; _localctx.predi = predicateCall();
 				}
 				break;
 			}
@@ -2936,7 +2940,7 @@ public partial class GiraphParser : Parser {
 						PushNewRecursionContext(_localctx, _startState, RULE_boolComparisons);
 						State = 517;
 						if (!(Precpred(Context, 4))) throw new FailedPredicateException(this, "Precpred(Context, 4)");
-						State = 518; _localctx.surfix = Match(ISEMPTY);
+						State = 518; _localctx.suffix = Match(ISEMPTY);
 						}
 						break;
 					}

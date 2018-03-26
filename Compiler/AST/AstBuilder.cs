@@ -99,10 +99,14 @@ namespace Compiler.AST
                 foreach (var NestedChild in Child.vertexDcl())
                 {
                     VertexNode VNode = new VertexNode(context.Start.Line);
-                    VNode.Name = NestedChild.variable().GetText();
-                    foreach (var Attribute in NestedChild.assignment())
-                    {
-                        VNode.ValueList.Add(Attribute.variable().GetText(), Attribute.expression().GetText());
+                    if (NestedChild.variable() != null) {
+						VNode.Name = NestedChild.variable().GetText();
+                    }
+                    if (NestedChild.assignment() != null) {
+                        foreach (var Attribute in NestedChild.assignment())
+                        {
+                            VNode.ValueList.Add(Attribute.variable().GetText(), Attribute.expression().GetText());
+                        } 
                     }
                     GNode.Vertices.Add(VNode);
                 }
@@ -113,12 +117,17 @@ namespace Compiler.AST
                 foreach (var NestedChild in Child.edgeDcl())
                 {
                     EdgeNode ENode = new EdgeNode(context.Start.Line);
-                    ENode.Name = NestedChild.variable(0).GetText();
+
+                    if (NestedChild.variable(0) != null) {
+						ENode.Name = NestedChild.variable(0).GetText();
+                    }
                     ENode.VertexNameFrom = NestedChild.variable(1).GetText();
                     ENode.VertexNameTo = NestedChild.variable(2).GetText();
-                    foreach (var Attribute in NestedChild.assignment())
-                    {
-                        ENode.ValueList.Add(Attribute.variable().GetText(), Attribute.expression().GetText());
+                    if (NestedChild.assignment() != null) {
+                        foreach (var Attribute in NestedChild.assignment())
+                        {
+                            ENode.ValueList.Add(Attribute.variable().GetText(), Attribute.expression().GetText());
+                        } 
                     }
                     GNode.Edges.Add(ENode);
                 }
@@ -160,26 +169,40 @@ namespace Compiler.AST
         {
             BoolComparisonNode BCompare = new BoolComparisonNode(context.Start.Line);
             // If there is a left and right side, This is what will be used
-            if (context.right != null && context.left != null)
+            if (context.prefix != null)
             {
-                BCompare.Left = Visit(context.GetChild(0));
-                BCompare.ComparisonOperator = context.GetChild(1).GetText();
-                BCompare.Right = Visit(context.GetChild(2));
-                BCompare.NextNodeBool = false;
+                BCompare.Prefix = context.prefix.Text;
+                BCompare.AdoptChildren(Visit(context.boolComparisons(0)));
+            }
+            if (context.suffix != null)
+            {
+                BCompare.Suffix = context.suffix.Text;
+                BCompare.AdoptChildren(Visit(context.boolComparisons(0)));
+            }
+            if (context.rightP != null && context.leftP != null && context.boolComparisons() != null) {
+                BCompare.InsideParentheses = true;
+                BCompare.AdoptChildren(Visit(context.boolComparisons(0)));
+            }
+            else if (context.right != null && context.left != null && context.boolComparisons() != null)
+            {
+                BCompare.Left = Visit(context.left);
+                BCompare.Right = Visit(context.right);
+                if (context.BOOLOPERATOR() != null) {
+					BCompare.ComparisonOperator = context.BOOLOPERATOR().GetText();
+                } else if (context.andOr() != null) {
+                    BCompare.ComparisonOperator = context.andOr().GetText();
+                }
             }
             else
             {
-                // If there is no Left or Right, this means that the end of this branch is a
-                if (context.GetChild(1) != null)
-                {
-                    BCompare.NextNode = Visit(context.GetChild(1));
+                if (context.predi != null) {
+                    BCompare.AdoptChildren(Visit(context.predi));
                 }
-                else
-                {
-                    BCompare.NextNode = Visit(context.GetChild(0));
+                else if (context.exp != null) {
+                    BCompare.AdoptChildren(Visit(context.exp));
                 }
-                BCompare.NextNodeBool = true;
             }
+
             return BCompare;
         }
 
@@ -279,5 +302,23 @@ namespace Compiler.AST
             }
             return DclNode;
 		}
+
+		public override AbstractNode VisitCollectionDcl([NotNull] GiraphParser.CollectionDclContext context)
+		{
+            DeclarationNode CollDcl = new DeclarationNode(context.Start.Line);
+            CollDcl.Name = context.variable().GetText();
+            CollDcl.CollectionDcl = true;
+            CollDcl.Type = context.allType().GetText();
+            if (context.collectionAssignment() != null) {
+                CollDcl.Assignment = Visit(context.collectionAssignment());
+            }
+			return base.VisitCollectionDcl(context);
+		}
+
+        public override AbstractNode VisitCollectionAssignment([NotNull] GiraphParser.CollectionAssignmentContext context)
+        {
+            return Visit(context.GetChild(0));
+        }
+
 	}
 }

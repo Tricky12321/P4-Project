@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using Compiler.AST.Nodes;
 
-namespace Compiler.AST.Symbol_Table
+namespace Compiler.AST.SymbolTable
 {
     class SymbolTableEntry
     {

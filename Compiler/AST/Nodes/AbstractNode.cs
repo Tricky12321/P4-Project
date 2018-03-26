@@ -2,10 +2,7 @@
 using System.Collections.Generic;
 namespace Compiler.AST.Nodes
 {
-    enum PrimitiveType { BOOL, INT, DECIMAL, STRING };
-    enum ObjectType { GRAPH, EDGE, VERTEX };
-    enum AllType { BOOL, INT, DECIMAL, STRING, GRAPH, EDGE, VERTEX }
-    enum FunctionTypes { BOOL, INT, DECIMAL, STRING, GRAPH, EDGE, VERTEX, VOID}
+    
 
     public class AbstractNode
     {
