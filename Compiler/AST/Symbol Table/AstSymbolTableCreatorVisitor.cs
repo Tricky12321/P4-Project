@@ -33,7 +33,7 @@ namespace Compiler.AST.Symbol_Table
         private SymbolTableEntry RetrieveSymbol(string name)
         {
             List<SymbolTableEntry> entriesWithThisName = _symbolTable[name];
-            SymbolTableEntry result = entriesWithThisName.Where(x => x.Depth == _globalDepth).First();
+            SymbolTableEntry result = entriesWithThisName.Where(x => x.Reachable && x.Depth == _globalDepth).First();
             return result;
         }
 
@@ -49,6 +49,15 @@ namespace Compiler.AST.Symbol_Table
 
         private void CloseScope()
         {
+            //Makes variables unreachable, when their scope is exited
+            foreach (List<SymbolTableEntry> list in _symbolTable.Values)
+            {
+                foreach(SymbolTableEntry entry in list)
+                {
+                    if (entry.Depth == _globalDepth)
+                        entry.Reachable = false;
+                }
+            }
             --_globalDepth;
         }
 
