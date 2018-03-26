@@ -2,6 +2,7 @@
 using Compiler.AST.Nodes;
 using Compiler.AST.Nodes.DatatypeNodes;
 using System.Collections.Generic;
+using Compiler.AST.Nodes.QueryNodes;
 
 namespace Compiler.AST
 {
@@ -124,6 +125,11 @@ namespace Compiler.AST
                 ProgramCode += $"{item.Key} = {item.Value}";
             }
             ProgramCode += ")";
+        }
+
+        public override void Visit(SetQueryNode node)
+        {
+
         }
 
         public override void Visit(AbstractNode node)

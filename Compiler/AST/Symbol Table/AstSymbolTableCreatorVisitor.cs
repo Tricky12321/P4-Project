@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Compiler.AST.Nodes;
 using Compiler.AST.Nodes.DatatypeNodes;
+using Compiler.AST.Nodes.QueryNodes;
 
 namespace Compiler.AST.Symbol_Table
 {
@@ -101,6 +102,11 @@ namespace Compiler.AST.Symbol_Table
         }
 
         public override void Visit(EdgeNode node)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void Visit(SetQueryNode node)
         {
             throw new NotImplementedException();
         }
