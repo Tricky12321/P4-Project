@@ -61,10 +61,11 @@ namespace Compiler.AST
             int CodeElementsInCodeblock = CodeBlockEntry.ChildCount;
             // J skips the first child "(" and starts with the first child that is actual code
             // Loops though all the children, and ignores the last child ")"
-            for (int j = 1; j < CodeElementsInCodeblock; j++)
+            foreach (var Child in context.codeBlock().children)
             {
-                FNode.AdoptChildren(Visit(CodeBlockEntry.GetChild(j)));
+				FNode.AdoptChildren(Visit(Child));
             }
+
             /*
             foreach (var CodeBlockChild in context.children)
             {
@@ -162,7 +163,7 @@ namespace Compiler.AST
             {
                 WhileNode.AdoptChildren(Visit(context.GetChild(2).GetChild(i)));
             }
-            return base.VisitWhileLoop(context);
+            return WhileNode;
         }
 
         public override AbstractNode VisitBoolComparisons([NotNull] GiraphParser.BoolComparisonsContext context)
