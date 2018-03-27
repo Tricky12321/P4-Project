@@ -125,10 +125,11 @@ namespace Compiler.AST
             Console.WriteLine("SetQueryNode");
             ProgramCode += $"SET ";
             int i = 0;
-            foreach (KeyValuePair<string, string> attribute in node.Attributes)
+
+            foreach (Tuple<string, string, string> attribute in node.Attributes)
             {
                 InsertComma(ref i);
-                ProgramCode += $"'{attribute.Key}' = {attribute.Value}";
+                ProgramCode += $"'{attribute.Item1}' = {attribute.Item2}";
             }
             ProgramCode += $" IN {node.Name}";
             if (node.WhereCondition == null)
