@@ -141,12 +141,16 @@ namespace Compiler.AST.SymbolTable
 
         public override void Visit(VertexNode node)
         {
-            throw new NotImplementedException();
+            /* Missing the values of the vertex*/
+            string vertexName = node.Name;
+            EnterSymbol(vertexName, AllType.VERTEX);
         }
 
         public override void Visit(EdgeNode node)
         {
-            throw new NotImplementedException();
+            /* Missing the values of the edge*/
+            string edgeName = node.Name;
+            EnterSymbol(edgeName, AllType.EDGE);
         }
 
         public override void Visit(SetQueryNode node)
