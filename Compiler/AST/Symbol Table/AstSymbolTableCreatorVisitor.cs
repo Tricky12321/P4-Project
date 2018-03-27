@@ -109,9 +109,9 @@ namespace Compiler.AST.SymbolTable
 
         public override void Visit(FunctionNode node)
         {
-            AllType Type = ResolveFuncType(node.ReturnType);
-            string FunctionName = node.Name;
-            EnterSymbol(FunctionName, Type);
+            AllType type = ResolveFuncType(node.ReturnType);
+            string functionName = node.Name;
+            EnterSymbol(functionName, type);
             OpenScope();
             VisitChildren(node);
             CloseScope();
@@ -134,7 +134,9 @@ namespace Compiler.AST.SymbolTable
 
         public override void Visit(GraphNode node)
         {
-            throw new NotImplementedException();
+            string graphName = node.Name;
+            EnterSymbol(graphName, AllType.GRAPH);
+            VisitChildren(node);
         }
 
         public override void Visit(VertexNode node)
