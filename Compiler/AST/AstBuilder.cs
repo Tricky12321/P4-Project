@@ -7,20 +7,25 @@ using Compiler.AST.Nodes.QueryNodes;
 using Compiler.AST.Exceptions;
 using Antlr4.Runtime;
 using System.Text.RegularExpressions;
+using System.Diagnostics;
 namespace Compiler.AST
 {
     internal class AstBuilder : GiraphParserBaseVisitor<AbstractNode>
     {
         public AbstractNode root;
+        public Stopwatch AstBuildTimer = new Stopwatch();
         public override AbstractNode VisitStart([NotNull] GiraphParser.StartContext context)
         {
+            AstBuildTimer.Start();
             root = new StartNode(context.Start.Line);
             // Program+ (Multiple Program children, atleast one)
-            foreach (var child in context.children)
+            foreach (var child in context.program())
             {
-                root.AdoptChildren(Visit(child.GetChild(0)));
+                root.AdoptChildren(Visit(child));
             }
             root.Name = "Root";
+            AstBuildTimer.Stop();
+            Console.WriteLine("AstBuilder took: "+AstBuildTimer.ElapsedMilliseconds+"ms");
             return root;
         }
 
@@ -73,8 +78,13 @@ namespace Compiler.AST
 
         public override AbstractNode VisitCodeBlock([NotNull] GiraphParser.CodeBlockContext context)
         {
-            VertexDclsNode VerDclsNode = new VertexDclsNode(context.Start.Line);
-            return Visit(context.children[1]);
+            //VertexDclsNode VerDclsNode = new VertexDclsNode(context.Start.Line);
+            CodeBlockNode CodeNode = new CodeBlockNode(context.Start.Line);
+            foreach (var Child in context.children)
+            {
+                CodeNode.AdoptChildren(Visit(Child));
+            }
+            return CodeNode;
         }
 
         public override AbstractNode VisitCodeBlockContent([NotNull] GiraphParser.CodeBlockContentContext context)
@@ -357,8 +367,25 @@ namespace Compiler.AST
         public override AbstractNode VisitIfElseIfElse([NotNull] GiraphParser.IfElseIfElseContext context)
         {
             IfElseIfElseNode IfNode = new IfElseIfElseNode(context.Start.Line);
-            //IfNode.IfCondition = context.boolComparisons(0);
-            return base.VisitIfElseIfElse(context);
+            IfNode.IfCondition = Visit(context.boolComparisons());
+            IfNode.IfCodeBlock = Visit(context.codeBlock());
+            if (context.elseifCond() != null) {
+                foreach (var ElseIf in context.elseifCond())
+                {
+                    IfNode.ElseIfConditions.Add(Visit(ElseIf.boolComparisons()));
+                    IfNode.ElseIfCodeBlocks.Add(Visit(ElseIf.codeBlock()));
+                }
+            }
+
+            // Else codeblock, First codeblock element, then it adopts the rest, if there are any
+            if (context.elseCond() != null) {
+                if (context.elseCond().codeBlock().ChildCount > 0) {
+                    IfNode.ElseCodeBlock = Visit(context.elseCond().codeBlock());
+                }
+            }
+
+            return IfNode;
         }
+
     }
 }
