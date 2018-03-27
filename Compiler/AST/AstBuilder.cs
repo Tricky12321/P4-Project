@@ -18,18 +18,10 @@ namespace Compiler.AST
             // Program+ (Multiple Program children, atleast one)
             foreach (var child in context.children)
             {
-                root.AdoptChildren(Visit(child));
+                root.AdoptChildren(Visit(child.GetChild(0)));
             }
             root.Name = "Root";
             return root;
-        }
-
-        public override AbstractNode VisitProgram([NotNull] GiraphParser.ProgramContext context)
-        {
-            ProgramNode PNode = new ProgramNode(context.Start.Line);
-            PNode.AdoptChildren(VisitChildren(context));
-            PNode.Name = "PNode";
-            return PNode;
         }
 
         public override AbstractNode VisitFunctionDcl([NotNull] GiraphParser.FunctionDclContext context)
@@ -63,7 +55,7 @@ namespace Compiler.AST
             // Loops though all the children, and ignores the last child ")"
             foreach (var Child in context.codeBlock().children)
             {
-				FNode.AdoptChildren(Visit(Child));
+                FNode.AdoptChildren(Visit(Child));
             }
 
             /*
@@ -100,14 +92,16 @@ namespace Compiler.AST
                 foreach (var NestedChild in Child.vertexDcl())
                 {
                     VertexNode VNode = new VertexNode(context.Start.Line);
-                    if (NestedChild.variable() != null) {
-						VNode.Name = NestedChild.variable().GetText();
+                    if (NestedChild.variable() != null)
+                    {
+                        VNode.Name = NestedChild.variable().GetText();
                     }
-                    if (NestedChild.assignment() != null) {
+                    if (NestedChild.assignment() != null)
+                    {
                         foreach (var Attribute in NestedChild.assignment())
                         {
                             VNode.ValueList.Add(Attribute.variable().GetText(), Attribute.expression().GetText());
-                        } 
+                        }
                     }
                     GNode.Vertices.Add(VNode);
                 }
@@ -119,24 +113,29 @@ namespace Compiler.AST
                 {
                     EdgeNode ENode = new EdgeNode(context.Start.Line);
                     // If there is a name for the Edge
-                    if (NestedChild.variable().GetLength(0) > 2) {
-						ENode.Name = NestedChild.variable(0).GetText(); // Edge Name
+                    if (NestedChild.variable().GetLength(0) > 2)
+                    {
+                        ENode.Name = NestedChild.variable(0).GetText(); // Edge Name
                         ENode.VertexNameFrom = NestedChild.variable(1).GetText(); // Vertex From
                         ENode.VertexNameTo = NestedChild.variable(2).GetText(); // Vertex To
-                    } else {
+                    }
+                    else
+                    {
                         ENode.VertexNameFrom = NestedChild.variable(0).GetText(); // Vertex From
                         ENode.VertexNameTo = NestedChild.variable(1).GetText(); // Vertex To
                     }
                     // Checks if there are any assignments
-                    if (NestedChild.assignment() != null) {
+                    if (NestedChild.assignment() != null)
+                    {
                         foreach (var Attribute in NestedChild.assignment())
                         {
                             // This is in order to ignore the attributes that are without 
-                            if (Attribute.variable() != null) {
+                            if (Attribute.variable() != null)
+                            {
                                 ENode.ValueList.Add(Attribute.variable().GetText(), Attribute.expression().GetText());
                             }
 
-                        } 
+                        }
                     }
                     GNode.Edges.Add(ENode);
                 }
@@ -188,7 +187,8 @@ namespace Compiler.AST
                 BCompare.Suffix = context.suffix.Text;
                 BCompare.AdoptChildren(Visit(context.boolComparisons(0)));
             }
-            if (context.rightP != null && context.leftP != null && context.boolComparisons() != null) {
+            if (context.rightP != null && context.leftP != null && context.boolComparisons() != null)
+            {
                 BCompare.InsideParentheses = true;
                 BCompare.AdoptChildren(Visit(context.boolComparisons(0)));
             }
@@ -196,18 +196,23 @@ namespace Compiler.AST
             {
                 BCompare.Left = Visit(context.left);
                 BCompare.Right = Visit(context.right);
-                if (context.BOOLOPERATOR() != null) {
-					BCompare.ComparisonOperator = context.BOOLOPERATOR().GetText();
-                } else if (context.andOr() != null) {
+                if (context.BOOLOPERATOR() != null)
+                {
+                    BCompare.ComparisonOperator = context.BOOLOPERATOR().GetText();
+                }
+                else if (context.andOr() != null)
+                {
                     BCompare.ComparisonOperator = context.andOr().GetText();
                 }
             }
             else
             {
-                if (context.predi != null) {
+                if (context.predi != null)
+                {
                     BCompare.AdoptChildren(Visit(context.predi));
                 }
-                else if (context.exp != null) {
+                else if (context.exp != null)
+                {
                     BCompare.AdoptChildren(Visit(context.exp));
                 }
             }
@@ -240,23 +245,23 @@ namespace Compiler.AST
             return Visit(context.GetChild(0));
         }
 
-		public override AbstractNode VisitQuery([NotNull] GiraphParser.QueryContext context)
-		{
+        public override AbstractNode VisitQuery([NotNull] GiraphParser.QueryContext context)
+        {
             return Visit(context.GetChild(0));
-		}
+        }
 
-		public override AbstractNode VisitNoReturnQuery([NotNull] GiraphParser.NoReturnQueryContext context)
-		{
+        public override AbstractNode VisitNoReturnQuery([NotNull] GiraphParser.NoReturnQueryContext context)
+        {
             return Visit(context.GetChild(0));
-		}
+        }
 
-		public override AbstractNode VisitReturnQuery([NotNull] GiraphParser.ReturnQueryContext context)
-		{
+        public override AbstractNode VisitReturnQuery([NotNull] GiraphParser.ReturnQueryContext context)
+        {
             return Visit(context.GetChild(0));
-		}
+        }
 
-		public override AbstractNode VisitSetQuery([NotNull] GiraphParser.SetQueryContext context)
-		{
+        public override AbstractNode VisitSetQuery([NotNull] GiraphParser.SetQueryContext context)
+        {
             SetQueryNode SetNode = new SetQueryNode(context.Start.Line);
             /*
             if (context.setExpressionAtri() != null) {
@@ -285,40 +290,42 @@ namespace Compiler.AST
             }
             */
             return SetNode;
-		}
+        }
 
-		public override AbstractNode VisitWhere([NotNull] GiraphParser.WhereContext context)
-		{
+        public override AbstractNode VisitWhere([NotNull] GiraphParser.WhereContext context)
+        {
             WhereNode WNode = new WhereNode(context.Start.Line);
-            foreach (var Child in context.boolComparisons().children) 
+            foreach (var Child in context.boolComparisons().children)
             {
                 WNode.AdoptChildren(Visit(Child));
             }
             return WNode;
-		}
+        }
 
-		public override AbstractNode VisitExtend([NotNull] GiraphParser.ExtendContext context)
-		{
+        public override AbstractNode VisitExtend([NotNull] GiraphParser.ExtendContext context)
+        {
             ExtendNode ENode = new ExtendNode(context.Start.Line);
             ENode.ExtensionName = context.variable(0).GetText();
-            if (context.variable().Length == 2) {
+            if (context.variable().Length == 2)
+            {
                 ENode.ExtensionShortName = context.variable(1).GetText();
             }
             ENode.ExtendWithType = context.allTypeWithColl().GetText();
             ENode.ClassToExtend = context.objects().GetText();
-            if (context.constant() != null) {
-				ENode.ExtensionDefaultValue = context.constant().GetText();
+            if (context.constant() != null)
+            {
+                ENode.ExtensionDefaultValue = context.constant().GetText();
             }
-			return ENode;
-		}
+            return ENode;
+        }
 
-		public override AbstractNode VisitDcls([NotNull] GiraphParser.DclsContext context)
-		{
+        public override AbstractNode VisitDcls([NotNull] GiraphParser.DclsContext context)
+        {
             return Visit(context.GetChild(0));
-		}
+        }
 
-		public override AbstractNode VisitSingleObjectDcl([NotNull] GiraphParser.SingleObjectDclContext context)
-		{
+        public override AbstractNode VisitSingleObjectDcl([NotNull] GiraphParser.SingleObjectDclContext context)
+        {
             DeclarationNode DclNode = new DeclarationNode(context.Start.Line);
             DclNode.Type = context.objects().GetText();
             DclNode.Name = context.variable().GetText();
@@ -327,23 +334,31 @@ namespace Compiler.AST
                 DclNode.Assignment = Visit(context.expression());
             }
             return DclNode;
-		}
+        }
 
-		public override AbstractNode VisitCollectionDcl([NotNull] GiraphParser.CollectionDclContext context)
-		{
+        public override AbstractNode VisitCollectionDcl([NotNull] GiraphParser.CollectionDclContext context)
+        {
             DeclarationNode CollDcl = new DeclarationNode(context.Start.Line);
             CollDcl.Name = context.variable().GetText();
             CollDcl.CollectionDcl = true;
             CollDcl.Type = context.allType().GetText();
-            if (context.collectionAssignment() != null) {
+            if (context.collectionAssignment() != null)
+            {
                 CollDcl.Assignment = Visit(context.collectionAssignment());
             }
-			return base.VisitCollectionDcl(context);
-		}
+            return CollDcl;
+        }
 
         public override AbstractNode VisitCollectionAssignment([NotNull] GiraphParser.CollectionAssignmentContext context)
         {
             return Visit(context.GetChild(0));
+        }
+
+        public override AbstractNode VisitIfElseIfElse([NotNull] GiraphParser.IfElseIfElseContext context)
+        {
+            IfElseIfElseNode IfNode = new IfElseIfElseNode(context.Start.Line);
+            IfNode.IfCondition = context.boolComparisons(0);
+            return base.VisitIfElseIfElse(context);
         }
     }
 }
