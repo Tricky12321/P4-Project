@@ -383,9 +383,23 @@ namespace Compiler.AST
                     IfNode.ElseCodeBlock = Visit(context.elseCond().codeBlock());
                 }
             }
-
             return IfNode;
         }
 
-    }
+		public override AbstractNode VisitPredicate([NotNull] GiraphParser.PredicateContext context)
+		{
+            PredicateNode PNode = new PredicateNode(context.Start.Line);
+            PNode.Name = context.variable().GetText();
+            if (context.formalParams().formalParam() != null) {
+                foreach (var Param in context.formalParams().formalParam())
+                {
+                    string ParameterName = Param.variable().GetText();
+                    string ParameterType = Param.allType().GetText();
+                    PNode.AddParameter(ParameterType, ParameterName, context.Start.Line);
+                }
+            }
+            PNode.AdoptChildren(Visit(context.boolComparisons()));
+            return PNode;
+		}
+	}
 }

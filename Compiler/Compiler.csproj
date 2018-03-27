@@ -89,6 +89,8 @@
     <Compile Include="AST\Symbol Table\enums.cs" />
     <Compile Include="AST\Nodes\QueryNodes\SetAtriQueryNode.cs" />
     <Compile Include="AST\Nodes\IfElseIfElseNode.cs" />
+    <Compile Include="AST\Nodes\PredicateNode.cs" />
+    <Compile Include="AST\Nodes\PredicateParameterNode.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Program\App.config" />

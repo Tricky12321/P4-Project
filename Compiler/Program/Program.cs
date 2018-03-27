@@ -19,7 +19,6 @@ namespace Compiler
 
         public static void MyParseMethod(string FilePath)
         {
-            //String input = "Main -> VOID (VERTEX TestV, VERTEX TestV2) {}";
             string input = File.ReadAllText(FilePath);
             ICharStream stream = CharStreams.fromstring(input);
             ITokenSource lexer = new GiraphLexer(stream);
