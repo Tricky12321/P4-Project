@@ -28,7 +28,8 @@ using IToken = Antlr4.Runtime.IToken;
 /// by <see cref="GiraphParser"/>.
 /// </summary>
 /// <typeparam name="Result">The return type of the visit operation.</typeparam>
-
+[System.CodeDom.Compiler.GeneratedCode("ANTLR", "4.7.1")]
+[System.CLSCompliant(false)]
 public interface IGiraphParserVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <summary>
 	/// Visit a parse tree produced by <see cref="GiraphParser.start"/>.
@@ -276,6 +277,18 @@ public interface IGiraphParserVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
 	Result VisitIfElseIfElse([NotNull] GiraphParser.IfElseIfElseContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="GiraphParser.elseifCond"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitElseifCond([NotNull] GiraphParser.ElseifCondContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="GiraphParser.elseCond"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitElseCond([NotNull] GiraphParser.ElseCondContext context);
 	/// <summary>
 	/// Visit a parse tree produced by <see cref="GiraphParser.boolComparisons"/>.
 	/// </summary>

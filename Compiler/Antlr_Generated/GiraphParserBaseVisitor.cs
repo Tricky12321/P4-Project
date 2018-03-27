@@ -30,7 +30,8 @@ using ParserRuleContext = Antlr4.Runtime.ParserRuleContext;
 /// of the available methods.
 /// </summary>
 /// <typeparam name="Result">The return type of the visit operation.</typeparam>
-
+[System.CodeDom.Compiler.GeneratedCode("ANTLR", "4.7.1")]
+[System.CLSCompliant(false)]
 public partial class GiraphParserBaseVisitor<Result> : AbstractParseTreeVisitor<Result>, IGiraphParserVisitor<Result> {
 	/// <summary>
 	/// Visit a parse tree produced by <see cref="GiraphParser.start"/>.
@@ -442,6 +443,26 @@ public partial class GiraphParserBaseVisitor<Result> : AbstractParseTreeVisitor<
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
 	public virtual Result VisitIfElseIfElse([NotNull] GiraphParser.IfElseIfElseContext context) { return VisitChildren(context); }
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="GiraphParser.elseifCond"/>.
+	/// <para>
+	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
+	/// on <paramref name="context"/>.
+	/// </para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	public virtual Result VisitElseifCond([NotNull] GiraphParser.ElseifCondContext context) { return VisitChildren(context); }
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="GiraphParser.elseCond"/>.
+	/// <para>
+	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
+	/// on <paramref name="context"/>.
+	/// </para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	public virtual Result VisitElseCond([NotNull] GiraphParser.ElseCondContext context) { return VisitChildren(context); }
 	/// <summary>
 	/// Visit a parse tree produced by <see cref="GiraphParser.boolComparisons"/>.
 	/// <para>
