@@ -384,9 +384,8 @@ namespace Compiler.AST
 
         public override AbstractNode VisitCollectionDcl([NotNull] GiraphParser.CollectionDclContext context)
         {
-            DeclarationNode CollDcl = new DeclarationNode(context.Start.Line);
+            CollectionNode CollDcl = new CollectionNode(context.Start.Line);
             CollDcl.Name = context.variable().GetText();
-            CollDcl.CollectionDcl = true;
             CollDcl.Type = context.allType().GetText();
             if (context.collectionAssignment() != null)
             {
@@ -672,5 +671,15 @@ namespace Compiler.AST
             VarDcl.AdoptChildren(Visit(context.operation()));
             return VarDcl;
         }
-    }
+
+		public override AbstractNode VisitCollReturnOps([NotNull] GiraphParser.CollReturnOpsContext context)
+		{
+			return Visit(context.GetChild(0));
+		}
+
+		public override AbstractNode VisitCollNoReturnOps([NotNull] GiraphParser.CollNoReturnOpsContext context)
+		{
+            return Visit(context.GetChild(0));
+		}
+	}
 }
