@@ -235,18 +235,17 @@ namespace Compiler.AST.SymbolTable
             string predicateName = node.Name;
             EnterSymbol(predicateName, AllType.BOOL);
             OpenScope();
+            foreach (PredicateParameterNode parameter in node.Parameters)
+            {
+                Visit(parameter);
+            }
             VisitChildren(node);
             CloseScope();
         }
 
         public override void Visit(PredicateParameterNode node)
         {
-            string predicateName = node.Name;
-
-            OpenScope();
-            VisitChildren(node);
-            CloseScope();
-            
+            EnterSymbol(node.Name, ResolveFuncType(node.Type));
         }
     }
 }
