@@ -38,7 +38,7 @@ namespace Compiler.AST
             }
             ProgramCode += $")\n{{\n";
             VisitChildren(node);
-            ProgramCode += "\n}\n";
+            ProgramCode += "}\n";
         }
 
         public override void Visit(FunctionParameterNode node)
@@ -126,10 +126,10 @@ namespace Compiler.AST
             ProgramCode += $"SET ";
             int i = 0;
 
-            foreach (Tuple<string, string, string> attribute in node.Attributes)
+            foreach (KeyValuePair<VariableAttributeNode, ExpressionNode> attribute in node.Attributes)
             {
                 InsertComma(ref i);
-                ProgramCode += $"'{attribute.Item1}' = {attribute.Item2}";
+                ProgramCode += $"'{attribute.Key.Name}' = {attribute.Value.Name}";
             }
             ProgramCode += $" IN {node.Name}";
             if (node.WhereCondition == null)
@@ -145,7 +145,8 @@ namespace Compiler.AST
         public override void Visit(WhereNode node)
         {
             Console.WriteLine("WhereNode");
-            ProgramCode += $" WHERE A == A;";
+            ProgramCode += $" WHERE ";
+            VisitChildren(node);
         }
 
         public override void Visit(AbstractNode node)
