@@ -172,6 +172,7 @@ namespace Compiler.AST.SymbolTable
              * it will now recognize vert.i */
             string longAttributeName = node.ExtensionName;
             string shortAttributeName = node.ExtensionShortName;
+            AllType attributeType = ResolveFuncType(node.ExtendWithType);
 
             foreach (KeyValuePair<string,List<SymbolTableEntry>> pair in _symbolTable)
             {
@@ -179,8 +180,8 @@ namespace Compiler.AST.SymbolTable
                 {
                     if (entry.Type == ResolveFuncType(node.ClassToExtend))
                     {
-                        EnterSymbol($"{pair.Key}.{longAttributeName}", entry.Type);
-                        EnterSymbol($"{pair.Key}.{shortAttributeName}", entry.Type);
+                        EnterSymbol($"{pair.Key}.{longAttributeName}", attributeType);
+                        EnterSymbol($"{pair.Key}.{shortAttributeName}", attributeType);
                     }
                 }
             }
