@@ -1,5 +1,5 @@
 ﻿using System;
-namespace Compiler.AST.Nodes
+namespace Compiler.AST.Nodes.LoopNodes
 {
     public class WhileLoopNode : AbstractNode
     {
