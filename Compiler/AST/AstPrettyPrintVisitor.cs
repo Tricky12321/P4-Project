@@ -152,5 +152,10 @@ namespace Compiler.AST
         {
             throw new NotImplementedException();
         }
-    }
+
+		public override void Visit(ExtendNode node)
+		{
+			throw new NotImplementedException();
+		}
+	}
 }

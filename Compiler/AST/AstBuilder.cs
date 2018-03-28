@@ -546,7 +546,20 @@ namespace Compiler.AST
             if (context.EQUALS() != null) {
                 VariableNode.AdoptChildren(Visit(context.expression()));
             }
-			return base.VisitVariableDcl(context);
+			return VariableNode;
+		}
+
+		public override AbstractNode VisitReturnBlock([NotNull] GiraphParser.ReturnBlockContext context)
+		{
+            ReturnNode RNode = new ReturnNode(context.Start.Line);
+            RNode.AdoptChildren(Visit(context.GetChild(1)));
+            return RNode;
+		}
+
+		public override AbstractNode VisitForLoop([NotNull] GiraphParser.ForLoopContext context)
+		{
+            
+			return base.VisitForLoop(context);
 		}
 	}
 }
