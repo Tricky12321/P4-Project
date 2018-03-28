@@ -1,37 +1,3 @@
-﻿﻿Main -> VOID () {
-    IF (TRUE) {
-        WHILE (TRUE) {
-            SELECT VERTEX FROM G1;
-            SELECT VERTEX FROM G1;
-            SELECT VERTEX FROM G1;
-            SELECT VERTEX FROM G1;
-            SELECT VERTEX FROM G1;
-            SELECT VERTEX FROM G1;
-            SELECT VERTEX FROM G1;
-            SELECT VERTEX FROM G1;
-        }
-    }
-    ELSEIF (TRUE) {
-            SELECT VERTEX FROM G1;
-            SELECT VERTEX FROM G1;
-            SELECT VERTEX FROM G1;
-            SELECT VERTEX FROM G1;
-            SELECT VERTEX FROM G1;
-            SELECT VERTEX FROM G1;
-            SELECT VERTEX FROM G1;
-            SELECT VERTEX FROM G1;
-    
-    } ELSE {
-            SELECT VERTEX FROM G1;
-            SELECT VERTEX FROM G1;
-            SELECT VERTEX FROM G1;
-            SELECT VERTEX FROM G1;
-            SELECT VERTEX FROM G1;
-            SELECT VERTEX FROM G1;
-            SELECT VERTEX FROM G1;
-            SELECT VERTEX FROM G1;
-            SELECT VERTEX FROM G1;
-            SELECT VERTEX FROM G1;
-            SELECT VERTEX FROM G1;
-    }
+﻿Main -> VOID () {
+    POP FROM C1;;
 }

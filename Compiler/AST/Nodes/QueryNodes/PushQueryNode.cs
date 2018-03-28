@@ -9,5 +9,10 @@ namespace Compiler.AST.Nodes.QueryNodes
         public PushQueryNode(int LineNumber) : base(LineNumber)
         {
         }
+
+        public override void Accept(AstVisitorBase astVisitor)
+        {
+            astVisitor.Visit(this);
+        }
     }
 }
