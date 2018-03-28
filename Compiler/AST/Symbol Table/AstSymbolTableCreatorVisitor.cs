@@ -12,7 +12,7 @@ namespace Compiler.AST.SymbolTable
     {
         private Dictionary<string, List<SymbolTableEntry>> _symbolTable = new Dictionary<string, List<SymbolTableEntry>>();
         private uint _globalDepth;
-
+        //s
         protected AstSymbolTableCreatorVisitor()
         {
         }
@@ -119,7 +119,7 @@ namespace Compiler.AST.SymbolTable
             OpenScope();
             foreach (FunctionParameterNode parameter in node.Parameters)
             {
-                Visit(parameter);
+                parameter.Accept(this);
             }
             VisitChildren(node);
             CloseScope();
@@ -133,11 +133,12 @@ namespace Compiler.AST.SymbolTable
 
         public override void Visit(StartNode node)
         {
-            throw new NotImplementedException();
+            VisitChildren(node);
         }
 
         public override void Visit(ProgramNode node)
         {
+            /* To be deleted */
             throw new NotImplementedException();
         }
 

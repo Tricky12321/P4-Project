@@ -22,7 +22,7 @@ namespace Compiler.AST
             AstBuildTimer.Start();
             root = new StartNode(context.Start.Line);
             // Program+ (Multiple Program children, atleast one)
-            foreach (var child in context.program())
+            foreach (var child in context.children)
             {
                 root.AdoptChildren(Visit(child));
             }
@@ -65,17 +65,6 @@ namespace Compiler.AST
             {
                 FNode.AdoptChildren(Visit(Child));
             }
-
-            /*
-            foreach (var CodeBlockChild in context.children)
-            {
-                if (k > i) {
-                    FNode.AdoptChildren(Vist)
-				    FNode.AdoptChildren(Visit(CodeBlockChild));
-                }
-                k++;
-            }
-            */
             return FNode;
         }
 
@@ -83,9 +72,9 @@ namespace Compiler.AST
         {
             //VertexDclsNode VerDclsNode = new VertexDclsNode(context.Start.Line);
             CodeBlockNode CodeNode = new CodeBlockNode(context.Start.Line);
-            foreach (var Child in context.children)
+            foreach (var Child in context.codeBlockContent())
             {
-                CodeNode.AdoptChildren(Visit(Child));
+                CodeNode.AdoptChildren(Visit(Child.GetChild(0)));
             }
             return CodeNode;
         }
@@ -631,6 +620,7 @@ namespace Compiler.AST
                 else
                 {
                     ForLoop.ToConst = true;
+                    ForLoop.ToValue = contextInside.varOrConstOperation(0).varOrConst().constant().GetText();
                 }
             }
             //Its not a var or const, which means its an operation
@@ -640,6 +630,37 @@ namespace Compiler.AST
                 ForLoop.ToValueOperation = Visit(contextInside.varOrConstOperation(0).operation());
             }
             #endregion
+            #region First VarOrConst | Operation 
+            //Check if the first is a VarOrConst, if it is, check if its a var or a const
+            if (contextInside.varOrConstOperation(1).varOrConst() != null && contextInside.varOrConstOperation(1).varOrConst().ChildCount > 0)
+            {
+                //CHeck if its a var or const
+                // It was a variable
+                if (contextInside.varOrConstOperation(1).varOrConst().variable() != null && contextInside.varOrConstOperation(1).varOrConst().variable().ChildCount > 0)
+                {
+                    ForLoop.IncrementVariable = true;
+                    ForLoop.IncrementValue = contextInside.varOrConstOperation(1).varOrConst().variable().GetText();
+                }
+                // It was a const
+                else
+                {
+                    ForLoop.IncrementConst = true;
+                    ForLoop.IncrementValue = contextInside.varOrConstOperation(1).varOrConst().constant().GetText();
+                }
+            }
+            //Its not a var or const, which means its an operation
+            else
+            {
+                ForLoop.IncrementOperation = true;
+                ForLoop.IncrementValueOperation = Visit(contextInside.varOrConstOperation(1).operation());
+            }
+            #endregion
+            // Visit all the children of the Codeblock associated with the ForLoop
+            foreach (var Child in context.codeBlock().codeBlockContent())
+            {
+                // Adopt the children
+                ForLoop.AdoptChildren(Visit(Child.GetChild(0)));
+            }
             return ForLoop;
         }
 
