@@ -133,11 +133,12 @@ namespace Compiler.AST.SymbolTable
 
         public override void Visit(StartNode node)
         {
-            throw new NotImplementedException();
+            VisitChildren(node);
         }
 
         public override void Visit(ProgramNode node)
         {
+            /* To be deleted */
             throw new NotImplementedException();
         }
 
