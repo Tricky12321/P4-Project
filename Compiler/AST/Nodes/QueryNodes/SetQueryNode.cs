@@ -6,7 +6,7 @@ namespace Compiler.AST.Nodes.QueryNodes
 {
     public class SetQueryNode : AbstractNode
     {
-        public Dictionary<VariableAttributeNode, ExpressionNode> Attributes = new Dictionary<VariableAttributeNode, ExpressionNode>();
+        public List<Tuple<VariableAttributeNode, string, ExpressionNode>> Attributes = new List<Tuple<VariableAttributeNode, string, ExpressionNode>>();
         public AbstractNode WhereCondition;
         public bool SetAttributes = false;
         public string InVariable;

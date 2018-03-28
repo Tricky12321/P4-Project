@@ -1,12 +1,9 @@
-﻿﻿Main -> VOID () {
-
-    FOR INT i = 0 TO 1000 : 1 {
-        SELECT VERTEX FROM G1;
-    }
+﻿Main -> VOID () {
     GRAPH G1 
 	{
 		VERTEX ve(), va();
 		EDGE e(ve,va);
+		SET 'Directed' = TRUE;
 	}
-	SET 'test' = 4 + 3 + d IN G1 WHERE t == t;
+	SET 'test' = 4 + 3 + d IN G1 WHERE h == h;
 }
