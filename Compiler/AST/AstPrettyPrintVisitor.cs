@@ -145,7 +145,8 @@ namespace Compiler.AST
         public override void Visit(WhereNode node)
         {
             Console.WriteLine("WhereNode");
-            ProgramCode += $" WHERE A == A;";
+            ProgramCode += $" WHERE ";
+            VisitChildren(node);
         }
 
         public override void Visit(AbstractNode node)
