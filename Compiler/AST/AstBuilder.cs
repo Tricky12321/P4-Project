@@ -517,6 +517,36 @@ namespace Compiler.AST
             return ExtractQuery;
 		}
 
+		public override AbstractNode VisitDequeueOPOneLine([NotNull] GiraphParser.DequeueOPOneLineContext context)
+		{
+            DequeueQueryNode DequeueNode = new DequeueQueryNode(context.Start.Line);
+            DequeueNode.Variable = context.variable().GetText();
+            if (context.where() != null && context.where().ChildCount > 0)
+            {
+                DequeueNode.WhereCondition = Visit(context.where());
+            }
+            return DequeueNode;
+		}
 
+		public override AbstractNode VisitComments([NotNull] GiraphParser.CommentsContext context)
+		{
+			return base.VisitComments(context);
+		}
+
+		public override AbstractNode VisitCommentLine([NotNull] GiraphParser.CommentLineContext context)
+		{
+			return base.VisitCommentLine(context);
+		}
+
+		public override AbstractNode VisitVariableDcl([NotNull] GiraphParser.VariableDclContext context)
+		{
+            VariableDclNode VariableNode = new VariableDclNode(context.Start.Line);
+            VariableNode.Type = context.TYPE().GetText();
+            VariableNode.Name = context.variable().GetText();
+            if (context.EQUALS() != null) {
+                VariableNode.AdoptChildren(Visit(context.expression()));
+            }
+			return base.VisitVariableDcl(context);
+		}
 	}
 }

@@ -99,6 +99,7 @@
     <Compile Include="AST\Nodes\QueryNodes\PopQueryNode.cs" />
     <Compile Include="AST\Nodes\QueryNodes\ExtractMinQueryNode.cs" />
     <Compile Include="AST\Nodes\QueryNodes\ExtractMaxQueryNode.cs" />
+    <Compile Include="AST\Nodes\DatatypeNodes\VariableDclNode.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Program\App.config" />
