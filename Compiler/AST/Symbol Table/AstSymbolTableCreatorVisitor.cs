@@ -47,7 +47,7 @@ namespace Compiler.AST.SymbolTable
 
         private void EnterSymbol(string name, AllType type)
         {
-            if (RetrieveSymbol(name) != null)
+            if (DeclaredLocally(name))
             {
                 throw new Exception($"Duplicate definition of {name}");
             }
@@ -165,7 +165,23 @@ namespace Compiler.AST.SymbolTable
 
         public override void Visit(ExtendNode node)
         {
-            //string attributeName = node.
+            /* Goes through all declared variables of the extended type, and adds the attribute as a recognized term 
+             * So if you extend vertices with an int i, and there is a vertex variable named vert,
+             * it will now recognize vert.i */
+            string longAttributeName = node.ExtensionName;
+            string shortAttributeName = node.ExtensionShortName;
+
+            foreach (KeyValuePair<string,List<SymbolTableEntry>> pair in _symbolTable)
+            {
+                foreach(SymbolTableEntry entry in pair.Value)
+                {
+                    if (entry.Type == AllType.VERTEX || entry.Type == AllType.GRAPH || entry.Type == AllType.EDGE)
+                    {
+                        EnterSymbol($"{pair.Key}.{longAttributeName}", entry.Type);
+                        EnterSymbol($"{pair.Key}.{shortAttributeName}", entry.Type);
+                    }
+                }
+            }
         }
     }
 }
