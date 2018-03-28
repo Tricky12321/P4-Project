@@ -17,7 +17,8 @@ namespace Compiler.AST.SymbolTable
         {
         }
 
-        public AllType ResolveFuncType(string Type) {
+        public AllType ResolveFuncType(string Type)
+        {
             switch (Type)
             {
                 case "VOID":
@@ -49,11 +50,11 @@ namespace Compiler.AST.SymbolTable
 
         private void EnterSymbol(string name, AllType type)
         {
-            if (RetrieveSymbol(name) != null)
+            if (DeclaredLocally(name))
             {
                 throw new Exception($"Duplicate definition of {name}");
             }
-            else if(!_symbolTable.ContainsKey(name))
+            else if (!_symbolTable.ContainsKey(name))
                 _symbolTable.Add(name, new List<SymbolTableEntry>());
 
             _symbolTable[name].Add(new SymbolTableEntry(type, _globalDepth));
@@ -81,7 +82,7 @@ namespace Compiler.AST.SymbolTable
             //Makes variables unreachable, when their scope is exited
             foreach (List<SymbolTableEntry> list in _symbolTable.Values)
             {
-                foreach(SymbolTableEntry entry in list)
+                foreach (SymbolTableEntry entry in list)
                 {
                     if (entry.Depth == _globalDepth)
                         entry.Reachable = false;
@@ -113,15 +114,21 @@ namespace Compiler.AST.SymbolTable
         {
             AllType type = ResolveFuncType(node.ReturnType);
             string functionName = node.Name;
+
             EnterSymbol(functionName, type);
             OpenScope();
+            foreach (FunctionParameterNode parameter in node.Parameters)
+            {
+                Visit(parameter);
+            }
             VisitChildren(node);
             CloseScope();
         }
 
         public override void Visit(FunctionParameterNode node)
         {
-            throw new NotImplementedException();
+            AllType parameterType = ResolveFuncType(node.Type);
+            EnterSymbol(node.Name, parameterType);
         }
 
         public override void Visit(StartNode node)
@@ -167,7 +174,24 @@ namespace Compiler.AST.SymbolTable
 
         public override void Visit(ExtendNode node)
         {
-            //string attributeName = node.
+            /* Goes through all declared variables of the extended type, and adds the attribute as a recognized term 
+             * So if you extend vertices with an int i, and there is a vertex variable named vert,
+             * it will now recognize vert.i */
+            string longAttributeName = node.ExtensionName;
+            string shortAttributeName = node.ExtensionShortName;
+            AllType attributeType = ResolveFuncType(node.ExtendWithType);
+
+            foreach (KeyValuePair<string, List<SymbolTableEntry>> pair in _symbolTable)
+            {
+                foreach (SymbolTableEntry entry in pair.Value)
+                {
+                    if (entry.Type == ResolveFuncType(node.ClassToExtend))
+                    {
+                        EnterSymbol($"{pair.Key}.{longAttributeName}", attributeType);
+                        EnterSymbol($"{pair.Key}.{shortAttributeName}", attributeType);
+                    }
+                }
+            }
         }
 
         #region CollOPSvisits

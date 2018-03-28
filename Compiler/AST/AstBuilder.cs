@@ -1,9 +1,10 @@
-using System;
+﻿using System;
 using Antlr4.Runtime.Misc;
 using Antlr4.Runtime.Tree;
 using Compiler.AST.Nodes;
 using Compiler.AST.Nodes.DatatypeNodes;
 using Compiler.AST.Nodes.QueryNodes;
+using Compiler.AST.Nodes.LoopNodes;
 using Compiler.AST.Exceptions;
 using Antlr4.Runtime;
 using System.Text.RegularExpressions;
@@ -608,8 +609,47 @@ namespace Compiler.AST
 
         public override AbstractNode VisitForLoop([NotNull] GiraphParser.ForLoopContext context)
         {
+            ForLoopNode ForLoop = new ForLoopNode(context.Start.Line);
+            var contextInside = context.forCondition().forConditionInside();
 
-            return base.VisitForLoop(context);
+            if (contextInside.inlineDcl() != null && contextInside.inlineDcl().ChildCount > 0)
+            {
+                ForLoop.VariableDeclartion = Visit(contextInside.inlineDcl());
+            }
+            #region First VarOrConst | Operation 
+            //Check if the first is a VarOrConst, if it is, check if its a var or a const
+            if (contextInside.varOrConstOperation(0).varOrConst() != null && contextInside.varOrConstOperation(0).varOrConst().ChildCount > 0)
+            {
+                //CHeck if its a var or const
+                // It was a variable
+                if (contextInside.varOrConstOperation(0).varOrConst().variable() != null && contextInside.varOrConstOperation(0).varOrConst().variable().ChildCount > 0)
+                {
+                    ForLoop.ToVariable = true;
+                    ForLoop.ToValue = contextInside.varOrConstOperation(0).varOrConst().variable().GetText();
+                }
+                // It was a const
+                else
+                {
+                    ForLoop.ToConst = true;
+                }
+            }
+            //Its not a var or const, which means its an operation
+            else
+            {
+                ForLoop.ToOperation = true;
+                ForLoop.ToValueOperation = Visit(contextInside.varOrConstOperation(0).operation());
+            }
+            #endregion
+            return ForLoop;
+        }
+
+        public override AbstractNode VisitInlineDcl([NotNull] GiraphParser.InlineDclContext context)
+        {
+            VariableDclNode VarDcl = new VariableDclNode(context.Start.Line);
+            VarDcl.Type = context.allType().GetText();
+            VarDcl.Name = context.VARIABLENAME().GetText();
+            VarDcl.AdoptChildren(Visit(context.operation()));
+            return VarDcl;
         }
     }
 }
