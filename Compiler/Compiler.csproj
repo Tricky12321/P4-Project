@@ -54,7 +54,6 @@
     <Compile Include="AST\Nodes\TerminalNode.cs" />
     <Compile Include="AST\Symbol Table\SymbolTableEntry.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Program\ASTTool.cs" />
     <Compile Include="Program\Program.cs" />
     <Compile Include="AST\Nodes\AbstractNode.cs" />
     <Compile Include="AST\Nodes\FunctionNode.cs" />
