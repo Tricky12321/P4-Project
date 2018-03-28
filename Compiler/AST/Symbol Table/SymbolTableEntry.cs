@@ -9,6 +9,7 @@ namespace Compiler.AST.SymbolTable
     class SymbolTableEntry
     {
         public AllType Type;
+        public AllType CollectionType; /* Only used for COLLECTION to indicate what type of COLLECTION */
         public uint Depth;
         public bool Reachable = true;
 
@@ -16,6 +17,11 @@ namespace Compiler.AST.SymbolTable
         {
             Type = type;
             Depth = depth;
+        }
+
+        public SymbolTableEntry(AllType type, AllType collectionType, uint depth) : this(type, depth)
+        {
+            CollectionType = collectionType;
         }
     }
 }
