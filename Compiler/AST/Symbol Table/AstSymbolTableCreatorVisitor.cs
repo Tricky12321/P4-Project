@@ -162,7 +162,7 @@ namespace Compiler.AST.SymbolTable
 
         public override void Visit(WhereNode node)
         {
-            throw new NotImplementedException();
+            VisitChildren(node);
         }
 
         public override void Visit(ExtendNode node)
@@ -207,7 +207,21 @@ namespace Compiler.AST.SymbolTable
 
         public override void Visit(PredicateNode node)
         {
-            throw new NotImplementedException();
+            string predicateName = node.Name;
+            EnterSymbol(predicateName, AllType.BOOL);
+            OpenScope();
+            VisitChildren(node);
+            CloseScope();
+        }
+
+        public override void Visit(PredicateParameterNode node)
+        {
+            string predicateName = node.Name;
+
+            OpenScope();
+            VisitChildren(node);
+            CloseScope();
+            
         }
     }
 }
