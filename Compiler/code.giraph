@@ -1,3 +1,12 @@
-﻿Main -> VOID () {
-    POP FROM C1;;
+﻿﻿Main -> VOID () {
+
+    FOR INT i = 0 TO 1000 : 1 {
+        SELECT VERTEX FROM G1;
+    }
+    GRAPH G1 
+	{
+		VERTEX ve(), va();
+		EDGE e(ve,va);
+	}
+	SET 'test' = 4 + 3 + d IN G1 WHERE t == t;
 }
