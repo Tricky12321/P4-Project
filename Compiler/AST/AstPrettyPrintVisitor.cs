@@ -149,14 +149,56 @@ namespace Compiler.AST
             VisitChildren(node);
         }
 
+        #region CollOPSvisits
         public override void Visit(AbstractNode node)
         {
             throw new NotImplementedException();
         }
 
-		public override void Visit(ExtendNode node)
-		{
-			throw new NotImplementedException();
-		}
-	}
+        public override void Visit(ExtendNode node)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void Visit(DequeueQueryNode node)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void Visit(EnqueueQueryNode node)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void Visit(ExtractMaxQueryNode node)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void Visit(ExtractMinQueryNode node)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void Visit(PopQueryNode node)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void Visit(PushQueryNode node)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void Visit(SelectAllQueryNode node)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void Visit(SelectQueryNode node)
+        {
+            throw new NotImplementedException();
+        }
+        #endregion
+    }
 }
