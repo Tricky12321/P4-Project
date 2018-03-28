@@ -177,7 +177,7 @@ namespace Compiler.AST.SymbolTable
             {
                 foreach(SymbolTableEntry entry in pair.Value)
                 {
-                    if (entry.Type == AllType.VERTEX || entry.Type == AllType.GRAPH || entry.Type == AllType.EDGE)
+                    if (entry.Type == ResolveFuncType(node.ClassToExtend))
                     {
                         EnterSymbol($"{pair.Key}.{longAttributeName}", entry.Type);
                         EnterSymbol($"{pair.Key}.{shortAttributeName}", entry.Type);
