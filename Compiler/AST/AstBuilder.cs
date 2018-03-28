@@ -65,17 +65,6 @@ namespace Compiler.AST
             {
                 FNode.AdoptChildren(Visit(Child));
             }
-
-            /*
-            foreach (var CodeBlockChild in context.children)
-            {
-                if (k > i) {
-                    FNode.AdoptChildren(Vist)
-				    FNode.AdoptChildren(Visit(CodeBlockChild));
-                }
-                k++;
-            }
-            */
             return FNode;
         }
 
@@ -83,9 +72,9 @@ namespace Compiler.AST
         {
             //VertexDclsNode VerDclsNode = new VertexDclsNode(context.Start.Line);
             CodeBlockNode CodeNode = new CodeBlockNode(context.Start.Line);
-            foreach (var Child in context.children)
+            foreach (var Child in context.codeBlockContent())
             {
-                CodeNode.AdoptChildren(Visit(Child));
+                CodeNode.AdoptChildren(Visit(Child.GetChild(0)));
             }
             return CodeNode;
         }
@@ -647,7 +636,7 @@ namespace Compiler.AST
             {
                 //CHeck if its a var or const
                 // It was a variable
-                if (contextInside.varOrConstOperation(1).varOrConst().variable() != null && contextInside.varOrConstOperation(0).varOrConst().variable().ChildCount > 0)
+                if (contextInside.varOrConstOperation(1).varOrConst().variable() != null && contextInside.varOrConstOperation(1).varOrConst().variable().ChildCount > 0)
                 {
                     ForLoop.IncrementVariable = true;
                     ForLoop.IncrementValue = contextInside.varOrConstOperation(1).varOrConst().variable().GetText();
@@ -667,10 +656,10 @@ namespace Compiler.AST
             }
             #endregion
             // Visit all the children of the Codeblock associated with the ForLoop
-            foreach (var Child in context.codeBlock().children)
+            foreach (var Child in context.codeBlock().codeBlockContent())
             {
                 // Adopt the children
-                ForLoop.AdoptChildren(Visit(Child));
+                ForLoop.AdoptChildren(Visit(Child.GetChild(0)));
             }
             return ForLoop;
         }
