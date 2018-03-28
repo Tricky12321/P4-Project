@@ -66,7 +66,7 @@ namespace Compiler.AST.SymbolTable
 
         private bool DeclaredLocally(string name)
         {
-            return RetrieveSymbol(name) == null;
+            return RetrieveSymbol(name) != null;
         }
 
         private void OpenScope()
@@ -161,6 +161,11 @@ namespace Compiler.AST.SymbolTable
         public override void Visit(WhereNode node)
         {
             throw new NotImplementedException();
+        }
+
+        public override void Visit(ExtendNode node)
+        {
+            //string attributeName = node.
         }
     }
 }
