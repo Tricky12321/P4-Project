@@ -93,6 +93,12 @@
     <Compile Include="AST\Nodes\PredicateParameterNode.cs" />
     <Compile Include="AST\Nodes\QueryNodes\SelectQueryNode.cs" />
     <Compile Include="AST\Nodes\QueryNodes\SelectAllQueryNode.cs" />
+    <Compile Include="AST\Nodes\QueryNodes\EnqueueQueryNode.cs" />
+    <Compile Include="AST\Nodes\QueryNodes\DequeueQueryNode.cs" />
+    <Compile Include="AST\Nodes\QueryNodes\PushQueryNode.cs" />
+    <Compile Include="AST\Nodes\QueryNodes\PopQueryNode.cs" />
+    <Compile Include="AST\Nodes\QueryNodes\ExtractMinQueryNode.cs" />
+    <Compile Include="AST\Nodes\QueryNodes\ExtractMaxQueryNode.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Program\App.config" />
