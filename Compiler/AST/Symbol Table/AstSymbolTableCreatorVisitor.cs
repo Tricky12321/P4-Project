@@ -49,7 +49,7 @@ namespace Compiler.AST.SymbolTable
 
         private void EnterSymbol(string name, AllType type)
         {
-            if (RetrieveSymbol(name) != null)
+            if (DeclaredLocally(name))
             {
                 throw new Exception($"Duplicate definition of {name}");
             }
@@ -167,50 +167,64 @@ namespace Compiler.AST.SymbolTable
 
         public override void Visit(ExtendNode node)
         {
-            //string attributeName = node.
+            /* Goes through all declared variables of the extended type, and adds the attribute as a recognized term 
+             * So if you extend vertices with an int i, and there is a vertex variable named vert,
+             * it will now recognize vert.i */
+            string longAttributeName = node.ExtensionName;
+            string shortAttributeName = node.ExtensionShortName;
+            AllType attributeType = ResolveFuncType(node.ExtendWithType);
+
+            foreach (KeyValuePair<string,List<SymbolTableEntry>> pair in _symbolTable)
+            {
+                foreach(SymbolTableEntry entry in pair.Value)
+                {
+                    if (entry.Type == ResolveFuncType(node.ClassToExtend))
+                    {
+                        EnterSymbol($"{pair.Key}.{longAttributeName}", attributeType);
+                        EnterSymbol($"{pair.Key}.{shortAttributeName}", attributeType);
+                    }
+                }
+            }
         }
 
         #region CollOPSvisits
         public override void Visit(DequeueQueryNode node)
         {
-            throw new NotImplementedException();
         }
 
         public override void Visit(EnqueueQueryNode node)
         {
-            throw new NotImplementedException();
         }
 
         public override void Visit(ExtractMaxQueryNode node)
         {
-            throw new NotImplementedException();
         }
 
         public override void Visit(ExtractMinQueryNode node)
         {
-            throw new NotImplementedException();
         }
 
         public override void Visit(PopQueryNode node)
         {
-            throw new NotImplementedException();
         }
 
         public override void Visit(PushQueryNode node)
         {
-            throw new NotImplementedException();
         }
 
         public override void Visit(SelectAllQueryNode node)
         {
-            throw new NotImplementedException();
         }
 
         public override void Visit(SelectQueryNode node)
         {
-            throw new NotImplementedException();
         }
 
         #endregion
+
+        public override void Visit(PredicateNode node)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

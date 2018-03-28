@@ -306,7 +306,9 @@ namespace Compiler.AST
                     if (j == 1)
                     {
                         SetNode.AssignmentOperator = child.GetChild(1).GetChild(0).ToString();
-                        SetNode.Attributes.Add(Visit(child.GetChild(0)) as VariableAttributeNode, Visit(child.GetChild(2)) as ExpressionNode);
+                        var test = Visit(child.GetChild(0)) as VariableAttributeNode;
+                        var test2 = Visit(child.GetChild(2)) as ExpressionNode;
+                        SetNode.Attributes.Add(test, test2);
                     }
                     else if (j == 2)
                     {
@@ -321,6 +323,30 @@ namespace Compiler.AST
             }
 
             return SetNode;
+        }
+
+        public override AbstractNode VisitAttribute([NotNull] GiraphParser.AttributeContext context)
+        {
+            VariableAttributeNode vaNode;
+            if (context.GetChild(0).ToString() == "'")
+            {
+                vaNode = new AttributeNode(context.Start.Line);
+            }
+            else
+            {
+                vaNode = new VariableNode(context.Start.Line);
+            }
+
+            vaNode.Name = context.GetChild(1).GetChild(0).ToString();
+
+            return vaNode;
+        }
+
+        public override AbstractNode VisitVarOrConst([NotNull] GiraphParser.VarOrConstContext context)
+        {
+            ExpressionNode exNode = new ExpressionNode(context.Start.Line);
+
+            return exNode;
         }
 
         public override AbstractNode VisitWhere([NotNull] GiraphParser.WhereContext context)
