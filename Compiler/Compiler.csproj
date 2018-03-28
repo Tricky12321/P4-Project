@@ -50,6 +50,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AST\Nodes\DatatypeNodes\VariableAttributeNode.cs" />
     <Compile Include="AST\Symbol Table\AstSymbolTableCreatorVisitor.cs" />
     <Compile Include="AST\Nodes\TerminalNode.cs" />
     <Compile Include="AST\Symbol Table\SymbolTableEntry.cs" />
