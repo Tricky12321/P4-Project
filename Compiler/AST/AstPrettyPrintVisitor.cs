@@ -123,18 +123,18 @@ namespace Compiler.AST
         public override void Visit(SetQueryNode node)
         {
             Console.WriteLine("SetQueryNode");
-            ProgramCode += $"SET ";
+            ProgramCode += "SET ";
             int i = 0;
 
-            foreach (KeyValuePair<VariableAttributeNode, ExpressionNode> attribute in node.Attributes)
+            foreach (var attribute in node.Attributes)
             {
                 InsertComma(ref i);
-                ProgramCode += $"'{attribute.Key.Name}' = {attribute.Value.Name}";
+                ProgramCode += $"'{attribute.Item1.Name}' = {attribute.Item3.Name}";
             }
             ProgramCode += $" IN {node.Name}";
             if (node.WhereCondition == null)
             {
-                ProgramCode += $";";
+                ProgramCode += ";";
             }
             else
             {
@@ -145,16 +145,27 @@ namespace Compiler.AST
         public override void Visit(WhereNode node)
         {
             Console.WriteLine("WhereNode");
-            ProgramCode += $" WHERE ";
+            ProgramCode += " WHERE ";
             VisitChildren(node);
         }
 
-        #region CollOPSvisits
+        public override void Visit(PushQueryNode node)
+        {
+            ProgramCode += $"PUSH {node.VariableToAdd} TO {node.VariableAddTo};\n";
+        }
+
+        public override void Visit(PopQueryNode node)
+        {
+            ProgramCode += $"POP FROM {node.Variable};\n";
+            //Needs WhereNode
+        }
+
         public override void Visit(AbstractNode node)
         {
             throw new NotImplementedException();
         }
 
+        #region CollOPSvisits
         public override void Visit(ExtendNode node)
         {
             throw new NotImplementedException();
@@ -176,16 +187,6 @@ namespace Compiler.AST
         }
 
         public override void Visit(ExtractMinQueryNode node)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override void Visit(PopQueryNode node)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override void Visit(PushQueryNode node)
         {
             throw new NotImplementedException();
         }

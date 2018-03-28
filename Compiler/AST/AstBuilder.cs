@@ -265,10 +265,6 @@ namespace Compiler.AST
             return Visit(context.GetChild(0));
         }
 
-        /*public override AbstractNode VisitSetExpressionAtri([NotNull] GiraphParser.SetExpressionAtriContext context){
-            throw new NotImplementedException("KJHJKSHDKJHKJH");    
-        }*/
-
         public override AbstractNode VisitSetQuery([NotNull] GiraphParser.SetQueryContext context)
         {
             SetQueryNode SetNode = new SetQueryNode(context.Start.Line);
@@ -294,10 +290,10 @@ namespace Compiler.AST
                 {
                     if (j == 1)
                     {
-                        SetNode.AssignmentOperator = child.GetChild(1).GetChild(0).ToString();
-                        var test = Visit(child.GetChild(0)) as VariableAttributeNode;
-                        var test2 = Visit(child.GetChild(2)) as ExpressionNode;
-                        SetNode.Attributes.Add(test, test2);
+                        //SetNode.AssignmentOperator = child.GetChild(1).GetChild(0).ToString();
+                        var attribute = Visit(child.GetChild(0)) as VariableAttributeNode;
+                        var expression = Visit(child.GetChild(2)) as ExpressionNode;
+                        SetNode.Attributes.Add(Tuple.Create<VariableAttributeNode, string, ExpressionNode>(attribute, child.GetChild(1).GetChild(0).ToString(), expression));
                     }
                     else if (j == 2)
                     {
@@ -305,13 +301,36 @@ namespace Compiler.AST
                     }
                     else if (j == 3)
                     {
-
+                        SetNode.AdoptChildren(Visit(child));
                     }
                 }
+            }
+            return SetNode;
+        }
 
+        public override AbstractNode VisitVarOrconstExpressionExt([NotNull] GiraphParser.VarOrconstExpressionExtContext context)
+        {
+            ExpressionNode exNode = new ExpressionNode(context.Start.Line);
+            exNode.Name = VisitVarOrconstExpressionExtRecursive(context);
+            return exNode;
+        }
+
+        private string VisitVarOrconstExpressionExtRecursive([NotNull] IParseTree context)
+        {
+            string expression = string.Empty;
+            if (context.ChildCount == 0)
+            {
+                return context.ToString();
+            }
+            else
+            {
+                for (int i = 0; i < context.ChildCount; i++)
+                {
+                    expression += VisitVarOrconstExpressionExtRecursive(context.GetChild(i));
+                }
             }
 
-            return SetNode;
+            return expression;
         }
 
         public override AbstractNode VisitAttribute([NotNull] GiraphParser.AttributeContext context)
@@ -330,6 +349,7 @@ namespace Compiler.AST
 
             return vaNode;
         }
+
 
         public override AbstractNode VisitVarOrConst([NotNull] GiraphParser.VarOrConstContext context)
         {
@@ -384,9 +404,8 @@ namespace Compiler.AST
 
         public override AbstractNode VisitCollectionDcl([NotNull] GiraphParser.CollectionDclContext context)
         {
-            DeclarationNode CollDcl = new DeclarationNode(context.Start.Line);
+            CollectionNode CollDcl = new CollectionNode(context.Start.Line);
             CollDcl.Name = context.variable().GetText();
-            CollDcl.CollectionDcl = true;
             CollDcl.Type = context.allType().GetText();
             if (context.collectionAssignment() != null)
             {
@@ -672,5 +691,15 @@ namespace Compiler.AST
             VarDcl.AdoptChildren(Visit(context.operation()));
             return VarDcl;
         }
-    }
+
+		public override AbstractNode VisitCollReturnOps([NotNull] GiraphParser.CollReturnOpsContext context)
+		{
+			return Visit(context.GetChild(0));
+		}
+
+		public override AbstractNode VisitCollNoReturnOps([NotNull] GiraphParser.CollNoReturnOpsContext context)
+		{
+            return Visit(context.GetChild(0));
+		}
+	}
 }
