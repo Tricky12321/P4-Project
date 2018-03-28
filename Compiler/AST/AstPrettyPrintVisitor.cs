@@ -199,6 +199,12 @@ namespace Compiler.AST
         {
             throw new NotImplementedException();
         }
+
         #endregion
+
+        public override void Visit(PredicateNode node)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
