@@ -1,4 +1,8 @@
 ﻿﻿Main -> VOID () {
+
+    FOR INT i = 0 TO 1000 : 1 {
+        SELECT VERTEX FROM G1;
+    }
     GRAPH G1 
 	{
 		VERTEX ve(), va();
