@@ -1,8 +1,9 @@
-﻿﻿Main -> VOID () {
+﻿Main -> VOID () {
     GRAPH G1 
 	{
 		VERTEX ve(), va();
 		EDGE e(ve,va);
+		SET 'Directed' = TRUE;
 	}
-	SET 'test' = 4 + 3 + d IN G1 WHERE t == t;
+	SET 'test' = 4 + 3 + d IN G1 WHERE h == h;
 }

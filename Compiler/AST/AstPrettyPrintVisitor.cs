@@ -126,10 +126,10 @@ namespace Compiler.AST
             ProgramCode += $"SET ";
             int i = 0;
 
-            foreach (KeyValuePair<VariableAttributeNode, ExpressionNode> attribute in node.Attributes)
+            foreach (var attribute in node.Attributes)
             {
                 InsertComma(ref i);
-                ProgramCode += $"'{attribute.Key.Name}' = {attribute.Value.Name}";
+                ProgramCode += $"'{attribute.Item1.Name}' = {attribute.Item3.Name}";
             }
             ProgramCode += $" IN {node.Name}";
             if (node.WhereCondition == null)
