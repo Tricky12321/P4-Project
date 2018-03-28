@@ -206,5 +206,10 @@ namespace Compiler.AST
         {
             throw new NotImplementedException();
         }
+
+        public override void Visit(PredicateParameterNode node)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
