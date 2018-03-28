@@ -36,6 +36,8 @@ namespace Compiler.AST.SymbolTable
                     return AllType.EDGE;
                 case "VERTEX":
                     return AllType.VERTEX;
+                case "COLLECTION":
+                    return AllType.COLLECTION;
             }
             throw new Exception("Unknown type");
         }
