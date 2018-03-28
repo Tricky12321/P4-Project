@@ -237,7 +237,7 @@ namespace Compiler.AST.SymbolTable
             OpenScope();
             foreach (PredicateParameterNode parameter in node.Parameters)
             {
-                Visit(parameter);
+                parameter.Accept(this);
             }
             VisitChildren(node);
             CloseScope();
