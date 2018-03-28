@@ -8,7 +8,7 @@ using Compiler.AST.Nodes.QueryNodes;
 
 namespace Compiler.AST.SymbolTable
 {
-    class AstSymbolTableCreatorVisitor : AstVisitorBase
+    internal class AstSymbolTableCreatorVisitor : AstVisitorBase
     {
         private Dictionary<string, List<SymbolTableEntry>> _symbolTable = new Dictionary<string, List<SymbolTableEntry>>();
         private uint _globalDepth;
@@ -169,5 +169,48 @@ namespace Compiler.AST.SymbolTable
         {
             //string attributeName = node.
         }
+
+        #region CollOPSvisits
+        public override void Visit(DequeueQueryNode node)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void Visit(EnqueueQueryNode node)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void Visit(ExtractMaxQueryNode node)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void Visit(ExtractMinQueryNode node)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void Visit(PopQueryNode node)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void Visit(PushQueryNode node)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void Visit(SelectAllQueryNode node)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void Visit(SelectQueryNode node)
+        {
+            throw new NotImplementedException();
+        }
+
+        #endregion
     }
 }
