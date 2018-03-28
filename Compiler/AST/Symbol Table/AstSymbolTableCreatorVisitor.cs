@@ -8,7 +8,7 @@ using Compiler.AST.Nodes.QueryNodes;
 
 namespace Compiler.AST.SymbolTable
 {
-    class AstSymbolTableCreatorVisitor : AstVisitorBase
+    internal class AstSymbolTableCreatorVisitor : AstVisitorBase
     {
         private Dictionary<string, List<SymbolTableEntry>> _symbolTable = new Dictionary<string, List<SymbolTableEntry>>();
         private uint _globalDepth;
@@ -36,6 +36,8 @@ namespace Compiler.AST.SymbolTable
                     return AllType.EDGE;
                 case "VERTEX":
                     return AllType.VERTEX;
+                case "COLLECTION":
+                    return AllType.COLLECTION;
             }
             throw new Exception("Unknown type");
         }
@@ -182,6 +184,46 @@ namespace Compiler.AST.SymbolTable
                     }
                 }
             }
+        }
+
+        #region CollOPSvisits
+        public override void Visit(DequeueQueryNode node)
+        {
+        }
+
+        public override void Visit(EnqueueQueryNode node)
+        {
+        }
+
+        public override void Visit(ExtractMaxQueryNode node)
+        {
+        }
+
+        public override void Visit(ExtractMinQueryNode node)
+        {
+        }
+
+        public override void Visit(PopQueryNode node)
+        {
+        }
+
+        public override void Visit(PushQueryNode node)
+        {
+        }
+
+        public override void Visit(SelectAllQueryNode node)
+        {
+        }
+
+        public override void Visit(SelectQueryNode node)
+        {
+        }
+
+        #endregion
+
+        public override void Visit(PredicateNode node)
+        {
+            throw new NotImplementedException();
         }
     }
 }

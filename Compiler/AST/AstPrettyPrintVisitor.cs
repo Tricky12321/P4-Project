@@ -38,7 +38,7 @@ namespace Compiler.AST
             }
             ProgramCode += $")\n{{\n";
             VisitChildren(node);
-            ProgramCode += "\n}\n";
+            ProgramCode += "}\n";
         }
 
         public override void Visit(FunctionParameterNode node)
@@ -126,10 +126,10 @@ namespace Compiler.AST
             ProgramCode += $"SET ";
             int i = 0;
 
-            foreach (Tuple<string, string, string> attribute in node.Attributes)
+            foreach (KeyValuePair<VariableAttributeNode, ExpressionNode> attribute in node.Attributes)
             {
                 InsertComma(ref i);
-                ProgramCode += $"'{attribute.Item1}' = {attribute.Item2}";
+                ProgramCode += $"'{attribute.Key.Name}' = {attribute.Value.Name}";
             }
             ProgramCode += $" IN {node.Name}";
             if (node.WhereCondition == null)
@@ -145,10 +145,64 @@ namespace Compiler.AST
         public override void Visit(WhereNode node)
         {
             Console.WriteLine("WhereNode");
-            ProgramCode += $" WHERE A == A;";
+            ProgramCode += $" WHERE ";
+            VisitChildren(node);
         }
 
+        #region CollOPSvisits
         public override void Visit(AbstractNode node)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void Visit(ExtendNode node)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void Visit(DequeueQueryNode node)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void Visit(EnqueueQueryNode node)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void Visit(ExtractMaxQueryNode node)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void Visit(ExtractMinQueryNode node)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void Visit(PopQueryNode node)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void Visit(PushQueryNode node)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void Visit(SelectAllQueryNode node)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void Visit(SelectQueryNode node)
+        {
+            throw new NotImplementedException();
+        }
+
+        #endregion
+
+        public override void Visit(PredicateNode node)
         {
             throw new NotImplementedException();
         }
