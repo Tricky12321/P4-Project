@@ -26,10 +26,10 @@ namespace Compiler
             parser.BuildParseTree = true;
             var cst = parser.start();
             var ast = new AstBuilder().VisitStart(cst);
-            //
-            /*var visitor = new AstPrettyPrintVisitor();
+
+            var visitor = new AstPrettyPrintVisitor();
             visitor.VisitRoot(ast);
-            Console.WriteLine(visitor.ProgramCode);*/
+            Console.WriteLine(visitor.ProgramCode);
         }
     }
 }

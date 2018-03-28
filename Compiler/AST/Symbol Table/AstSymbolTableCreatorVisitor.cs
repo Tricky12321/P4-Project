@@ -12,7 +12,7 @@ namespace Compiler.AST.SymbolTable
     {
         private Dictionary<string, List<SymbolTableEntry>> _symbolTable = new Dictionary<string, List<SymbolTableEntry>>();
         private uint _globalDepth;
-        //s
+        
         protected AstSymbolTableCreatorVisitor()
         {
         }
