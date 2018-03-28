@@ -403,6 +403,12 @@ public interface IGiraphParserVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <return>The visitor result.</return>
 	Result VisitForConditionInside([NotNull] GiraphParser.ForConditionInsideContext context);
 	/// <summary>
+	/// Visit a parse tree produced by <see cref="GiraphParser.varOrConstOperation"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitVarOrConstOperation([NotNull] GiraphParser.VarOrConstOperationContext context);
+	/// <summary>
 	/// Visit a parse tree produced by <see cref="GiraphParser.operation"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
