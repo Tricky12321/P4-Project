@@ -1,6 +1,7 @@
 ﻿using System;
 namespace Compiler.AST.Nodes.DatatypeNodes
 {
+    
     public class VariableNode : VariableAttributeNode
     {
         public bool Declaration = false;
@@ -10,4 +11,5 @@ namespace Compiler.AST.Nodes.DatatypeNodes
 
         }
     }
+    
 }
