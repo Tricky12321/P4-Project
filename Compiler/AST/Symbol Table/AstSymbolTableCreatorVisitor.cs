@@ -36,6 +36,8 @@ namespace Compiler.AST.SymbolTable
                     return AllType.EDGE;
                 case "VERTEX":
                     return AllType.VERTEX;
+                case "COLLECTION":
+                    return AllType.COLLECTION;
             }
             throw new Exception("Unknown type");
         }
@@ -66,7 +68,7 @@ namespace Compiler.AST.SymbolTable
 
         private bool DeclaredLocally(string name)
         {
-            return RetrieveSymbol(name) == null;
+            return RetrieveSymbol(name) != null;
         }
 
         private void OpenScope()
@@ -161,6 +163,11 @@ namespace Compiler.AST.SymbolTable
         public override void Visit(WhereNode node)
         {
             throw new NotImplementedException();
+        }
+
+        public override void Visit(ExtendNode node)
+        {
+            //string attributeName = node.
         }
     }
 }

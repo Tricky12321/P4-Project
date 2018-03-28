@@ -2721,7 +2721,7 @@ public partial class GiraphParser : Parser {
 
 	public partial class IfElseIfElseContext : ParserRuleContext {
 		public ElseifCondContext elseif;
-		public ElseCondContext @else;
+		public ElseCondContext elseBlock;
 		public ITerminalNode IF() { return GetToken(GiraphParser.IF, 0); }
 		public ITerminalNode LP() { return GetToken(GiraphParser.LP, 0); }
 		public BoolComparisonsContext boolComparisons() {
@@ -2783,7 +2783,7 @@ public partial class GiraphParser : Parser {
 			_la = TokenStream.LA(1);
 			if (_la==ELSE) {
 				{
-				State = 497; _localctx.@else = elseCond();
+				State = 497; _localctx.elseBlock = elseCond();
 				}
 			}
 

@@ -186,22 +186,25 @@ namespace Compiler.AST
         public override AbstractNode VisitBoolComparisons([NotNull] GiraphParser.BoolComparisonsContext context)
         {
             BoolComparisonNode BCompare = new BoolComparisonNode(context.Start.Line);
-            // If there is a left and right side, This is what will be used
+            // Checks if there is a prefix, if there is, add it to the Node
             if (context.prefix != null)
             {
                 BCompare.Prefix = context.prefix.Text;
                 BCompare.AdoptChildren(Visit(context.boolComparisons(0)));
             }
+			// Checks if there is a Suffix, if there is, add it to the Node
             if (context.suffix != null)
             {
                 BCompare.Suffix = context.suffix.Text;
                 BCompare.AdoptChildren(Visit(context.boolComparisons(0)));
             }
+            // Check if there are left and right "()" around the boolcomparison
             if (context.rightP != null && context.leftP != null && context.boolComparisons() != null)
             {
                 BCompare.InsideParentheses = true;
                 BCompare.AdoptChildren(Visit(context.boolComparisons(0)));
             }
+            // Checks if there is a left and right statement, because this will indicate that the boolcomparison, has a left bool and right bool, compared by the operator.
             else if (context.right != null && context.left != null && context.boolComparisons() != null)
             {
                 BCompare.Left = Visit(context.left);
@@ -215,6 +218,7 @@ namespace Compiler.AST
                     BCompare.ComparisonOperator = context.andOr().GetText();
                 }
             }
+            // A boolcomparison can end in an expression or a predicate, this is handled here. 
             else
             {
                 if (context.predi != null)
@@ -370,8 +374,10 @@ namespace Compiler.AST
             IfNode.IfCondition = Visit(context.boolComparisons());
             IfNode.IfCodeBlock = Visit(context.codeBlock());
             if (context.elseifCond() != null) {
+                // Loop though all the ElseIf(s)
                 foreach (var ElseIf in context.elseifCond())
                 {
+                    // Add their conditions and codeblocks
                     IfNode.ElseIfConditions.Add(Visit(ElseIf.boolComparisons()));
                     IfNode.ElseIfCodeBlocks.Add(Visit(ElseIf.codeBlock()));
                 }
@@ -379,10 +385,12 @@ namespace Compiler.AST
 
             // Else codeblock, First codeblock element, then it adopts the rest, if there are any
             if (context.elseCond() != null) {
+                // There will never be more then one Else block, and it does not have a boolcomparison
                 if (context.elseCond().codeBlock().ChildCount > 0) {
                     IfNode.ElseCodeBlock = Visit(context.elseCond().codeBlock());
                 }
             }
+
             return IfNode;
         }
 
@@ -390,16 +398,155 @@ namespace Compiler.AST
 		{
             PredicateNode PNode = new PredicateNode(context.Start.Line);
             PNode.Name = context.variable().GetText();
+            // Check if there is any parameters
             if (context.formalParams().formalParam() != null) {
+                // If there are any parameters, loop though all of them
                 foreach (var Param in context.formalParams().formalParam())
                 {
                     string ParameterName = Param.variable().GetText();
                     string ParameterType = Param.allType().GetText();
+                    // Add them to the paramter list
                     PNode.AddParameter(ParameterType, ParameterName, context.Start.Line);
                 }
             }
+            // Adopt the boolcomparisons of the Predicate as children to the PNode
             PNode.AdoptChildren(Visit(context.boolComparisons()));
             return PNode;
+		}
+
+		public override AbstractNode VisitSelect([NotNull] GiraphParser.SelectContext context)
+		{
+            SelectQueryNode SelectNode = new SelectQueryNode(context.Start.Line);
+            SelectNode.Type = context.allTypeWithColl().GetText();
+            SelectNode.Variable = context.variableFunc().GetText();
+            if (context.where() != null && context.where().ChildCount > 0) {
+                SelectNode.WhereCondition = Visit(context.where());
+            }
+			return SelectNode;
+		}
+
+
+		public override AbstractNode VisitSelectAll([NotNull] GiraphParser.SelectAllContext context)
+		{
+            SelectAllQueryNode SelectNode = new SelectAllQueryNode(context.Start.Line);
+            SelectNode.Type = context.allTypeWithColl().GetText();
+            SelectNode.Variable = context.variableFunc().GetText();
+            if (context.where() != null && context.where().ChildCount > 0)
+            {
+                SelectNode.WhereCondition = Visit(context.where());
+            }
+			return SelectNode;
+		}
+
+		public override AbstractNode VisitEnqueueOP([NotNull] GiraphParser.EnqueueOPContext context)
+		{
+            EnqueueQueryNode EnqueueNode = new EnqueueQueryNode(context.Start.Line);
+            EnqueueNode.VariableTo = context.variable(1).GetText();
+            EnqueueNode.VariableToAdd = context.variable(0).GetText();
+
+            if (context.where() != null && context.where().ChildCount > 0) {
+                EnqueueNode.WhereCondition = Visit(context.where());
+            }
+
+			return EnqueueNode;
+		}
+
+		public override AbstractNode VisitDequeueOP([NotNull] GiraphParser.DequeueOPContext context)
+		{
+            DequeueQueryNode DequeueNode = new DequeueQueryNode(context.Start.Line);
+            DequeueNode.Variable = context.variable().GetText();
+            if (context.where() != null && context.where().ChildCount > 0)
+            {
+                DequeueNode.WhereCondition = Visit(context.where());
+            }
+            return DequeueNode;
+		}
+
+		public override AbstractNode VisitPopOP([NotNull] GiraphParser.PopOPContext context)
+		{
+            PopQueryNode PopNode = new PopQueryNode(context.Start.Line);
+            PopNode.Variable = context.variable().GetText();
+            if (context.where() != null && context.where().ChildCount > 0) {
+                PopNode.WhereCondition = Visit(context.where());
+            }
+
+			return PopNode;
+		}
+
+		public override AbstractNode VisitPushOP([NotNull] GiraphParser.PushOPContext context)
+		{
+            PushQueryNode PushNode = new PushQueryNode(context.Start.Line);
+            PushNode.VariableToAdd = context.variable(0).GetText();
+            PushNode.VariableAddTo = context.variable(1).GetText();
+            if (context.where() != null && context.where().ChildCount > 0)
+            {
+                PushNode.WhereCondition = Visit(context.where());
+            }
+			return PushNode;
+		}
+
+		public override AbstractNode VisitExtractMinOP([NotNull] GiraphParser.ExtractMinOPContext context)
+		{
+            ExtractMinQueryNode ExtractQuery = new ExtractMinQueryNode(context.Start.Line);
+
+            ExtractQuery.Variable = context.variable().GetText();
+            if (context.attribute() != null && context.attribute().ChildCount > 0)
+            {
+                ExtractQuery.Attribute = context.attribute().GetText();
+            }
+            if (context.where() != null && context.where().ChildCount > 0)
+            {
+				ExtractQuery.WhereCondition = Visit(context.where());
+            }
+			return ExtractQuery;
+		}
+
+		public override AbstractNode VisitExtractMaxOP([NotNull] GiraphParser.ExtractMaxOPContext context)
+		{
+            ExtractMaxQueryNode ExtractQuery = new ExtractMaxQueryNode(context.Start.Line);
+
+            ExtractQuery.Variable = context.variable().GetText();
+            if (context.attribute() != null && context.attribute().ChildCount > 0)
+            {
+                ExtractQuery.Attribute = context.attribute().GetText();
+            }
+            if (context.where() != null && context.where().ChildCount > 0)
+            {
+                ExtractQuery.WhereCondition = Visit(context.where());
+            }
+            return ExtractQuery;
+		}
+
+		public override AbstractNode VisitDequeueOPOneLine([NotNull] GiraphParser.DequeueOPOneLineContext context)
+		{
+            DequeueQueryNode DequeueNode = new DequeueQueryNode(context.Start.Line);
+            DequeueNode.Variable = context.variable().GetText();
+            if (context.where() != null && context.where().ChildCount > 0)
+            {
+                DequeueNode.WhereCondition = Visit(context.where());
+            }
+            return DequeueNode;
+		}
+
+		public override AbstractNode VisitComments([NotNull] GiraphParser.CommentsContext context)
+		{
+			return base.VisitComments(context);
+		}
+
+		public override AbstractNode VisitCommentLine([NotNull] GiraphParser.CommentLineContext context)
+		{
+			return base.VisitCommentLine(context);
+		}
+
+		public override AbstractNode VisitVariableDcl([NotNull] GiraphParser.VariableDclContext context)
+		{
+            VariableDclNode VariableNode = new VariableDclNode(context.Start.Line);
+            VariableNode.Type = context.TYPE().GetText();
+            VariableNode.Name = context.variable().GetText();
+            if (context.EQUALS() != null) {
+                VariableNode.AdoptChildren(Visit(context.expression()));
+            }
+			return base.VisitVariableDcl(context);
 		}
 	}
 }
