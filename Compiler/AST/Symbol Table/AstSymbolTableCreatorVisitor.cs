@@ -119,7 +119,7 @@ namespace Compiler.AST.SymbolTable
             OpenScope();
             foreach (FunctionParameterNode parameter in node.Parameters)
             {
-                Visit(parameter);
+                parameter.Accept(this);
             }
             VisitChildren(node);
             CloseScope();
