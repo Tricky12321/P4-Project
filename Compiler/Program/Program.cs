@@ -6,7 +6,6 @@ using Antlr4.Runtime;
 using Antlr4.Runtime.Tree;
 using System.IO;
 using Compiler.AST;
-//using Compiler.Nodes;
 
 namespace Compiler
 {
@@ -27,7 +26,6 @@ namespace Compiler
             parser.BuildParseTree = true;
             var cst = parser.start();
             var ast = new AstBuilder().VisitStart(cst);
-
 
             var visitor = new AstPrettyPrintVisitor();
             visitor.VisitRoot(ast);

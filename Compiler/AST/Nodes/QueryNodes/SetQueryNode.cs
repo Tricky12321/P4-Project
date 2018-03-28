@@ -1,14 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using Compiler.AST.Nodes.DatatypeNodes;
 
 namespace Compiler.AST.Nodes.QueryNodes
 {
     public class SetQueryNode : AbstractNode
     {
-        public List<Tuple<string, string, string>> Attributes;
+        public Dictionary<VariableAttributeNode, ExpressionNode> Attributes = new Dictionary<VariableAttributeNode, ExpressionNode>();
         public AbstractNode WhereCondition;
-        public bool SetAtributes = false;
-        public string InVaraible;
+        public bool SetAttributes = false;
+        public string InVariable;
+        public string AssignmentOperator;
 
         public SetQueryNode(int LineNumber) : base(LineNumber)
         {

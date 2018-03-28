@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Antlr4.Runtime.Misc;
 using Antlr4.Runtime.Tree;
 using Compiler.AST.Nodes;
@@ -7,7 +7,13 @@ using Compiler.AST.Nodes.QueryNodes;
 using Compiler.AST.Exceptions;
 using Antlr4.Runtime;
 using System.Text.RegularExpressions;
+<<<<<<< HEAD
 using System.Diagnostics;
+=======
+using System.Collections.Generic;
+using System.Linq;
+
+>>>>>>> 3ce0dfb... SETQUERY HALVT FÆRDIG
 namespace Compiler.AST
 {
     internal class AstBuilder : GiraphParserBaseVisitor<AbstractNode>
@@ -198,7 +204,10 @@ namespace Compiler.AST
                 BCompare.Suffix = context.suffix.Text;
                 BCompare.AdoptChildren(Visit(context.boolComparisons(0)));
             }
+<<<<<<< HEAD
             // Check if there are left and right "()" around the boolcomparison
+=======
+>>>>>>> 3ce0dfb... SETQUERY HALVT FÆRDIG
             if (context.rightP != null && context.leftP != null && context.boolComparisons() != null)
             {
                 BCompare.InsideParentheses = true;
@@ -230,7 +239,6 @@ namespace Compiler.AST
                     BCompare.AdoptChildren(Visit(context.exp));
                 }
             }
-
             return BCompare;
         }
 
@@ -273,39 +281,89 @@ namespace Compiler.AST
         {
             return Visit(context.GetChild(0));
         }
+<<<<<<< HEAD
 
+=======
+
+        /*public override AbstractNode VisitSetExpressionAtri([NotNull] GiraphParser.SetExpressionAtriContext context){
+            throw new NotImplementedException("KJHJKSHDKJHKJH");    
+        }*/
+
+
+>>>>>>> 3ce0dfb... SETQUERY HALVT FÆRDIG
         public override AbstractNode VisitSetQuery([NotNull] GiraphParser.SetQueryContext context)
         {
             SetQueryNode SetNode = new SetQueryNode(context.Start.Line);
-            /*
-            if (context.setExpressionAtri() != null) {
-                foreach (var setAtri in context.setExpressionAtri())
+            Dictionary<string, int> indexList = new Dictionary<string, int>();
+
+            for (int i = 0; i < context.children.Count; i++)
+            {
+                if (context.children[i] is TerminalNodeImpl)
                 {
-                    string AttributeName = setAtri.attribute()..GetText();
-                    string AttributeAssignmentOp = setAtri.compoundAssign().GetText();
-                    AbstractNode AttributeValue = setAtri.;
-                    SetNode.Attributes.Add(AttributeName, ());
+                    indexList.Add(((TerminalNodeImpl)context.children[i]).ToString(), i);
                 }
-                SetNode.Name = context.variable().GetText();
-            } 
-            else if (context.setExpressionVari() != null) {
-                foreach (var setVari in context.setExpressionVari())
-                {
-                    string GetterVariable = setVari.variable().GetText();
-                    string Operator = setVari.compoundAssign().GetText();
-                    AbstractNode SetterVariable = setVari.varOrconstExpressionExt().GetText();
-                    SetNode.Attributes.Add(AttributeName, AttributeValue);
-                }
-                SetNode.Name = context.variable().GetText();
             }
 
-            if (context.where() != null) {
-				SetNode.WhereCondition = Visit(context.where());
+            int j = 0;
+            foreach (var child in context.children)
+            {
+                if (child.ToString() == "SET" || child.ToString() == "IN" || child is GiraphParser.WhereContext)
+                {
+                    j++;
+                }
+
+                if (!(child is TerminalNodeImpl))
+                {
+                    if (j == 1)
+                    {
+                        SetNode.AssignmentOperator = child.GetChild(1).GetChild(0).ToString();
+                        SetNode.Attributes.Add(Visit(child.GetChild(0)) as VariableAttributeNode, Visit(child.GetChild(2)) as ExpressionNode);
+                    }
+                    else if (j == 2)
+                    {
+                        SetNode.InVariable = child.GetChild(0).ToString();
+                    }
+                    else if (j == 3)
+                    {
+                        
+                    }
+                }
+
             }
-            */
+
             return SetNode;
         }
+<<<<<<< HEAD
 
+=======
+
+        public override AbstractNode VisitVarOrconstExpressionExt([NotNull] GiraphParser.VarOrconstExpressionExtContext context)
+        {
+            ExpressionNode exNode = new ExpressionNode(context.Start.Line);
+
+            return exNode;
+        }
+
+        public override AbstractNode VisitAttribute([NotNull] GiraphParser.AttributeContext context)
+        {
+            VariableAttributeNode vaNode;
+            if (context.GetChild(0).ToString() == "'")
+            {
+                vaNode = new AttributeNode(context.Start.Line);
+            }
+            else
+            {
+                vaNode = new VariableNode(context.Start.Line);
+            }
+
+            vaNode.Name = context.GetChild(1).GetChild(0).ToString();
+
+            return vaNode;
+        }
+
+
+
+>>>>>>> 3ce0dfb... SETQUERY HALVT FÆRDIG
         public override AbstractNode VisitWhere([NotNull] GiraphParser.WhereContext context)
         {
             WhereNode WNode = new WhereNode(context.Start.Line);
@@ -360,7 +418,11 @@ namespace Compiler.AST
             {
                 CollDcl.Assignment = Visit(context.collectionAssignment());
             }
+<<<<<<< HEAD
             return CollDcl;
+=======
+            return base.VisitCollectionDcl(context);
+>>>>>>> 3ce0dfb... SETQUERY HALVT FÆRDIG
         }
 
         public override AbstractNode VisitCollectionAssignment([NotNull] GiraphParser.CollectionAssignmentContext context)
