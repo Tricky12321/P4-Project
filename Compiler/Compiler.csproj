@@ -70,7 +70,6 @@
     <Compile Include="AST\Nodes\DatatypeNodes\EdgeDclsNode.cs" />
     <Compile Include="AST\Nodes\DatatypeNodes\Graph\GraphNode.cs" />
     <Compile Include="AST\Nodes\DatatypeNodes\Graph\GraphSetQuery.cs" />
-    <Compile Include="AST\Nodes\WhileLoopNode.cs" />
     <Compile Include="AST\Nodes\BoolComparisonNode.cs" />
     <Compile Include="AST\Nodes\ExpressionNode.cs" />
     <Compile Include="AST\Nodes\DatatypeNodes\VariableNode.cs" />
@@ -100,6 +99,8 @@
     <Compile Include="AST\Nodes\QueryNodes\ExtractMaxQueryNode.cs" />
     <Compile Include="AST\Nodes\DatatypeNodes\VariableDclNode.cs" />
     <Compile Include="AST\Nodes\ReturnNode.cs" />
+    <Compile Include="AST\Nodes\LoopNodes\WhileLoopNode.cs" />
+    <Compile Include="AST\Nodes\LoopNodes\ForLoopNode.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Program\App.config" />
@@ -111,6 +112,9 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup />
+  <ItemGroup>
+    <Folder Include="AST\Nodes\LoopNodes\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
