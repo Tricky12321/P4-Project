@@ -1,37 +1,8 @@
 ﻿﻿Main -> VOID () {
-    IF (TRUE) {
-        WHILE (TRUE) {
-            SELECT VERTEX FROM G1;
-            SELECT VERTEX FROM G1;
-            SELECT VERTEX FROM G1;
-            SELECT VERTEX FROM G1;
-            SELECT VERTEX FROM G1;
-            SELECT VERTEX FROM G1;
-            SELECT VERTEX FROM G1;
-            SELECT VERTEX FROM G1;
-        }
-    }
-    ELSEIF (TRUE) {
-            SELECT VERTEX FROM G1;
-            SELECT VERTEX FROM G1;
-            SELECT VERTEX FROM G1;
-            SELECT VERTEX FROM G1;
-            SELECT VERTEX FROM G1;
-            SELECT VERTEX FROM G1;
-            SELECT VERTEX FROM G1;
-            SELECT VERTEX FROM G1;
-    
-    } ELSE {
-            SELECT VERTEX FROM G1;
-            SELECT VERTEX FROM G1;
-            SELECT VERTEX FROM G1;
-            SELECT VERTEX FROM G1;
-            SELECT VERTEX FROM G1;
-            SELECT VERTEX FROM G1;
-            SELECT VERTEX FROM G1;
-            SELECT VERTEX FROM G1;
-            SELECT VERTEX FROM G1;
-            SELECT VERTEX FROM G1;
-            SELECT VERTEX FROM G1;
-    }
+    GRAPH G1 
+	{
+		VERTEX ve(), va();
+		EDGE e(ve,va);
+	}
+	SET 'test' = 4 + 3 + d IN G1 WHERE t == t;
 }
