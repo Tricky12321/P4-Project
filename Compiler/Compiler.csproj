@@ -103,6 +103,7 @@
     <Compile Include="AST\Nodes\ReturnNode.cs" />
     <Compile Include="AST\Nodes\LoopNodes\WhileLoopNode.cs" />
     <Compile Include="AST\Nodes\LoopNodes\ForLoopNode.cs" />
+    <Compile Include="AST\Nodes\DatatypeNodes\CollectionNode.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Program\App.config" />
