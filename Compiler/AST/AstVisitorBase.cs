@@ -32,6 +32,10 @@ namespace Compiler.AST
         public abstract void Visit(WhereNode node);
         public abstract void Visit(ExtendNode node);
 
+
+
+        public abstract void Visit(PredicateNode node);
+        public abstract void Visit(PredicateParameterNode node);
         #region CollOPSvisits
         public abstract void Visit(DequeueQueryNode node);
         public abstract void Visit(EnqueueQueryNode node);

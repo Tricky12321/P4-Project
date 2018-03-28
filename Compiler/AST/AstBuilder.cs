@@ -1,9 +1,10 @@
-using System;
+﻿using System;
 using Antlr4.Runtime.Misc;
 using Antlr4.Runtime.Tree;
 using Compiler.AST.Nodes;
 using Compiler.AST.Nodes.DatatypeNodes;
 using Compiler.AST.Nodes.QueryNodes;
+using Compiler.AST.Nodes.LoopNodes;
 using Compiler.AST.Exceptions;
 using Antlr4.Runtime;
 using System.Text.RegularExpressions;
@@ -21,7 +22,7 @@ namespace Compiler.AST
             AstBuildTimer.Start();
             root = new StartNode(context.Start.Line);
             // Program+ (Multiple Program children, atleast one)
-            foreach (var child in context.program())
+            foreach (var child in context.children)
             {
                 root.AdoptChildren(Visit(child));
             }
@@ -64,17 +65,6 @@ namespace Compiler.AST
             {
                 FNode.AdoptChildren(Visit(Child));
             }
-
-            /*
-            foreach (var CodeBlockChild in context.children)
-            {
-                if (k > i) {
-                    FNode.AdoptChildren(Vist)
-				    FNode.AdoptChildren(Visit(CodeBlockChild));
-                }
-                k++;
-            }
-            */
             return FNode;
         }
 
@@ -82,9 +72,9 @@ namespace Compiler.AST
         {
             //VertexDclsNode VerDclsNode = new VertexDclsNode(context.Start.Line);
             CodeBlockNode CodeNode = new CodeBlockNode(context.Start.Line);
-            foreach (var Child in context.children)
+            foreach (var Child in context.codeBlockContent())
             {
-                CodeNode.AdoptChildren(Visit(Child));
+                CodeNode.AdoptChildren(Visit(Child.GetChild(0)));
             }
             return CodeNode;
         }
@@ -414,9 +404,8 @@ namespace Compiler.AST
 
         public override AbstractNode VisitCollectionDcl([NotNull] GiraphParser.CollectionDclContext context)
         {
-            DeclarationNode CollDcl = new DeclarationNode(context.Start.Line);
+            CollectionNode CollDcl = new CollectionNode(context.Start.Line);
             CollDcl.Name = context.variable().GetText();
-            CollDcl.CollectionDcl = true;
             CollDcl.Type = context.allType().GetText();
             if (context.collectionAssignment() != null)
             {
@@ -628,8 +617,89 @@ namespace Compiler.AST
 
         public override AbstractNode VisitForLoop([NotNull] GiraphParser.ForLoopContext context)
         {
+            ForLoopNode ForLoop = new ForLoopNode(context.Start.Line);
+            var contextInside = context.forCondition().forConditionInside();
 
-            return base.VisitForLoop(context);
+            if (contextInside.inlineDcl() != null && contextInside.inlineDcl().ChildCount > 0)
+            {
+                ForLoop.VariableDeclartion = Visit(contextInside.inlineDcl());
+            }
+            #region First VarOrConst | Operation 
+            //Check if the first is a VarOrConst, if it is, check if its a var or a const
+            if (contextInside.varOrConstOperation(0).varOrConst() != null && contextInside.varOrConstOperation(0).varOrConst().ChildCount > 0)
+            {
+                //CHeck if its a var or const
+                // It was a variable
+                if (contextInside.varOrConstOperation(0).varOrConst().variable() != null && contextInside.varOrConstOperation(0).varOrConst().variable().ChildCount > 0)
+                {
+                    ForLoop.ToVariable = true;
+                    ForLoop.ToValue = contextInside.varOrConstOperation(0).varOrConst().variable().GetText();
+                }
+                // It was a const
+                else
+                {
+                    ForLoop.ToConst = true;
+                    ForLoop.ToValue = contextInside.varOrConstOperation(0).varOrConst().constant().GetText();
+                }
+            }
+            //Its not a var or const, which means its an operation
+            else
+            {
+                ForLoop.ToOperation = true;
+                ForLoop.ToValueOperation = Visit(contextInside.varOrConstOperation(0).operation());
+            }
+            #endregion
+            #region First VarOrConst | Operation 
+            //Check if the first is a VarOrConst, if it is, check if its a var or a const
+            if (contextInside.varOrConstOperation(1).varOrConst() != null && contextInside.varOrConstOperation(1).varOrConst().ChildCount > 0)
+            {
+                //CHeck if its a var or const
+                // It was a variable
+                if (contextInside.varOrConstOperation(1).varOrConst().variable() != null && contextInside.varOrConstOperation(1).varOrConst().variable().ChildCount > 0)
+                {
+                    ForLoop.IncrementVariable = true;
+                    ForLoop.IncrementValue = contextInside.varOrConstOperation(1).varOrConst().variable().GetText();
+                }
+                // It was a const
+                else
+                {
+                    ForLoop.IncrementConst = true;
+                    ForLoop.IncrementValue = contextInside.varOrConstOperation(1).varOrConst().constant().GetText();
+                }
+            }
+            //Its not a var or const, which means its an operation
+            else
+            {
+                ForLoop.IncrementOperation = true;
+                ForLoop.IncrementValueOperation = Visit(contextInside.varOrConstOperation(1).operation());
+            }
+            #endregion
+            // Visit all the children of the Codeblock associated with the ForLoop
+            foreach (var Child in context.codeBlock().codeBlockContent())
+            {
+                // Adopt the children
+                ForLoop.AdoptChildren(Visit(Child.GetChild(0)));
+            }
+            return ForLoop;
         }
-    }
+
+        public override AbstractNode VisitInlineDcl([NotNull] GiraphParser.InlineDclContext context)
+        {
+            VariableDclNode VarDcl = new VariableDclNode(context.Start.Line);
+            VarDcl.Type = context.allType().GetText();
+            VarDcl.Name = context.VARIABLENAME().GetText();
+            VarDcl.AdoptChildren(Visit(context.operation()));
+            return VarDcl;
+        }
+
+		public override AbstractNode VisitCollReturnOps([NotNull] GiraphParser.CollReturnOpsContext context)
+		{
+			return Visit(context.GetChild(0));
+		}
+
+		public override AbstractNode VisitCollNoReturnOps([NotNull] GiraphParser.CollNoReturnOpsContext context)
+		{
+            return Visit(context.GetChild(0));
+		}
+	}
 }
