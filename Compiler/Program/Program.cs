@@ -6,6 +6,7 @@ using Antlr4.Runtime;
 using Antlr4.Runtime.Tree;
 using System.IO;
 using Compiler.AST;
+using Compiler.AST.SymbolTable;
 using Compiler.AST.Nodes;
 
 namespace Compiler

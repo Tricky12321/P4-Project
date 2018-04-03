@@ -50,6 +50,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AST\AstTypeCheckerVisitor.cs" />
     <Compile Include="AST\Nodes\DatatypeNodes\AttributeNode.cs" />
     <Compile Include="AST\Nodes\DatatypeNodes\VariableAttributeNode.cs" />
     <Compile Include="AST\Symbol Table\AstSymbolTableCreatorVisitor.cs" />
@@ -115,9 +116,7 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup />
-  <ItemGroup>
-    <Folder Include="AST\Nodes\LoopNodes\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
