@@ -247,5 +247,10 @@ namespace Compiler.AST.SymbolTable
         {
             EnterSymbol(node.Name, ResolveFuncType(node.Type));
         }
+
+        public override void Visit(CollectionNode node)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
