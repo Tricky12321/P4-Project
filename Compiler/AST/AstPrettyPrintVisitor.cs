@@ -165,6 +165,25 @@ namespace Compiler.AST
         public override void Visit(IfElseIfElseNode node)
         {
             Console.WriteLine("IfElseIfElseNode");
+            ProgramCode += "IF (";
+            //node.IfCondition.Accept(this);
+            ProgramCode += ")\n{\n";
+            VisitChildren(node.IfCodeBlock);
+            ProgramCode += "}\n";
+            for(int i = 0; i < node.ElseIfCodeBlocks.Count; i++)
+            {
+                ProgramCode += "ELSEIF (";
+                //node.ElseIfConditions[i].Accept(this);
+                ProgramCode += ")\n{\n";
+                VisitChildren(node.ElseIfCodeBlocks[i]);
+                ProgramCode += "}\n";
+            }
+            if(node.ElseCodeBlock != null)
+            {
+                ProgramCode += "ELSE\n{\n";
+                VisitChildren(node.ElseCodeBlock);
+                ProgramCode += "}\n";
+            }
         }
 
         #region CollOPSvisits

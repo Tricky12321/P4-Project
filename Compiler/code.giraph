@@ -1,8 +1,24 @@
 ﻿Main -> VOID () {
-	GRAPH g1 
+	IF(v1 == v2)
 	{
-		SET 'Directed' = FALSE;
+	PUSH x1 TO C1;
+	PUSH x1 TO C1;
+	PUSH x1 TO C1;
 	}
-
-	SET 'test' = 10 IN g1 WHERE h == h;
+	ELSEIF(v3 == v4)
+	{
+	PUSH x2 TO C2;
+	}
+	ELSEIF(v5 == v6)
+	{
+	PUSH x3 TO C3;
+	}
+	ELSEIF(v7 == v8)
+	{
+	PUSH x4 TO C4;
+	}
+	ELSE
+	{
+	PUSH x5 TO C5;
+	}
 }
