@@ -85,6 +85,10 @@ namespace Compiler.AST
                 }
                 ProgramCode += ";\n";
             }
+            if(node.LeftmostChild != null)
+            {
+                VisitChildren(node);
+            }
             ProgramCode += $"}}\n";
         }
 
@@ -118,6 +122,12 @@ namespace Compiler.AST
                 ProgramCode += $"{item.Key} = {item.Value}";
             }
             ProgramCode += ")";
+        }
+
+        public override void Visit(GraphSetQuery node)
+        {
+            Console.WriteLine("GraphSetQueryNode");
+            ProgramCode += $"SET {node.Attributes.Item1.Name} = {node.Attributes.Item3.Name};\n";
         }
 
         public override void Visit(SetQueryNode node)
@@ -165,6 +175,25 @@ namespace Compiler.AST
         public override void Visit(IfElseIfElseNode node)
         {
             Console.WriteLine("IfElseIfElseNode");
+            ProgramCode += "IF (";
+            //node.IfCondition.Accept(this);
+            ProgramCode += ")\n{\n";
+            VisitChildren(node.IfCodeBlock);
+            ProgramCode += "}\n";
+            for(int i = 0; i < node.ElseIfCodeBlocks.Count; i++)
+            {
+                ProgramCode += "ELSEIF (";
+                //node.ElseIfConditions[i].Accept(this);
+                ProgramCode += ")\n{\n";
+                VisitChildren(node.ElseIfCodeBlocks[i]);
+                ProgramCode += "}\n";
+            }
+            if(node.ElseCodeBlock != null)
+            {
+                ProgramCode += "ELSE\n{\n";
+                VisitChildren(node.ElseCodeBlock);
+                ProgramCode += "}\n";
+            }
         }
 
         #region CollOPSvisits
