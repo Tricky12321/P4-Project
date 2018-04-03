@@ -13,7 +13,7 @@ namespace Compiler.AST
     {
         private Dictionary<string, List<SymbolTableEntry>> _symbolTable;
         private uint _globalDepth;
-
+        public bool errorOccured = false;
 
         public AstTypeCheckerVisitor(Dictionary<string, List<SymbolTableEntry>> symbolTable)
         {
@@ -28,7 +28,7 @@ namespace Compiler.AST
                 SymbolTableEntry result = entriesWithThisName.Where(x => x.Reachable && x.Depth <= _globalDepth).First();
                 return result;
             }
-            catch (KeyNotFoundException e)
+            catch (KeyNotFoundException)
             {
                 return null;
             }
@@ -37,6 +37,11 @@ namespace Compiler.AST
         private bool DeclaredLocally(string name)
         {
             return RetrieveSymbol(name) != null;
+        }
+
+        private void Error()
+        {
+            errorOccured = true;
         }
 
         //-----------------------------Visitor----------------------------------------------
@@ -114,15 +119,22 @@ namespace Compiler.AST
             {
                 varToAdd = RetrieveSymbol(node.VariableToAdd);
                 collectionToAddTo = RetrieveSymbol(node.VariableTo);
+
+                if(varToAdd.Type == collectionToAddTo.Type)
+                {
+                    //very gud :)))
+                }
+                else
+                {
+                    Console.WriteLine($"Variable {varToAdd} and collection {collectionToAddTo} are not of same type, at line number {node.LineNumber}");
+                    Error();
+                }
             }
             else
             {
-                //warning message
+                Console.WriteLine($"Variable or collection are not declared at line number {node.LineNumber}");
+                Error();
             }
-
-
-
-
         }
 
         public override void Visit(PredicateParameterNode node)
@@ -161,6 +173,11 @@ namespace Compiler.AST
         }
 
         public override void Visit(AbstractNode node)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void Visit(IfElseIfElseNode node)
         {
             throw new NotImplementedException();
         }

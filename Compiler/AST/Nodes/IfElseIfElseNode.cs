@@ -10,11 +10,14 @@ namespace Compiler.AST.Nodes
         public List<AbstractNode> ElseIfCodeBlocks = new List<AbstractNode>();
         public AbstractNode ElseCodeBlock;
 
-
-
         public IfElseIfElseNode(int LineNumber) : base(LineNumber)
         {
             
+        }
+
+        public override void Accept(AstVisitorBase astVisitor)
+        {
+            astVisitor.Visit(this);
         }
     }
 }

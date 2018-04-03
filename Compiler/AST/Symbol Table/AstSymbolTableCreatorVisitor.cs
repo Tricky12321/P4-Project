@@ -48,11 +48,11 @@ namespace Compiler.AST.SymbolTable
             VisitRoot(root);
         }
 
-        private void EnterSymbol(string name, AllType type)
+        private void EnterSymbol(string name, AllType type, int linenumber)
         {
             if (DeclaredLocally(name))
             {
-                throw new Exception($"Duplicate definition of {name}");
+                Console.WriteLine($"Duplicate definition of {name} at line number {linenumber}");
             }
             else if (!_symbolTable.ContainsKey(name))
                 _symbolTable.Add(name, new List<SymbolTableEntry>());
@@ -68,7 +68,7 @@ namespace Compiler.AST.SymbolTable
                 SymbolTableEntry result = entriesWithThisName.Where(x => x.Reachable && x.Depth <= _globalDepth).First();
                 return result;
             }
-            catch (KeyNotFoundException e)
+            catch (KeyNotFoundException)
             {
                 return null;
             }
@@ -122,7 +122,7 @@ namespace Compiler.AST.SymbolTable
             AllType type = ResolveFuncType(node.ReturnType);
             string functionName = node.Name;
 
-            EnterSymbol(functionName, type);
+            EnterSymbol(functionName, type, node.LineNumber);
             OpenScope();
             foreach (FunctionParameterNode parameter in node.Parameters)
             {
@@ -135,7 +135,7 @@ namespace Compiler.AST.SymbolTable
         public override void Visit(FunctionParameterNode node)
         {
             AllType parameterType = ResolveFuncType(node.Type);
-            EnterSymbol(node.Name, parameterType);
+            EnterSymbol(node.Name, parameterType, node.LineNumber);
         }
 
         public override void Visit(StartNode node)
@@ -152,7 +152,7 @@ namespace Compiler.AST.SymbolTable
         public override void Visit(GraphNode node)
         {
             string graphName = node.Name;
-            EnterSymbol(graphName, AllType.GRAPH);
+            EnterSymbol(graphName, AllType.GRAPH, node.LineNumber);
             VisitChildren(node);
         }
 
@@ -160,14 +160,14 @@ namespace Compiler.AST.SymbolTable
         {
             /* Missing the values of the vertex*/
             string vertexName = node.Name;
-            EnterSymbol(vertexName, AllType.VERTEX);
+            EnterSymbol(vertexName, AllType.VERTEX, node.LineNumber);
         }
 
         public override void Visit(EdgeNode node)
         {
             /* Missing the values of the edge*/
             string edgeName = node.Name;
-            EnterSymbol(edgeName, AllType.EDGE);
+            EnterSymbol(edgeName, AllType.EDGE, node.LineNumber);
         }
 
         public override void Visit(SetQueryNode node)
@@ -195,8 +195,8 @@ namespace Compiler.AST.SymbolTable
                 {
                     if (entry.Type == ResolveFuncType(node.ClassToExtend))
                     {
-                        EnterSymbol($"{pair.Key}.{longAttributeName}", attributeType);
-                        EnterSymbol($"{pair.Key}.{shortAttributeName}", attributeType);
+                        EnterSymbol($"{pair.Key}.{longAttributeName}", attributeType, node.LineNumber);
+                        EnterSymbol($"{pair.Key}.{shortAttributeName}", attributeType, node.LineNumber);
                     }
                 }
             }
@@ -240,7 +240,7 @@ namespace Compiler.AST.SymbolTable
         public override void Visit(PredicateNode node)
         {
             string predicateName = node.Name;
-            EnterSymbol(predicateName, AllType.BOOL);
+            EnterSymbol(predicateName, AllType.BOOL, node.LineNumber);
             OpenScope();
             foreach (PredicateParameterNode parameter in node.Parameters)
             {
@@ -252,10 +252,15 @@ namespace Compiler.AST.SymbolTable
 
         public override void Visit(PredicateParameterNode node)
         {
-            EnterSymbol(node.Name, ResolveFuncType(node.Type));
+            EnterSymbol(node.Name, ResolveFuncType(node.Type), node.LineNumber);
         }
 
         public override void Visit(CollectionNode node)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void Visit(IfElseIfElseNode node)
         {
             throw new NotImplementedException();
         }
