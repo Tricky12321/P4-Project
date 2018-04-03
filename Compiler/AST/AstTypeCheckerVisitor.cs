@@ -11,7 +11,7 @@ namespace Compiler.AST
 {
     class AstTypeCheckerVisitor : AstVisitorBase
     {
-        private Dictionary<string, List<SymbolTableEntry>> _symbolTable = new Dictionary<string, List<SymbolTableEntry>>();
+        private Dictionary<string, List<SymbolTableEntry>> _symbolTable;
 
         public AstTypeCheckerVisitor(Dictionary<string, List<SymbolTableEntry>> symbolTable)
         {
