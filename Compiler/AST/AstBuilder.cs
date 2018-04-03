@@ -764,35 +764,102 @@ namespace Compiler.AST
 						AddNode.Dcls.Add(Visit(Child));
 					}
                 }
+                if (context.addToGraph().edgeDcls() != null)
+                {
+                    foreach (var Child in context.addToGraph().edgeDcls().edgeDcl())
+                    {
+                        AddNode.Dcls.Add(Visit(Child));
+                    }
+                }
+                // Shared
+                AddNode.ToVariable = context.addToGraph().variable().GetText();
+                if (context.addToGraph().where() != null) {
+					AddNode.WhereCondition = Visit(context.addToGraph().where());
+                }
             }
             // ITS A COLLECTION ADD
             else if (context.addToColl() != null)
             {
-                
                 AddNode.IsColl = true;
                 // ITS ALL TYPE
                 if (context.addToColl().allType() != null)
                 {
                     AddNode.IsType = true;
+                    AddNode.TypeOrVariable = context.addToColl().allType().GetText();
                 }
                 // ITS A VARIABLE
                 else if (context.addToColl().variable() != null)
                 {
                     AddNode.IsVariable = true;
+                    AddNode.TypeOrVariable = context.addToColl().variable(0).GetText();
                 }
                 // ITS A QUERY
                 else if (context.addToColl().returnQuery() != null)
                 {
                     AddNode.IsQuery = true;
+                    AddNode.Query = Visit(context.addToColl().returnQuery());
+
                 } else {
                     throw new Exception("Whaaaaat!");
+                }
+                // Shared
+                if (AddNode.IsVariable) {
+					AddNode.ToVariable = context.addToColl().variable(1).GetText();
+                } else {
+                    AddNode.ToVariable = context.addToColl().variable(0).GetText();
+                }
+                if (context.addToColl().where() != null)
+                {
+                    AddNode.WhereCondition = Visit(context.addToGraph().where());
                 }
             }
             else
             {
                 throw new Exception("Whaaaaaaaat?!");
             }
+
             return AddNode;
         }
-    }
+
+		public override AbstractNode VisitEdgeDcl([NotNull] GiraphParser.EdgeDclContext context)
+		{
+            EdgeNode VarNode = new EdgeNode(context.Start.Line);
+            if (context.GetChild(0).GetText() != "(") {
+                VarNode.Name = context.variable(0).GetText();
+            }
+            VarNode.VertexNameFrom = context.variable(1).GetText();
+            VarNode.VertexNameFrom = context.variable(2).GetText();
+
+            // Visit all assignments and add them as children, if there are any
+            if (context.assignment() != null) {
+				foreach (var Child in context.assignment())
+				{
+					VarNode.AdoptChildren(Visit(Child));
+				}
+            }
+            return VarNode;
+		}
+
+		public override AbstractNode VisitVertexDcl([NotNull] GiraphParser.VertexDclContext context)
+		{
+            VariableDclNode VarNode = new VariableDclNode(context.Start.Line);
+            VarNode.Type = "VERTEX";
+            if (context.GetChild(0).GetText() != "(")
+            {
+                VarNode.Name = context.variable().GetText();
+            }
+            if (context.assignment() != null) {
+                foreach (var Child in context.assignment())
+                {
+                    VarNode.AdoptChildren(Visit(Child));
+                }
+            }
+            return VarNode;
+		}
+
+		public override AbstractNode VisitErrorNode(IErrorNode node)
+		{
+            throw new Exception("Error at "+node.GetText()+" "+node.Parent.SourceInterval);
+		}
+	}
 }
