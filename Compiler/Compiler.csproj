@@ -104,6 +104,9 @@
     <Compile Include="AST\Nodes\LoopNodes\WhileLoopNode.cs" />
     <Compile Include="AST\Nodes\LoopNodes\ForLoopNode.cs" />
     <Compile Include="AST\Nodes\DatatypeNodes\CollectionNode.cs" />
+    <Compile Include="AST\Nodes\QueryNodes\PrintQueryNode.cs" />
+    <Compile Include="AST\Nodes\QueryNodes\PrintOption.cs" />
+    <Compile Include="AST\Nodes\LoopNodes\ForeachLoopNode.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Program\App.config" />

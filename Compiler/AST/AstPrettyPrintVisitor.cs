@@ -212,5 +212,10 @@ namespace Compiler.AST
         {
             throw new NotImplementedException();
         }
-    }
+
+		public override void Visit(CollectionNode node)
+		{
+			throw new NotImplementedException();
+		}
+	}
 }

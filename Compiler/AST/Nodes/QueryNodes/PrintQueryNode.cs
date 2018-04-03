@@ -1,10 +1,12 @@
 ﻿using System;
 namespace Compiler.AST.Nodes.QueryNodes
 {
-    public class PrintQueryNode
+    public class PrintQueryNode : AbstractNode
     {
-        public PrintQueryNode()
+        
+        public PrintQueryNode(int LineNumber) : base(LineNumber)
         {
+            
         }
     }
 }
