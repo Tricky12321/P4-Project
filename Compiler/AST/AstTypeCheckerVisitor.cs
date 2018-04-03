@@ -11,7 +11,7 @@ namespace Compiler.AST
 {
     class AstTypeCheckerVisitor : AstVisitorBase
     {
-        private Dictionary<string, List<SymbolTableEntry>> _symbolTable = new Dictionary<string, List<SymbolTableEntry>>();
+        private Dictionary<string, List<SymbolTableEntry>> _symbolTable;
         private uint _globalDepth;
         public bool errorOccured = false;
 
@@ -173,6 +173,11 @@ namespace Compiler.AST
         }
 
         public override void Visit(AbstractNode node)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void Visit(IfElseIfElseNode node)
         {
             throw new NotImplementedException();
         }

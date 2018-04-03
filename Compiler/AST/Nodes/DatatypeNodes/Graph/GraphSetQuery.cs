@@ -1,10 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
+
 namespace Compiler.AST.Nodes.DatatypeNodes
 {
     public class GraphSetQuery : AbstractNode
     {
-        public string AttributeName;
-        public string AttributeValue;
+        public List<Tuple<VariableAttributeNode, string, ExpressionNode>> Attributes = new List<Tuple<VariableAttributeNode, string, ExpressionNode>>();
         public GraphSetQuery(int LineNumber) : base(LineNumber)
         {
             
