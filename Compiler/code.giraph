@@ -1,14 +1,3 @@
 ﻿Main -> VOID () {
-	IF (v1 == v2)
-	{
-	PUSH v1 TO C1;
-	}
-	ELSEIF(v3 == v4)
-	{
-	PUSH v1 TO C1;
-	}
-	ELSE
-	{
-	PUSH v1 TO C1;
-	}
+POP FROM C1;;
 }
