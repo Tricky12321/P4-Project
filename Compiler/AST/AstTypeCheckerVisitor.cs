@@ -12,10 +12,31 @@ namespace Compiler.AST
     class AstTypeCheckerVisitor : AstVisitorBase
     {
         private Dictionary<string, List<SymbolTableEntry>> _symbolTable;
+        private uint _globalDepth;
+
 
         public AstTypeCheckerVisitor(Dictionary<string, List<SymbolTableEntry>> symbolTable)
         {
             _symbolTable = symbolTable;
+        }
+
+        private SymbolTableEntry RetrieveSymbol(string name)
+        {
+            try
+            {
+                List<SymbolTableEntry> entriesWithThisName = _symbolTable[name];
+                SymbolTableEntry result = entriesWithThisName.Where(x => x.Reachable && x.Depth <= _globalDepth).First();
+                return result;
+            }
+            catch (KeyNotFoundException e)
+            {
+                return null;
+            }
+        }
+
+        private bool DeclaredLocally(string name)
+        {
+            return RetrieveSymbol(name) != null;
         }
 
         //-----------------------------Visitor----------------------------------------------
@@ -86,7 +107,22 @@ namespace Compiler.AST
 
         public override void Visit(EnqueueQueryNode node)
         {
-            throw new NotImplementedException();
+            SymbolTableEntry varToAdd;
+            SymbolTableEntry collectionToAddTo;
+
+            if(DeclaredLocally(node.VariableToAdd) && DeclaredLocally(node.VariableTo))
+            {
+                varToAdd = RetrieveSymbol(node.VariableToAdd);
+                collectionToAddTo = RetrieveSymbol(node.VariableTo);
+            }
+            else
+            {
+                //warning message
+            }
+
+
+
+
         }
 
         public override void Visit(PredicateParameterNode node)

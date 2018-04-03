@@ -62,9 +62,16 @@ namespace Compiler.AST.SymbolTable
 
         private SymbolTableEntry RetrieveSymbol(string name)
         {
-            List<SymbolTableEntry> entriesWithThisName = _symbolTable[name];
-            SymbolTableEntry result = entriesWithThisName.Where(x => x.Reachable && x.Depth <= _globalDepth).First();
-            return result;
+            try
+            {
+                List<SymbolTableEntry> entriesWithThisName = _symbolTable[name];
+                SymbolTableEntry result = entriesWithThisName.Where(x => x.Reachable && x.Depth <= _globalDepth).First();
+                return result;
+            }
+            catch (KeyNotFoundException e)
+            {
+                return null;
+            }
         }
 
         private bool DeclaredLocally(string name)
