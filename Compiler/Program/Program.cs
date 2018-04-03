@@ -13,23 +13,25 @@ namespace Compiler
     {
         static void Main(string[] args)
         {
-            MyParseMethod("code.giraph");
+            BuildAST("code.giraph");
         }
 
-        public static void MyParseMethod(string FilePath)
+        public static void BuildAST(string FilePath)
         {
+            var ast = new AstBuilder().VisitStart(BuildCST(FilePath));
+            var visitor = new AstPrettyPrintVisitor();
+            visitor.VisitRoot(ast);
+            Console.WriteLine(visitor.ProgramCode);
+        }
+
+        public static GiraphParser.StartContext BuildCST(string FilePath) {
             string input = File.ReadAllText(FilePath);
             ICharStream stream = CharStreams.fromstring(input);
             ITokenSource lexer = new GiraphLexer(stream);
             ITokenStream tokens = new CommonTokenStream(lexer);
             GiraphParser parser = new GiraphParser(tokens);
             parser.BuildParseTree = true;
-            var cst = parser.start();
-            var ast = new AstBuilder().VisitStart(cst);
-
-            var visitor = new AstPrettyPrintVisitor();
-            visitor.VisitRoot(ast);
-            Console.WriteLine(visitor.ProgramCode);
+            return parser.start();
         }
     }
 }

@@ -8,6 +8,7 @@ namespace Compiler.AST.Nodes.DatatypeNodes
         public AbstractNode Assignment;
         public CollectionNode(int LineNumber) : base (LineNumber)
         {
+            
         }
     }
 }
