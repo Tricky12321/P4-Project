@@ -5,4 +5,5 @@
         SET 'Directed' = FALSE;
     }
 	SET 'test' = 10 IN g1 WHERE h == h;
+    SET 'test' = 10, 'test' = 19 IN g1 WHERE h == h;
 }

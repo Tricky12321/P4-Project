@@ -144,7 +144,6 @@ namespace Compiler.AST
                             {
                                 ENode.ValueList.Add(Attribute.variable().GetText(), Attribute.expression().GetText());
                             }
-
                         }
                     }
                     GNode.Edges.Add(ENode);
@@ -166,8 +165,7 @@ namespace Compiler.AST
             VariableAttributeNode attribute = Visit(context.GetChild(1).GetChild(0)) as VariableAttributeNode;
             ExpressionNode expression = Visit(context.GetChild(1).GetChild(2)) as ExpressionNode;
             string expType = context.GetChild(1).GetChild(1).GetText();
-            SetQuery.Attributes.Add(Tuple.Create<VariableAttributeNode, string, ExpressionNode>(attribute, expType, expression));
-
+            SetQuery.Attributes = (Tuple.Create<VariableAttributeNode, string, ExpressionNode>(attribute, expType, expression));
 
             return SetQuery;
         }
@@ -301,7 +299,6 @@ namespace Compiler.AST
                 {
                     if (j == 1)
                     {
-                        //SetNode.AssignmentOperator = child.GetChild(1).GetChild(0).ToString();
                         VariableAttributeNode attribute = Visit(child.GetChild(0)) as VariableAttributeNode;
                         ExpressionNode expression = Visit(child.GetChild(2)) as ExpressionNode;
                         SetNode.Attributes.Add(Tuple.Create<VariableAttributeNode, string, ExpressionNode>(attribute, child.GetChild(1).GetChild(0).ToString(), expression));
@@ -340,7 +337,7 @@ namespace Compiler.AST
                     expression += VisitVarOrconstExpressionExtRecursive(context.GetChild(i));
                 }
             }
-
+            
             return expression;
         }
 

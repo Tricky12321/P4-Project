@@ -181,5 +181,10 @@ namespace Compiler.AST
         {
             throw new NotImplementedException();
         }
+
+        public override void Visit(GraphSetQuery node)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
