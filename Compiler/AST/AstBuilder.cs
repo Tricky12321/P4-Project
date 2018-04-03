@@ -150,13 +150,11 @@ namespace Compiler.AST
                     GNode.Edges.Add(ENode);
                 }
             }
+
             // Handle the setQuery Nodes, if there are any
             foreach (var Child in context.graphDclBlock().graphSetQuery())
             {
-                foreach (var NestedChild in Child.children)
-                {
-                    GNode.AdoptChildren(Visit(NestedChild)); // Vertices, Edges, SetQuerys
-                }
+                GNode.AdoptChildren(Visit(Child));
             }
             return GNode;
         }
@@ -164,8 +162,13 @@ namespace Compiler.AST
         public override AbstractNode VisitGraphSetQuery([NotNull] GiraphParser.GraphSetQueryContext context)
         {
             GraphSetQuery SetQuery = new GraphSetQuery(context.Start.Line);
-            SetQuery.AttributeName = context.GetChild(1).GetChild(0).GetText();
-            SetQuery.AttributeValue = context.GetChild(1).GetChild(2).GetText();
+
+            VariableAttributeNode attribute = Visit(context.GetChild(1).GetChild(0)) as VariableAttributeNode;
+            ExpressionNode expression = Visit(context.GetChild(1).GetChild(2)) as ExpressionNode;
+            string expType = context.GetChild(1).GetChild(1).GetText();
+            SetQuery.Attributes.Add(Tuple.Create<VariableAttributeNode, string, ExpressionNode>(attribute, expType, expression));
+
+
             return SetQuery;
         }
 
@@ -299,8 +302,8 @@ namespace Compiler.AST
                     if (j == 1)
                     {
                         //SetNode.AssignmentOperator = child.GetChild(1).GetChild(0).ToString();
-                        var attribute = Visit(child.GetChild(0)) as VariableAttributeNode;
-                        var expression = Visit(child.GetChild(2)) as ExpressionNode;
+                        VariableAttributeNode attribute = Visit(child.GetChild(0)) as VariableAttributeNode;
+                        ExpressionNode expression = Visit(child.GetChild(2)) as ExpressionNode;
                         SetNode.Attributes.Add(Tuple.Create<VariableAttributeNode, string, ExpressionNode>(attribute, child.GetChild(1).GetChild(0).ToString(), expression));
                     }
                     else if (j == 2)
@@ -337,7 +340,7 @@ namespace Compiler.AST
                     expression += VisitVarOrconstExpressionExtRecursive(context.GetChild(i));
                 }
             }
-
+             
             return expression;
         }
 
