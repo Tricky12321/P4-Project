@@ -10,10 +10,10 @@ namespace Compiler.AST.SymbolTable
 {
     internal class AstSymbolTableCreatorVisitor : AstVisitorBase
     {
-        private Dictionary<string, List<SymbolTableEntry>> _symbolTable = new Dictionary<string, List<SymbolTableEntry>>();
+        public Dictionary<string, List<SymbolTableEntry>> _symbolTable = new Dictionary<string, List<SymbolTableEntry>>();
         private uint _globalDepth;
         
-        protected AstSymbolTableCreatorVisitor()
+        public AstSymbolTableCreatorVisitor()
         {
         }
 
