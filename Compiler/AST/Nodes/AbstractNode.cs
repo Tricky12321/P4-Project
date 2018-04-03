@@ -6,10 +6,10 @@ namespace Compiler.AST.Nodes
 
     public class AbstractNode
     {
-        AbstractNode Parent;
-        AbstractNode LeftmostSibling;
-        AbstractNode LeftmostChild;
-        AbstractNode RightSibling;
+        public AbstractNode Parent;
+        public AbstractNode LeftmostSibling;
+        public AbstractNode LeftmostChild;
+        public AbstractNode RightSibling;
         public int LineNumber;
         public string Name;
         public int ChildCount;

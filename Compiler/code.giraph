@@ -1,24 +1,13 @@
 ﻿Main -> VOID () {
-	IF(v1 == v2)
+GRAPH G2
 	{
-	PUSH x1 TO C1;
-	PUSH x1 TO C1;
-	PUSH x1 TO C1;
-	}
-	ELSEIF(v3 == v4)
-	{
-	PUSH x2 TO C2;
-	}
-	ELSEIF(v5 == v6)
-	{
-	PUSH x3 TO C3;
-	}
-	ELSEIF(v7 == v8)
-	{
-	PUSH x4 TO C4;
-	}
-	ELSE
-	{
-	PUSH x5 TO C5;
+		EDGE (v, q);
+		SET 'Directed' = FALSE;
+		VERTEX (v = 5), (), (v = 15, i = 4);
+		EDGE (a, b, i = 0), (b, c, w = 10*i+5), (c, a);
+		SET 'Directed' = TRUE;
+		VERTEX ();
+		EDGE (y, c);
+		SET 'Directed' = FALSE;
 	}
 }

@@ -85,6 +85,10 @@ namespace Compiler.AST
                 }
                 ProgramCode += ";\n";
             }
+            if(node.LeftmostChild != null)
+            {
+                VisitChildren(node);
+            }
             ProgramCode += $"}}\n";
         }
 
@@ -118,6 +122,12 @@ namespace Compiler.AST
                 ProgramCode += $"{item.Key} = {item.Value}";
             }
             ProgramCode += ")";
+        }
+
+        public override void Visit(GraphSetQuery node)
+        {
+            Console.WriteLine("GraphSetQueryNode");
+            ProgramCode += $"SET {node.Attributes.Item1.Name} = {node.Attributes.Item3.Name};\n";
         }
 
         public override void Visit(SetQueryNode node)
