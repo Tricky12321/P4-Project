@@ -7,6 +7,7 @@ using Antlr4.Runtime.Tree;
 using System.IO;
 using Compiler.AST;
 using Compiler.AST.SymbolTable;
+using Compiler.AST.Nodes;
 
 namespace Compiler
 {
@@ -19,15 +20,11 @@ namespace Compiler
 
         public static void BuildAST(string FilePath)
         {
-            var ast = new AstBuilder().VisitStart(BuildCST(FilePath));
-            var prettyvisitor = new AstPrettyPrintVisitor();
-            prettyvisitor.VisitRoot(ast);
-            Console.WriteLine(prettyvisitor.ProgramCode);
-            /*
-            var symboltableVisitor = new AstSymbolTableCreatorVisitor();
-            var typecheckerVisitor = new AstTypeCheckerVisitor(symboltableVisitor._symbolTable);
-            */
-    }
+            AbstractNode ast = new AstBuilder().VisitStart(BuildCST(FilePath));
+            AstPrettyPrintVisitor visitor = new AstPrettyPrintVisitor();
+            visitor.VisitRoot(ast);
+            Console.WriteLine(visitor.ProgramCode);
+        }
 
         public static GiraphParser.StartContext BuildCST(string FilePath) {
             string input = File.ReadAllText(FilePath);
@@ -36,6 +33,7 @@ namespace Compiler
             ITokenStream tokens = new CommonTokenStream(lexer);
             GiraphParser parser = new GiraphParser(tokens);
             parser.BuildParseTree = true;
+
             return parser.start();
         }
     }

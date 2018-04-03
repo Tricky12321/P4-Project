@@ -131,10 +131,10 @@ namespace Compiler.AST
                 InsertComma(ref i);
                 ProgramCode += $"'{attribute.Item1.Name}' = {attribute.Item3.Name}";
             }
-            ProgramCode += $" IN {node.Name}";
+            ProgramCode += $" IN {node.InVariable}";
             if (node.WhereCondition == null)
             {
-                ProgramCode += ";";
+                ProgramCode += ";\n";
             }
             else
             {

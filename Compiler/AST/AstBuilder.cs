@@ -61,14 +61,22 @@ namespace Compiler.AST
             int CodeElementsInCodeblock = CodeBlockEntry.ChildCount;
             // J skips the first child "(" and starts with the first child that is actual code
             // Loops though all the children, and ignores the last child ")"
-            foreach (var Child in context.codeBlock().children)
+            foreach (var Child in context.codeBlock().codeBlockContent())
             {
-                FNode.AdoptChildren(Visit(Child));
+                var subChild = Child.GetChild(0);
+                var test = subChild.GetText();
+                var test2 = Visit(subChild);
+                FNode.AdoptChildren(test2);
             }
             return FNode;
         }
 
-        public override AbstractNode VisitCodeBlock([NotNull] GiraphParser.CodeBlockContext context)
+		public override AbstractNode VisitQuerySC([NotNull] GiraphParser.QuerySCContext context)
+		{
+            return Visit(context.GetChild(0));
+		}
+
+		public override AbstractNode VisitCodeBlock([NotNull] GiraphParser.CodeBlockContext context)
         {
             //VertexDclsNode VerDclsNode = new VertexDclsNode(context.Start.Line);
             CodeBlockNode CodeNode = new CodeBlockNode(context.Start.Line);
@@ -142,13 +150,11 @@ namespace Compiler.AST
                     GNode.Edges.Add(ENode);
                 }
             }
+
             // Handle the setQuery Nodes, if there are any
             foreach (var Child in context.graphDclBlock().graphSetQuery())
             {
-                foreach (var NestedChild in Child.children)
-                {
-                    GNode.AdoptChildren(Visit(NestedChild)); // Vertices, Edges, SetQuerys
-                }
+                GNode.AdoptChildren(Visit(Child));
             }
             return GNode;
         }
@@ -156,8 +162,13 @@ namespace Compiler.AST
         public override AbstractNode VisitGraphSetQuery([NotNull] GiraphParser.GraphSetQueryContext context)
         {
             GraphSetQuery SetQuery = new GraphSetQuery(context.Start.Line);
-            SetQuery.AttributeName = context.GetChild(1).GetChild(0).GetText();
-            SetQuery.AttributeValue = context.GetChild(1).GetChild(2).GetText();
+
+            VariableAttributeNode attribute = Visit(context.GetChild(1).GetChild(0)) as VariableAttributeNode;
+            ExpressionNode expression = Visit(context.GetChild(1).GetChild(2)) as ExpressionNode;
+            string expType = context.GetChild(1).GetChild(1).GetText();
+            SetQuery.Attributes.Add(Tuple.Create<VariableAttributeNode, string, ExpressionNode>(attribute, expType, expression));
+
+
             return SetQuery;
         }
 
@@ -291,8 +302,8 @@ namespace Compiler.AST
                     if (j == 1)
                     {
                         //SetNode.AssignmentOperator = child.GetChild(1).GetChild(0).ToString();
-                        var attribute = Visit(child.GetChild(0)) as VariableAttributeNode;
-                        var expression = Visit(child.GetChild(2)) as ExpressionNode;
+                        VariableAttributeNode attribute = Visit(child.GetChild(0)) as VariableAttributeNode;
+                        ExpressionNode expression = Visit(child.GetChild(2)) as ExpressionNode;
                         SetNode.Attributes.Add(Tuple.Create<VariableAttributeNode, string, ExpressionNode>(attribute, child.GetChild(1).GetChild(0).ToString(), expression));
                     }
                     else if (j == 2)
@@ -329,7 +340,7 @@ namespace Compiler.AST
                     expression += VisitVarOrconstExpressionExtRecursive(context.GetChild(i));
                 }
             }
-
+             
             return expression;
         }
 
@@ -648,7 +659,7 @@ namespace Compiler.AST
                 ForLoop.ToValueOperation = Visit(contextInside.varOrConstOperation(0).operation());
             }
             #endregion
-            #region First VarOrConst | Operation 
+            #region Second VarOrConst | Operation 
             //Check if the first is a VarOrConst, if it is, check if its a var or a const
             if (contextInside.varOrConstOperation(1).varOrConst() != null && contextInside.varOrConstOperation(1).varOrConst().ChildCount > 0)
             {
@@ -699,6 +710,44 @@ namespace Compiler.AST
 		public override AbstractNode VisitCollNoReturnOps([NotNull] GiraphParser.CollNoReturnOpsContext context)
 		{
             return Visit(context.GetChild(0));
+		}
+
+		public override AbstractNode VisitPrint([NotNull] GiraphParser.PrintContext context)
+        {
+            PrintQueryNode PNode = new PrintQueryNode(context.Start.Line);
+            foreach (var child in context.printOptions().printOption())
+            {
+                if (child.VARIABLENAME() != null && child.VARIABLENAME().GetText().Length > 0) {
+                    foreach (var subChild in child.children)
+                    {
+                        PNode.AdoptChildren(Visit(subChild));
+
+                    }
+                } else {
+                    PNode.AdoptChildren(Visit(child.GetChild(0)));
+                }
+            }
+            return PNode;
+		}
+
+		public override AbstractNode VisitForeachLoop([NotNull] GiraphParser.ForeachLoopContext context)
+		{
+            ForeachLoopNode ForeachNode = new ForeachLoopNode(context.Start.Line);
+            ForeachNode.VariableName = context.foreachCondition().variable().GetText();
+            ForeachNode.VariableType = context.foreachCondition().allType().GetText();
+            ForeachNode.InVariableName = context.foreachCondition().variableFunc().GetText();
+            // Check the where condition
+            if (context.where() != null && context.where().GetText().Length > 0) {
+				ForeachNode.WhereCondition = Visit(context.where());
+            }
+
+            // Visit the children of the codeblock
+            foreach (var Child in context.codeBlock().children)
+            {
+                ForeachNode.AdoptChildren(Visit(Child.GetChild(0)));
+            }
+
+            return ForeachNode;
 		}
 	}
 }
