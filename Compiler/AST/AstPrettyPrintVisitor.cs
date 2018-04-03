@@ -162,9 +162,9 @@ namespace Compiler.AST
             //Needs WhereNode
         }
 
-        public override void Visit(AbstractNode node)
+        public override void Visit(IfElseIfElseNode node)
         {
-            throw new NotImplementedException();
+            Console.WriteLine("IfElseIfElseNode");
         }
 
         #region CollOPSvisits
@@ -216,6 +216,11 @@ namespace Compiler.AST
         }
 
         public override void Visit(CollectionNode node)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void Visit(AbstractNode node)
         {
             throw new NotImplementedException();
         }
