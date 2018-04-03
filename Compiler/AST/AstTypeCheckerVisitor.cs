@@ -164,5 +164,10 @@ namespace Compiler.AST
         {
             throw new NotImplementedException();
         }
+
+        public override void Visit(IfElseIfElseNode node)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
