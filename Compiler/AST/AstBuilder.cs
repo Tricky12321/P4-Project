@@ -535,7 +535,6 @@ namespace Compiler.AST
             {
                 PopNode.WhereCondition = Visit(context.where());
             }
-
             return PopNode;
         }
 

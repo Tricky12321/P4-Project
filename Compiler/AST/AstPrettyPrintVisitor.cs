@@ -151,11 +151,13 @@ namespace Compiler.AST
 
         public override void Visit(PushQueryNode node)
         {
+            Console.WriteLine("PushNode");
             ProgramCode += $"PUSH {node.VariableToAdd} TO {node.VariableAddTo};\n";
         }
 
         public override void Visit(PopQueryNode node)
         {
+            Console.WriteLine("PopNode");
             ProgramCode += $"POP FROM {node.Variable};\n";
             //Needs WhereNode
         }
@@ -213,9 +215,9 @@ namespace Compiler.AST
             throw new NotImplementedException();
         }
 
-		public override void Visit(CollectionNode node)
-		{
-			throw new NotImplementedException();
-		}
-	}
+        public override void Visit(CollectionNode node)
+        {
+            throw new NotImplementedException();
+        }
+    }
 }

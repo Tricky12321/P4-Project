@@ -1,3 +1,4 @@
 ﻿Main -> VOID () {
-    POP FROM VertexCollection;;
+	POP FROM C1;;
+	PUSH v1 TO C1;
 }
