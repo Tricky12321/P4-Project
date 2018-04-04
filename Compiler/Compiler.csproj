@@ -12,7 +12,7 @@
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <TargetFrameworkProfile />
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -37,9 +37,8 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.ValueTuple">
-      <HintPath>..\packages\System.ValueTuple.4.4.0\lib\net47\System.ValueTuple.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="System.ValueTuple, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.ValueTuple.4.4.0\lib\net461\System.ValueTuple.dll</HintPath>
     </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -55,6 +54,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AST\AstTypeCheckerVisitor.cs" />
+    <Compile Include="AST\Exceptions\WroneExpressionPartTypeFound.cs" />
     <Compile Include="AST\Nodes\DatatypeNodes\AttributeNode.cs" />
     <Compile Include="AST\Nodes\DatatypeNodes\VariableAttributeNode.cs" />
     <Compile Include="AST\Symbol Table\AstSymbolTableCreatorVisitor.cs" />
@@ -114,6 +114,8 @@
     <Compile Include="AST\Nodes\LoopNodes\ForeachLoopNode.cs" />
     <Compile Include="AST\Nodes\QueryNodes\AddQueryNode.cs" />
     <Compile Include="AST\Nodes\DatatypeNodes\Graph\EdgeDcl.cs" />
+    <Compile Include="AST\Symbol Table\Extension.cs" />
+    <Compile Include="AST\Symbol Table\ClassEntry.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
