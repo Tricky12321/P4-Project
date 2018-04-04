@@ -54,6 +54,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AST\AstTypeCheckerVisitor.cs" />
+    <Compile Include="AST\Exceptions\WroneExpressionPartTypeFound.cs" />
     <Compile Include="AST\Nodes\DatatypeNodes\AttributeNode.cs" />
     <Compile Include="AST\Nodes\DatatypeNodes\VariableAttributeNode.cs" />
     <Compile Include="AST\Symbol Table\AstSymbolTableCreatorVisitor.cs" />

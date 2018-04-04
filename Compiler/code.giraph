@@ -1,15 +1,9 @@
-﻿MAIN -> VOID (GRAPH g1, COLLECTION VERTEX vertexColl) 
-{
-	GRAPH Graph1 {
-		VERTEX va(), vb(), vc(), vd(), ve();
-		EDGE x(vb, vd, v = 4), y(vd, ve, v = 7), z(va, vc, v = 10);
-	}
-
-	COLLECTION VERTEX test = SELECTALL VERTEX FROM Graph1.Vertices;
-
-
-
-	VERTEX xd = POP FROM test;
-
-	SET xd = POP FROM test;
+﻿Main -> VOID () {
+    ADD V TO g1.Vertices;
+    GRAPH g1 
+    {
+        SET 'Directed' = FALSE;
+    }
+	SET 'test' = 5 + 1.2 * 2 + x.fe IN g1 WHERE h == h;
+    SET 'test' = 10, 'test' = 19 IN g1 WHERE h == h;
 }

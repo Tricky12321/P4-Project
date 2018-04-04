@@ -319,26 +319,67 @@ namespace Compiler.AST
         public override AbstractNode VisitVarOrconstExpressionExt([NotNull] GiraphParser.VarOrconstExpressionExtContext context)
         {
             ExpressionNode exNode = new ExpressionNode(context.Start.Line);
-            exNode.Name = VisitVarOrconstExpressionExtRecursive(context);
+            exNode.ExpressionParts = VisitVarOrconstExpressionExtRecursive(context);
             return exNode;
         }
 
-        private string VisitVarOrconstExpressionExtRecursive([NotNull] IParseTree context)
+        private List<KeyValuePair<ExpressionPartType, string>> VisitVarOrconstExpressionExtRecursive([NotNull] IParseTree context)
         {
-            string expression = string.Empty;
+            List<KeyValuePair<ExpressionPartType, string>> expression = new List<KeyValuePair<ExpressionPartType, string>>();
+
+            if (context.GetType().ToString() == "GiraphParser+VariableContext")
+            {
+                string placeholderString = string.Empty;
+                for (int i = 0; i < context.ChildCount; i++)
+                {
+                    placeholderString += context.GetChild(i).GetText();
+                    expression.AddRange(VisitVarOrconstExpressionExtRecursive(context.GetChild(i)));
+                }
+                List<KeyValuePair<ExpressionPartType, string>> listPlaceholder = new List<KeyValuePair<ExpressionPartType, string>>();
+                listPlaceholder.Add(new KeyValuePair<ExpressionPartType, string>(ExpressionPartType.VARIABLE, placeholderString));
+                return listPlaceholder;
+            }
+
+
             if (context.ChildCount == 0)
             {
-                return context.ToString();
+                List<KeyValuePair<ExpressionPartType, string>> expressionPlaceholder = new List<KeyValuePair<ExpressionPartType, string>>();
+
+                expressionPlaceholder.Add(new KeyValuePair<ExpressionPartType, string>(ExpressionPartTypeFinder(context.Parent), context.GetText()));
+                return expressionPlaceholder;
+                //context.ToString();
             }
             else
             {
                 for (int i = 0; i < context.ChildCount; i++)
                 {
-                    expression += VisitVarOrconstExpressionExtRecursive(context.GetChild(i));
+                    expression.AddRange(VisitVarOrconstExpressionExtRecursive(context.GetChild(i)));
                 }
             }
-            
             return expression;
+        }
+
+        private ExpressionPartType ExpressionPartTypeFinder(IParseTree context)
+        {
+            string type = context.GetType().ToString();
+            switch (type)
+            {
+                case "GiraphParser+BoolContext":
+                    return ExpressionPartType.BOOL;
+                case "GiraphParser+FloatnumContext":
+                    return ExpressionPartType.DECIMAL;
+                case "GiraphParser+IntegerContext":
+                    return ExpressionPartType.INT;
+                case "GiraphParser+SimpleOperatorsContext":
+                    return ExpressionPartType.OPERATOR;
+                case "¨GiraphParser+StringContext":
+                    return ExpressionPartType.STRING;
+                case "GiraphParser+AdvancedOperatorsContext":
+                    return ExpressionPartType.ADVANCED_OPERATOR;
+                case "GiraphParser+VariableContext":
+                    return ExpressionPartType.VARIABLE;
+            }
+            throw new WroneExpressionPartTypeFound($"Typen: {type} har ikke en case i typefinder!!"); 
         }
 
         public override AbstractNode VisitAttribute([NotNull] GiraphParser.AttributeContext context)
@@ -352,7 +393,6 @@ namespace Compiler.AST
             {
                 vaNode = new VariableNode(context.Start.Line);
             }
-
             vaNode.Name = context.GetChild(1).GetChild(0).ToString();
 
             return vaNode;
@@ -757,11 +797,12 @@ namespace Compiler.AST
             if (context.addToGraph() != null)
             {
                 AddNode.IsGraph = true;
-                if (context.addToGraph().vertexDcls() != null) {
-					foreach (var Child in context.addToGraph().vertexDcls().vertexDcl())
-					{
-						AddNode.Dcls.Add(Visit(Child));
-					}
+                if (context.addToGraph().vertexDcls() != null)
+                {
+                    foreach (var Child in context.addToGraph().vertexDcls().vertexDcl())
+                    {
+                        AddNode.Dcls.Add(Visit(Child));
+                    }
                 }
                 if (context.addToGraph().edgeDcls() != null)
                 {
@@ -772,8 +813,9 @@ namespace Compiler.AST
                 }
                 // Shared
                 AddNode.ToVariable = context.addToGraph().variable().GetText();
-                if (context.addToGraph().where() != null) {
-					AddNode.WhereCondition = Visit(context.addToGraph().where());
+                if (context.addToGraph().where() != null)
+                {
+                    AddNode.WhereCondition = Visit(context.addToGraph().where());
                 }
             }
             // ITS A COLLECTION ADD
@@ -798,13 +840,18 @@ namespace Compiler.AST
                     AddNode.IsQuery = true;
                     AddNode.Query = Visit(context.addToColl().returnQuery());
 
-                } else {
+                }
+                else
+                {
                     throw new Exception("Whaaaaat!");
                 }
                 // Shared
-                if (AddNode.IsVariable) {
-					AddNode.ToVariable = context.addToColl().variable(1).GetText();
-                } else {
+                if (AddNode.IsVariable)
+                {
+                    AddNode.ToVariable = context.addToColl().variable(1).GetText();
+                }
+                else
+                {
                     AddNode.ToVariable = context.addToColl().variable(0).GetText();
                 }
                 if (context.addToColl().where() != null)
@@ -820,45 +867,48 @@ namespace Compiler.AST
             return AddNode;
         }
 
-		public override AbstractNode VisitEdgeDcl([NotNull] GiraphParser.EdgeDclContext context)
-		{
+        public override AbstractNode VisitEdgeDcl([NotNull] GiraphParser.EdgeDclContext context)
+        {
             EdgeNode VarNode = new EdgeNode(context.Start.Line);
-            if (context.GetChild(0).GetText() != "(") {
+            if (context.GetChild(0).GetText() != "(")
+            {
                 VarNode.Name = context.variable(0).GetText();
             }
             VarNode.VertexNameFrom = context.variable(1).GetText();
             VarNode.VertexNameFrom = context.variable(2).GetText();
 
             // Visit all assignments and add them as children, if there are any
-            if (context.assignment() != null) {
-				foreach (var Child in context.assignment())
-				{
-					VarNode.AdoptChildren(Visit(Child));
-				}
-            }
-            return VarNode;
-		}
-
-		public override AbstractNode VisitVertexDcl([NotNull] GiraphParser.VertexDclContext context)
-		{
-            VariableDclNode VarNode = new VariableDclNode(context.Start.Line);
-            VarNode.Type = "VERTEX";
-            if (context.GetChild(0).GetText() != "(")
+            if (context.assignment() != null)
             {
-                VarNode.Name = context.variable().GetText();
-            }
-            if (context.assignment() != null) {
                 foreach (var Child in context.assignment())
                 {
                     VarNode.AdoptChildren(Visit(Child));
                 }
             }
             return VarNode;
-		}
+        }
 
-		public override AbstractNode VisitErrorNode(IErrorNode node)
-		{
-            throw new Exception("Error at "+node.GetText()+" "+node.Parent.SourceInterval);
-		}
-	}
+        public override AbstractNode VisitVertexDcl([NotNull] GiraphParser.VertexDclContext context)
+        {
+            VariableDclNode VarNode = new VariableDclNode(context.Start.Line);
+            VarNode.Type = "VERTEX";
+            if (context.GetChild(0).GetText() != "(")
+            {
+                VarNode.Name = context.variable().GetText();
+            }
+            if (context.assignment() != null)
+            {
+                foreach (var Child in context.assignment())
+                {
+                    VarNode.AdoptChildren(Visit(Child));
+                }
+            }
+            return VarNode;
+        }
+
+        public override AbstractNode VisitErrorNode(IErrorNode node)
+        {
+            throw new Exception("Error at " + node.GetText() + " " + node.Parent.SourceInterval);
+        }
+    }
 }
