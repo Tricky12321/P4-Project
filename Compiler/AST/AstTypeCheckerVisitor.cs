@@ -146,8 +146,11 @@ namespace Compiler.AST
         }
 
         public override void Visit(PopQueryNode node)
-        {
-            throw new NotImplementedException();
+        {            
+            if (node.WhereCondition != null)
+            {
+                Visit(node.WhereCondition);
+            }
         }
 
         public override void Visit(EnqueueQueryNode node)
@@ -253,7 +256,7 @@ namespace Compiler.AST
         {
             throw new NotImplementedException();
         }
-
+                                                                                                                                                                                 
         public override void Visit(GraphSetQuery node)
         {
             throw new NotImplementedException();
