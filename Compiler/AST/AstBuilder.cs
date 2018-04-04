@@ -71,12 +71,12 @@ namespace Compiler.AST
             return FNode;
         }
 
-		public override AbstractNode VisitQuerySC([NotNull] GiraphParser.QuerySCContext context)
-		{
+        public override AbstractNode VisitQuerySC([NotNull] GiraphParser.QuerySCContext context)
+        {
             return Visit(context.GetChild(0));
-		}
+        }
 
-		public override AbstractNode VisitCodeBlock([NotNull] GiraphParser.CodeBlockContext context)
+        public override AbstractNode VisitCodeBlock([NotNull] GiraphParser.CodeBlockContext context)
         {
             //VertexDclsNode VerDclsNode = new VertexDclsNode(context.Start.Line);
             CodeBlockNode CodeNode = new CodeBlockNode(context.Start.Line);
@@ -144,7 +144,6 @@ namespace Compiler.AST
                             {
                                 ENode.ValueList.Add(Attribute.variable().GetText(), Attribute.expression().GetText());
                             }
-
                         }
                     }
                     GNode.Edges.Add(ENode);
@@ -166,8 +165,7 @@ namespace Compiler.AST
             VariableAttributeNode attribute = Visit(context.GetChild(1).GetChild(0)) as VariableAttributeNode;
             ExpressionNode expression = Visit(context.GetChild(1).GetChild(2)) as ExpressionNode;
             string expType = context.GetChild(1).GetChild(1).GetText();
-            SetQuery.Attributes.Add(Tuple.Create<VariableAttributeNode, string, ExpressionNode>(attribute, expType, expression));
-
+            SetQuery.Attributes = (Tuple.Create<VariableAttributeNode, string, ExpressionNode>(attribute, expType, expression));
 
             return SetQuery;
         }
@@ -301,7 +299,6 @@ namespace Compiler.AST
                 {
                     if (j == 1)
                     {
-                        //SetNode.AssignmentOperator = child.GetChild(1).GetChild(0).ToString();
                         VariableAttributeNode attribute = Visit(child.GetChild(0)) as VariableAttributeNode;
                         ExpressionNode expression = Visit(child.GetChild(2)) as ExpressionNode;
                         SetNode.Attributes.Add(Tuple.Create<VariableAttributeNode, string, ExpressionNode>(attribute, child.GetChild(1).GetChild(0).ToString(), expression));
@@ -340,7 +337,7 @@ namespace Compiler.AST
                     expression += VisitVarOrconstExpressionExtRecursive(context.GetChild(i));
                 }
             }
-             
+            
             return expression;
         }
 
@@ -702,52 +699,164 @@ namespace Compiler.AST
             return VarDcl;
         }
 
-		public override AbstractNode VisitCollReturnOps([NotNull] GiraphParser.CollReturnOpsContext context)
-		{
-			return Visit(context.GetChild(0));
-		}
-
-		public override AbstractNode VisitCollNoReturnOps([NotNull] GiraphParser.CollNoReturnOpsContext context)
-		{
+        public override AbstractNode VisitCollReturnOps([NotNull] GiraphParser.CollReturnOpsContext context)
+        {
             return Visit(context.GetChild(0));
-		}
+        }
 
-		public override AbstractNode VisitPrint([NotNull] GiraphParser.PrintContext context)
+        public override AbstractNode VisitCollNoReturnOps([NotNull] GiraphParser.CollNoReturnOpsContext context)
+        {
+            return Visit(context.GetChild(0));
+        }
+
+        public override AbstractNode VisitPrint([NotNull] GiraphParser.PrintContext context)
         {
             PrintQueryNode PNode = new PrintQueryNode(context.Start.Line);
             foreach (var child in context.printOptions().printOption())
             {
-                if (child.VARIABLENAME() != null && child.VARIABLENAME().GetText().Length > 0) {
+                if (child.VARIABLENAME() != null && child.VARIABLENAME().GetText().Length > 0)
+                {
                     foreach (var subChild in child.children)
                     {
                         PNode.AdoptChildren(Visit(subChild));
-
                     }
-                } else {
+                }
+                else
+                {
                     PNode.AdoptChildren(Visit(child.GetChild(0)));
                 }
             }
             return PNode;
-		}
+        }
 
-		public override AbstractNode VisitForeachLoop([NotNull] GiraphParser.ForeachLoopContext context)
-		{
+        public override AbstractNode VisitForeachLoop([NotNull] GiraphParser.ForeachLoopContext context)
+        {
             ForeachLoopNode ForeachNode = new ForeachLoopNode(context.Start.Line);
             ForeachNode.VariableName = context.foreachCondition().variable().GetText();
             ForeachNode.VariableType = context.foreachCondition().allType().GetText();
             ForeachNode.InVariableName = context.foreachCondition().variableFunc().GetText();
             // Check the where condition
-            if (context.where() != null && context.where().GetText().Length > 0) {
-				ForeachNode.WhereCondition = Visit(context.where());
+            if (context.where() != null && context.where().GetText().Length > 0)
+            {
+                ForeachNode.WhereCondition = Visit(context.where());
             }
-
             // Visit the children of the codeblock
             foreach (var Child in context.codeBlock().children)
             {
                 ForeachNode.AdoptChildren(Visit(Child.GetChild(0)));
             }
-
             return ForeachNode;
+        }
+
+        public override AbstractNode VisitAddQuery([NotNull] GiraphParser.AddQueryContext context)
+        {
+            AddQueryNode AddNode = new AddQueryNode(context.Start.Line);
+            // ITS A GRAPH ADD
+            if (context.addToGraph() != null)
+            {
+                AddNode.IsGraph = true;
+                if (context.addToGraph().vertexDcls() != null) {
+					foreach (var Child in context.addToGraph().vertexDcls().vertexDcl())
+					{
+						AddNode.Dcls.Add(Visit(Child));
+					}
+                }
+                if (context.addToGraph().edgeDcls() != null)
+                {
+                    foreach (var Child in context.addToGraph().edgeDcls().edgeDcl())
+                    {
+                        AddNode.Dcls.Add(Visit(Child));
+                    }
+                }
+                // Shared
+                AddNode.ToVariable = context.addToGraph().variable().GetText();
+                if (context.addToGraph().where() != null) {
+					AddNode.WhereCondition = Visit(context.addToGraph().where());
+                }
+            }
+            // ITS A COLLECTION ADD
+            else if (context.addToColl() != null)
+            {
+                AddNode.IsColl = true;
+                // ITS ALL TYPE
+                if (context.addToColl().allType() != null)
+                {
+                    AddNode.IsType = true;
+                    AddNode.TypeOrVariable = context.addToColl().allType().GetText();
+                }
+                // ITS A VARIABLE
+                else if (context.addToColl().variable() != null)
+                {
+                    AddNode.IsVariable = true;
+                    AddNode.TypeOrVariable = context.addToColl().variable(0).GetText();
+                }
+                // ITS A QUERY
+                else if (context.addToColl().returnQuery() != null)
+                {
+                    AddNode.IsQuery = true;
+                    AddNode.Query = Visit(context.addToColl().returnQuery());
+
+                } else {
+                    throw new Exception("Whaaaaat!");
+                }
+                // Shared
+                if (AddNode.IsVariable) {
+					AddNode.ToVariable = context.addToColl().variable(1).GetText();
+                } else {
+                    AddNode.ToVariable = context.addToColl().variable(0).GetText();
+                }
+                if (context.addToColl().where() != null)
+                {
+                    AddNode.WhereCondition = Visit(context.addToGraph().where());
+                }
+            }
+            else
+            {
+                throw new Exception("Whaaaaaaaat?!");
+            }
+
+            return AddNode;
+        }
+
+		public override AbstractNode VisitEdgeDcl([NotNull] GiraphParser.EdgeDclContext context)
+		{
+            EdgeNode VarNode = new EdgeNode(context.Start.Line);
+            if (context.GetChild(0).GetText() != "(") {
+                VarNode.Name = context.variable(0).GetText();
+            }
+            VarNode.VertexNameFrom = context.variable(1).GetText();
+            VarNode.VertexNameFrom = context.variable(2).GetText();
+
+            // Visit all assignments and add them as children, if there are any
+            if (context.assignment() != null) {
+				foreach (var Child in context.assignment())
+				{
+					VarNode.AdoptChildren(Visit(Child));
+				}
+            }
+            return VarNode;
+		}
+
+		public override AbstractNode VisitVertexDcl([NotNull] GiraphParser.VertexDclContext context)
+		{
+            VariableDclNode VarNode = new VariableDclNode(context.Start.Line);
+            VarNode.Type = "VERTEX";
+            if (context.GetChild(0).GetText() != "(")
+            {
+                VarNode.Name = context.variable().GetText();
+            }
+            if (context.assignment() != null) {
+                foreach (var Child in context.assignment())
+                {
+                    VarNode.AdoptChildren(Visit(Child));
+                }
+            }
+            return VarNode;
+		}
+
+		public override AbstractNode VisitErrorNode(IErrorNode node)
+		{
+            throw new Exception("Error at "+node.GetText()+" "+node.Parent.SourceInterval);
 		}
 	}
 }

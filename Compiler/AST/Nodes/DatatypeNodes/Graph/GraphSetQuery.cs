@@ -5,10 +5,15 @@ namespace Compiler.AST.Nodes.DatatypeNodes
 {
     public class GraphSetQuery : AbstractNode
     {
-        public List<Tuple<VariableAttributeNode, string, ExpressionNode>> Attributes = new List<Tuple<VariableAttributeNode, string, ExpressionNode>>();
+        public Tuple<VariableAttributeNode, string, ExpressionNode> Attributes;
         public GraphSetQuery(int LineNumber) : base(LineNumber)
         {
             
+        }
+
+        public override void Accept(AstVisitorBase astVisitor)
+        {
+            astVisitor.Visit(this);
         }
     }
 }

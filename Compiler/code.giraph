@@ -1,8 +1,9 @@
 ﻿Main -> VOID () {
-	GRAPH g1 
-	{
-		SET 'Directed' = FALSE;
-	}
-
+    ADD V TO g1.Vertices;;;;
+    GRAPH g1 
+    {
+        SET 'Directed' = FALSE;
+    }
 	SET 'test' = 10 IN g1 WHERE h == h;
+    SET 'test' = 10, 'test' = 19 IN g1 WHERE h == h;
 }
