@@ -86,7 +86,7 @@ namespace Compiler.AST
                 SymbolTableEntry collection = RetrieveSymbol(node.Variable);
                 SymbolTableEntry collectionParent = RetrieveSymbol(node.Parent.Name);
 
-                if (collection.CollectionType == collectionParent.Type)
+                if (collection.Type == collectionParent.Type)
                 {
 
                 }
@@ -109,7 +109,7 @@ namespace Compiler.AST
                 SymbolTableEntry collection = RetrieveSymbol(node.Variable);
                 SymbolTableEntry collectionParent = RetrieveSymbol(node.Parent.Name);
 
-                if (collection.CollectionType == collectionParent.Type)
+                if (collection.Type == collectionParent.Type)
                 {
 
                 }
@@ -133,7 +133,7 @@ namespace Compiler.AST
                 SymbolTableEntry collectionNameType = RetrieveSymbol(node.Variable);
                 SymbolTableEntry nameDeclaredForRetrieve = RetrieveSymbol(node.Parent.Name);
 
-                if (collectionNameType.CollectionType.ToString() == nameDeclaredForRetrieve.Type.ToString() && nameDeclaredForRetrieve.Type.ToString() == node.Type)
+                if (collectionNameType.Type.ToString() == nameDeclaredForRetrieve.Type.ToString() && nameDeclaredForRetrieve.Type.ToString() == node.Type)
                 {
 
                 }
@@ -156,7 +156,7 @@ namespace Compiler.AST
                 SymbolTableEntry collectionNameType = RetrieveSymbol(node.Variable);
                 SymbolTableEntry nameDeclaredForRetrieve = RetrieveSymbol(node.Parent.Name);
 
-                if (collectionNameType.CollectionType.ToString() == nameDeclaredForRetrieve.Type.ToString() && nameDeclaredForRetrieve.Type.ToString() == node.Type)
+                if (collectionNameType.Type.ToString() == nameDeclaredForRetrieve.Type.ToString() && nameDeclaredForRetrieve.Type.ToString() == node.Type)
                 {
 
                 }
@@ -213,7 +213,7 @@ namespace Compiler.AST
                 SymbolTableEntry collection = RetrieveSymbol(node.Variable);
                 SymbolTableEntry collectionParent = RetrieveSymbol(node.Parent.Name);
 
-                if (collection.CollectionType == collectionParent.Type)
+                if (collection.Type == collectionParent.Type)
                 {
 
                 }
@@ -270,7 +270,7 @@ namespace Compiler.AST
                 SymbolTableEntry collection = RetrieveSymbol(node.Variable);
                 SymbolTableEntry collectionParent = RetrieveSymbol(node.Parent.Name);
 
-                if (collection.CollectionType == collectionParent.Type)
+                if (collection.Type == collectionParent.Type)
                 {
 
                 }
