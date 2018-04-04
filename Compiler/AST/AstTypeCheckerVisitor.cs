@@ -146,13 +146,11 @@ namespace Compiler.AST
         }
 
         public override void Visit(PopQueryNode node)
-        {
+        {            
             if (node.WhereCondition != null)
             {
                 Visit(node.WhereCondition);
             }
-            SymbolTableEntry collectionFrom = RetrieveSymbol(node.Variable);
-            collectionRetrieveType = collectionFrom.CollectionType;
         }
 
         public override void Visit(EnqueueQueryNode node)
@@ -244,7 +242,7 @@ namespace Compiler.AST
         {
             throw new NotImplementedException();
         }
-
+                                                                                                                                                                                 
         public override void Visit(GraphSetQuery node)
         {
             throw new NotImplementedException();
