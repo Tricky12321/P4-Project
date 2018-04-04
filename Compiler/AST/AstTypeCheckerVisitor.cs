@@ -52,7 +52,7 @@ namespace Compiler.AST
 
         public override void Visit(StartNode node)
         {
-            throw new NotImplementedException();
+            VisitChildren(node);
         }
 
         public override void Visit(VertexNode node)
