@@ -54,7 +54,7 @@ namespace Compiler.AST
 
         public override void Visit(StartNode node)
         {
-            throw new NotImplementedException();
+            VisitChildren(node);
         }
 
         public override void Visit(VertexNode node)
@@ -69,7 +69,7 @@ namespace Compiler.AST
 
         public override void Visit(ExtendNode node)
         {
-            throw new NotImplementedException();
+
         }
 
         public override void Visit(PredicateNode node)
@@ -158,14 +158,14 @@ namespace Compiler.AST
             SymbolTableEntry varToAdd;
             SymbolTableEntry collectionToAddTo;
 
-            if(DeclaredLocally(node.VariableToAdd) && DeclaredLocally(node.VariableTo))
+            if (DeclaredLocally(node.VariableToAdd) && DeclaredLocally(node.VariableTo))
             {
                 varToAdd = RetrieveSymbol(node.VariableToAdd);
                 collectionToAddTo = RetrieveSymbol(node.VariableTo);
 
-                if(varToAdd.Type == collectionToAddTo.Type)
+                if (varToAdd.Type == collectionToAddTo.Type)
                 {
-                    if(node.WhereCondition != null)
+                    if (node.WhereCondition != null)
                     {
                         Visit(node.WhereCondition);
                     }
@@ -189,11 +189,25 @@ namespace Compiler.AST
 
         public override void Visit(DequeueQueryNode node)
         {
+            if (node.Parent != null && node.Parent is DeclarationNode)
+            {
+                SymbolTableEntry collection = RetrieveSymbol(node.Variable);
+                SymbolTableEntry collectionParent = RetrieveSymbol(node.Parent.Name);
+
+                if (collection.CollectionType == collectionParent.Type)
+                {
+
+                }
+                else
+                {
+                    Console.WriteLine($"Type incorrect at line number {node.LineNumber}");
+                }
+            }
+            
             if (node.WhereCondition != null)
             {
                 Visit(node.WhereCondition);
             }
-            
         }
 
         #endregion
@@ -244,6 +258,11 @@ namespace Compiler.AST
         }
                                                                                                                                                                                  
         public override void Visit(GraphSetQuery node)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void Visit(DeclarationNode node)
         {
             throw new NotImplementedException();
         }
