@@ -6,11 +6,11 @@ namespace Compiler.AST.Nodes
 {
     public class ExpressionNode : AbstractNode
     {
-        public List<Tuple<string, AllType, string>> expressionParts = new List<Tuple<string, AllType, string>>();
+        public List<KeyValuePair<ExpressionPartType, string>> ExpressionParts = new List<KeyValuePair<ExpressionPartType, string>>();
 
         public ExpressionNode(int LineNumber) : base(LineNumber)
         {
-            
+
         }
     }
 }

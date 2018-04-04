@@ -81,6 +81,21 @@ namespace Compiler.AST
 
         public override void Visit(ExtractMaxQueryNode node)
         {
+            if (node.Parent != null && node.Parent is ExpressionNode)
+            {
+                SymbolTableEntry collection = RetrieveSymbol(node.Variable);
+                SymbolTableEntry collectionParent = RetrieveSymbol(node.Parent.Name);
+
+                if (collection.Type == collectionParent.Type)
+                {
+
+                }
+                else
+                {
+                    Console.WriteLine($"Type incorrect at line number {node.LineNumber}");
+                }
+            }
+
             if (node.WhereCondition != null)
             {
                 Visit(node.WhereCondition);
@@ -89,6 +104,20 @@ namespace Compiler.AST
 
         public override void Visit(ExtractMinQueryNode node)
         {
+            if (node.Parent != null && node.Parent is ExpressionNode)
+            {
+                SymbolTableEntry collection = RetrieveSymbol(node.Variable);
+                SymbolTableEntry collectionParent = RetrieveSymbol(node.Parent.Name);
+
+                if (collection.Type == collectionParent.Type)
+                {
+
+                }
+                else
+                {
+                    Console.WriteLine($"Type incorrect at line number {node.LineNumber}");
+                }
+            }
 
             if (node.WhereCondition != null)
             {
@@ -98,6 +127,22 @@ namespace Compiler.AST
 
         public override void Visit(SelectAllQueryNode node)
         {
+            if (node.Parent != null && node.Parent is DeclarationNode)
+            {
+                
+                SymbolTableEntry collectionNameType = RetrieveSymbol(node.Variable);
+                SymbolTableEntry nameDeclaredForRetrieve = RetrieveSymbol(node.Parent.Name);
+
+                if (collectionNameType.Type.ToString() == nameDeclaredForRetrieve.Type.ToString() && nameDeclaredForRetrieve.Type.ToString() == node.Type)
+                {
+
+                }
+                else
+                {
+                    Console.WriteLine($"Type incorrect at line number {node.LineNumber}");
+                }
+            }
+
             if (node.WhereCondition != null)
             {
                 Visit(node.WhereCondition);
@@ -106,6 +151,21 @@ namespace Compiler.AST
 
         public override void Visit(SelectQueryNode node)
         {
+            if (node.Parent != null && node.Parent is ExpressionNode)
+            {
+                SymbolTableEntry collectionNameType = RetrieveSymbol(node.Variable);
+                SymbolTableEntry nameDeclaredForRetrieve = RetrieveSymbol(node.Parent.Name);
+
+                if (collectionNameType.Type.ToString() == nameDeclaredForRetrieve.Type.ToString() && nameDeclaredForRetrieve.Type.ToString() == node.Type)
+                {
+
+                }
+                else
+                {
+                    Console.WriteLine($"Type incorrect at line number {node.LineNumber}");
+                }
+            }
+
             if (node.WhereCondition != null)
             {
                 Visit(node.WhereCondition);
@@ -147,7 +207,22 @@ namespace Compiler.AST
         }
 
         public override void Visit(PopQueryNode node)
-        {            
+        {
+            if (node.Parent != null && node.Parent is ExpressionNode)
+            {
+                SymbolTableEntry collection = RetrieveSymbol(node.Variable);
+                SymbolTableEntry collectionParent = RetrieveSymbol(node.Parent.Name);
+
+                if (collection.Type == collectionParent.Type)
+                {
+
+                }
+                else
+                {
+                    Console.WriteLine($"Type incorrect at line number {node.LineNumber}");
+                }
+            }
+
             if (node.WhereCondition != null)
             {
                 Visit(node.WhereCondition);
@@ -190,12 +265,12 @@ namespace Compiler.AST
 
         public override void Visit(DequeueQueryNode node)
         {
-            if (node.Parent != null && node.Parent is DeclarationNode)
+            if (node.Parent != null && node.Parent is ExpressionNode)
             {
                 SymbolTableEntry collection = RetrieveSymbol(node.Variable);
                 SymbolTableEntry collectionParent = RetrieveSymbol(node.Parent.Name);
 
-                if (collection.CollectionType == collectionParent.Type)
+                if (collection.Type == collectionParent.Type)
                 {
 
                 }

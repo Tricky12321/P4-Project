@@ -8,20 +8,20 @@ namespace Compiler.AST.SymbolTable
 {
     class SymbolTableEntry
     {
+        public string Name;
         public AllType Type;
-        public AllType CollectionType; /* Only used for COLLECTION to indicate what type of COLLECTION */
         public uint Depth;
         public bool Reachable = true;
-
+        public bool IsCollection = false;
         public SymbolTableEntry(AllType type, uint depth)
         {
             Type = type;
             Depth = depth;
         }
 
-        public SymbolTableEntry(AllType type, AllType collectionType, uint depth) : this(type, depth)
+        public SymbolTableEntry(AllType type, bool IsCollection, uint depth) : this(type, depth)
         {
-            CollectionType = collectionType;
+            this.IsCollection = IsCollection;
         }
     }
 }

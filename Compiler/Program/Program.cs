@@ -15,15 +15,22 @@ namespace Compiler
     {
         static void Main(string[] args)
         {
-            BuildAST("code.giraph");
+            var CST = BuildCST("code.giraph");
+            var AST = BuildAST(CST);
+            var SymbolTable = BuildSymbolTable(AST as StartNode);
+            PrettyPrint(AST as StartNode);
             Console.ReadKey();
         }
 
-        public static void BuildAST(string FilePath)
+        public static AbstractNode BuildAST(GiraphParser.StartContext start)
         {
-            AbstractNode ast = new AstBuilder().VisitStart(BuildCST(FilePath));
+            AbstractNode ast = new AstBuilder().VisitStart(start);
+            return ast;
+        }
+
+        public static void PrettyPrint(StartNode start) {
             AstPrettyPrintVisitor visitor = new AstPrettyPrintVisitor();
-            visitor.VisitRoot(ast);
+            visitor.VisitRoot(start);
             Console.WriteLine(visitor.ProgramCode);
         }
 
@@ -34,8 +41,13 @@ namespace Compiler
             ITokenStream tokens = new CommonTokenStream(lexer);
             GiraphParser parser = new GiraphParser(tokens);
             parser.BuildParseTree = true;
-
             return parser.start();
+        }
+
+        public static AstSymbolTableCreatorVisitor BuildSymbolTable(StartNode node) {
+            AstSymbolTableCreatorVisitor SymbolTable = new AstSymbolTableCreatorVisitor();
+            SymbolTable.VisitRoot(node);
+            return SymbolTable;
         }
     }
 }
