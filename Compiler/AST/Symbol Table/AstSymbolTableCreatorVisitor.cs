@@ -264,5 +264,10 @@ namespace Compiler.AST.SymbolTable
         {
             throw new NotImplementedException();
         }
+
+        public override void Visit(GraphSetQuery node)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -16,6 +16,7 @@ namespace Compiler
         static void Main(string[] args)
         {
             BuildAST("code.giraph");
+            Console.ReadKey();
         }
 
         public static void BuildAST(string FilePath)
