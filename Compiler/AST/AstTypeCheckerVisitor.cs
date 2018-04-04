@@ -14,11 +14,13 @@ namespace Compiler.AST
         private Dictionary<string, List<SymbolTableEntry>> _symbolTable;
         private uint _globalDepth;
         public bool errorOccured = false;
+        private AllType collectionRetrieveType = AllType.VOID;
 
         public AstTypeCheckerVisitor(Dictionary<string, List<SymbolTableEntry>> symbolTable)
         {
             _symbolTable = symbolTable;
         }
+
 
         private SymbolTableEntry RetrieveSymbol(string name)
         {
@@ -52,7 +54,7 @@ namespace Compiler.AST
 
         public override void Visit(StartNode node)
         {
-            throw new NotImplementedException();
+            VisitChildren(node);
         }
 
         public override void Visit(VertexNode node)
@@ -67,7 +69,7 @@ namespace Compiler.AST
 
         public override void Visit(ExtendNode node)
         {
-            throw new NotImplementedException();
+
         }
 
         public override void Visit(PredicateNode node)
@@ -75,54 +77,60 @@ namespace Compiler.AST
             throw new NotImplementedException();
         }
 
-        public override void Visit(DequeueQueryNode node)
-        {
-            throw new NotImplementedException();
-        }
+        #region CollopsVisits
 
         public override void Visit(ExtractMaxQueryNode node)
         {
-            throw new NotImplementedException();
-        }
-
-        public override void Visit(PopQueryNode node)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override void Visit(SelectAllQueryNode node)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override void Visit(SelectQueryNode node)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override void Visit(PushQueryNode node)
-        {
-            throw new NotImplementedException();
+            if (node.WhereCondition != null)
+            {
+                Visit(node.WhereCondition);
+            }
         }
 
         public override void Visit(ExtractMinQueryNode node)
         {
-            throw new NotImplementedException();
+            if (node.WhereCondition != null)
+            {
+                Visit(node.WhereCondition);
+            }
         }
 
-        public override void Visit(EnqueueQueryNode node)
+        public override void Visit(SelectAllQueryNode node)
+        {
+            if (node.WhereCondition != null)
+            {
+                Visit(node.WhereCondition);
+            }
+        }
+
+        public override void Visit(SelectQueryNode node)
+        {
+            if (node.WhereCondition != null)
+            {
+                Visit(node.WhereCondition);
+            }
+        }
+
+        public override void Visit(PushQueryNode node)
         {
             SymbolTableEntry varToAdd;
             SymbolTableEntry collectionToAddTo;
 
-            if(DeclaredLocally(node.VariableToAdd) && DeclaredLocally(node.VariableTo))
+            if (DeclaredLocally(node.VariableToAdd) && DeclaredLocally(node.VariableAddTo))
             {
                 varToAdd = RetrieveSymbol(node.VariableToAdd);
-                collectionToAddTo = RetrieveSymbol(node.VariableTo);
+                collectionToAddTo = RetrieveSymbol(node.VariableAddTo);
 
-                if(varToAdd.Type == collectionToAddTo.Type)
+                if (varToAdd.Type == collectionToAddTo.Type)
                 {
-                    //very gud :)))
+                    if (node.WhereCondition != null)
+                    {
+                        Visit(node.WhereCondition);
+                    }
+                    else
+                    {
+                        //very gud :)))
+                    }
                 }
                 else
                 {
@@ -136,6 +144,73 @@ namespace Compiler.AST
                 Error();
             }
         }
+
+        public override void Visit(PopQueryNode node)
+        {            
+            if (node.WhereCondition != null)
+            {
+                Visit(node.WhereCondition);
+            }
+        }
+
+        public override void Visit(EnqueueQueryNode node)
+        {
+            SymbolTableEntry varToAdd;
+            SymbolTableEntry collectionToAddTo;
+
+            if (DeclaredLocally(node.VariableToAdd) && DeclaredLocally(node.VariableTo))
+            {
+                varToAdd = RetrieveSymbol(node.VariableToAdd);
+                collectionToAddTo = RetrieveSymbol(node.VariableTo);
+
+                if (varToAdd.Type == collectionToAddTo.Type)
+                {
+                    if (node.WhereCondition != null)
+                    {
+                        Visit(node.WhereCondition);
+                    }
+                    else
+                    {
+                        //very gud :)))
+                    }
+                }
+                else
+                {
+                    Console.WriteLine($"Variable {varToAdd} and collection {collectionToAddTo} are not of same type, at line number {node.LineNumber}");
+                    Error();
+                }
+            }
+            else
+            {
+                Console.WriteLine($"Variable or collection are not declared at line number {node.LineNumber}");
+                Error();
+            }
+        }
+
+        public override void Visit(DequeueQueryNode node)
+        {
+            if (node.Parent != null && node.Parent is DeclarationNode)
+            {
+                SymbolTableEntry collection = RetrieveSymbol(node.Variable);
+                SymbolTableEntry collectionParent = RetrieveSymbol(node.Parent.Name);
+
+                if (collection.CollectionType == collectionParent.Type)
+                {
+
+                }
+                else
+                {
+                    Console.WriteLine($"Type incorrect at line number {node.LineNumber}");
+                }
+            }
+            
+            if (node.WhereCondition != null)
+            {
+                Visit(node.WhereCondition);
+            }
+        }
+
+        #endregion
 
         public override void Visit(PredicateParameterNode node)
         {
@@ -181,8 +256,13 @@ namespace Compiler.AST
         {
             throw new NotImplementedException();
         }
-
+                                                                                                                                                                                 
         public override void Visit(GraphSetQuery node)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void Visit(DeclarationNode node)
         {
             throw new NotImplementedException();
         }

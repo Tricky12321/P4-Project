@@ -20,6 +20,7 @@ namespace Compiler.AST
             root.Accept(this);
         }
 
+        public abstract void Visit(DeclarationNode node);
         public abstract void Visit(AbstractNode node);
         public abstract void Visit(FunctionNode node);
         public abstract void Visit(FunctionParameterNode node);
