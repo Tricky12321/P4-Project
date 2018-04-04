@@ -15,8 +15,6 @@ namespace Compiler
     {
         static void Main(string[] args)
         {
-            EmptyClass Test = new EmptyClass();
-
             var CST = BuildCST("code.giraph");
             var AST = BuildAST(CST);
             var SymbolTable = BuildSymbolTable(AST as StartNode);
