@@ -412,14 +412,16 @@ namespace Compiler.AST
 
         public override AbstractNode VisitCollectionDcl([NotNull] GiraphParser.CollectionDclContext context)
         {
-            CollectionNode CollDcl = new CollectionNode(context.Start.Line);
-            CollDcl.Name = context.variable().GetText();
-            CollDcl.Type = context.allType().GetText();
+            DeclarationNode dclNode = new DeclarationNode(context.Start.Line);
+            dclNode.CollectionDcl = true;
+            dclNode.Type = context.allType().GetText();
+            dclNode.Name = context.variable().GetText();
             if (context.collectionAssignment() != null)
             {
-                CollDcl.Assignment = Visit(context.collectionAssignment());
+                dclNode.Assignment = Visit(context.collectionAssignment());
+                dclNode.Assignment.Parent = dclNode;
             }
-            return CollDcl;
+            return dclNode;
         }
 
         public override AbstractNode VisitCollectionAssignment([NotNull] GiraphParser.CollectionAssignmentContext context)
