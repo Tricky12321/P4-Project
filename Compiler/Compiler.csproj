@@ -112,6 +112,7 @@
     <Compile Include="AST\Nodes\QueryNodes\PrintOption.cs" />
     <Compile Include="AST\Nodes\LoopNodes\ForeachLoopNode.cs" />
     <Compile Include="AST\Nodes\QueryNodes\AddQueryNode.cs" />
+    <Compile Include="AST\Nodes\DatatypeNodes\Graph\EdgeDcl.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

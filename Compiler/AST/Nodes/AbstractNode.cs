@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 namespace Compiler.AST.Nodes
 {
-    
-
     public class AbstractNode
     {
         public AbstractNode Parent;

@@ -6,6 +6,7 @@ namespace Compiler.AST.Nodes.DatatypeNodes
         public string Type;
         public VariableDclNode(int LineNumber) : base(LineNumber)
         {
+            
         }
     }
 }

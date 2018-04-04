@@ -15,6 +15,11 @@ namespace Compiler.AST.Nodes.QueryNodes
         public bool IsVariable = false;
         public bool IsType = false;
         public bool IsQuery = false;
+        public string TypeOrVariable;
+        public AbstractNode Query;
+        // Shared
+        public string ToVariable;
+        public AbstractNode WhereCondition;
 
         public AddQueryNode(int LineNumber) : base (LineNumber)
         {

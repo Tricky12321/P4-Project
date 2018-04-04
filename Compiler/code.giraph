@@ -1,13 +1,9 @@
 ﻿Main -> VOID () {
-GRAPH G2
-	{
-		EDGE (v, q);
-		SET 'Directed' = FALSE;
-		VERTEX (v = 5), (), (v = 15, i = 4);
-		EDGE (a, b, i = 0), (b, c, w = 10*i+5), (c, a);
-		SET 'Directed' = TRUE;
-		VERTEX ();
-		EDGE (y, c);
-		SET 'Directed' = FALSE;
-	}
+    ADD V TO g1.Vertices;;;;
+    GRAPH g1 
+    {
+        SET 'Directed' = FALSE;
+    }
+	SET 'test' = 10 IN g1 WHERE h == h;
+    SET 'test' = 10, 'test' = 19 IN g1 WHERE h == h;
 }
