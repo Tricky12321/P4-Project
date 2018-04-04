@@ -309,7 +309,7 @@ namespace Compiler.AST
                     }
                     else if (j == 3)
                     {
-                        SetNode.AdoptChildren(Visit(child));
+                        SetNode.WhereCondition = Visit(child);
                     }
                 }
             }
