@@ -1,5 +1,5 @@
 ﻿Main -> VOID () {
-    ADD V TO g1.Vertices;;;;
+    ADD V TO g1.Vertices;
     GRAPH g1 
     {
         SET 'Directed' = FALSE;
