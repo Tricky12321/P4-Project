@@ -10,6 +10,4 @@
 
 
 	VERTEX xd = POP FROM test;
-
-	SET xd = POP FROM test;
 }
