@@ -115,7 +115,6 @@
     <Compile Include="AST\Nodes\QueryNodes\AddQueryNode.cs" />
     <Compile Include="AST\Nodes\DatatypeNodes\Graph\EdgeDcl.cs" />
     <Compile Include="AST\Symbol Table\Extension.cs" />
-    <Compile Include="Program\EmptyClass.cs" />
     <Compile Include="AST\Symbol Table\ClassEntry.cs" />
   </ItemGroup>
   <ItemGroup>
