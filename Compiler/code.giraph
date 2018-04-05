@@ -1,4 +1,24 @@
-﻿Main -> VOID () 
+﻿Main -> VOID () {
+    GRAPH g1 
+    {
+		VERTEX va(), vb(), vc(), vd(), ve();
+		EDGE x(vb, vd, v = 4), y(vd, ve, v = 7), z(va, vc, v = 10);
+    }
+    ADD V TO g1.Vertices;
+	SET 'test' = 5 + 1.2 * 2 + x.fe IN g1 WHERE h == h;
+    SET 'test' = 10, 'test' = 19 IN g1 WHERE h == h;
+
+	VERTEX sese = SELECT VERTEX FROM graph1.Vertices WHERE v > 2;
+
+	COLLECTION VERTEX test = SELECTALL VERTEX FROM Graph1.Vertices;
+
+
+	VERTEX xd = POP FROM test;
+
+	IF(V1 == V2 | FALSE & V3 > 4.9)
+	{
+	}
+Main -> VOID () 
 {
   	IF (3 == sc & TRUE | v3 == 2.9)
 	{
