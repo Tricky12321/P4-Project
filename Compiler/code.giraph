@@ -5,28 +5,8 @@
 		EDGE x(vb, vd, v = 4), y(vd, ve, v = 7), z(va, vc, v = 10);
     }
 
-    IF (g1 == g2) {
-        SET 'test' = 5 + 1.2 * 2 + x.fe IN g1 WHERE h == h;
-    } ELSEIF (g1 == g2) {
-        SET 'test' = 5 + 1.2 * 2 + x.fe IN g1 WHERE h == h;
-    } ELSE {sdfsd
-	s
-	df
-	sdf
-	ds
-	f
-	dsf
-	sd
-	f
-	sdf
-	sd
-	f
-	dsf
-	ds
-	f
-	dsf
+	VERTEX cc = SELECT VERTEX FROM g1 WHERE v > 8;
 
-        SET 'test' = 5 + 1.2 * 2 + x.fe IN g1 WHERE h == h;
-    }
+	COLLECTION VERTEX test = SELECTALL VERTEX FROM G1 WHERE V < 8;
 }
 
