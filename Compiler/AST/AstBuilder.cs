@@ -573,11 +573,11 @@ namespace Compiler.AST
             ExtractMinQueryNode ExtractQuery = new ExtractMinQueryNode(context.Start.Line);
 
             ExtractQuery.Variable = context.variable().GetText();
-            if (context.attribute() != null && context.attribute().ChildCount > 0)
+            if (context.attribute() != null)
             {
                 ExtractQuery.Attribute = context.attribute().GetText();
             }
-            if (context.where() != null && context.where().ChildCount > 0)
+            if (context.where() != null)
             {
                 ExtractQuery.WhereCondition = Visit(context.where());
             }
