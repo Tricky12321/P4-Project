@@ -38,7 +38,7 @@ namespace Compiler
             PPTimer.Start();
             PPVisitor.VisitRoot(start);
             PPTimer.Stop();
-            Console.WriteLine(PPTimer.ElapsedMilliseconds);
+            Console.WriteLine($"Pretty Printer took: {PPTimer.ElapsedMilliseconds}ms");
             Console.WriteLine(PPVisitor.ProgramCode);
         }
 
