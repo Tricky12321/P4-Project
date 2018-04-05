@@ -4,14 +4,29 @@
 		VERTEX va(), vb(), vc(), vd(), ve();
 		EDGE x(vb, vd, v = 4), y(vd, ve, v = 7), z(va, vc, v = 10);
     }
-    ADD V TO g1.Vertices;
-	SET 'test' = 5 + 1.2 * 2 + x.fe IN g1 WHERE h == h;
-    SET 'test' = 10, 'test' = 19 IN g1 WHERE h == h;
 
-	VERTEX sese = SELECT VERTEX FROM graph1.Vertices WHERE v > 2;
+    IF (g1 == g2) {
+        SET 'test' = 5 + 1.2 * 2 + x.fe IN g1 WHERE h == h;
+    } ELSEIF (g1 == g2) {
+        SET 'test' = 5 + 1.2 * 2 + x.fe IN g1 WHERE h == h;
+    } ELSE {sdfsd
+	s
+	df
+	sdf
+	ds
+	f
+	dsf
+	sd
+	f
+	sdf
+	sd
+	f
+	dsf
+	ds
+	f
+	dsf
 
-	COLLECTION VERTEX test = SELECTALL VERTEX FROM Graph1.Vertices;
-
-
-	VERTEX xd = POP FROM test;
+        SET 'test' = 5 + 1.2 * 2 + x.fe IN g1 WHERE h == h;
+    }
 }
+

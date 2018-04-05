@@ -42,6 +42,8 @@ namespace Compiler.AST.SymbolTable
             _symTable[name].Add(new SymbolTableEntry(type, _globalDepth));
         }
 
+
+
         private AllType? RetrieveTypeFromClasses(List<string> names, AllType type, out bool IsCollection, bool ShowErrors = true)
         {
             // [GRAPH/VERTEX/EDGE]-><KEYS>->ClassEntry
@@ -84,6 +86,11 @@ namespace Compiler.AST.SymbolTable
                 IsCollection = false;
                 return null;
             }
+        }
+
+        public AllType? RetrieveSymbol(string Name, bool ShowErrors = true) {
+            bool IsCollection;
+            return RetrieveSymbol(Name, out IsCollection, ShowErrors);
         }
 
         public AllType? RetrieveSymbol(string Name, out bool IsCollection, bool ShowErrors = true)

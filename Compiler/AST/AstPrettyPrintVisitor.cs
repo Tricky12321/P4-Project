@@ -85,7 +85,7 @@ namespace Compiler.AST
                 }
                 ProgramCode += ";\n";
             }
-            if(node.LeftmostChild != null)
+            if (node.LeftmostChild != null)
             {
                 VisitChildren(node);
             }
@@ -127,7 +127,7 @@ namespace Compiler.AST
         public override void Visit(GraphSetQuery node)
         {
             Console.WriteLine("GraphSetQueryNode");
-            ProgramCode += $"SET {node.Attributes.Item1.Name} = {node.Attributes.Item3.Name};\n";
+            ProgramCode += $"SET {node.Attributes.Item1.Name} = {node.Attributes.Item3.ExpressionString()};\n";
         }
 
         public override void Visit(SetQueryNode node)
@@ -139,7 +139,7 @@ namespace Compiler.AST
             foreach (var attribute in node.Attributes)
             {
                 InsertComma(ref i);
-                ProgramCode += $"'{attribute.Item1.Name}' = {attribute.Item3.Name}";
+                ProgramCode += $"'{attribute.Item1.Name}' = {attribute.Item3.ExpressionString()}";
             }
             ProgramCode += $" IN {node.InVariable}";
             if (node.WhereCondition == null)
@@ -162,33 +162,36 @@ namespace Compiler.AST
         public override void Visit(PushQueryNode node)
         {
             Console.WriteLine("PushNode");
-            ProgramCode += $"PUSH {node.VariableToAdd} TO {node.VariableAddTo};\n";
+            ProgramCode += $"PUSH {node.VariableToAdd} TO {node.VariableAddTo}";
+            node.WhereCondition.Accept(this);
+            ProgramCode += ";\n";
         }
 
         public override void Visit(PopQueryNode node)
         {
             Console.WriteLine("PopNode");
-            ProgramCode += $"POP FROM {node.Variable};\n";
-            //Needs WhereNode
+            ProgramCode += $"POP FROM {node.Variable}";
+            node.WhereCondition.Accept(this);
+            ProgramCode += ";\n";
         }
 
         public override void Visit(IfElseIfElseNode node)
         {
             Console.WriteLine("IfElseIfElseNode");
             ProgramCode += "IF (";
-            //node.IfCondition.Accept(this);
+            node.IfCondition.Accept(this);
             ProgramCode += ")\n{\n";
             VisitChildren(node.IfCodeBlock);
             ProgramCode += "}\n";
-            for(int i = 0; i < node.ElseIfCodeBlocks.Count; i++)
+            for (int i = 0; i < node.ElseIfCodeBlocks.Count; i++)
             {
                 ProgramCode += "ELSEIF (";
-                //node.ElseIfConditions[i].Accept(this);
+                node.ElseIfConditions[i].Accept(this);
                 ProgramCode += ")\n{\n";
                 VisitChildren(node.ElseIfCodeBlocks[i]);
                 ProgramCode += "}\n";
             }
-            if(node.ElseCodeBlock != null)
+            if (node.ElseCodeBlock != null)
             {
                 ProgramCode += "ELSE\n{\n";
                 VisitChildren(node.ElseCodeBlock);
@@ -196,20 +199,63 @@ namespace Compiler.AST
             }
         }
 
+        public override void Visit(BoolComparisonNode node)
+        {
+            Console.WriteLine("BoolComparisonNode");
+            if (node.LeftmostChild != null)
+            {
+                VisitChildren(node);
+            }
+            else
+            {
+                if (node.Left != null)
+                {
+                    node.Left.Accept(this);
+                    ProgramCode += $" {node.ComparisonOperator} ";
+                    node.Right.Accept(this);
+                }
+            }
+        }
+
+        public override void Visit(ExpressionNode node)
+        {
+            ProgramCode += node.ExpressionString();
+        }
+
         #region CollOPSvisits
         public override void Visit(ExtendNode node)
         {
-            throw new NotImplementedException();
+            Console.WriteLine("ExtendNode");
+            ProgramCode += "EXTEND ";
+            ProgramCode += $"{node.ClassToExtend} {node.ExtendWithType} ";
+            ProgramCode += $"'{node.ExtensionName}'";
+            if (node.ExtensionShortName != null)
+            {
+                ProgramCode += $":'{node.ExtensionShortName}'";
+            }
+            if (node.ExtensionDefaultValue != null)
+            {
+                ProgramCode += $"= {node.ExtensionDefaultValue}";
+            }
+            ProgramCode += ";\n";
         }
 
         public override void Visit(DequeueQueryNode node)
         {
-            throw new NotImplementedException();
+            Console.WriteLine("DequeueQueryNode");
+            ProgramCode += "DEQUEUE FROM ";
+            ProgramCode += $"{node.Variable}";
+            node.WhereCondition.Accept(this);
+            ProgramCode += ";\n";
         }
 
         public override void Visit(EnqueueQueryNode node)
         {
-            throw new NotImplementedException();
+            Console.WriteLine("EnqueueQueryNode");
+            ProgramCode += "ENQUEUE ";
+            ProgramCode += $"{node.VariableToAdd} TO {node.VariableTo}";
+            node.WhereCondition.Accept(this);
+            ProgramCode += ";\n";
         }
 
         public override void Visit(ExtractMaxQueryNode node)
@@ -249,12 +295,12 @@ namespace Compiler.AST
             throw new NotImplementedException();
         }
 
-        public override void Visit(AbstractNode node)
+        public override void Visit(DeclarationNode node)
         {
             throw new NotImplementedException();
         }
 
-        public override void Visit(DeclarationNode node)
+        public override void Visit(AbstractNode node)
         {
             throw new NotImplementedException();
         }

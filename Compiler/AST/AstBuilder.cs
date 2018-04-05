@@ -36,37 +36,22 @@ namespace Compiler.AST
         {
             FunctionNode FNode = new FunctionNode(context.Start.Line);
             // Extract the Name of the function, and the return type
-            FNode.Name = context.children[0].GetText(); // Name
-            FNode.ReturnType = context.children[2].GetText(); // Return Type
+            FNode.Name = context.variable().GetText(); // Name
+            FNode.ReturnType = context.allTypeWithColl().GetText(); // Return Type
             int i = 0;
             // Extract the parameters from the function
-            while (context.children[i].GetText() != ")")
-            {
-                var Child = context.children[4].GetChild(i);
-                if (Child != null && Child.GetText() != ",")
-                {
-                    var first = context.children[4].GetChild(i).GetChild(0).GetText(); // Parameter Type
-                    var second = context.children[4].GetChild(i).GetChild(1).GetText(); // Parameter Name
-                    FNode.AddParameter(first, second, context.Start.Line);
-                }
-                i++;
+            if (context.formalParams() != null) {
+				foreach (var Parameter in context.formalParams().formalParam())
+				{
+                    var Type = Parameter.allType().GetText();  // Parameter Type
+                    var Name = Parameter.variable().GetText(); // Parameter Name
+
+                    FNode.AddParameter(Type, Name, context.Start.Line);
+				}
             }
-            // Access the codeblock related to the function, by ignoring:
-            //
-            // Function Name
-            // Function Type
-            // Function Parameters
-            // K is the amount of children in the FunctionCodeBlock
-            var CodeBlockEntry = context.GetChild(i + 1);
-            int CodeElementsInCodeblock = CodeBlockEntry.ChildCount;
-            // J skips the first child "(" and starts with the first child that is actual code
-            // Loops though all the children, and ignores the last child ")"
             foreach (var Child in context.codeBlock().codeBlockContent())
             {
-                var subChild = Child.GetChild(0);
-                var test = subChild.GetText();
-                var test2 = Visit(subChild);
-                FNode.AdoptChildren(test2);
+                FNode.AdoptChildren(Visit(Child.GetChild(0)));
             }
             return FNode;
         }
@@ -89,7 +74,7 @@ namespace Compiler.AST
 
         public override AbstractNode VisitCodeBlockContent([NotNull] GiraphParser.CodeBlockContentContext context)
         {
-            return VisitChildren(context);
+            throw new Exception("You should not end here, this is codeBlockContent...");
         }
 
         public override AbstractNode VisitGraphInitDcl([NotNull] GiraphParser.GraphInitDclContext context)
@@ -237,7 +222,8 @@ namespace Compiler.AST
         public override AbstractNode VisitExpression([NotNull] GiraphParser.ExpressionContext context)
         {
             ExpressionNode ExpNode = new ExpressionNode(context.Start.Line);
-            ExpNode.AdoptChildren(Visit(context.GetChild(0)));
+            ExpNode.ExpressionParts = VisitVarOrconstExpressionExtRecursive(context);
+            //ExpNode.AdoptChildren(Visit(context.GetChild(0)));
             return ExpNode;
         }
 
@@ -378,8 +364,16 @@ namespace Compiler.AST
                     return ExpressionPartType.ADVANCED_OPERATOR;
                 case "GiraphParser+VariableContext":
                     return ExpressionPartType.VARIABLE;
+                case "GiraphParser+SelectContext":
+                case "GiraphParser+PopOPContext":
+                case "GiraphParser+PushOPContext":
+                case "GiraphParser+EnqueueOPContext":
+                case "GiraphPArser+DequeueOPContext":
+                    return ExpressionPartType.QUERYTYPE;
+                case "GiraphParser+AttributeContext":
+                    return ExpressionPartType.ATTRIBUTE;
             }
-            throw new WroneExpressionPartTypeFound($"Typen: {type} har ikke en case i typefinder!!"); 
+            throw new WrongExpressionPartTypeFound($"Typen: {type} har ikke en case i typefinder!!"); 
         }
 
         public override AbstractNode VisitAttribute([NotNull] GiraphParser.AttributeContext context)
@@ -409,10 +403,11 @@ namespace Compiler.AST
         public override AbstractNode VisitWhere([NotNull] GiraphParser.WhereContext context)
         {
             WhereNode WNode = new WhereNode(context.Start.Line);
-            foreach (var Child in context.boolComparisons().children)
+            WNode.AdoptChildren(Visit(context.boolComparisons()));
+            /*foreach (var Child in context.boolComparisons().children)
             {
                 WNode.AdoptChildren(Visit(Child));
-            }
+            }*/
             return WNode;
         }
 
@@ -494,7 +489,6 @@ namespace Compiler.AST
                     IfNode.ElseCodeBlock = Visit(context.elseCond().codeBlock());
                 }
             }
-
             return IfNode;
         }
 
@@ -910,5 +904,6 @@ namespace Compiler.AST
         {
             throw new Exception("Error at " + node.GetText() + " " + node.Parent.SourceInterval);
         }
+
     }
 }
