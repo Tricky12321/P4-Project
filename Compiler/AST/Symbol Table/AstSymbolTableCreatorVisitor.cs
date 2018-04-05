@@ -10,7 +10,12 @@ namespace Compiler.AST.SymbolTable
 {
     internal class AstSymbolTableCreatorVisitor : AstVisitorBase
     {
-        SymTable SymbolTable = new SymTable();
+        SymTable SymbolTable;
+
+        public AstSymbolTableCreatorVisitor(SymTable symbolTable)
+        {
+            SymbolTable = symbolTable;
+        }
 
         public AllType ResolveFuncType(string Type)
         {
