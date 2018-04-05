@@ -10,7 +10,12 @@ namespace Compiler.AST.SymbolTable
 {
     internal class AstSymbolTableCreatorVisitor : AstVisitorBase
     {
-        SymTable SymbolTable = new SymTable();
+        SymTable SymbolTable;
+
+        public AstSymbolTableCreatorVisitor(SymTable symbolTable)
+        {
+            SymbolTable = symbolTable;
+        }
 
         public AllType ResolveFuncType(string Type)
         {
@@ -245,6 +250,11 @@ namespace Compiler.AST.SymbolTable
         }
 
         public override void Visit(BoolComparisonNode node)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void Visit(ExpressionNode node)
         {
             throw new NotImplementedException();
         }

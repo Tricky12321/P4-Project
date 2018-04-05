@@ -385,8 +385,11 @@ namespace Compiler.AST
                 case "GiraphParser+EnqueueOPContext":
                 case "GiraphPArser+DequeueOPContext":
                     return ExpressionPartType.QUERYTYPE;
+                    return ExpressionPartType.VARIABLE;
+                case "GiraphParser+AttributeContext":
+                    return ExpressionPartType.ATTRIBUTE;
             }
-            throw new WroneExpressionPartTypeFound($"Typen: {type} har ikke en case i typefinder!!"); 
+            throw new WrongExpressionPartTypeFound($"Typen: {type} har ikke en case i typefinder!!"); 
         }
 
         public override AbstractNode VisitAttribute([NotNull] GiraphParser.AttributeContext context)
@@ -416,10 +419,11 @@ namespace Compiler.AST
         public override AbstractNode VisitWhere([NotNull] GiraphParser.WhereContext context)
         {
             WhereNode WNode = new WhereNode(context.Start.Line);
-            foreach (var Child in context.boolComparisons().children)
+            WNode.AdoptChildren(Visit(context.boolComparisons()));
+            /*foreach (var Child in context.boolComparisons().children)
             {
                 WNode.AdoptChildren(Visit(Child));
-            }
+            }*/
             return WNode;
         }
 
