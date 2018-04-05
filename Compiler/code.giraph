@@ -18,4 +18,9 @@
 	IF(V1 == V2 | FALSE & V3 > 4.9)
 	{
 	}
+Main -> VOID () 
+{
+  	IF (3 == sc & TRUE | v3 == 2.9)
+	{
+	}
 }

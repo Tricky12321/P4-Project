@@ -237,7 +237,8 @@ namespace Compiler.AST
         public override AbstractNode VisitExpression([NotNull] GiraphParser.ExpressionContext context)
         {
             ExpressionNode ExpNode = new ExpressionNode(context.Start.Line);
-            ExpNode.AdoptChildren(Visit(context.GetChild(0)));
+            ExpNode.ExpressionParts = VisitVarOrconstExpressionExtRecursive(context);
+            //ExpNode.AdoptChildren(Visit(context.GetChild(0)));
             return ExpNode;
         }
 
