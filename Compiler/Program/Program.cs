@@ -18,8 +18,7 @@ namespace Compiler
             var CST = BuildCST("code.giraph");
             var AST = BuildAST(CST);
             PrettyPrint(AST as StartNode);
-            SymTable SymbolTableMethods = new SymTable();
-            AstSymbolTableCreatorVisitor SymbolTable = BuildSymbolTable(AST as StartNode, SymbolTableMethods);
+            SymTable SymbolTable = BuildSymbolTable(AST as StartNode);
             Console.ReadKey();
         }
 
@@ -45,10 +44,10 @@ namespace Compiler
             return parser.start();
         }
 
-        public static AstSymbolTableCreatorVisitor BuildSymbolTable(StartNode node, SymTable symbolTable) {
-            AstSymbolTableCreatorVisitor SymbolTable = new AstSymbolTableCreatorVisitor(symbolTable);
-            SymbolTable.VisitRoot(node);
-            return SymbolTable;
+        public static SymTable BuildSymbolTable(StartNode node) {
+            AstSymbolTableCreatorVisitor SymbolTable = new AstSymbolTableCreatorVisitor();
+            SymbolTable.BuildSymbolTable(node);
+            return SymbolTable.SymbolTable;
 
         }
     }
