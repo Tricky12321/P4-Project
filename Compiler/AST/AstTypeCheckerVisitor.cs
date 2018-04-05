@@ -64,15 +64,18 @@ namespace Compiler.AST
         {
             if (node.Parent != null && node.Parent is ExpressionNode)
             {
-                AllType? collection = _createdSymbolTabe.RetrieveSymbol(node.Variable, false);
-                AllType? collectionParent = _createdSymbolTabe.RetrieveSymbol(node.Parent.Name, false);
+                bool isCollectionInQuery;
+                AllType? collectionInQuery = _createdSymbolTabe.RetrieveSymbol(node.Variable, out isCollectionInQuery, false);
+                bool isCollectionRetrieveVar;
+                AllType? RetrieveVar = _createdSymbolTabe.RetrieveSymbol(node.Parent.Name, out isCollectionRetrieveVar, false);
 
-                if (collection == collectionParent)
+                if (collectionInQuery == RetrieveVar && isCollectionInQuery && !isCollectionRetrieveVar)
                 {
 
                 }
                 else
                 {
+                    
                     Console.WriteLine($"Type incorrect at line number {node.LineNumber}");
                 }
             }
@@ -110,11 +113,12 @@ namespace Compiler.AST
         {
             if (node.Parent != null && node.Parent is DeclarationNode)
             {
+                bool isCollectionRetrieveVar;
+                AllType? nameDeclaredForRetrieve = _createdSymbolTabe.RetrieveSymbol(node.Parent.Name, out isCollectionRetrieveVar , false);
+                bool isCollectionInQuery;
+                AllType? collectionNameType = _createdSymbolTabe.RetrieveSymbol(node.Variable, out isCollectionInQuery , false);
 
-                AllType? collectionNameType = _createdSymbolTabe.RetrieveSymbol(node.Variable, false);
-                AllType? nameDeclaredForRetrieve = _createdSymbolTabe.RetrieveSymbol(node.Parent.Name, false);
-
-                if (collectionNameType.ToString() == nameDeclaredForRetrieve.ToString() && nameDeclaredForRetrieve.ToString() == node.Type)
+                if (nameDeclaredForRetrieve.ToString() == collectionNameType.ToString() && nameDeclaredForRetrieve.ToString() == node.Type && isCollectionInQuery && isCollectionRetrieveVar)
                 {
 
                 }
