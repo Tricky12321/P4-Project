@@ -1,8 +1,11 @@
-﻿Main -> VOID () {
+﻿EXTEND VERTEX INT 'Fuck':'me' = 3;
+EXTEND GRAPH INT 'Weight':'W';
+EXTEND EDGE STRING 'name';
+Main -> VOID () {
     GRAPH g1 
     {
 		VERTEX va(), vb(), vc(), vd(), ve();
 		EDGE x(vb, vd, v = 4), y(vd, ve, v = 7), z(va, vc, v = 10);
     }
-	SET 'test' = 5 + 1.2 * 2 + x.fe IN g1 WHERE h == h;
+	SET 'test' = 5 + 1.2 * 2 + x.fe IN g1;
 }

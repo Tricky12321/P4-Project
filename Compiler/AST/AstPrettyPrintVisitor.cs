@@ -85,7 +85,7 @@ namespace Compiler.AST
                 }
                 ProgramCode += ";\n";
             }
-            if(node.LeftmostChild != null)
+            if (node.LeftmostChild != null)
             {
                 VisitChildren(node);
             }
@@ -180,7 +180,7 @@ namespace Compiler.AST
             ProgramCode += ")\n{\n";
             VisitChildren(node.IfCodeBlock);
             ProgramCode += "}\n";
-            for(int i = 0; i < node.ElseIfCodeBlocks.Count; i++)
+            for (int i = 0; i < node.ElseIfCodeBlocks.Count; i++)
             {
                 ProgramCode += "ELSEIF (";
                 //node.ElseIfConditions[i].Accept(this);
@@ -188,7 +188,7 @@ namespace Compiler.AST
                 VisitChildren(node.ElseIfCodeBlocks[i]);
                 ProgramCode += "}\n";
             }
-            if(node.ElseCodeBlock != null)
+            if (node.ElseCodeBlock != null)
             {
                 ProgramCode += "ELSE\n{\n";
                 VisitChildren(node.ElseCodeBlock);
@@ -199,7 +199,19 @@ namespace Compiler.AST
         #region CollOPSvisits
         public override void Visit(ExtendNode node)
         {
-            throw new NotImplementedException();
+            Console.WriteLine("ExtendNode");
+            ProgramCode += "EXTEND ";
+            ProgramCode += $"{node.ClassToExtend} {node.ExtendWithType} ";
+            ProgramCode += $"'{node.ExtensionName}'";
+            if (node.ExtensionShortName != null)
+            {
+                ProgramCode += $":'{node.ExtensionShortName}'";
+            }
+            if (node.ExtensionDefaultValue != null)
+            {
+                ProgramCode += $"= {node.ExtensionDefaultValue}";
+            }
+            ProgramCode += ";\n";
         }
 
         public override void Visit(DequeueQueryNode node)

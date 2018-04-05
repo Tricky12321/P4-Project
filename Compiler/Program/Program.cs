@@ -17,8 +17,8 @@ namespace Compiler
         {
             var CST = BuildCST("code.giraph");
             var AST = BuildAST(CST);
-            var SymbolTable = BuildSymbolTable(AST as StartNode);
             PrettyPrint(AST as StartNode);
+            var SymbolTable = BuildSymbolTable(AST as StartNode);
             Console.ReadKey();
         }
 
