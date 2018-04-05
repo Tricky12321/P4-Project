@@ -46,7 +46,7 @@ namespace Compiler
 
         public static SymTable BuildSymbolTable(StartNode node) {
             AstSymbolTableCreatorVisitor SymbolTable = new AstSymbolTableCreatorVisitor();
-            SymbolTable.VisitRoot(node);
+            SymbolTable.BuildSymbolTable(node);
             return SymbolTable.SymbolTable;
 
         }
