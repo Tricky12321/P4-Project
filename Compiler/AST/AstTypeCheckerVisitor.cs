@@ -11,34 +11,15 @@ namespace Compiler.AST
 {
     class AstTypeCheckerVisitor : AstVisitorBase
     {
-        private Dictionary<string, List<SymbolTableEntry>> _symbolTable;
-        private uint _globalDepth;
         public bool errorOccured = false;
         private AllType collectionRetrieveType = AllType.VOID;
+        bool isCollection;
 
-        public AstTypeCheckerVisitor(Dictionary<string, List<SymbolTableEntry>> symbolTable)
+        SymTable _createdSymbolTabe;
+
+        public AstTypeCheckerVisitor(SymTable symbolTable)
         {
-            _symbolTable = symbolTable;
-        }
-
-
-        private SymbolTableEntry RetrieveSymbol(string name)
-        {
-            try
-            {
-                List<SymbolTableEntry> entriesWithThisName = _symbolTable[name];
-                SymbolTableEntry result = entriesWithThisName.Where(x => x.Reachable && x.Depth <= _globalDepth).First();
-                return result;
-            }
-            catch (KeyNotFoundException)
-            {
-                return null;
-            }
-        }
-
-        private bool DeclaredLocally(string name)
-        {
-            return RetrieveSymbol(name) != null;
+            _createdSymbolTabe = symbolTable;
         }
 
         private void Error()
@@ -83,10 +64,10 @@ namespace Compiler.AST
         {
             if (node.Parent != null && node.Parent is ExpressionNode)
             {
-                SymbolTableEntry collection = RetrieveSymbol(node.Variable);
-                SymbolTableEntry collectionParent = RetrieveSymbol(node.Parent.Name);
+                AllType? collection = _createdSymbolTabe.RetrieveSymbol(node.Variable, out isCollection, false);
+                AllType? collectionParent = _createdSymbolTabe.RetrieveSymbol(node.Parent.Name, out isCollection, false);
 
-                if (collection.Type == collectionParent.Type)
+                if (collection == collectionParent)
                 {
 
                 }
@@ -106,10 +87,10 @@ namespace Compiler.AST
         {
             if (node.Parent != null && node.Parent is ExpressionNode)
             {
-                SymbolTableEntry collection = RetrieveSymbol(node.Variable);
-                SymbolTableEntry collectionParent = RetrieveSymbol(node.Parent.Name);
+                AllType? collection = _createdSymbolTabe.RetrieveSymbol(node.Variable, out isCollection, false);
+                AllType? collectionParent = _createdSymbolTabe.RetrieveSymbol(node.Parent.Name, out isCollection, false);
 
-                if (collection.Type == collectionParent.Type)
+                if (collection == collectionParent)
                 {
 
                 }
@@ -129,11 +110,11 @@ namespace Compiler.AST
         {
             if (node.Parent != null && node.Parent is DeclarationNode)
             {
-                
-                SymbolTableEntry collectionNameType = RetrieveSymbol(node.Variable);
-                SymbolTableEntry nameDeclaredForRetrieve = RetrieveSymbol(node.Parent.Name);
 
-                if (collectionNameType.Type.ToString() == nameDeclaredForRetrieve.Type.ToString() && nameDeclaredForRetrieve.Type.ToString() == node.Type)
+                AllType? collectionNameType = _createdSymbolTabe.RetrieveSymbol(node.Variable, out isCollection, false);
+                AllType? nameDeclaredForRetrieve = _createdSymbolTabe.RetrieveSymbol(node.Parent.Name, out isCollection, false);
+
+                if (collectionNameType.ToString() == nameDeclaredForRetrieve.ToString() && nameDeclaredForRetrieve.ToString() == node.Type)
                 {
 
                 }
@@ -153,10 +134,10 @@ namespace Compiler.AST
         {
             if (node.Parent != null && node.Parent is ExpressionNode)
             {
-                SymbolTableEntry collectionNameType = RetrieveSymbol(node.Variable);
-                SymbolTableEntry nameDeclaredForRetrieve = RetrieveSymbol(node.Parent.Name);
+                AllType? collectionNameType = _createdSymbolTabe.RetrieveSymbol(node.Variable, out isCollection, false);
+                AllType? nameDeclaredForRetrieve = _createdSymbolTabe.RetrieveSymbol(node.Parent.Name, out isCollection, false);
 
-                if (collectionNameType.Type.ToString() == nameDeclaredForRetrieve.Type.ToString() && nameDeclaredForRetrieve.Type.ToString() == node.Type)
+                if (collectionNameType.ToString() == nameDeclaredForRetrieve.ToString() && nameDeclaredForRetrieve.ToString() == node.Type)
                 {
 
                 }
@@ -174,15 +155,15 @@ namespace Compiler.AST
 
         public override void Visit(PushQueryNode node)
         {
-            SymbolTableEntry varToAdd;
-            SymbolTableEntry collectionToAddTo;
+            AllType? varToAdd;
+            AllType? collectionToAddTo;
 
-            if (DeclaredLocally(node.VariableToAdd) && DeclaredLocally(node.VariableAddTo))
+            if (_createdSymbolTabe.DeclaredLocally(node.VariableToAdd) && _createdSymbolTabe.DeclaredLocally(node.VariableAddTo))
             {
-                varToAdd = RetrieveSymbol(node.VariableToAdd);
-                collectionToAddTo = RetrieveSymbol(node.VariableAddTo);
+                varToAdd = _createdSymbolTabe.RetrieveSymbol(node.VariableToAdd, out isCollection, false);
+                collectionToAddTo = _createdSymbolTabe.RetrieveSymbol(node.VariableAddTo, out isCollection, false);
 
-                if (varToAdd.Type == collectionToAddTo.Type)
+                if (varToAdd == collectionToAddTo)
                 {
                     if (node.WhereCondition != null)
                     {
@@ -210,10 +191,10 @@ namespace Compiler.AST
         {
             if (node.Parent != null && node.Parent is ExpressionNode)
             {
-                SymbolTableEntry collection = RetrieveSymbol(node.Variable);
-                SymbolTableEntry collectionParent = RetrieveSymbol(node.Parent.Name);
+                AllType? collection = _createdSymbolTabe.RetrieveSymbol(node.Variable, out isCollection, false);
+                AllType? collectionParent = _createdSymbolTabe.RetrieveSymbol(node.Parent.Name, out isCollection, false);
 
-                if (collection.Type == collectionParent.Type)
+                if (collection == collectionParent)
                 {
 
                 }
@@ -231,15 +212,15 @@ namespace Compiler.AST
 
         public override void Visit(EnqueueQueryNode node)
         {
-            SymbolTableEntry varToAdd;
-            SymbolTableEntry collectionToAddTo;
+            AllType? varToAdd;
+            AllType? collectionToAddTo;
 
-            if (DeclaredLocally(node.VariableToAdd) && DeclaredLocally(node.VariableTo))
+            if (_createdSymbolTabe.DeclaredLocally(node.VariableToAdd) && _createdSymbolTabe.DeclaredLocally(node.VariableTo))
             {
-                varToAdd = RetrieveSymbol(node.VariableToAdd);
-                collectionToAddTo = RetrieveSymbol(node.VariableTo);
+                varToAdd = _createdSymbolTabe.RetrieveSymbol(node.VariableToAdd, out isCollection, false);
+                collectionToAddTo = _createdSymbolTabe.RetrieveSymbol(node.VariableTo, out isCollection, false);
 
-                if (varToAdd.Type == collectionToAddTo.Type)
+                if (varToAdd == collectionToAddTo)
                 {
                     if (node.WhereCondition != null)
                     {
@@ -267,10 +248,10 @@ namespace Compiler.AST
         {
             if (node.Parent != null && node.Parent is ExpressionNode)
             {
-                SymbolTableEntry collection = RetrieveSymbol(node.Variable);
-                SymbolTableEntry collectionParent = RetrieveSymbol(node.Parent.Name);
+                AllType? collection = _createdSymbolTabe.RetrieveSymbol(node.Variable, out isCollection, false);
+                AllType? collectionParent = _createdSymbolTabe.RetrieveSymbol(node.Parent.Name, out isCollection, false);
 
-                if (collection.Type == collectionParent.Type)
+                if (collection == collectionParent)
                 {
 
                 }
