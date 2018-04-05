@@ -116,6 +116,7 @@
     <Compile Include="AST\Nodes\DatatypeNodes\Graph\EdgeDcl.cs" />
     <Compile Include="AST\Symbol Table\Extension.cs" />
     <Compile Include="AST\Symbol Table\ClassEntry.cs" />
+    <Compile Include="AST\Symbol Table\SymbolTable.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
