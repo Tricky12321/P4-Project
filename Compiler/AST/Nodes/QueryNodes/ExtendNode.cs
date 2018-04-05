@@ -12,5 +12,10 @@ namespace Compiler.AST.Nodes.QueryNodes
         public ExtendNode(int LineNumber) : base(LineNumber)
         {
         }
+
+        public override void Accept(AstVisitorBase astVisitor)
+        {
+            astVisitor.Visit(this);
+        }
     }
 }
