@@ -10,12 +10,7 @@ namespace Compiler.AST.SymbolTable
 {
     internal class AstSymbolTableCreatorVisitor : AstVisitorBase
     {
-        SymTable SymbolTable;
-
-        public AstSymbolTableCreatorVisitor(SymTable symbolTable)
-        {
-            SymbolTable = symbolTable;
-        }
+        public SymTable SymbolTable = new SymTable();
 
         public AllType ResolveFuncType(string Type)
         {
@@ -69,7 +64,8 @@ namespace Compiler.AST.SymbolTable
         //All the visit stuff-----------------------------------------
         public override void Visit(AbstractNode node)
         {
-            throw new NotImplementedException();
+            Console.WriteLine("This node is visited, but its not implemented!");
+            Console.WriteLine(node.ToString());
         }
 
         public override void VisitChildren(AbstractNode node)
@@ -148,7 +144,8 @@ namespace Compiler.AST.SymbolTable
 
         public override void Visit(SetQueryNode node)
         {
-            throw new NotImplementedException();
+            Console.WriteLine("This node is visited, but its not implemented!");
+            Console.WriteLine(node.ToString());
         }
 
         public override void Visit(WhereNode node)
@@ -236,7 +233,21 @@ namespace Compiler.AST.SymbolTable
 
         public override void Visit(IfElseIfElseNode node)
         {
-            throw new NotImplementedException();
+         
+            Visit(node.IfCondition);
+            SymbolTable.OpenScope();
+            VisitChildren(node.IfCodeBlock);
+            SymbolTable.CloseScope();
+
+            int count = node.ElseIfCodeBlocks.Count();
+            for (int i = 0; i < count; i++)
+            {
+                VisitChildren(node.ElseIfConditions[i]);
+                SymbolTable.OpenScope();
+                VisitChildren(node.ElseIfCodeBlocks[i]);
+                SymbolTable.CloseScope();
+            }
+            VisitChildren(node.ElseCodeBlock);
         }
 
         public override void Visit(GraphSetQuery node)
