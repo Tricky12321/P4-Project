@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Compiler.AST.Exceptions
 {
-    class WroneExpressionPartTypeFound : Exception
+    class WrongExpressionPartTypeFound : Exception
     {
-        public WroneExpressionPartTypeFound(string message) : base(message)
+        public WrongExpressionPartTypeFound(string message) : base(message)
         {
         }
     }
