@@ -260,5 +260,14 @@ namespace Compiler.AST.SymbolTable
             throw new NotImplementedException();
         }
 
+        public override void Visit(BoolComparisonNode node)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void Visit(ExpressionNode node)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

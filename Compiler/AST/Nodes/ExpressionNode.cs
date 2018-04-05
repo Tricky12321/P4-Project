@@ -13,7 +13,12 @@ namespace Compiler.AST.Nodes
 
         }
 
-        public override string ToString()
+        public override void Accept(AstVisitorBase astVisitor)
+        {
+            astVisitor.Visit(this);
+        }
+
+        public string ExpressionString()
         {
             string placeholderString = string.Empty;
             foreach (KeyValuePair<ExpressionPartType, string> part in ExpressionParts)
@@ -22,5 +27,6 @@ namespace Compiler.AST.Nodes
             }
             return placeholderString;
         }
+
     }
 }

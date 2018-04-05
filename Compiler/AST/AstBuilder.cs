@@ -222,7 +222,8 @@ namespace Compiler.AST
         public override AbstractNode VisitExpression([NotNull] GiraphParser.ExpressionContext context)
         {
             ExpressionNode ExpNode = new ExpressionNode(context.Start.Line);
-            ExpNode.AdoptChildren(Visit(context.GetChild(0)));
+            ExpNode.ExpressionParts = VisitVarOrconstExpressionExtRecursive(context);
+            //ExpNode.AdoptChildren(Visit(context.GetChild(0)));
             return ExpNode;
         }
 
@@ -363,6 +364,8 @@ namespace Compiler.AST
                     return ExpressionPartType.ADVANCED_OPERATOR;
                 case "GiraphParser+VariableContext":
                     return ExpressionPartType.VARIABLE;
+                case "GiraphParser+AttributeContext":
+                    return ExpressionPartType.ATTRIBUTE;
             }
             throw new WroneExpressionPartTypeFound($"Typen: {type} har ikke en case i typefinder!!"); 
         }
