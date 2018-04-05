@@ -6,7 +6,7 @@ namespace Compiler.AST.Nodes.DatatypeNodes
         // test
         public string Type;
         public AbstractNode Assignment;
-        public CollectionNode(int LineNumber) : base (LineNumber)
+        public CollectionNode(int LineNumber, int CharIndex) : base (LineNumber, CharIndex)
         {
             
         }

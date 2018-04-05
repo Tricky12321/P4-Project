@@ -8,7 +8,7 @@ namespace Compiler.AST.Nodes
     {
         public List<KeyValuePair<ExpressionPartType, string>> ExpressionParts = new List<KeyValuePair<ExpressionPartType, string>>();
 
-        public ExpressionNode(int LineNumber) : base(LineNumber)
+        public ExpressionNode(int LineNumber, int CharIndex) : base(LineNumber, CharIndex)
         {
 
         }

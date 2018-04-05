@@ -6,7 +6,7 @@ namespace Compiler.AST.Nodes.DatatypeNodes
     {
         public bool Declaration = false;
         public AbstractNode Assignment;
-        public VariableNode(int LineNumber) : base(LineNumber)
+        public VariableNode(int LineNumber, int CharIndex) : base(LineNumber, CharIndex)
         {
 
         }

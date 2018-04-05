@@ -161,7 +161,6 @@ namespace Compiler.AST
         {
             Console.WriteLine("PushNode");
             ProgramCode.Append( $"PUSH {node.VariableToAdd} TO {node.VariableAddTo}");
-            node.WhereCondition.Accept(this);
             ProgramCode.Append( ");\n");
         }
 
@@ -169,7 +168,6 @@ namespace Compiler.AST
         {
             Console.WriteLine("PopNode");
             ProgramCode.Append( $"POP FROM {node.Variable}");
-            node.WhereCondition.Accept(this);
             ProgramCode.Append( ");\n");
         }
 
@@ -249,7 +247,6 @@ namespace Compiler.AST
             Console.WriteLine("DequeueQueryNode");
             ProgramCode.Append( "DEQUEUE FROM ");
             ProgramCode.Append( $"{node.Variable}");
-            node.WhereCondition.Accept(this);
             ProgramCode.Append( ");\n");
         }
 
@@ -258,18 +255,40 @@ namespace Compiler.AST
             Console.WriteLine("EnqueueQueryNode");
             ProgramCode.Append( "ENQUEUE ");
             ProgramCode.Append( $"{node.VariableToAdd} TO {node.VariableTo}");
-            node.WhereCondition.Accept(this);
             ProgramCode.Append( ");\n");
         }
 
         public override void Visit(ExtractMaxQueryNode node)
         {
-            throw new NotImplementedException();
+            Console.WriteLine("ExtractMaxQueryNode");
+            ProgramCode += "EXTRACTMAX ";
+            if (node.Attribute != null)
+            {
+                ProgramCode += $"{node.Attribute} ";
+            }
+            ProgramCode += $"FROM {node.Variable}";
+            if (node.WhereCondition != null)
+            {
+            node.WhereCondition.Accept(this);
+            }
+            ProgramCode += ";\n";
         }
 
         public override void Visit(ExtractMinQueryNode node)
         {
-            throw new NotImplementedException();
+            Console.WriteLine("ExtractMinQueryNode");
+            ProgramCode += "EXTRACTMIN ";
+            if (node.Attribute != null)
+            {
+                ProgramCode += $"{node.Attribute} ";
+            }
+            ProgramCode += $"FROM {node.Variable}";
+            if (node.WhereCondition != null)
+            {
+                node.WhereCondition.Accept(this);
+            }
+            ProgramCode += ";\n";
+
         }
 
         public override void Visit(SelectAllQueryNode node)

@@ -9,7 +9,7 @@ namespace Compiler.AST.Nodes
         public List<Tuple<BoolComparisonNode, CodeBlockNode>> ElseIfList = new List<Tuple<BoolComparisonNode, CodeBlockNode>>();
         public CodeBlockNode ElseCodeBlock;
 
-        public IfElseIfElseNode(int LineNumber) : base(LineNumber)
+        public IfElseIfElseNode(int LineNumber, int CharIndex) : base(LineNumber, CharIndex)
         {
             
         }
