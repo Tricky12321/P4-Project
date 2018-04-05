@@ -370,7 +370,6 @@ namespace Compiler.AST
                 case "GiraphParser+EnqueueOPContext":
                 case "GiraphPArser+DequeueOPContext":
                     return ExpressionPartType.QUERYTYPE;
-                    return ExpressionPartType.VARIABLE;
                 case "GiraphParser+AttributeContext":
                     return ExpressionPartType.ATTRIBUTE;
             }
