@@ -350,6 +350,7 @@ namespace Compiler.AST
             switch (type)
             {
                 case "GiraphParser+BoolContext":
+                case "GiraphParser+BoolComparisonsContext":
                     return ExpressionPartType.BOOL;
                 case "GiraphParser+FloatnumContext":
                     return ExpressionPartType.DECIMAL;
@@ -369,6 +370,8 @@ namespace Compiler.AST
                 case "GiraphParser+PushOPContext":
                 case "GiraphParser+EnqueueOPContext":
                 case "GiraphPArser+DequeueOPContext":
+                case "GiraphParser+ObjectsContext":
+                case "GiraphParser+WhereContext":
                     return ExpressionPartType.QUERYTYPE;
                 case "GiraphParser+AttributeContext":
                     return ExpressionPartType.ATTRIBUTE;
