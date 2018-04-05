@@ -4,7 +4,7 @@ namespace Compiler.AST.Nodes
     public class FunctionParameterNode : TerminalNode
     {
         public string Type;
-        public FunctionParameterNode(int LineNumber) : base(LineNumber)
+        public FunctionParameterNode(int LineNumber, int CharIndex) : base(LineNumber,CharIndex)
         {
             
         }

@@ -3,7 +3,7 @@ namespace Compiler.AST.Nodes.QueryNodes
 {
     public class WhereNode : AbstractNode
     {
-        public WhereNode(int LineNumber) : base(LineNumber)
+        public WhereNode(int LineNumber, int CharIndex) : base(LineNumber, CharIndex)
         {
         }
 

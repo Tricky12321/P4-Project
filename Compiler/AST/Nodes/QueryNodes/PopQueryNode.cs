@@ -6,7 +6,7 @@ namespace Compiler.AST.Nodes.QueryNodes
         public string Variable;
         public AbstractNode WhereCondition;
 
-        public PopQueryNode(int LineNumber) : base(LineNumber)
+        public PopQueryNode(int LineNumber, int CharIndex) : base(LineNumber, CharIndex)
         {
             
         }

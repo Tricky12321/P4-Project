@@ -6,7 +6,7 @@ namespace Compiler.AST.Nodes.QueryNodes
         public string Attribute;
         public string Variable;
         public AbstractNode WhereCondition;
-        public ExtractMaxQueryNode(int LineNumber) : base(LineNumber)
+        public ExtractMaxQueryNode(int LineNumber, int CharIndex) : base(LineNumber,CharIndex)
         {
         }
         public override void Accept(AstVisitorBase astVisitor)

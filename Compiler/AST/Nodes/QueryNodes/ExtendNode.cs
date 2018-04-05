@@ -9,7 +9,7 @@ namespace Compiler.AST.Nodes.QueryNodes
         public string ExtensionName;
         public string ExtensionShortName;
         public string ExtensionDefaultValue;
-        public ExtendNode(int LineNumber) : base(LineNumber)
+        public ExtendNode(int LineNumber, int CharIndex) : base(LineNumber, CharIndex)
         {
         }
 

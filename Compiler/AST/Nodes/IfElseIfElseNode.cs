@@ -10,7 +10,7 @@ namespace Compiler.AST.Nodes
         public List<AbstractNode> ElseIfCodeBlocks = new List<AbstractNode>();
         public AbstractNode ElseCodeBlock;
 
-        public IfElseIfElseNode(int LineNumber) : base(LineNumber)
+        public IfElseIfElseNode(int LineNumber, int CharIndex) : base(LineNumber, CharIndex)
         {
             
         }

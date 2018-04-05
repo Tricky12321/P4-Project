@@ -5,7 +5,7 @@ namespace Compiler.AST.Nodes.QueryNodes
     {
         public string Variable;
         public AbstractNode WhereCondition;
-        public DequeueQueryNode(int LineNumber) : base(LineNumber)
+        public DequeueQueryNode(int LineNumber, int CharIndex) : base(LineNumber, CharIndex)
         {
             
         }
