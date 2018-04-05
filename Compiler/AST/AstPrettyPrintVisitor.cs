@@ -214,6 +214,11 @@ namespace Compiler.AST
             }
         }
 
+        public override void Visit(ExpressionNode node)
+        {
+            ProgramCode += node.ExpressionString();
+        }
+
         #region CollOPSvisits
         public override void Visit(ExtendNode node)
         {

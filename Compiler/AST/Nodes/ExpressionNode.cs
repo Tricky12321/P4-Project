@@ -13,6 +13,11 @@ namespace Compiler.AST.Nodes
 
         }
 
+        public override void Accept(AstVisitorBase astVisitor)
+        {
+            astVisitor.Visit(this);
+        }
+
         public string ExpressionString()
         {
             string placeholderString = string.Empty;
@@ -22,5 +27,6 @@ namespace Compiler.AST.Nodes
             }
             return placeholderString;
         }
+
     }
 }

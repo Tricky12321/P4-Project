@@ -379,6 +379,8 @@ namespace Compiler.AST
                     return ExpressionPartType.ADVANCED_OPERATOR;
                 case "GiraphParser+VariableContext":
                     return ExpressionPartType.VARIABLE;
+                case "GiraphParser+AttributeContext":
+                    return ExpressionPartType.ATTRIBUTE;
             }
             throw new WroneExpressionPartTypeFound($"Typen: {type} har ikke en case i typefinder!!"); 
         }
