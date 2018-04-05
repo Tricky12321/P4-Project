@@ -544,11 +544,6 @@ namespace Compiler.AST
             EnqueueNode.VariableTo = context.variable(1).GetText();
             EnqueueNode.VariableToAdd = context.variable(0).GetText();
 
-            if (context.where() != null && context.where().ChildCount > 0)
-            {
-                EnqueueNode.WhereCondition = Visit(context.where());
-            }
-
             return EnqueueNode;
         }
 
@@ -556,10 +551,6 @@ namespace Compiler.AST
         {
             DequeueQueryNode DequeueNode = new DequeueQueryNode(context.Start.Line);
             DequeueNode.Variable = context.variable().GetText();
-            if (context.where() != null && context.where().ChildCount > 0)
-            {
-                DequeueNode.WhereCondition = Visit(context.where());
-            }
             return DequeueNode;
         }
 
@@ -567,10 +558,6 @@ namespace Compiler.AST
         {
             PopQueryNode PopNode = new PopQueryNode(context.Start.Line);
             PopNode.Variable = context.variable().GetText();
-            if (context.where() != null && context.where().ChildCount > 0)
-            {
-                PopNode.WhereCondition = Visit(context.where());
-            }
             return PopNode;
         }
 
@@ -579,10 +566,6 @@ namespace Compiler.AST
             PushQueryNode PushNode = new PushQueryNode(context.Start.Line);
             PushNode.VariableToAdd = context.variable(0).GetText();
             PushNode.VariableAddTo = context.variable(1).GetText();
-            if (context.where() != null && context.where().ChildCount > 0)
-            {
-                PushNode.WhereCondition = Visit(context.where());
-            }
             return PushNode;
         }
 
