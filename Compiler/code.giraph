@@ -8,7 +8,7 @@
 	SET 'test' = 5 + 1.2 * 2 + x.fe IN g1 WHERE h == h;
     SET 'test' = 10, 'test' = 19 IN g1 WHERE h == h;
 
-	VERTEX sese = SELECT VERTEX FROM graph1.Vertices WHERE v > 2
+	VERTEX sese = SELECT VERTEX FROM graph1.Vertices WHERE v > 2;
 
 	COLLECTION VERTEX test = SELECTALL VERTEX FROM Graph1.Vertices;
 
