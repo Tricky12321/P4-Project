@@ -273,5 +273,10 @@ namespace Compiler.AST.SymbolTable
         {
             throw new NotImplementedException();
         }
+
+        public override void Visit(ReturnNode node)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

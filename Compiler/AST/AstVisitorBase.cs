@@ -23,6 +23,7 @@ namespace Compiler.AST
         public abstract void Visit(DeclarationNode node);
         public abstract void Visit(AbstractNode node);
         public abstract void Visit(FunctionNode node);
+        public abstract void Visit(ReturnNode node);
         public abstract void Visit(FunctionParameterNode node);
         public abstract void Visit(ProgramNode node);
         public abstract void Visit(StartNode node);

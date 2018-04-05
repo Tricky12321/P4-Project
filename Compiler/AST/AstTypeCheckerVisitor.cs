@@ -342,5 +342,10 @@ namespace Compiler.AST
         {
             throw new NotImplementedException();
         }
+
+        public override void Visit(ReturnNode node)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
