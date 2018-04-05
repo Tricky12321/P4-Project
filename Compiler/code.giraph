@@ -1,6 +1,4 @@
 ﻿Main -> VOID () 
 {
-  	IF (3 == sc & TRUE | v3 == 2.9)
-	{
-	}
+	SET 'v1' = 5 IN G1 WHERE 'v2' > 5 | FALSE;
 }
