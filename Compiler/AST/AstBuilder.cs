@@ -517,7 +517,7 @@ namespace Compiler.AST
             SelectQueryNode SelectNode = new SelectQueryNode(context.Start.Line);
             SelectNode.Type = context.allTypeWithColl().GetText();
             SelectNode.Variable = context.variableFunc().GetText();
-            if (context.where() != null && context.where().ChildCount > 0)
+            if (context.where() != null)
             {
                 SelectNode.WhereCondition = Visit(context.where());
             }
@@ -530,7 +530,7 @@ namespace Compiler.AST
             SelectAllQueryNode SelectNode = new SelectAllQueryNode(context.Start.Line);
             SelectNode.Type = context.allTypeWithColl().GetText();
             SelectNode.Variable = context.variableFunc().GetText();
-            if (context.where() != null && context.where().ChildCount > 0)
+            if (context.where() != null)
             {
                 SelectNode.WhereCondition = Visit(context.where());
             }
@@ -589,11 +589,11 @@ namespace Compiler.AST
             ExtractMaxQueryNode ExtractQuery = new ExtractMaxQueryNode(context.Start.Line);
 
             ExtractQuery.Variable = context.variable().GetText();
-            if (context.attribute() != null && context.attribute().ChildCount > 0)
+            if (context.attribute() != null)
             {
                 ExtractQuery.Attribute = context.attribute().GetText();
             }
-            if (context.where() != null && context.where().ChildCount > 0)
+            if (context.where() != null)
             {
                 ExtractQuery.WhereCondition = Visit(context.where());
             }
@@ -604,7 +604,7 @@ namespace Compiler.AST
         {
             DequeueQueryNode DequeueNode = new DequeueQueryNode(context.Start.Line);
             DequeueNode.Variable = context.variable().GetText();
-            if (context.where() != null && context.where().ChildCount > 0)
+            if (context.where() != null)
             {
                 DequeueNode.WhereCondition = Visit(context.where());
             }
