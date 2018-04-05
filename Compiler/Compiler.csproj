@@ -120,12 +120,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <None Include="kode.giraph" />
     <None Include="Program\App.config" />
     <None Include="Program\packages.config" />
     <None Include="packages.config" />
-    <None Include="kode.giraph">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
   <ItemGroup />
   <ItemGroup />
