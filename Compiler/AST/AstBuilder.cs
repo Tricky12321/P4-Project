@@ -38,7 +38,6 @@ namespace Compiler.AST
             // Extract the Name of the function, and the return type
             FNode.Name = context.variable().GetText(); // Name
             FNode.ReturnType = context.allTypeWithColl().GetText(); // Return Type
-            int i = 0;
             // Extract the parameters from the function
             if (context.formalParams() != null) {
 				foreach (var Parameter in context.formalParams().formalParam())
