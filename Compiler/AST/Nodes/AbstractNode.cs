@@ -11,10 +11,11 @@ namespace Compiler.AST.Nodes
         public int LineNumber;
         public string Name;
         public int ChildCount;
-
-        public AbstractNode(int LineNumber)
+        public int CharIndex;
+        public AbstractNode(int LineNumber, int CharIndex)
         {
             this.LineNumber = LineNumber;
+            this.CharIndex = CharIndex;
         }
 
         public virtual void Accept(AstVisitorBase astVisitor)

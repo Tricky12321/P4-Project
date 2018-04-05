@@ -7,7 +7,7 @@ namespace Compiler.AST.Nodes.QueryNodes
         public string Variable;
         public AbstractNode WhereCondition;
 
-        public SelectQueryNode(int LineNumber) : base(LineNumber)
+        public SelectQueryNode(int LineNumber, int CharIndex) : base(LineNumber, CharIndex)
         {
             
         }

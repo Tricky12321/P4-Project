@@ -14,7 +14,7 @@ namespace Compiler.AST.Nodes
 
 
         public bool InsideParentheses;
-        public BoolComparisonNode(int LineNumber) : base(LineNumber)
+        public BoolComparisonNode(int LineNumber, int CharIndex) : base(LineNumber, CharIndex)
         {
             
         }

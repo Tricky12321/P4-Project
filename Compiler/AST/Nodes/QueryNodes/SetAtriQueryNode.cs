@@ -8,7 +8,7 @@ namespace Compiler.AST.Nodes.QueryNodes
         public Dictionary<string, string> Attributes = new Dictionary<string, string>();
         public AbstractNode WhereCondition;
 
-        public SetAtriQueryNode(int LineNumber) : base(LineNumber)
+        public SetAtriQueryNode(int LineNumber, int CharIndex) : base(LineNumber, CharIndex)
         {
             
         }
