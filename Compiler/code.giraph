@@ -5,27 +5,16 @@
 		EDGE x(vb, vd, v = 4), y(vd, ve, v = 7), z(va, vc, v = 10);
     }
 
-    IF (g1 == g2) {
+    IF (g1 == g2) 
+	{
         SET 'test' = 5 + 1.2 * 2 + x.fe IN g1 WHERE h == h;
-    } ELSEIF (g1 == g2) {
+    } 
+	ELSEIF (g1 == g2)
+	{ssssss
         SET 'test' = 5 + 1.2 * 2 + x.fe IN g1 WHERE h == h;
-    } ELSE {sdfsd
-	s
-	dfqweads
-	sdf
-	ds
-	f
-	dsf
-	sd
-	f
-	sdf
-	sd
-	f
-	dsf
-	ds
-	f
-	dsf
-
+    } 
+	ELSE 
+	{
         SET 'test' = 5 + 1.2 * 2 + x.fe IN g1 WHERE h == h;
     }
 }
