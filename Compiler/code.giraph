@@ -1,13 +1,14 @@
 ﻿Main -> VOID () {
-    GRAPH g1 
-    {
+
+
+    GRAPH g1 {
 		VERTEX va(), vb(), vc(), vd(), ve();
 		EDGE x(vb, vd, v = 4), y(vd, ve, v = 7), z(va, vc, v = 10);
     }
 
-	VERTEX cc = SELECT VERTEX FROM g1 WHERE v > 8;
+	VERTEX cc = SELECT VERTEX FROM g1.Vertices WHERE 'v' > 8;
 
-	COLLECTION VERTEX test = SELECTALL VERTEX FROM g1 WHERE V < 8;
+	COLLECTION VERTEX test = SELECTALL VERTEX FROM g1.Vertices WHERE 'v' < 8;
 
 }
 
