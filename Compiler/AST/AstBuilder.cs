@@ -370,7 +370,7 @@ namespace Compiler.AST
                 case "GiraphParser+PushOPContext":
                 case "GiraphParser+EnqueueOPContext":
                 case "GiraphPArser+DequeueOPContext":
-                case "GiraphParser+ObjectsContext":
+                //case "GiraphParser+ObjectsContext":
                 case "GiraphParser+WhereContext":
                     return ExpressionPartType.QUERYTYPE;
                 case "GiraphParser+AttributeContext":
