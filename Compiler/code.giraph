@@ -1,21 +1,3 @@
-﻿Main -> VOID () {
-    GRAPH g1 
-    {
-		VERTEX va(), vb(), vc(), vd(), ve();
-		EDGE x(vb, vd, v = 4), y(vd, ve, v = 7), z(va, vc, v = 10);
-    }
+﻿Main -> VOID() { GRAPH g1 { VERTEX va(), vb(), vc(), vd(), ve(); EDGE x(vb, vd, v = 4), y(vd, ve, v = 7), z(va, vc, v = 10); } IF (g1 == g2) { SET 'test' = 5+1.2*2+x.fe IN g1 WHERE h == h; } ELSEIF (g1 == g2) { SET 'test' = 5+1.2*2+x.fe IN g1 WHERE h == 5+1.2 & 2+x.fe | FALSE; } ELSE { SET 'test' = 5+1.2*2+x.fe IN g1 WHERE h == h; } }
 
-    IF (g1 == g2) 
-	{
-        SET 'test' = 5 + 1.2 * 2 + x.fe IN g1 WHERE h == h;
-    } 
-	ELSEIF (g1 == g2)
-	{ssssss
-        SET 'test' = 5 + 1.2 * 2 + x.fe IN g1 WHERE h == h;
-    } 
-	ELSE 
-	{
-        SET 'test' = 5 + 1.2 * 2 + x.fe IN g1 WHERE h == h;
-    }
-}
 
