@@ -85,22 +85,25 @@ namespace Compiler.AST.SymbolTable
             SymbolTable.SetCurrentNode(node);
             AllType type = ResolveFuncType(node.ReturnType);
             string functionName = node.Name;
-
-            SymbolTable.EnterSymbol(functionName, type);
-            SymbolTable.OpenScope();
-            foreach (FunctionParameterNode parameter in node.Parameters)
-            {
-                parameter.Accept(this);
+            if (!SymbolTable.DeclaredLocally(functionName)) {
+				SymbolTable.EnterSymbol(functionName, type);
+				SymbolTable.OpenScope();
+				foreach (FunctionParameterNode parameter in node.Parameters)
+				{
+					parameter.Accept(this);
+				}
+				VisitChildren(node);
+				SymbolTable.CloseScope();
             }
-            VisitChildren(node);
-            SymbolTable.CloseScope();
         }
 
         public override void Visit(FunctionParameterNode node)
         {
-            SymbolTable.SetCurrentNode(node);
-            AllType parameterType = ResolveFuncType(node.Type);
-            SymbolTable.EnterSymbol(node.Name, parameterType);
+            if (!SymbolTable.DeclaredLocally(node.Name)) {
+				SymbolTable.SetCurrentNode(node);
+				AllType parameterType = ResolveFuncType(node.Type);
+				SymbolTable.EnterSymbol(node.Name, parameterType);
+            }
         }
 
         public override void Visit(StartNode node)

@@ -160,7 +160,7 @@ namespace Compiler.AST.SymbolTable
         public bool DeclaredLocally(string name)
         {
             bool IsCollection;
-            return RetrieveSymbol(name, out IsCollection) != null;
+            return RetrieveSymbol(name, out IsCollection, false) != null;
         }
 
         public void OpenScope()
