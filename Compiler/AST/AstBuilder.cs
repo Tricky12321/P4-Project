@@ -466,7 +466,7 @@ namespace Compiler.AST
 
         public override AbstractNode VisitIfElseIfElse([NotNull] GiraphParser.IfElseIfElseContext context)
         {
-            IfElseIfElseNode IfNode = new IfElseIfElseNode(context.Start.Line);
+            IfElseIfElseNode IfNode = new IfElseIfElseNode(context.Start.Line, context.Start.Column);
             IfNode.IfCondition = Visit(context.boolComparisons()) as BoolComparisonNode;
             IfNode.IfCodeBlock = Visit(context.codeBlock()) as CodeBlockNode;
             if (context.elseifCond() != null)

@@ -16,8 +16,8 @@ namespace Compiler
     {
         static void Main(string[] args)
         {
-            var CST = BuildCST("kode.giraph");
-            var AST = BuildAST(CST);
+            GiraphParser.StartContext CST = BuildCST("kode.giraph");
+            AbstractNode AST = BuildAST(CST);
 
             PrettyPrint(AST as StartNode);
 
@@ -34,8 +34,8 @@ namespace Compiler
         public static void PrettyPrint(StartNode start)
         {
             Stopwatch PPTimer = new Stopwatch();
-            PPTimer.Start();
             AstPrettyPrintVisitor PPVisitor = new AstPrettyPrintVisitor();
+            PPTimer.Start();
             PPVisitor.VisitRoot(start);
             PPTimer.Stop();
             Console.WriteLine(PPTimer.ElapsedMilliseconds);

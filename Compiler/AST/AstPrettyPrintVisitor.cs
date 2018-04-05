@@ -29,7 +29,7 @@ namespace Compiler.AST
 
         public override void Visit(FunctionNode node)
         {
-            Console.WriteLine("FunctionNode");
+            //console.WriteLine("FunctionNode");
             ProgramCode.Append( $"{node.Name} -> {node.ReturnType}(");
             int i = 0;
             foreach (FunctionParameterNode Param in node.Parameters)
@@ -49,19 +49,19 @@ namespace Compiler.AST
 
         public override void Visit(ProgramNode node)
         {
-            Console.WriteLine("ProgramNode");
+            //console.WriteLine("ProgramNode");
             VisitChildren(node);
         }
 
         public override void Visit(StartNode node)
         {
-            Console.WriteLine("StartNode");
+            //console.WriteLine("StartNode");
             VisitChildren(node);
         }
 
         public override void Visit(GraphNode node)
         {
-            Console.WriteLine("GraphNode");
+            //console.WriteLine("GraphNode");
             ProgramCode.Append( $"GRAPH {node.Name}\n{{\n");
 
             if (node.Vertices.Count != 0)
@@ -95,7 +95,7 @@ namespace Compiler.AST
 
         public override void Visit(VertexNode node)
         {
-            Console.WriteLine("VertexNode");
+            //console.WriteLine("VertexNode");
             ProgramCode.Append( $"{node.Name}(");
             int i = 0;
             foreach (KeyValuePair<string, string> item in node.ValueList)
@@ -108,7 +108,7 @@ namespace Compiler.AST
 
         public override void Visit(EdgeNode node)
         {
-            Console.WriteLine("EdgeNode");
+            //console.WriteLine("EdgeNode");
             ProgramCode.Append( $"{node.Name}(");
             int i = 0;
             ProgramCode.Append( $"{node.VertexNameFrom}, {node.VertexNameTo}");
@@ -127,13 +127,13 @@ namespace Compiler.AST
 
         public override void Visit(GraphSetQuery node)
         {
-            Console.WriteLine("GraphSetQueryNode");
+            //console.WriteLine("GraphSetQueryNode");
             ProgramCode.Append( $"SET {node.Attributes.Item1.Name} = {node.Attributes.Item3.ExpressionString()};\n");
         }
 
         public override void Visit(SetQueryNode node)
         {
-            Console.WriteLine("SetQueryNode");
+            //console.WriteLine("SetQueryNode");
             ProgramCode.Append( "SET ");
             int i = 0;
 
@@ -152,28 +152,28 @@ namespace Compiler.AST
 
         public override void Visit(WhereNode node)
         {
-            Console.WriteLine("WhereNode");
+            //console.WriteLine("WhereNode");
             ProgramCode.Append( " WHERE ");
             VisitChildren(node);
         }
 
         public override void Visit(PushQueryNode node)
         {
-            Console.WriteLine("PushNode");
+            //console.WriteLine("PushNode");
             ProgramCode.Append( $"PUSH {node.VariableToAdd} TO {node.VariableAddTo}");
             ProgramCode.Append( ");\n");
         }
 
         public override void Visit(PopQueryNode node)
         {
-            Console.WriteLine("PopNode");
+            //console.WriteLine("PopNode");
             ProgramCode.Append( $"POP FROM {node.Variable}");
             ProgramCode.Append( ");\n");
         }
 
         public override void Visit(IfElseIfElseNode node)
         {
-            Console.WriteLine("IfElseIfElseNode");
+            //console.WriteLine("IfElseIfElseNode");
             ProgramCode.Append( "IF (");
             node.IfCondition.Accept(this);
             ProgramCode.Append( ")\n{\n");
@@ -197,13 +197,13 @@ namespace Compiler.AST
 
         public override void Visit(CodeBlockNode node)
         {
-            Console.WriteLine("CodeBlockNode");
+            //console.WriteLine("CodeBlockNode");
             VisitChildren(node);
         }
 
         public override void Visit(BoolComparisonNode node)
         {
-            Console.WriteLine("BoolComparisonNode");
+            //console.WriteLine("BoolComparisonNode");
             if (node.LeftmostChild != null)
             {
                 VisitChildren(node);
@@ -227,7 +227,7 @@ namespace Compiler.AST
         #region CollOPSvisits
         public override void Visit(ExtendNode node)
         {
-            Console.WriteLine("ExtendNode");
+            //console.WriteLine("ExtendNode");
             ProgramCode.Append( "EXTEND ");
             ProgramCode.Append( $"{node.ClassToExtend} {node.ExtendWithType} ");
             ProgramCode.Append( $"'{node.ExtensionName}'");
@@ -244,7 +244,7 @@ namespace Compiler.AST
 
         public override void Visit(DequeueQueryNode node)
         {
-            Console.WriteLine("DequeueQueryNode");
+            //console.WriteLine("DequeueQueryNode");
             ProgramCode.Append( "DEQUEUE FROM ");
             ProgramCode.Append( $"{node.Variable}");
             ProgramCode.Append( ");\n");
@@ -252,7 +252,7 @@ namespace Compiler.AST
 
         public override void Visit(EnqueueQueryNode node)
         {
-            Console.WriteLine("EnqueueQueryNode");
+            //console.WriteLine("EnqueueQueryNode");
             ProgramCode.Append( "ENQUEUE ");
             ProgramCode.Append( $"{node.VariableToAdd} TO {node.VariableTo}");
             ProgramCode.Append( ");\n");
@@ -260,34 +260,34 @@ namespace Compiler.AST
 
         public override void Visit(ExtractMaxQueryNode node)
         {
-            Console.WriteLine("ExtractMaxQueryNode");
-            ProgramCode += "EXTRACTMAX ";
+            //console.WriteLine("ExtractMaxQueryNode");
+            ProgramCode.Append("EXTRACTMAX ");
             if (node.Attribute != null)
             {
-                ProgramCode += $"{node.Attribute} ";
+                ProgramCode.Append($"{node.Attribute} ");
             }
-            ProgramCode += $"FROM {node.Variable}";
+            ProgramCode.Append($"FROM {node.Variable}");
             if (node.WhereCondition != null)
             {
             node.WhereCondition.Accept(this);
             }
-            ProgramCode += ";\n";
+            ProgramCode.Append(";\n");
         }
 
         public override void Visit(ExtractMinQueryNode node)
         {
-            Console.WriteLine("ExtractMinQueryNode");
-            ProgramCode += "EXTRACTMIN ";
+            //console.WriteLine("ExtractMinQueryNode");
+            ProgramCode.Append("EXTRACTMIN ");
             if (node.Attribute != null)
             {
-                ProgramCode += $"{node.Attribute} ";
+                ProgramCode.Append($"{node.Attribute} ");
             }
-            ProgramCode += $"FROM {node.Variable}";
+            ProgramCode.Append($"FROM {node.Variable}");
             if (node.WhereCondition != null)
             {
                 node.WhereCondition.Accept(this);
             }
-            ProgramCode += ";\n";
+            ProgramCode.Append(";\n");
 
         }
 
