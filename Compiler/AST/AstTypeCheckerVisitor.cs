@@ -64,8 +64,8 @@ namespace Compiler.AST
         {
             if (node.Parent != null && node.Parent is ExpressionNode)
             {
-                AllType? collection = _createdSymbolTabe.RetrieveSymbol(node.Variable, out isCollection, false);
-                AllType? collectionParent = _createdSymbolTabe.RetrieveSymbol(node.Parent.Name, out isCollection, false);
+                AllType? collection = _createdSymbolTabe.RetrieveSymbol(node.Variable, false);
+                AllType? collectionParent = _createdSymbolTabe.RetrieveSymbol(node.Parent.Name, false);
 
                 if (collection == collectionParent)
                 {
@@ -87,8 +87,8 @@ namespace Compiler.AST
         {
             if (node.Parent != null && node.Parent is ExpressionNode)
             {
-                AllType? collection = _createdSymbolTabe.RetrieveSymbol(node.Variable, out isCollection, false);
-                AllType? collectionParent = _createdSymbolTabe.RetrieveSymbol(node.Parent.Name, out isCollection, false);
+                AllType? collection = _createdSymbolTabe.RetrieveSymbol(node.Variable, false);
+                AllType? collectionParent = _createdSymbolTabe.RetrieveSymbol(node.Parent.Name, false);
 
                 if (collection == collectionParent)
                 {
@@ -111,8 +111,8 @@ namespace Compiler.AST
             if (node.Parent != null && node.Parent is DeclarationNode)
             {
 
-                AllType? collectionNameType = _createdSymbolTabe.RetrieveSymbol(node.Variable, out isCollection, false);
-                AllType? nameDeclaredForRetrieve = _createdSymbolTabe.RetrieveSymbol(node.Parent.Name, out isCollection, false);
+                AllType? collectionNameType = _createdSymbolTabe.RetrieveSymbol(node.Variable, false);
+                AllType? nameDeclaredForRetrieve = _createdSymbolTabe.RetrieveSymbol(node.Parent.Name, false);
 
                 if (collectionNameType.ToString() == nameDeclaredForRetrieve.ToString() && nameDeclaredForRetrieve.ToString() == node.Type)
                 {
@@ -134,8 +134,8 @@ namespace Compiler.AST
         {
             if (node.Parent != null && node.Parent is ExpressionNode)
             {
-                AllType? collectionNameType = _createdSymbolTabe.RetrieveSymbol(node.Variable, out isCollection, false);
-                AllType? nameDeclaredForRetrieve = _createdSymbolTabe.RetrieveSymbol(node.Parent.Name, out isCollection, false);
+                AllType? collectionNameType = _createdSymbolTabe.RetrieveSymbol(node.Variable, false);
+                AllType? nameDeclaredForRetrieve = _createdSymbolTabe.RetrieveSymbol(node.Parent.Name, false);
 
                 if (collectionNameType.ToString() == nameDeclaredForRetrieve.ToString() && nameDeclaredForRetrieve.ToString() == node.Type)
                 {
@@ -160,8 +160,8 @@ namespace Compiler.AST
 
             if (_createdSymbolTabe.DeclaredLocally(node.VariableToAdd) && _createdSymbolTabe.DeclaredLocally(node.VariableAddTo))
             {
-                varToAdd = _createdSymbolTabe.RetrieveSymbol(node.VariableToAdd, out isCollection, false);
-                collectionToAddTo = _createdSymbolTabe.RetrieveSymbol(node.VariableAddTo, out isCollection, false);
+                varToAdd = _createdSymbolTabe.RetrieveSymbol(node.VariableToAdd, false);
+                collectionToAddTo = _createdSymbolTabe.RetrieveSymbol(node.VariableAddTo, false);
 
                 if (varToAdd == collectionToAddTo)
                 {
@@ -191,8 +191,8 @@ namespace Compiler.AST
         {
             if (node.Parent != null && node.Parent is ExpressionNode)
             {
-                AllType? collection = _createdSymbolTabe.RetrieveSymbol(node.Variable, out isCollection, false);
-                AllType? collectionParent = _createdSymbolTabe.RetrieveSymbol(node.Parent.Name, out isCollection, false);
+                AllType? collection = _createdSymbolTabe.RetrieveSymbol(node.Variable, false);
+                AllType? collectionParent = _createdSymbolTabe.RetrieveSymbol(node.Parent.Name, false);
 
                 if (collection == collectionParent)
                 {
@@ -217,8 +217,8 @@ namespace Compiler.AST
 
             if (_createdSymbolTabe.DeclaredLocally(node.VariableToAdd) && _createdSymbolTabe.DeclaredLocally(node.VariableTo))
             {
-                varToAdd = _createdSymbolTabe.RetrieveSymbol(node.VariableToAdd, out isCollection, false);
-                collectionToAddTo = _createdSymbolTabe.RetrieveSymbol(node.VariableTo, out isCollection, false);
+                varToAdd = _createdSymbolTabe.RetrieveSymbol(node.VariableToAdd, false);
+                collectionToAddTo = _createdSymbolTabe.RetrieveSymbol(node.VariableTo, false);
 
                 if (varToAdd == collectionToAddTo)
                 {
@@ -248,8 +248,8 @@ namespace Compiler.AST
         {
             if (node.Parent != null && node.Parent is ExpressionNode)
             {
-                AllType? collection = _createdSymbolTabe.RetrieveSymbol(node.Variable, out isCollection, false);
-                AllType? collectionParent = _createdSymbolTabe.RetrieveSymbol(node.Parent.Name, out isCollection, false);
+                AllType? collection = _createdSymbolTabe.RetrieveSymbol(node.Variable, false);
+                AllType? collectionParent = _createdSymbolTabe.RetrieveSymbol(node.Parent.Name, false);
 
                 if (collection == collectionParent)
                 {
@@ -330,6 +330,11 @@ namespace Compiler.AST
         }
 
         public override void Visit(ExpressionNode node)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void Visit(CodeBlockNode node)
         {
             throw new NotImplementedException();
         }

@@ -8,7 +8,7 @@ namespace Compiler.AST.Nodes.LoopNodes
         public string InVariableName;
         public AbstractNode WhereCondition;
 
-        public ForeachLoopNode(int LineNumber) : base(LineNumber)
+        public ForeachLoopNode(int LineNumber, int CharIndex) : base(LineNumber, CharIndex)
         {
             
         }

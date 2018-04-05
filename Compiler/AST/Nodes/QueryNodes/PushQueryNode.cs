@@ -6,7 +6,7 @@ namespace Compiler.AST.Nodes.QueryNodes
         public string VariableToAdd;
         public string VariableAddTo;
         public AbstractNode WhereCondition;
-        public PushQueryNode(int LineNumber) : base(LineNumber)
+        public PushQueryNode(int LineNumber, int CharIndex) : base(LineNumber, CharIndex)
         {
         }
 

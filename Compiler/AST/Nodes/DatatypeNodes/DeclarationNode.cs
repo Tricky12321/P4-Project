@@ -7,7 +7,7 @@ namespace Compiler.AST.Nodes.DatatypeNodes
         public AbstractNode Assignment;
         public bool CollectionDcl = false;
 
-        public DeclarationNode(int LineNumber) : base(LineNumber)
+        public DeclarationNode(int LineNumber, int CharIndex) : base(LineNumber, CharIndex)
         {
         }
     }

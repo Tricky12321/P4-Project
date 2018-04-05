@@ -233,18 +233,17 @@ namespace Compiler.AST.SymbolTable
 
         public override void Visit(IfElseIfElseNode node)
         {
-         
             Visit(node.IfCondition);
             SymbolTable.OpenScope();
             VisitChildren(node.IfCodeBlock);
             SymbolTable.CloseScope();
 
-            int count = node.ElseIfCodeBlocks.Count();
+            int count = node.ElseIfList.Count();
             for (int i = 0; i < count; i++)
             {
-                VisitChildren(node.ElseIfConditions[i]);
+                VisitChildren(node.ElseIfList[i].Item1);
                 SymbolTable.OpenScope();
-                VisitChildren(node.ElseIfCodeBlocks[i]);
+                VisitChildren(node.ElseIfList[i].Item2);
                 SymbolTable.CloseScope();
             }
             VisitChildren(node.ElseCodeBlock);
@@ -266,6 +265,11 @@ namespace Compiler.AST.SymbolTable
         }
 
         public override void Visit(ExpressionNode node)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void Visit(CodeBlockNode node)
         {
             throw new NotImplementedException();
         }

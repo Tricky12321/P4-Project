@@ -3,7 +3,7 @@ namespace Compiler.AST.Nodes
 {
     public class ProgramNode : AbstractNode
     {
-        public ProgramNode(int LineNumber) : base(LineNumber)
+        public ProgramNode(int LineNumber, int CharIndex) : base(LineNumber,CharIndex)
         {
             
         }

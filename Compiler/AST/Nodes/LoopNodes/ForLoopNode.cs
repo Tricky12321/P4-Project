@@ -15,7 +15,7 @@ namespace Compiler.AST.Nodes.LoopNodes
         public AbstractNode IncrementValueOperation;
         public string IncrementValue;
 
-        public ForLoopNode(int LineNumber) : base(LineNumber)
+        public ForLoopNode(int LineNumber, int CharIndex) : base(LineNumber, CharIndex)
         {
             
         }

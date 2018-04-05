@@ -4,7 +4,7 @@ namespace Compiler.AST
 {
     internal class AttributeNode : VariableAttributeNode
     {
-        public AttributeNode(int LineNumber) : base(LineNumber)
+        public AttributeNode(int LineNumber, int CharIndex) : base(LineNumber, CharIndex)
         {
         }
     }
