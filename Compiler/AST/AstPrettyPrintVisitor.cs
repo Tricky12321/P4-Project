@@ -127,7 +127,7 @@ namespace Compiler.AST
         public override void Visit(GraphSetQuery node)
         {
             Console.WriteLine("GraphSetQueryNode");
-            ProgramCode += $"SET {node.Attributes.Item1.Name} = {node.Attributes.Item3.Name};\n";
+            ProgramCode += $"SET {node.Attributes.Item1.Name} = {node.Attributes.Item3.ExpressionString()};\n";
         }
 
         public override void Visit(SetQueryNode node)
@@ -139,7 +139,7 @@ namespace Compiler.AST
             foreach (var attribute in node.Attributes)
             {
                 InsertComma(ref i);
-                ProgramCode += $"'{attribute.Item1.Name}' = {attribute.Item3.Name}";
+                ProgramCode += $"'{attribute.Item1.Name}' = {attribute.Item3.ExpressionString()}";
             }
             ProgramCode += $" IN {node.InVariable}";
             if (node.WhereCondition == null)
@@ -176,14 +176,14 @@ namespace Compiler.AST
         {
             Console.WriteLine("IfElseIfElseNode");
             ProgramCode += "IF (";
-            //node.IfCondition.Accept(this);
+            node.IfCondition.Accept(this);
             ProgramCode += ")\n{\n";
             VisitChildren(node.IfCodeBlock);
             ProgramCode += "}\n";
             for(int i = 0; i < node.ElseIfCodeBlocks.Count; i++)
             {
                 ProgramCode += "ELSEIF (";
-                //node.ElseIfConditions[i].Accept(this);
+                node.ElseIfConditions[i].Accept(this);
                 ProgramCode += ")\n{\n";
                 VisitChildren(node.ElseIfCodeBlocks[i]);
                 ProgramCode += "}\n";
@@ -193,6 +193,24 @@ namespace Compiler.AST
                 ProgramCode += "ELSE\n{\n";
                 VisitChildren(node.ElseCodeBlock);
                 ProgramCode += "}\n";
+            }
+        }
+
+        public override void Visit(BoolComparisonNode node)
+        {
+            Console.WriteLine("BoolComparisonNode");
+            if(node.LeftmostChild != null)
+            {
+                VisitChildren(node);
+            }
+            else
+            {
+                if (node.Left != null)
+                {
+                    node.Left.Accept(this);
+                    ProgramCode += $" {node.ComparisonOperator} ";
+                    node.Right.Accept(this);
+                }
             }
         }
 
@@ -249,12 +267,12 @@ namespace Compiler.AST
             throw new NotImplementedException();
         }
 
-        public override void Visit(AbstractNode node)
+        public override void Visit(DeclarationNode node)
         {
             throw new NotImplementedException();
         }
 
-        public override void Visit(DeclarationNode node)
+        public override void Visit(AbstractNode node)
         {
             throw new NotImplementedException();
         }

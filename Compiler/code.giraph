@@ -1,8 +1,6 @@
 ﻿Main -> VOID () {
-    GRAPH g1 
-    {
-		VERTEX va(), vb(), vc(), vd(), ve();
-		EDGE x(vb, vd, v = 4), y(vd, ve, v = 7), z(va, vc, v = 10);
-    }
-	SET 'test' = 5 + 1.2 * 2 + x.fe IN g1 WHERE h == h;
+
+	IF(V1 == V2 | FALSE & V3 > 4.9)
+	{
+	}
 }
