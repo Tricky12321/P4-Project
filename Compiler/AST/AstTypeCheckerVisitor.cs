@@ -69,7 +69,7 @@ namespace Compiler.AST
 
         public override void Visit(ExtendNode node)
         {
-
+            throw new NotImplementedException();
         }
 
         public override void Visit(PredicateNode node)

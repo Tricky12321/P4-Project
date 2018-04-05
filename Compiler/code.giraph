@@ -1,7 +1,6 @@
 ﻿Main -> VOID () {
     GRAPH g1 
     {
-        SET 'Directed' = FALSE;
 		VERTEX va(), vb(), vc(), vd(), ve();
 		EDGE x(vb, vd, v = 4), y(vd, ve, v = 7), z(va, vc, v = 10);
     }

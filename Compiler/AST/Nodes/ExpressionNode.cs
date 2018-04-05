@@ -12,5 +12,15 @@ namespace Compiler.AST.Nodes
         {
 
         }
+
+        public override string ToString()
+        {
+            string placeholderString = string.Empty;
+            foreach (KeyValuePair<ExpressionPartType, string> part in ExpressionParts)
+            {
+                placeholderString += part.Value;
+            }
+            return placeholderString;
+        }
     }
 }
