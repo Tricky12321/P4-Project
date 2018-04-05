@@ -15,10 +15,10 @@ namespace Compiler
     {
         static void Main(string[] args)
         {
-            var CST = BuildCST("code.giraph");
+            var CST = BuildCST("kode.giraph");
             var AST = BuildAST(CST);
-            PrettyPrint(AST as StartNode);
             SymTable SymbolTable = BuildSymbolTable(AST as StartNode);
+			PrettyPrint(AST as StartNode);
             Console.ReadKey();
         }
 
