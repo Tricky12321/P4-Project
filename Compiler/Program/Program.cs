@@ -16,9 +16,9 @@ namespace Compiler
         static void Main(string[] args)
         {
             var CST = BuildCST("code.giraph");
-            var AST = BuildAST(CST);
+            StartNode AST = BuildAST(CST) as StartNode;
+            PrettyPrint(AST);
             var SymbolTable = BuildSymbolTable(AST as StartNode);
-            PrettyPrint(AST as StartNode);
             Console.ReadKey();
         }
 
