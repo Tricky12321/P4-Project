@@ -9,5 +9,9 @@ namespace Compiler.AST.Nodes.QueryNodes
         public EnqueueQueryNode(int LineNumber) : base (LineNumber)
         {
         }
+        public override void Accept(AstVisitorBase astVisitor)
+        {
+            astVisitor.Visit(this);
+        }
     }
 }

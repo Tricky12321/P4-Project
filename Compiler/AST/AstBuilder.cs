@@ -364,6 +364,13 @@ namespace Compiler.AST
                     return ExpressionPartType.ADVANCED_OPERATOR;
                 case "GiraphParser+VariableContext":
                     return ExpressionPartType.VARIABLE;
+                case "GiraphParser+SelectContext":
+                case "GiraphParser+PopOPContext":
+                case "GiraphParser+PushOPContext":
+                case "GiraphParser+EnqueueOPContext":
+                case "GiraphPArser+DequeueOPContext":
+                    return ExpressionPartType.QUERYTYPE;
+                    return ExpressionPartType.VARIABLE;
                 case "GiraphParser+AttributeContext":
                     return ExpressionPartType.ATTRIBUTE;
             }

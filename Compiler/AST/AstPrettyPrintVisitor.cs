@@ -162,14 +162,17 @@ namespace Compiler.AST
         public override void Visit(PushQueryNode node)
         {
             Console.WriteLine("PushNode");
-            ProgramCode += $"PUSH {node.VariableToAdd} TO {node.VariableAddTo};\n";
+            ProgramCode += $"PUSH {node.VariableToAdd} TO {node.VariableAddTo}";
+            node.WhereCondition.Accept(this);
+            ProgramCode += ";\n";
         }
 
         public override void Visit(PopQueryNode node)
         {
             Console.WriteLine("PopNode");
-            ProgramCode += $"POP FROM {node.Variable};\n";
-            //Needs WhereNode
+            ProgramCode += $"POP FROM {node.Variable}";
+            node.WhereCondition.Accept(this);
+            ProgramCode += ";\n";
         }
 
         public override void Visit(IfElseIfElseNode node)
@@ -199,7 +202,7 @@ namespace Compiler.AST
         public override void Visit(BoolComparisonNode node)
         {
             Console.WriteLine("BoolComparisonNode");
-            if(node.LeftmostChild != null)
+            if (node.LeftmostChild != null)
             {
                 VisitChildren(node);
             }
@@ -239,12 +242,20 @@ namespace Compiler.AST
 
         public override void Visit(DequeueQueryNode node)
         {
-            throw new NotImplementedException();
+            Console.WriteLine("DequeueQueryNode");
+            ProgramCode += "DEQUEUE FROM ";
+            ProgramCode += $"{node.Variable}";
+            node.WhereCondition.Accept(this);
+            ProgramCode += ";\n";
         }
 
         public override void Visit(EnqueueQueryNode node)
         {
-            throw new NotImplementedException();
+            Console.WriteLine("EnqueueQueryNode");
+            ProgramCode += "ENQUEUE ";
+            ProgramCode += $"{node.VariableToAdd} TO {node.VariableTo}";
+            node.WhereCondition.Accept(this);
+            ProgramCode += ";\n";
         }
 
         public override void Visit(ExtractMaxQueryNode node)
