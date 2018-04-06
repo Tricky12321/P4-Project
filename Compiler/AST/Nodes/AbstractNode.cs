@@ -12,6 +12,7 @@ namespace Compiler.AST.Nodes
         public string Name;
         public int ChildCount;
         public int CharIndex;
+        public bool HasChildren => LeftmostChild != null;
         public AbstractNode(int LineNumber, int CharIndex)
         {
             this.LineNumber = LineNumber;
@@ -50,7 +51,7 @@ namespace Compiler.AST.Nodes
             {
                 node.Parent = this;
                 ChildCount++;
-                if (LeftmostChild == null)
+                if (!(HasChildren))
                 {
                     LeftmostChild = node;
                 }
