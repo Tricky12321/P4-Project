@@ -25,5 +25,10 @@ namespace Compiler.AST.Nodes.QueryNodes
         {
             
         }
+
+        public override void Accept(AstVisitorBase astVisitor)
+        {
+            astVisitor.Visit(this);
+        }
     }
 }

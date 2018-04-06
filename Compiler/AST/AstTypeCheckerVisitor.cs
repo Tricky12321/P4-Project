@@ -6,6 +6,7 @@ using Compiler.AST.Nodes;
 using Compiler.AST.Nodes.DatatypeNodes;
 using Compiler.AST.Nodes.QueryNodes;
 using Compiler.AST.SymbolTable;
+using System.Diagnostics;
 
 namespace Compiler.AST
 {
@@ -344,6 +345,11 @@ namespace Compiler.AST
         }
 
         public override void Visit(ReturnNode node)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void Visit(AddQueryNode node)
         {
             throw new NotImplementedException();
         }
