@@ -58,24 +58,22 @@
     <Compile Include="AST\Exceptions\WrongExpressionPartTypeFound.cs" />
     <Compile Include="AST\Nodes\DatatypeNodes\AttributeNode.cs" />
     <Compile Include="AST\Nodes\DatatypeNodes\VariableAttributeNode.cs" />
+    <Compile Include="AST\Nodes\DatatypeNodes\VariableDclNode.cs" />
     <Compile Include="AST\Symbol Table\AstSymbolTableCreatorVisitor.cs" />
-    <Compile Include="AST\Nodes\TerminalNode.cs" />
     <Compile Include="AST\Symbol Table\SymbolTableEntry.cs" />
+    <Compile Include="Program\Utilities.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program\Program.cs" />
     <Compile Include="AST\Nodes\AbstractNode.cs" />
     <Compile Include="AST\Nodes\FunctionNode.cs" />
-    <Compile Include="AST\Nodes\ProgramNode.cs" />
     <Compile Include="AST\Nodes\StartNode.cs" />
     <Compile Include="AST\AstBuilder.cs" />
     <Compile Include="AST\AstVisitorBase.cs" />
-    <Compile Include="AST\Nodes\FunctionParameterNode.cs" />
-    <Compile Include="AST\Nodes\DatatypeNodes\EdgeNode.cs" />
-    <Compile Include="AST\Nodes\DatatypeNodes\VertexNode.cs" />
+    <Compile Include="AST\Nodes\ParameterNode.cs" />
+    <Compile Include="AST\Nodes\DatatypeNodes\GraphDeclEdgeNode.cs" />
+    <Compile Include="AST\Nodes\DatatypeNodes\GraphDeclVertexNode.cs" />
     <Compile Include="AST\Nodes\CodeBlockNode.cs" />
     <Compile Include="AST\Nodes\CodeBlockContentNode.cs" />
-    <Compile Include="AST\Nodes\DatatypeNodes\VertexDclsNode.cs" />
-    <Compile Include="AST\Nodes\DatatypeNodes\EdgeDclsNode.cs" />
     <Compile Include="AST\Nodes\DatatypeNodes\Graph\GraphNode.cs" />
     <Compile Include="AST\Nodes\DatatypeNodes\Graph\GraphSetQuery.cs" />
     <Compile Include="AST\Nodes\BoolComparisonNode.cs" />
@@ -96,7 +94,6 @@
     <Compile Include="AST\Nodes\QueryNodes\SetAtriQueryNode.cs" />
     <Compile Include="AST\Nodes\IfElseIfElseNode.cs" />
     <Compile Include="AST\Nodes\PredicateNode.cs" />
-    <Compile Include="AST\Nodes\PredicateParameterNode.cs" />
     <Compile Include="AST\Nodes\QueryNodes\SelectQueryNode.cs" />
     <Compile Include="AST\Nodes\QueryNodes\SelectAllQueryNode.cs" />
     <Compile Include="AST\Nodes\QueryNodes\EnqueueQueryNode.cs" />
@@ -105,11 +102,10 @@
     <Compile Include="AST\Nodes\QueryNodes\PopQueryNode.cs" />
     <Compile Include="AST\Nodes\QueryNodes\ExtractMinQueryNode.cs" />
     <Compile Include="AST\Nodes\QueryNodes\ExtractMaxQueryNode.cs" />
-    <Compile Include="AST\Nodes\DatatypeNodes\VariableDclNode.cs" />
     <Compile Include="AST\Nodes\ReturnNode.cs" />
     <Compile Include="AST\Nodes\LoopNodes\WhileLoopNode.cs" />
     <Compile Include="AST\Nodes\LoopNodes\ForLoopNode.cs" />
-    <Compile Include="AST\Nodes\DatatypeNodes\CollectionNode.cs" />
+    <Compile Include="AST\Nodes\DatatypeNodes\CollectionDeclNode.cs" />
     <Compile Include="AST\Nodes\QueryNodes\PrintQueryNode.cs" />
     <Compile Include="AST\Nodes\QueryNodes\PrintOption.cs" />
     <Compile Include="AST\Nodes\LoopNodes\ForeachLoopNode.cs" />
@@ -118,6 +114,8 @@
     <Compile Include="AST\Symbol Table\Extension.cs" />
     <Compile Include="AST\Symbol Table\ClassEntry.cs" />
     <Compile Include="AST\Symbol Table\SymbolTable.cs" />
+    <Compile Include="AST\Symbol Table\Scope.cs" />
+    <Compile Include="AST\Symbol Table\LoopType.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

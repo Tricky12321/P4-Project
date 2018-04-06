@@ -85,7 +85,7 @@ namespace Compiler.AST
             {
                 foreach (var NestedChild in Child.vertexDcl())
                 {
-                    VertexNode VNode = new VertexNode(context.Start.Line, context.Start.Column);
+                    GraphDeclVertexNode VNode = new GraphDeclVertexNode(context.Start.Line, context.Start.Column);
                     if (NestedChild.variable() != null)
                     {
                         VNode.Name = NestedChild.variable().GetText();
@@ -105,7 +105,7 @@ namespace Compiler.AST
             {
                 foreach (var NestedChild in Child.edgeDcl())
                 {
-                    EdgeNode ENode = new EdgeNode(context.Start.Line, context.Start.Column);
+                    GraphDeclEdgeNode ENode = new GraphDeclEdgeNode(context.Start.Line, context.Start.Column);
                     // If there is a name for the Edge
                     if (NestedChild.variable().GetLength(0) > 2)
                     {
@@ -639,6 +639,8 @@ namespace Compiler.AST
             return VariableNode;
         }
 
+
+
         public override AbstractNode VisitReturnBlock([NotNull] GiraphParser.ReturnBlockContext context)
         {
             ReturnNode RNode = new ReturnNode(context.Start.Line, context.Start.Column);
@@ -651,13 +653,13 @@ namespace Compiler.AST
             ForLoopNode ForLoop = new ForLoopNode(context.Start.Line, context.Start.Column);
             var contextInside = context.forCondition().forConditionInside();
 
-            if (contextInside.inlineDcl() != null && contextInside.inlineDcl().ChildCount > 0)
+            if (contextInside.inlineDcl() != null)
             {
-                ForLoop.VariableDeclartion = Visit(contextInside.inlineDcl());
+                ForLoop.VariableDeclaration = Visit(contextInside.inlineDcl());
             }
             #region First VarOrConst | Operation 
             //Check if the first is a VarOrConst, if it is, check if its a var or a const
-            if (contextInside.varOrConstOperation(0).varOrConst() != null && contextInside.varOrConstOperation(0).varOrConst().ChildCount > 0)
+            if (contextInside.varOrConstOperation(0).varOrConst() != null)
             {
                 //CHeck if its a var or const
                 // It was a variable
@@ -682,7 +684,7 @@ namespace Compiler.AST
             #endregion
             #region Second VarOrConst | Operation 
             //Check if the first is a VarOrConst, if it is, check if its a var or a const
-            if (contextInside.varOrConstOperation(1).varOrConst() != null && contextInside.varOrConstOperation(1).varOrConst().ChildCount > 0)
+            if (contextInside.varOrConstOperation(1).varOrConst() != null)
             {
                 //CHeck if its a var or const
                 // It was a variable
@@ -811,7 +813,7 @@ namespace Compiler.AST
                     AddNode.TypeOrVariable = context.addToColl().allType().GetText();
                 }
                 // ITS A VARIABLE
-                else if (context.addToColl().variable() != null)
+                else if (context.addToColl().variable() != null && context.addToColl().variable().Count() > 1)
                 {
                     AddNode.IsVariable = true;
                     AddNode.TypeOrVariable = context.addToColl().variable(0).GetText();
@@ -851,7 +853,7 @@ namespace Compiler.AST
 
         public override AbstractNode VisitEdgeDcl([NotNull] GiraphParser.EdgeDclContext context)
         {
-            EdgeNode VarNode = new EdgeNode(context.Start.Line, context.Start.Column);
+            GraphDeclEdgeNode VarNode = new GraphDeclEdgeNode(context.Start.Line, context.Start.Column);
             if (context.GetChild(0).GetText() != "(")
             {
                 VarNode.Name = context.variable(0).GetText();

@@ -31,11 +31,11 @@ namespace Compiler.AST
 
         public override void Visit(FunctionNode node)
         {
-            
+
             Debug.Print("FunctionNode");
             ProgramCode.Append($"{node.Name} -> {node.ReturnType}(");
             int i = 0;
-            foreach (FunctionParameterNode Param in node.Parameters)
+            foreach (ParameterNode Param in node.Parameters)
             {
                 InsertComma(ref i);
                 Param.Accept(this);
@@ -45,15 +45,9 @@ namespace Compiler.AST
             ProgramCode.Append("}\n");
         }
 
-        public override void Visit(FunctionParameterNode node)
+        public override void Visit(ParameterNode node)
         {
             ProgramCode.Append($"{node.Type} {node.Name}");
-        }
-
-        public override void Visit(ProgramNode node)
-        {
-            Debug.Print("ProgramNode");
-            VisitChildren(node);
         }
 
         public override void Visit(StartNode node)
@@ -71,7 +65,7 @@ namespace Compiler.AST
             {
                 ProgramCode.Append($"VERTEX ");
                 int i = 0;
-                foreach (VertexNode vertex in node.Vertices)
+                foreach (GraphDeclVertexNode vertex in node.Vertices)
                 {
                     InsertComma(ref i);
                     vertex.Accept(this);
@@ -82,23 +76,23 @@ namespace Compiler.AST
             {
                 ProgramCode.Append($"EDGE ");
                 int i = 0;
-                foreach (EdgeNode edge in node.Edges)
+                foreach (GraphDeclEdgeNode edge in node.Edges)
                 {
                     InsertComma(ref i);
                     edge.Accept(this);
                 }
                 ProgramCode.Append(");\n");
             }
-            if (node.LeftmostChild != null)
+            if (node.HasChildren)
             {
                 VisitChildren(node);
             }
             ProgramCode.Append($"}}\n");
         }
 
-        public override void Visit(VertexNode node)
+        public override void Visit(GraphDeclVertexNode node)
         {
-            Debug.Print("VertexNode");
+            Debug.Print("GraphDeclVertexNode");
             ProgramCode.Append($"{node.Name}(");
             int i = 0;
             foreach (KeyValuePair<string, string> item in node.ValueList)
@@ -109,9 +103,9 @@ namespace Compiler.AST
             ProgramCode.Append(")");
         }
 
-        public override void Visit(EdgeNode node)
+        public override void Visit(GraphDeclEdgeNode node)
         {
-            Debug.Print("EdgeNode");
+            Debug.Print("GraphDeclEdgeNode");
             ProgramCode.Append($"{node.Name}(");
             int i = 0;
             ProgramCode.Append($"{node.VertexNameFrom}, {node.VertexNameTo}");
@@ -207,7 +201,7 @@ namespace Compiler.AST
         public override void Visit(BoolComparisonNode node)
         {
             Debug.Print("BoolComparisonNode");
-            if (node.LeftmostChild != null)
+            if (node.HasChildren)
             {
                 VisitChildren(node);
             }
@@ -324,22 +318,25 @@ namespace Compiler.AST
 
         public override void Visit(PredicateNode node)
         {
-            throw new NotImplementedException();
+            ProgramCode.Append($"PREDICATE {node.Name}(");
+            int i = 0;
+            foreach (ParameterNode parameter in node.Parameters)
+            {
+                InsertComma(ref i);
+                ProgramCode.Append($"{parameter.Type} {parameter.Name}");
+            }
+            ProgramCode.Append("): {");
+            VisitChildren(node);
+            ProgramCode.Append("};\n");
         }
 
-        public override void Visit(PredicateParameterNode node)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override void Visit(CollectionNode node)
+        public override void Visit(CollectionDeclNode node)
         {
             throw new NotImplementedException();
         }
 
         public override void Visit(DeclarationNode node)
         {
-            throw new NotImplementedException();
         }
 
         public override void Visit(AddQueryNode node)
@@ -360,12 +357,9 @@ namespace Compiler.AST
 
         public override void Visit(WhileLoopNode node)
         {
-            throw new NotImplementedException();
-        }
-
-        public override void Visit(EdgeDclsNode node)
-        {
-            throw new NotImplementedException();
+            ProgramCode.Append("WHILE ");
+            node.BoolCompare.Accept(this);
+            VisitChildren(node);
         }
 
         public override void Visit(VariableAttributeNode node)
@@ -374,10 +368,6 @@ namespace Compiler.AST
         }
 
         public override void Visit(VariableNode node)
-        {
-            throw new NotImplementedException();
-        }
-        public override void Visit(TerminalNode node)
         {
             throw new NotImplementedException();
         }
@@ -390,6 +380,18 @@ namespace Compiler.AST
         public override void Visit(ForeachLoopNode node)
         {
             throw new NotImplementedException();
+        }
+
+        public override void Visit(VariableDclNode node)
+        {
+            ProgramCode.Append(node.Type);
+            ProgramCode.Append($" {node.Name}");
+            if (node.HasChildren)
+            {
+                ProgramCode.Append(" = ");
+                VisitChildren(node);
+            }
+            ProgramCode.Append(";\n");
         }
     }
 }

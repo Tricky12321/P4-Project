@@ -13,33 +13,14 @@ namespace Compiler.AST.SymbolTable
     {
         public SymTable SymbolTable = new SymTable();
 
-        public AllType ResolveFuncType(string Type)
-        {
-            switch (Type)
-            {
-                case "VOID":
-                    return AllType.VOID;
-                case "STRING":
-                    return AllType.STRING;
-                case "BOOL":
-                    return AllType.BOOL;
-                case "DECIMAL":
-                    return AllType.DECIMAL;
-                case "INT":
-                    return AllType.INT;
-                case "GRAPH":
-                    return AllType.GRAPH;
-                case "EDGE":
-                    return AllType.EDGE;
-                case "VERTEX":
-                    return AllType.VERTEX;
-                case "COLLECTION":
-                    return AllType.COLLECTION;
+        public bool CheckDeclared(string name) {
+            if (!SymbolTable.DeclaredLocally(name)) {
+                return true;
+            } else {
+                SymbolTable.AlreadyDeclaredError(name);
+                return false;
             }
-            throw new Exception("Unknown type");
         }
-
-
 
         public void BuildSymbolTable(AbstractNode root)
         {
@@ -60,27 +41,25 @@ namespace Compiler.AST.SymbolTable
             }
         }
 
-
-
         //All the visit stuff-----------------------------------------
         public override void Visit(AbstractNode node)
         {
-            Console.WriteLine("This node is visited, but its not implemented!");
-            Console.WriteLine(node.ToString());
+            SymbolTable.NotImplementedError(node);
         }
 
-		public void VisitChildrenNewScope(AbstractNode node)
-		{
-            SymbolTable.OpenScope();
+        public void VisitChildrenNewScope(AbstractNode node)
+        {
+            SymbolTable.OpenScope(node.Name);
+
             foreach (AbstractNode child in node.GetChildren())
             {
-                child.Accept(this);
-
+                Visit(child);
             }
-            SymbolTable.CloseScope();
-		}
 
-		public override void VisitRoot(AbstractNode root)
+            SymbolTable.CloseScope();
+        }
+
+        public override void VisitRoot(AbstractNode root)
         {
             root.Accept(this);
         }
@@ -88,26 +67,29 @@ namespace Compiler.AST.SymbolTable
         public override void Visit(FunctionNode node)
         {
             SymbolTable.SetCurrentNode(node);
-            AllType type = ResolveFuncType(node.ReturnType);
+            AllType type = Utilities.FindTypeFromString(node.ReturnType);
             string functionName = node.Name;
-            if (!SymbolTable.DeclaredLocally(functionName)) {
-				SymbolTable.EnterSymbol(functionName, type);
-				SymbolTable.OpenScope();
-				foreach (FunctionParameterNode parameter in node.Parameters)
-				{
-					parameter.Accept(this);
-				}
-				VisitChildren(node);
-				SymbolTable.CloseScope();
+            if (!SymbolTable.DeclaredLocally(functionName))
+            {
+                SymbolTable.EnterSymbol(functionName, type);
+                SymbolTable.OpenScope(node.Name);
+                foreach (ParameterNode parameter in node.Parameters)
+                {
+                    parameter.Accept(this);
+                }
+                VisitChildren(node);
+                SymbolTable.CloseScope();
+            } else {
+                
             }
         }
 
-        public override void Visit(FunctionParameterNode node)
+        public override void Visit(ParameterNode node)
         {
-            if (!SymbolTable.DeclaredLocally(node.Name)) {
+            if (!SymbolTable.DeclaredLocally(node.Name))
+            {
 				SymbolTable.SetCurrentNode(node);
-				AllType parameterType = ResolveFuncType(node.Type);
-				SymbolTable.EnterSymbol(node.Name, parameterType);
+                SymbolTable.EnterSymbol(node.Name, node.Type_enum);
             }
         }
 
@@ -116,21 +98,17 @@ namespace Compiler.AST.SymbolTable
             VisitChildren(node);
         }
 
-        public override void Visit(ProgramNode node)
-        {
-            /* To be deleted */
-            throw new NotImplementedException();
-        }
-
         public override void Visit(GraphNode node)
         {
-            SymbolTable.SetCurrentNode(node);
-            string graphName = node.Name;
-            SymbolTable.EnterSymbol(graphName, AllType.GRAPH);
-            VisitChildren(node);
+            if (CheckDeclared(node.Name)) {
+				SymbolTable.SetCurrentNode(node);
+				string graphName = node.Name;
+				SymbolTable.EnterSymbol(graphName, AllType.GRAPH);
+				VisitChildren(node);
+            }
         }
 
-        public override void Visit(VertexNode node)
+        public override void Visit(GraphDeclVertexNode node)
         {
             SymbolTable.SetCurrentNode(node);
             /* Missing the values of the vertex*/
@@ -138,7 +116,7 @@ namespace Compiler.AST.SymbolTable
             SymbolTable.EnterSymbol(vertexName, AllType.VERTEX);
         }
 
-        public override void Visit(EdgeNode node)
+        public override void Visit(GraphDeclEdgeNode node)
         {
             SymbolTable.SetCurrentNode(node);
             /* Missing the values of the edge*/
@@ -148,8 +126,7 @@ namespace Compiler.AST.SymbolTable
 
         public override void Visit(SetQueryNode node)
         {
-            Console.WriteLine("This node is visited, but its not implemented!");
-            Console.WriteLine(node.ToString());
+            SymbolTable.NotImplementedError(node);
         }
 
         public override void Visit(WhereNode node)
@@ -161,7 +138,7 @@ namespace Compiler.AST.SymbolTable
         {
             SymbolTable.SetCurrentNode(node);
             string longAttributeName = node.ExtensionName;
-            AllType attributeType = ResolveFuncType(node.ExtendWithType);
+            AllType attributeType = Utilities.FindTypeFromString(node.ExtendWithType);
             // If there is a shortname AND a long name, create 2 entries in the class table
             if (node.ExtensionShortName != null && node.ExtensionShortName.Length > 0)
             {
@@ -215,8 +192,8 @@ namespace Compiler.AST.SymbolTable
             SymbolTable.SetCurrentNode(node);
             string predicateName = node.Name;
             SymbolTable.EnterSymbol(predicateName, AllType.BOOL);
-            SymbolTable.OpenScope();
-            foreach (PredicateParameterNode parameter in node.Parameters)
+            SymbolTable.OpenScope(node.Name);
+            foreach (ParameterNode parameter in node.Parameters)
             {
                 parameter.Accept(this);
             }
@@ -224,15 +201,9 @@ namespace Compiler.AST.SymbolTable
             SymbolTable.CloseScope();
         }
 
-        public override void Visit(PredicateParameterNode node)
+        public override void Visit(CollectionDeclNode node)
         {
-            SymbolTable.SetCurrentNode(node);
-            SymbolTable.EnterSymbol(node.Name, ResolveFuncType(node.Type));
-        }
-
-        public override void Visit(CollectionNode node)
-        {
-            throw new NotImplementedException();
+            SymbolTable.NotImplementedError(node);
         }
 
         public override void Visit(IfElseIfElseNode node)
@@ -245,50 +216,28 @@ namespace Compiler.AST.SymbolTable
             {
                 VisitChildren(node.ElseIfList[i].Item1);
                 VisitChildrenNewScope(node.ElseIfList[i].Item2);
-                SymbolTable.CloseScope();
             }
             VisitChildren(node.ElseCodeBlock);
         }
 
         public override void Visit(GraphSetQuery node)
         {
-            throw new NotImplementedException();
+            SymbolTable.NotImplementedError(node);
         }
 
         public override void Visit(DeclarationNode node)
         {
-            throw new NotImplementedException();
+            SymbolTable.EnterSymbol(node.Name, node.Type_enum);
         }
-
+        
         public override void Visit(BoolComparisonNode node)
         {
-            throw new NotImplementedException();
+            SymbolTable.NotImplementedError(node);
         }
 
         public override void Visit(ExpressionNode node)
         {
-            throw new NotImplementedException();
-        }
-
-        public override void Visit(ForLoopNode node)
-        {
-            if (node.VariableDeclartion != null) {
-                Visit(node.VariableDeclartion);
-            }
-            if (node.VariableDeclartion != null)
-            {
-                Visit(node.VariableDeclartion);
-            }
-            VisitChildrenNewScope(node);
-        }
-
-        public override void Visit(ForeachLoopNode node)
-	    {
-            throw new NotImplementedException();
-        }
-	    public override void Visit(CodeBlockNode node)
-        {
-            throw new NotImplementedException();
+            SymbolTable.NotImplementedError(node);
         }
 
         public override void Visit(ReturnNode node)
@@ -296,34 +245,51 @@ namespace Compiler.AST.SymbolTable
             throw new NotImplementedException();
         }
 
-        public override void Visit(WhileLoopNode node)
+        public override void Visit(ForLoopNode node)
         {
-            throw new NotImplementedException();
+            if (node.VariableDeclaration != null)
+            {
+                Visit(node.VariableDeclaration);
+            }
+            if (node.VariableDeclaration != null)
+            {
+                Visit(node.VariableDeclaration);
+            }
+            VisitChildrenNewScope(node);
         }
 
-        public override void Visit(EdgeDclsNode node)
+        public override void Visit(ForeachLoopNode node)
         {
-            throw new NotImplementedException();
+            SymbolTable.NotImplementedError(node);
+        }
+        public override void Visit(CodeBlockNode node)
+        {
+            SymbolTable.NotImplementedError(node);
+        }
+
+        public override void Visit(WhileLoopNode node)
+        {
+            SymbolTable.NotImplementedError(node);
         }
 
         public override void Visit(VariableAttributeNode node)
         {
-            throw new NotImplementedException();
+            SymbolTable.NotImplementedError(node);
         }
 
         public override void Visit(VariableNode node)
         {
-            throw new NotImplementedException();
-        }
-
-        public override void Visit(TerminalNode node)
-        {
-            throw new NotImplementedException();
+            SymbolTable.NotImplementedError(node);
         }
 
         public override void Visit(AddQueryNode node)
         {
-            throw new NotImplementedException();
+            SymbolTable.NotImplementedError(node);
+        }
+
+        public override void Visit(VariableDclNode node)
+        {
+            SymbolTable.EnterSymbol(node.Name, node.Type_enum);
         }
     }
 }

@@ -51,8 +51,12 @@ namespace Compiler
         }
 
         public static SymTable BuildSymbolTable(StartNode node) {
+            Stopwatch SymbolTableTimer = new Stopwatch();
+            SymbolTableTimer.Start();
             AstSymbolTableCreatorVisitor SymbolTable = new AstSymbolTableCreatorVisitor();
             SymbolTable.BuildSymbolTable(node);
+            SymbolTableTimer.Stop();
+            Console.WriteLine("Building Symbol Table took: "+SymbolTableTimer.ElapsedMilliseconds + "ms");
             return SymbolTable.SymbolTable;
 
         }
