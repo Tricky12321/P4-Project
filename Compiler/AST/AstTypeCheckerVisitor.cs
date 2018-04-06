@@ -30,7 +30,7 @@ namespace Compiler.AST
         }
 
         //-----------------------------Visitor----------------------------------------------
-        public override void Visit(FunctionParameterNode node)
+        public override void Visit(ParameterNode node)
         {
             throw new NotImplementedException();
         }
@@ -280,6 +280,7 @@ namespace Compiler.AST
             if (node.WhereCondition != null)
             {
                 Visit(node.WhereCondition);
+                
             }
         }
 
@@ -300,7 +301,7 @@ namespace Compiler.AST
 
         public override void Visit(WhereNode node)
         {
-            throw new NotImplementedException();
+            node.Accept(this);
         }
 
         public override void Visit(EdgeNode node)
@@ -313,14 +314,11 @@ namespace Compiler.AST
             throw new NotImplementedException();
         }
 
-        public override void Visit(ProgramNode node)
-        {
-            throw new NotImplementedException();
-        }
-
         public override void Visit(FunctionNode node)
         {
-            throw new NotImplementedException();
+            AllType? funcType = _createdSymbolTabe.RetrieveSymbol(node.Name);
+
+            VisitChildren(node);
         }
 
         public override void Visit(AbstractNode node)
@@ -351,6 +349,11 @@ namespace Compiler.AST
         public override void Visit(ExpressionNode node)
         {
             throw new NotImplementedException();
+        }
+
+        public override void Visit(ReturnNode node)
+        {
+            VisitChildren(node);
         }
 
         public override void Visit(ForLoopNode node)
@@ -386,7 +389,8 @@ namespace Compiler.AST
         {
             throw new NotImplementedException();
         }
-        public override void Visit(ReturnNode node)
+
+        public override void Visit(CodeBlockNode node)
         {
             throw new NotImplementedException();
         }
@@ -395,6 +399,9 @@ namespace Compiler.AST
             throw new NotImplementedException();
         }
 
-
+        public override void Visit(VariableDclNode node)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
