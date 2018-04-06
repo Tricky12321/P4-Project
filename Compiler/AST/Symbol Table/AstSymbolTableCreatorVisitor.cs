@@ -89,7 +89,7 @@ namespace Compiler.AST.SymbolTable
             if (!SymbolTable.DeclaredLocally(node.Name))
             {
 				SymbolTable.SetCurrentNode(node);
-				SymbolTable.EnterSymbol(node.Name, node.Type);
+				SymbolTable.EnterSymbol(node.Name, Utilities.FindTypeFromString(node.Type));
             }
         }
 
