@@ -300,11 +300,6 @@ namespace Compiler.AST.SymbolTable
             SymbolTable.NotImplementedError(node);
         }
 
-        public override void Visit(ReturnNode node)
-        {
-            SymbolTable.NotImplementedError(node);
-        }
-
         public override void Visit(WhileLoopNode node)
         {
             SymbolTable.NotImplementedError(node);
