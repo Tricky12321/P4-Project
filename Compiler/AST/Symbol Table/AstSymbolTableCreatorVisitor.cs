@@ -77,7 +77,7 @@ namespace Compiler.AST.SymbolTable
 
         public void VisitChildrenNewScope(AbstractNode node)
         {
-            SymbolTable.OpenScope();
+            SymbolTable.OpenScope(node.Name);
 
             foreach (AbstractNode child in node.GetChildren())
             {
@@ -100,7 +100,7 @@ namespace Compiler.AST.SymbolTable
             if (!SymbolTable.DeclaredLocally(functionName))
             {
                 SymbolTable.EnterSymbol(functionName, type);
-                SymbolTable.OpenScope();
+                SymbolTable.OpenScope(node.Name);
                 foreach (FunctionParameterNode parameter in node.Parameters)
                 {
                     parameter.Accept(this);
@@ -129,10 +129,12 @@ namespace Compiler.AST.SymbolTable
 
         public override void Visit(GraphNode node)
         {
-            SymbolTable.SetCurrentNode(node);
-            string graphName = node.Name;
-            SymbolTable.EnterSymbol(graphName, AllType.GRAPH);
-            VisitChildren(node);
+            if (CheckDeclared(node.Name)) {
+				SymbolTable.SetCurrentNode(node);
+				string graphName = node.Name;
+				SymbolTable.EnterSymbol(graphName, AllType.GRAPH);
+				VisitChildren(node);
+            }
         }
 
         public override void Visit(VertexNode node)
@@ -219,7 +221,7 @@ namespace Compiler.AST.SymbolTable
             SymbolTable.SetCurrentNode(node);
             string predicateName = node.Name;
             SymbolTable.EnterSymbol(predicateName, AllType.BOOL);
-            SymbolTable.OpenScope();
+            SymbolTable.OpenScope(node.Name);
             foreach (PredicateParameterNode parameter in node.Parameters)
             {
                 parameter.Accept(this);

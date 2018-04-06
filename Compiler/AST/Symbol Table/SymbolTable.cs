@@ -13,9 +13,15 @@ namespace Compiler.AST.SymbolTable
         private Dictionary<AllType, Dictionary<string, ClassEntry>> _classesTable = new Dictionary<AllType, Dictionary<string, ClassEntry>>();
         private uint _globalDepth;
         private AbstractNode _currentNode;
-
+        private Scope _currentScope = new Scope(null,0,new List<string>());
         public void SetCurrentNode( AbstractNode node) {
             _currentNode = node;
+        }
+
+        public string Prefix => _currentScope.Prefix;
+
+        public string GetName(string name) {
+			return Prefix + name;
         }
 
         public SymTable()
@@ -31,13 +37,13 @@ namespace Compiler.AST.SymbolTable
 
         public void EnterSymbol(string name, AllType type)
         {
-            if (DeclaredLocally(name))
+            if (DeclaredLocally(GetName(name)))
             {
                 Console.WriteLine($"Duplicate definition of {name} at line number {GetLineNumber()}");
             }
-            else if (!_symTable.ContainsKey(name))
+            else if (!_symTable.ContainsKey(GetName(name)))
             {
-                _symTable.Add(name, new SymbolTableEntry(type, _globalDepth));
+                _symTable.Add(GetName(name), new SymbolTableEntry(type, _globalDepth));
             }
         }
 
@@ -165,18 +171,34 @@ namespace Compiler.AST.SymbolTable
         public bool DeclaredLocally(string name)
         {
             bool IsCollection;
-            return RetrieveSymbol(name, out IsCollection, false) != null;
+            return RetrieveSymbol(GetName(name), out IsCollection, false) != null;
         }
 
-        public void OpenScope()
+        public void OpenScope(LoopType type)
         {
+            Scope NewScope = new Scope(_currentScope,_globalDepth,_currentScope.GetPrefixes());
+            _currentScope = NewScope;
+            _currentScope.AddPrefix(type);
+            ++_globalDepth;
+        }
+
+        public void OpenScope(string value)
+        {
+            Scope NewScope = new Scope(_currentScope, _globalDepth, _currentScope.GetPrefixes());
+            _currentScope = NewScope;
+            _currentScope.AddPrefix(value);
             ++_globalDepth;
         }
 
         public void CloseScope()
         {
-            _symTable.Values.Where(y => y.Depth == _globalDepth && y.Reachable == true).ToList().ForEach(y=>y.Reachable = false);
-            --_globalDepth;
+            if (_currentScope.ParentScope == null) {
+                Console.WriteLine("Cannot close scope, since its the last scope!");
+            } else {
+                _currentScope = _currentScope.CloseScope();
+				_symTable.Values.Where(y => y.Depth == _globalDepth && y.Reachable == true).ToList().ForEach(y=>y.Reachable = false);
+				--_globalDepth;
+            }
         }
 
         public void ExtendClass(AllType Type, string longAttribute, string shortAttribute)

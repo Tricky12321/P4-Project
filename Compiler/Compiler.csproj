@@ -118,6 +118,8 @@
     <Compile Include="AST\Symbol Table\Extension.cs" />
     <Compile Include="AST\Symbol Table\ClassEntry.cs" />
     <Compile Include="AST\Symbol Table\SymbolTable.cs" />
+    <Compile Include="AST\Symbol Table\Scope.cs" />
+    <Compile Include="AST\Symbol Table\LoopType.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

@@ -22,7 +22,6 @@ namespace Compiler.AST.Nodes
             PParaNode.Type = Type;
             PParaNode.Name = Name;
             Parameters.Add(PParaNode);
-
         }
     }
 }
