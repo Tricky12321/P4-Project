@@ -12,12 +12,22 @@ namespace Compiler.AST.Nodes
             
         }
 
+        public override void Accept(AstVisitorBase astVisitor)
+        {
+            astVisitor.Visit(this);
+        }
+
         public void AddParameter(string Type, string Name, int LineNumber, int CharIndex) {
             PredicateParameterNode PParaNode = new PredicateParameterNode(LineNumber, CharIndex);
             PParaNode.Type = Type;
             PParaNode.Name = Name;
             Parameters.Add(PParaNode);
 
+        }
+
+        public override void Accept(AstVisitorBase astVisitor)
+        {
+            astVisitor.Visit(this);
         }
     }
 }

@@ -4,6 +4,7 @@ using Compiler.AST.Nodes.DatatypeNodes;
 using System.Collections.Generic;
 using Compiler.AST.Nodes.QueryNodes;
 using System.Text;
+using Compiler.AST.Nodes.LoopNodes;
 
 namespace Compiler.AST
 {
@@ -339,6 +340,11 @@ namespace Compiler.AST
             throw new NotImplementedException();
         }
 
+        public override void Visit(AddQueryNode node)
+        {
+            throw new NotImplementedException();
+        }
+
         public override void Visit(AbstractNode node)
         {
             throw new NotImplementedException();
@@ -348,6 +354,40 @@ namespace Compiler.AST
         {
             ProgramCode.Append("RETURN ");
             VisitChildren(node);
+        }
+
+        public override void Visit(WhileLoopNode node)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void Visit(EdgeDclsNode node)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void Visit(VariableAttributeNode node)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void Visit(VariableNode node)
+        {
+            throw new NotImplementedException();
+        }
+        public override void Visit(TerminalNode node)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void Visit(ForLoopNode node)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void Visit(ForeachLoopNode node)
+        {
+            throw new NotImplementedException();
         }
     }
 }

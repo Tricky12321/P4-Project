@@ -8,5 +8,10 @@ namespace Compiler.AST.Nodes.DatatypeNodes
         {
             
         }
+
+        public override void Accept(AstVisitorBase astVisitor)
+        {
+            astVisitor.Visit(this);
+        }
     }
 }
