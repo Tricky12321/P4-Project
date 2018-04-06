@@ -45,7 +45,7 @@ namespace Compiler.AST
                     var Type = Parameter.allType().GetText();  // Parameter Type
                     var Name = Parameter.variable().GetText(); // Parameter Name
 
-                    FNode.AddParameter(Utilities.FindTypeFromString(Type), Name, context.Start.Line, context.Start.Column);
+                    FNode.AddParameter(Type, Name, context.Start.Line, context.Start.Column);
 				}
             }
             foreach (var Child in context.codeBlock().codeBlockContent())
@@ -813,7 +813,7 @@ namespace Compiler.AST
                     AddNode.TypeOrVariable = context.addToColl().allType().GetText();
                 }
                 // ITS A VARIABLE
-                else if (context.addToColl().variable() != null)
+                else if (context.addToColl().variable() != null && context.addToColl().variable().Count() > 1)
                 {
                     AddNode.IsVariable = true;
                     AddNode.TypeOrVariable = context.addToColl().variable(0).GetText();

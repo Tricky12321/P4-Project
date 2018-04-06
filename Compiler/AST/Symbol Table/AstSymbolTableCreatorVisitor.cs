@@ -13,8 +13,6 @@ namespace Compiler.AST.SymbolTable
     {
         public SymTable SymbolTable = new SymTable();
 
-
-
         public bool CheckDeclared(string name) {
             if (!SymbolTable.DeclaredLocally(name)) {
                 return true;
@@ -51,7 +49,7 @@ namespace Compiler.AST.SymbolTable
 
         public void VisitChildrenNewScope(AbstractNode node)
         {
-            SymbolTable.OpenScope();
+            SymbolTable.OpenScope(node.Name);
 
             foreach (AbstractNode child in node.GetChildren())
             {
@@ -73,14 +71,16 @@ namespace Compiler.AST.SymbolTable
             string functionName = node.Name;
             if (!SymbolTable.DeclaredLocally(functionName))
             {
-				SymbolTable.EnterSymbol(functionName, type);
-				SymbolTable.OpenScope();
-				foreach (ParameterNode parameter in node.Parameters)
-				{
-					parameter.Accept(this);
-				}
-				VisitChildren(node);
-				SymbolTable.CloseScope();
+                SymbolTable.EnterSymbol(functionName, type);
+                SymbolTable.OpenScope(node.Name);
+                foreach (ParameterNode parameter in node.Parameters)
+                {
+                    parameter.Accept(this);
+                }
+                VisitChildren(node);
+                SymbolTable.CloseScope();
+            } else {
+                
             }
         }
 
@@ -89,7 +89,7 @@ namespace Compiler.AST.SymbolTable
             if (!SymbolTable.DeclaredLocally(node.Name))
             {
 				SymbolTable.SetCurrentNode(node);
-				SymbolTable.EnterSymbol(node.Name, node.Type);
+                SymbolTable.EnterSymbol(node.Name, node.Type_enum);
             }
         }
 
@@ -100,10 +100,12 @@ namespace Compiler.AST.SymbolTable
 
         public override void Visit(GraphNode node)
         {
-            SymbolTable.SetCurrentNode(node);
-            string graphName = node.Name;
-            SymbolTable.EnterSymbol(graphName, AllType.GRAPH);
-            VisitChildren(node);
+            if (CheckDeclared(node.Name)) {
+				SymbolTable.SetCurrentNode(node);
+				string graphName = node.Name;
+				SymbolTable.EnterSymbol(graphName, AllType.GRAPH);
+				VisitChildren(node);
+            }
         }
 
         public override void Visit(GraphDeclVertexNode node)
@@ -190,7 +192,7 @@ namespace Compiler.AST.SymbolTable
             SymbolTable.SetCurrentNode(node);
             string predicateName = node.Name;
             SymbolTable.EnterSymbol(predicateName, AllType.BOOL);
-            SymbolTable.OpenScope();
+            SymbolTable.OpenScope(node.Name);
             foreach (ParameterNode parameter in node.Parameters)
             {
                 parameter.Accept(this);
@@ -198,8 +200,6 @@ namespace Compiler.AST.SymbolTable
             VisitChildren(node);
             SymbolTable.CloseScope();
         }
-
-
 
         public override void Visit(CollectionDeclNode node)
         {
@@ -227,7 +227,7 @@ namespace Compiler.AST.SymbolTable
 
         public override void Visit(DeclarationNode node)
         {
-            SymbolTable.EnterSymbol(node.Name, Utilities.FindTypeFromString(node.Type));
+            SymbolTable.EnterSymbol(node.Name, node.Type_enum);
         }
         
         public override void Visit(BoolComparisonNode node)
@@ -289,7 +289,7 @@ namespace Compiler.AST.SymbolTable
 
         public override void Visit(VariableDclNode node)
         {
-            SymbolTable.EnterSymbol(node.Name, Utilities.FindTypeFromString(node.Type));
+            SymbolTable.EnterSymbol(node.Name, node.Type_enum);
         }
     }
 }
