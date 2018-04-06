@@ -13,7 +13,6 @@ namespace Compiler.AST
 {
     public class AstTypeCheckerVisitor : AstVisitorBase
     {
-        public bool errorOccured = false;
         private AllType collectionRetrieveType = AllType.VOID;
         bool isCollection;
 
@@ -24,10 +23,7 @@ namespace Compiler.AST
             _createdSymbolTabe = symbolTable;
         }
 
-        private void Error()
-        {
-            errorOccured = true;
-        }
+
 
         //-----------------------------Visitor----------------------------------------------
         public override void Visit(ParameterNode node)
@@ -75,8 +71,8 @@ namespace Compiler.AST
                 }
                 else
                 {
-                    
-                    Console.WriteLine($"Type incorrect at line number {node.LineNumber}");
+
+                    _createdSymbolTabe.WrongTypeError(node, RetrieveVar, collectionInQuery);
                 }
             }
 
@@ -93,15 +89,15 @@ namespace Compiler.AST
                 bool isCollectionInQuery;
                 AllType? collection = _createdSymbolTabe.RetrieveSymbol(node.Variable, out isCollectionInQuery, false);
                 bool isCollectionRetriever;
-                AllType? collectionParent = _createdSymbolTabe.RetrieveSymbol(node.Parent.Name, out isCollectionRetriever, false);
+                AllType? RetrieveVar = _createdSymbolTabe.RetrieveSymbol(node.Parent.Name, out isCollectionRetriever, false);
 
-                if (collection == collectionParent && isCollectionInQuery && !isCollectionRetriever)
+                if (collection == RetrieveVar && isCollectionInQuery && !isCollectionRetriever)
                 {
 
                 }
                 else
                 {
-                    Console.WriteLine($"Type incorrect at line number {node.LineNumber}");
+                    _createdSymbolTabe.WrongTypeError(node, RetrieveVar, collection);
                 }
             }
 
@@ -126,7 +122,7 @@ namespace Compiler.AST
                 }
                 else
                 {
-                    Console.WriteLine($"Type incorrect at line number {node.LineNumber}");
+                    _createdSymbolTabe.WrongTypeError(node, nameDeclaredForRetrieve, collectionNameType);
                 }
             }
 
@@ -151,7 +147,7 @@ namespace Compiler.AST
                 }
                 else
                 {
-                    Console.WriteLine($"Type incorrect at line number {node.LineNumber}");
+                    _createdSymbolTabe.WrongTypeError(node, nameDeclaredForRetrieve, collectionNameType);
                 }
             }
 
@@ -187,13 +183,11 @@ namespace Compiler.AST
                 else
                 {
                     Console.WriteLine($"Variable {varToAdd} and collection {collectionToAddTo} are not of same type, at line number {node.LineNumber}");
-                    Error();
                 }
             }
             else
             {
-                Console.WriteLine($"Variable or collection are not declared at line number {node.LineNumber}");
-                Error();
+                _createdSymbolTabe.NotDeclaredError(node);
             }
         }
 
@@ -212,7 +206,7 @@ namespace Compiler.AST
                 }
                 else
                 {
-                    Console.WriteLine($"Type incorrect at line number {node.LineNumber}");
+                    _createdSymbolTabe.WrongTypeError(node, nameDeclaredForRetrieve, collection);
                 }
             }
 
@@ -247,14 +241,12 @@ namespace Compiler.AST
                 }
                 else
                 {
-                    Console.WriteLine($"Variable {varToAdd} and collection {collectionToAddTo} are not of same type, at line number {node.LineNumber}");
-                    Error();
+                    _createdSymbolTabe.WrongTypeError(node, varToAdd, collectionToAddTo);
                 }
             }
             else
             {
-                Console.WriteLine($"Variable or collection are not declared at line number {node.LineNumber}");
-                Error();
+                _createdSymbolTabe.NotDeclaredError(node);
             }
         }
 
@@ -273,7 +265,7 @@ namespace Compiler.AST
                 }
                 else
                 {
-                    Console.WriteLine($"Type incorrect at line number {node.LineNumber}");
+                    _createdSymbolTabe.WrongTypeError(node, nameDeclaredForRetrieve, collection);
                 }
             }
             
