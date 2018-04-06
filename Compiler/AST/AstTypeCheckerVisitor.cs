@@ -42,7 +42,7 @@ namespace Compiler.AST
 
         public override void Visit(VertexNode node)
         {
-            throw new NotImplementedException();
+            VisitChildren(node);
         }
 
         public override void Visit(SetQueryNode node)
@@ -311,8 +311,6 @@ namespace Compiler.AST
 
         public override void Visit(FunctionNode node)
         {
-            AllType? funcType = _createdSymbolTabe.RetrieveSymbol(node.Name);
-
             VisitChildren(node);
         }
 
@@ -348,6 +346,21 @@ namespace Compiler.AST
 
         public override void Visit(ReturnNode node)
         {
+            AllType? funcType = _createdSymbolTabe.RetrieveSymbol(node.Parent.Name);
+            AllType? returnChild = _createdSymbolTabe.RetrieveSymbol(node.LeftmostChild.Name);
+
+            if(funcType == AllType.VOID)
+            {
+                //calling return on void function error 
+            }
+            else if (returnChild == funcType)
+            {
+
+            }
+            else
+            {
+                //conflicting types, on return and function
+            }
             VisitChildren(node);
         }
 
@@ -399,5 +412,6 @@ namespace Compiler.AST
         {
             throw new NotImplementedException();
         }
+
     }
 }
