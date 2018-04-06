@@ -106,7 +106,7 @@ namespace Compiler.AST.SymbolTable
             VisitChildren(node);
         }
 
-        public override void Visit(VertexNode node)
+        public override void Visit(GraphDeclVertexNode node)
         {
             SymbolTable.SetCurrentNode(node);
             /* Missing the values of the vertex*/
@@ -114,7 +114,7 @@ namespace Compiler.AST.SymbolTable
             SymbolTable.EnterSymbol(vertexName, AllType.VERTEX);
         }
 
-        public override void Visit(EdgeNode node)
+        public override void Visit(GraphDeclEdgeNode node)
         {
             SymbolTable.SetCurrentNode(node);
             /* Missing the values of the edge*/
@@ -201,7 +201,7 @@ namespace Compiler.AST.SymbolTable
 
 
 
-        public override void Visit(CollectionNode node)
+        public override void Visit(CollectionDeclNode node)
         {
             SymbolTable.NotImplementedError(node);
         }
@@ -272,22 +272,12 @@ namespace Compiler.AST.SymbolTable
             SymbolTable.NotImplementedError(node);
         }
 
-        public override void Visit(EdgeDclsNode node)
-        {
-            SymbolTable.NotImplementedError(node);
-        }
-
         public override void Visit(VariableAttributeNode node)
         {
             SymbolTable.NotImplementedError(node);
         }
 
         public override void Visit(VariableNode node)
-        {
-            SymbolTable.NotImplementedError(node);
-        }
-
-        public override void Visit(TerminalNode node)
         {
             SymbolTable.NotImplementedError(node);
         }

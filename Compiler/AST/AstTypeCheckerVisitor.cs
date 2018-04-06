@@ -36,7 +36,7 @@ namespace Compiler.AST
             VisitChildren(node);
         }
 
-        public override void Visit(VertexNode node)
+        public override void Visit(GraphDeclVertexNode node)
         {
             VisitChildren(node);
         }
@@ -281,7 +281,7 @@ namespace Compiler.AST
             
         }
 
-        public override void Visit(CollectionNode node)
+        public override void Visit(CollectionDeclNode node)
         {
             _createdSymbolTabe.NotImplementedError(node);
         }
@@ -291,7 +291,7 @@ namespace Compiler.AST
             node.Accept(this);
         }
 
-        public override void Visit(EdgeNode node)
+        public override void Visit(GraphDeclEdgeNode node)
         {
             _createdSymbolTabe.NotImplementedError(node);
         }
@@ -371,21 +371,12 @@ namespace Compiler.AST
             _createdSymbolTabe.NotImplementedError(node);
         }
 
-        public override void Visit(EdgeDclsNode node)
-        {
-            _createdSymbolTabe.NotImplementedError(node);
-        }
-
         public override void Visit(VariableAttributeNode node)
         {
             _createdSymbolTabe.NotImplementedError(node);
         }
 
         public override void Visit(VariableNode node)
-        {
-            _createdSymbolTabe.NotImplementedError(node);
-        }
-        public override void Visit(TerminalNode node)
         {
             _createdSymbolTabe.NotImplementedError(node);
         }

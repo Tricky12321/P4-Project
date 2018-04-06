@@ -65,7 +65,7 @@ namespace Compiler.AST
             {
                 ProgramCode.Append($"VERTEX ");
                 int i = 0;
-                foreach (VertexNode vertex in node.Vertices)
+                foreach (GraphDeclVertexNode vertex in node.Vertices)
                 {
                     InsertComma(ref i);
                     vertex.Accept(this);
@@ -76,7 +76,7 @@ namespace Compiler.AST
             {
                 ProgramCode.Append($"EDGE ");
                 int i = 0;
-                foreach (EdgeNode edge in node.Edges)
+                foreach (GraphDeclEdgeNode edge in node.Edges)
                 {
                     InsertComma(ref i);
                     edge.Accept(this);
@@ -90,9 +90,9 @@ namespace Compiler.AST
             ProgramCode.Append($"}}\n");
         }
 
-        public override void Visit(VertexNode node)
+        public override void Visit(GraphDeclVertexNode node)
         {
-            Debug.Print("VertexNode");
+            Debug.Print("GraphDeclVertexNode");
             ProgramCode.Append($"{node.Name}(");
             int i = 0;
             foreach (KeyValuePair<string, string> item in node.ValueList)
@@ -103,9 +103,9 @@ namespace Compiler.AST
             ProgramCode.Append(")");
         }
 
-        public override void Visit(EdgeNode node)
+        public override void Visit(GraphDeclEdgeNode node)
         {
-            Debug.Print("EdgeNode");
+            Debug.Print("GraphDeclEdgeNode");
             ProgramCode.Append($"{node.Name}(");
             int i = 0;
             ProgramCode.Append($"{node.VertexNameFrom}, {node.VertexNameTo}");
@@ -330,7 +330,7 @@ namespace Compiler.AST
             ProgramCode.Append("};\n");
         }
 
-        public override void Visit(CollectionNode node)
+        public override void Visit(CollectionDeclNode node)
         {
             throw new NotImplementedException();
         }
@@ -362,21 +362,12 @@ namespace Compiler.AST
             VisitChildren(node);
         }
 
-        public override void Visit(EdgeDclsNode node)
-        {
-            throw new NotImplementedException();
-        }
-
         public override void Visit(VariableAttributeNode node)
         {
             throw new NotImplementedException();
         }
 
         public override void Visit(VariableNode node)
-        {
-            throw new NotImplementedException();
-        }
-        public override void Visit(TerminalNode node)
         {
             throw new NotImplementedException();
         }
