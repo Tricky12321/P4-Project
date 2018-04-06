@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Compiler.AST.Nodes;
 using Compiler.AST.Nodes.DatatypeNodes;
+using Compiler.AST.Nodes.LoopNodes;
 using Compiler.AST.Nodes.QueryNodes;
 
 namespace Compiler.AST.SymbolTable
@@ -68,15 +69,18 @@ namespace Compiler.AST.SymbolTable
             Console.WriteLine(node.ToString());
         }
 
-        public override void VisitChildren(AbstractNode node)
-        {
+		public void VisitChildrenNewScope(AbstractNode node)
+		{
+            SymbolTable.OpenScope();
             foreach (AbstractNode child in node.GetChildren())
             {
                 child.Accept(this);
-            }
-        }
 
-        public override void VisitRoot(AbstractNode root)
+            }
+            SymbolTable.CloseScope();
+		}
+
+		public override void VisitRoot(AbstractNode root)
         {
             root.Accept(this);
         }
@@ -235,16 +239,13 @@ namespace Compiler.AST.SymbolTable
         {
          
             Visit(node.IfCondition);
-            SymbolTable.OpenScope();
-            VisitChildren(node.IfCodeBlock);
-            SymbolTable.CloseScope();
+            VisitChildrenNewScope(node.IfCodeBlock);
 
             int count = node.ElseIfCodeBlocks.Count();
             for (int i = 0; i < count; i++)
             {
                 VisitChildren(node.ElseIfConditions[i]);
-                SymbolTable.OpenScope();
-                VisitChildren(node.ElseIfCodeBlocks[i]);
+                VisitChildrenNewScope(node.ElseIfCodeBlocks[i]);
                 SymbolTable.CloseScope();
             }
             VisitChildren(node.ElseCodeBlock);
@@ -266,6 +267,28 @@ namespace Compiler.AST.SymbolTable
         }
 
         public override void Visit(ExpressionNode node)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void Visit(ForLoopNode node)
+        {
+            if (node.VariableDeclartion != null) {
+                Visit(node.VariableDeclartion);
+            }
+            if (node.VariableDeclartion != null)
+            {
+                Visit(node.VariableDeclartion);
+            }
+            VisitChildrenNewScope(node);
+        }
+
+        public override void Visit(ForeachLoopNode node)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void Visit(WhileLoopNode node)
         {
             throw new NotImplementedException();
         }

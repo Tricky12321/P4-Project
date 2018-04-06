@@ -4,12 +4,13 @@ using System.Linq;
 using System.Text;
 using Compiler.AST.Nodes;
 using Compiler.AST.Nodes.DatatypeNodes;
+using Compiler.AST.Nodes.LoopNodes;
 using Compiler.AST.Nodes.QueryNodes;
 using Compiler.AST.SymbolTable;
 
 namespace Compiler.AST
 {
-    class AstTypeCheckerVisitor : AstVisitorBase
+    public class AstTypeCheckerVisitor : AstVisitorBase
     {
         public bool errorOccured = false;
         private AllType collectionRetrieveType = AllType.VOID;
@@ -330,6 +331,46 @@ namespace Compiler.AST
         }
 
         public override void Visit(ExpressionNode node)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void Visit(ForLoopNode node)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void Visit(ForeachLoopNode node)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void Visit(WhileLoopNode node)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void Visit(EdgeDclsNode node)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void Visit(VariableAttributeNode node)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void Visit(VariableNode node)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void Visit(CodeBlockNode node)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void Visit(TerminalNode node)
         {
             throw new NotImplementedException();
         }
