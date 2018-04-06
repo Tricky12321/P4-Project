@@ -289,11 +289,6 @@ namespace Compiler.AST
             
         }
 
-        public override void Visit(PredicateParameterNode node)
-        {
-            throw new NotImplementedException();
-        }
-
         public override void Visit(CollectionNode node)
         {
             throw new NotImplementedException();
@@ -390,10 +385,6 @@ namespace Compiler.AST
             throw new NotImplementedException();
         }
 
-        public override void Visit(CodeBlockNode node)
-        {
-            throw new NotImplementedException();
-        }
         public override void Visit(CodeBlockNode node)
         {
             throw new NotImplementedException();
