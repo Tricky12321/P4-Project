@@ -1,7 +1,7 @@
 ﻿using System;
 namespace Compiler.AST.Nodes
 {
-    public class ParameterNode : TerminalNode
+    public class ParameterNode : AbstractNode
     {
         public AllType Type;
         public ParameterNode(int LineNumber, int CharIndex) : base(LineNumber,CharIndex)

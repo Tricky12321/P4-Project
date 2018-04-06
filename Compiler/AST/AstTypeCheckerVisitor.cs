@@ -40,7 +40,7 @@ namespace Compiler.AST
             VisitChildren(node);
         }
 
-        public override void Visit(VertexNode node)
+        public override void Visit(GraphDeclVertexNode node)
         {
             throw new NotImplementedException();
         }
@@ -289,7 +289,7 @@ namespace Compiler.AST
             
         }
 
-        public override void Visit(CollectionNode node)
+        public override void Visit(CollectionDeclNode node)
         {
             throw new NotImplementedException();
         }
@@ -299,7 +299,7 @@ namespace Compiler.AST
             node.Accept(this);
         }
 
-        public override void Visit(EdgeNode node)
+        public override void Visit(GraphDeclEdgeNode node)
         {
             throw new NotImplementedException();
         }
@@ -366,21 +366,12 @@ namespace Compiler.AST
             throw new NotImplementedException();
         }
 
-        public override void Visit(EdgeDclsNode node)
-        {
-            throw new NotImplementedException();
-        }
-
         public override void Visit(VariableAttributeNode node)
         {
             throw new NotImplementedException();
         }
 
         public override void Visit(VariableNode node)
-        {
-            throw new NotImplementedException();
-        }
-	    public override void Visit(TerminalNode node)
         {
             throw new NotImplementedException();
         }
