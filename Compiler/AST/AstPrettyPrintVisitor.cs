@@ -323,12 +323,12 @@ namespace Compiler.AST
             throw new NotImplementedException();
         }
 
-        public override void Visit(AbstractNode node)
+        public override void Visit(ReturnNode node)
         {
             throw new NotImplementedException();
         }
 
-        public override void Visit(ReturnNode node)
+        public override void Visit(AbstractNode node)
         {
             throw new NotImplementedException();
         }
