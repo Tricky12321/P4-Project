@@ -31,7 +31,7 @@ namespace Compiler.AST
 
         public override void Visit(FunctionNode node)
         {
-            
+
             Debug.Print("FunctionNode");
             ProgramCode.Append($"{node.Name} -> {node.ReturnType}(");
             int i = 0;
@@ -83,7 +83,7 @@ namespace Compiler.AST
                 }
                 ProgramCode.Append(");\n");
             }
-            if (node.LeftmostChild != null)
+            if (node.HasChildren)
             {
                 VisitChildren(node);
             }
@@ -201,7 +201,7 @@ namespace Compiler.AST
         public override void Visit(BoolComparisonNode node)
         {
             Debug.Print("BoolComparisonNode");
-            if (node.LeftmostChild != null)
+            if (node.HasChildren)
             {
                 VisitChildren(node);
             }
@@ -330,13 +330,9 @@ namespace Compiler.AST
             ProgramCode.Append("};\n");
         }
 
-        public override void Visit(CollectionDeclNode node)
-        {
-            throw new NotImplementedException();
-        }
-
         public override void Visit(DeclarationNode node)
         {
+
         }
 
         public override void Visit(AddQueryNode node)
@@ -384,7 +380,14 @@ namespace Compiler.AST
 
         public override void Visit(VariableDclNode node)
         {
-            throw new NotImplementedException();
+            ProgramCode.Append(node.Type);
+            ProgramCode.Append($" {node.Name}");
+            if (node.HasChildren)
+            {
+                ProgramCode.Append(" = ");
+                VisitChildren(node);
+            }
+            ProgramCode.Append(";\n");
         }
     }
 }
