@@ -284,6 +284,10 @@ namespace Compiler.AST
             }
         }
 
+        public override void Visit(AddQueryNode node)
+        {//her
+            
+        }
 
         public override void Visit(CollectionNode node)
         {
@@ -382,11 +386,6 @@ namespace Compiler.AST
         }
 
         public override void Visit(CodeBlockNode node)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override void Visit(AddQueryNode node)
         {
             throw new NotImplementedException();
         }

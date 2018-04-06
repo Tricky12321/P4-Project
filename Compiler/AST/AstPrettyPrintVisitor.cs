@@ -357,7 +357,9 @@ namespace Compiler.AST
 
         public override void Visit(WhileLoopNode node)
         {
-            throw new NotImplementedException();
+            ProgramCode.Append("WHILE ");
+            node.BoolCompare.Accept(this);
+            VisitChildren(node);
         }
 
         public override void Visit(EdgeDclsNode node)

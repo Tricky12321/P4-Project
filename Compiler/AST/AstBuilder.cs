@@ -653,7 +653,7 @@ namespace Compiler.AST
 
             if (contextInside.inlineDcl() != null)
             {
-                ForLoop.VariableDeclartion = Visit(contextInside.inlineDcl());
+                ForLoop.VariableDeclaration = Visit(contextInside.inlineDcl());
             }
             #region First VarOrConst | Operation 
             //Check if the first is a VarOrConst, if it is, check if its a var or a const
