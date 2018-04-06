@@ -227,9 +227,9 @@ namespace Compiler.AST.SymbolTable
 
         public override void Visit(DeclarationNode node)
         {
-            SymbolTable.EnterSymbol(node.Name, ResolveFuncType(node.Type));
+            SymbolTable.EnterSymbol(node.Name, Utilities.FindTypeFromString(node.Type));
         }
-
+        
         public override void Visit(BoolComparisonNode node)
         {
             SymbolTable.NotImplementedError(node);
@@ -299,7 +299,7 @@ namespace Compiler.AST.SymbolTable
 
         public override void Visit(VariableDclNode node)
         {
-            SymbolTable.EnterSymbol(node.Name, ResolveFuncType(node.Type));
+            SymbolTable.EnterSymbol(node.Name, Utilities.FindTypeFromString(node.Type));
         }
     }
 }
