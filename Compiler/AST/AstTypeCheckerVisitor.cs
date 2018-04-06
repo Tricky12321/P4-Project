@@ -223,7 +223,7 @@ namespace Compiler.AST
         }
 
         public override void Visit(EnqueueQueryNode node)
-        {
+        {//TODO enqueue push og add skal have type tjekke efter konstanter - lav en ny metode der finder hvad type en konstant er. 
             _createdSymbolTabe.SetCurrentNode(node);
             bool isCollectionVarToAdd;
             AllType? varToAdd;
@@ -287,6 +287,17 @@ namespace Compiler.AST
         public override void Visit(AddQueryNode node)
         {
             _createdSymbolTabe.SetCurrentNode(node);
+            bool isCollectionInQuery;
+            AllType? collectionTarget = _createdSymbolTabe.RetrieveSymbol(node.ToVariable, out isCollectionInQuery, false);
+
+            if(node.Dcls.Count < 0)
+            {
+                
+            }
+            else
+            {
+
+            }
 
         }
 
