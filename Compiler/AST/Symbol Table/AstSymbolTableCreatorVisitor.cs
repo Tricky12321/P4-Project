@@ -13,8 +13,6 @@ namespace Compiler.AST.SymbolTable
     {
         public SymTable SymbolTable = new SymTable();
 
-
-
         public bool CheckDeclared(string name) {
             if (!SymbolTable.DeclaredLocally(name)) {
                 return true;
@@ -91,7 +89,7 @@ namespace Compiler.AST.SymbolTable
             if (!SymbolTable.DeclaredLocally(node.Name))
             {
 				SymbolTable.SetCurrentNode(node);
-				SymbolTable.EnterSymbol(node.Name, Utilities.FindTypeFromString(node.Type));
+                SymbolTable.EnterSymbol(node.Name, node.Type_enum);
             }
         }
 
@@ -206,7 +204,7 @@ namespace Compiler.AST.SymbolTable
         public override void Visit(ParameterNode node)
         {
             SymbolTable.SetCurrentNode(node);
-            SymbolTable.EnterSymbol(node.Name, node.Type);
+            SymbolTable.EnterSymbol(node.Name, node.Type_enum);
         }
 
         public override void Visit(CollectionDeclNode node)
@@ -235,7 +233,7 @@ namespace Compiler.AST.SymbolTable
 
         public override void Visit(DeclarationNode node)
         {
-            SymbolTable.EnterSymbol(node.Name, node.Type);
+            SymbolTable.EnterSymbol(node.Name, node.Type_enum);
         }
         
         public override void Visit(BoolComparisonNode node)
@@ -280,11 +278,6 @@ namespace Compiler.AST.SymbolTable
             SymbolTable.NotImplementedError(node);
         }
 
-        public override void Visit(EdgeDclsNode node)
-        {
-            SymbolTable.NotImplementedError(node);
-        }
-
         public override void Visit(VariableAttributeNode node)
         {
             SymbolTable.NotImplementedError(node);
@@ -295,20 +288,14 @@ namespace Compiler.AST.SymbolTable
             SymbolTable.NotImplementedError(node);
         }
 
-        public override void Visit(TerminalNode node)
-        {
-            SymbolTable.NotImplementedError(node);
-        }
-
         public override void Visit(AddQueryNode node)
         {
-==== BASE ====
             SymbolTable.NotImplementedError(node);
         }
 
         public override void Visit(VariableDclNode node)
         {
-            SymbolTable.EnterSymbol(node.Name, node.Type);
+            SymbolTable.EnterSymbol(node.Name, node.Type_enum);
         }
     }
 }
