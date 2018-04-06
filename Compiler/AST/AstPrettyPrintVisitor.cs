@@ -318,7 +318,16 @@ namespace Compiler.AST
 
         public override void Visit(PredicateNode node)
         {
-            //throw new NotImplementedException();
+            ProgramCode.Append($"PREDICATE {node.Name}(");
+            int i = 0;
+            foreach (ParameterNode parameter in node.Parameters)
+            {
+                InsertComma(ref i);
+                ProgramCode.Append($"{parameter.Type} {parameter.Name}");
+            }
+            ProgramCode.Append("): {");
+            VisitChildren(node);
+            ProgramCode.Append("};\n");
         }
 
         public override void Visit(CollectionDeclNode node)

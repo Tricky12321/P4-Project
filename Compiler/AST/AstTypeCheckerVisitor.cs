@@ -13,7 +13,6 @@ namespace Compiler.AST
 {
     public class AstTypeCheckerVisitor : AstVisitorBase
     {
-        public bool errorOccured = false;
         private AllType collectionRetrieveType = AllType.VOID;
         bool isCollection;
 
@@ -24,15 +23,12 @@ namespace Compiler.AST
             _createdSymbolTabe = symbolTable;
         }
 
-        private void Error()
-        {
-            errorOccured = true;
-        }
+
 
         //-----------------------------Visitor----------------------------------------------
         public override void Visit(ParameterNode node)
         {
-            throw new NotImplementedException();
+            _createdSymbolTabe.NotImplementedError(node);
         }
 
         public override void Visit(StartNode node)
@@ -42,22 +38,22 @@ namespace Compiler.AST
 
         public override void Visit(GraphDeclVertexNode node)
         {
-            throw new NotImplementedException();
+            VisitChildren(node);
         }
 
         public override void Visit(SetQueryNode node)
         {
-            throw new NotImplementedException();
+            _createdSymbolTabe.NotImplementedError(node);
         }
 
         public override void Visit(ExtendNode node)
         {
-            throw new NotImplementedException();
+            _createdSymbolTabe.NotImplementedError(node);
         }
 
         public override void Visit(PredicateNode node)
         {
-            throw new NotImplementedException();
+            _createdSymbolTabe.NotImplementedError(node);
         }
 
         public override void Visit(ExtractMaxQueryNode node)
@@ -75,8 +71,8 @@ namespace Compiler.AST
                 }
                 else
                 {
-                    
-                    Console.WriteLine($"Type incorrect at line number {node.LineNumber}");
+
+                    _createdSymbolTabe.WrongTypeError(node, RetrieveVar, collectionInQuery);
                 }
             }
 
@@ -93,15 +89,15 @@ namespace Compiler.AST
                 bool isCollectionInQuery;
                 AllType? collection = _createdSymbolTabe.RetrieveSymbol(node.Variable, out isCollectionInQuery, false);
                 bool isCollectionRetriever;
-                AllType? collectionParent = _createdSymbolTabe.RetrieveSymbol(node.Parent.Name, out isCollectionRetriever, false);
+                AllType? RetrieveVar = _createdSymbolTabe.RetrieveSymbol(node.Parent.Name, out isCollectionRetriever, false);
 
-                if (collection == collectionParent && isCollectionInQuery && !isCollectionRetriever)
+                if (collection == RetrieveVar && isCollectionInQuery && !isCollectionRetriever)
                 {
 
                 }
                 else
                 {
-                    Console.WriteLine($"Type incorrect at line number {node.LineNumber}");
+                    _createdSymbolTabe.WrongTypeError(node, RetrieveVar, collection);
                 }
             }
 
@@ -126,7 +122,7 @@ namespace Compiler.AST
                 }
                 else
                 {
-                    Console.WriteLine($"Type incorrect at line number {node.LineNumber}");
+                    _createdSymbolTabe.WrongTypeError(node, nameDeclaredForRetrieve, collectionNameType);
                 }
             }
 
@@ -151,7 +147,7 @@ namespace Compiler.AST
                 }
                 else
                 {
-                    Console.WriteLine($"Type incorrect at line number {node.LineNumber}");
+                    _createdSymbolTabe.WrongTypeError(node, nameDeclaredForRetrieve, collectionNameType);
                 }
             }
 
@@ -186,14 +182,12 @@ namespace Compiler.AST
                 }
                 else
                 {
-                    Console.WriteLine($"Variable {varToAdd} and collection {collectionToAddTo} are not of same type, at line number {node.LineNumber}");
-                    Error();
+                    _createdSymbolTabe.WrongTypeError(node, varToAdd, collectionToAddTo);
                 }
             }
             else
             {
-                Console.WriteLine($"Variable or collection are not declared at line number {node.LineNumber}");
-                Error();
+                _createdSymbolTabe.NotDeclaredError(node);
             }
         }
 
@@ -212,7 +206,7 @@ namespace Compiler.AST
                 }
                 else
                 {
-                    Console.WriteLine($"Type incorrect at line number {node.LineNumber}");
+                    _createdSymbolTabe.WrongTypeError(node, nameDeclaredForRetrieve, collection);
                 }
             }
 
@@ -247,14 +241,12 @@ namespace Compiler.AST
                 }
                 else
                 {
-                    Console.WriteLine($"Variable {varToAdd} and collection {collectionToAddTo} are not of same type, at line number {node.LineNumber}");
-                    Error();
+                    _createdSymbolTabe.WrongTypeError(node, varToAdd, collectionToAddTo);
                 }
             }
             else
             {
-                Console.WriteLine($"Variable or collection are not declared at line number {node.LineNumber}");
-                Error();
+                _createdSymbolTabe.NotDeclaredError(node);
             }
         }
 
@@ -273,7 +265,7 @@ namespace Compiler.AST
                 }
                 else
                 {
-                    Console.WriteLine($"Type incorrect at line number {node.LineNumber}");
+                    _createdSymbolTabe.WrongTypeError(node, nameDeclaredForRetrieve, collection);
                 }
             }
             
@@ -291,7 +283,7 @@ namespace Compiler.AST
 
         public override void Visit(CollectionDeclNode node)
         {
-            throw new NotImplementedException();
+            _createdSymbolTabe.NotImplementedError(node);
         }
 
         public override void Visit(WhereNode node)
@@ -301,89 +293,103 @@ namespace Compiler.AST
 
         public override void Visit(GraphDeclEdgeNode node)
         {
-            throw new NotImplementedException();
+            _createdSymbolTabe.NotImplementedError(node);
         }
 
         public override void Visit(GraphNode node)
         {
-            throw new NotImplementedException();
+            _createdSymbolTabe.NotImplementedError(node);
         }
 
         public override void Visit(FunctionNode node)
         {
-            AllType? funcType = _createdSymbolTabe.RetrieveSymbol(node.Name);
-
             VisitChildren(node);
         }
 
         public override void Visit(AbstractNode node)
         {
-            throw new NotImplementedException();
+            _createdSymbolTabe.NotImplementedError(node);
         }
 
         public override void Visit(IfElseIfElseNode node)
         {
-            throw new NotImplementedException();
+            _createdSymbolTabe.NotImplementedError(node);
         }
-                                                                                                                                                                                 
+
         public override void Visit(GraphSetQuery node)
         {
-            throw new NotImplementedException();
+            _createdSymbolTabe.NotImplementedError(node);
         }
 
         public override void Visit(DeclarationNode node)
         {
-            throw new NotImplementedException();
+            _createdSymbolTabe.NotImplementedError(node);
         }
 
         public override void Visit(BoolComparisonNode node)
         {
-            throw new NotImplementedException();
+            _createdSymbolTabe.NotImplementedError(node);
         }
 
         public override void Visit(ExpressionNode node)
         {
-            throw new NotImplementedException();
+            _createdSymbolTabe.NotImplementedError(node);
         }
 
         public override void Visit(ReturnNode node)
         {
+            AllType? funcType = _createdSymbolTabe.RetrieveSymbol(node.Parent.Name);
+            AllType? returnChild = _createdSymbolTabe.RetrieveSymbol(node.LeftmostChild.Name);
+
+            if(funcType == AllType.VOID)
+            {
+                //calling return on void function error 
+            }
+            else if (returnChild == funcType)
+            {
+
+            }
+            else
+            {
+                //conflicting types, on return and function
+            }
             VisitChildren(node);
         }
 
         public override void Visit(ForLoopNode node)
         {
-            throw new NotImplementedException();
+            _createdSymbolTabe.NotImplementedError(node);
         }
 
         public override void Visit(ForeachLoopNode node)
         {
-            throw new NotImplementedException();
+            _createdSymbolTabe.NotImplementedError(node);
         }
 
         public override void Visit(WhileLoopNode node)
         {
-            throw new NotImplementedException();
+            _createdSymbolTabe.NotImplementedError(node);
         }
 
         public override void Visit(VariableAttributeNode node)
         {
-            throw new NotImplementedException();
+            _createdSymbolTabe.NotImplementedError(node);
         }
 
         public override void Visit(VariableNode node)
         {
-            throw new NotImplementedException();
+            _createdSymbolTabe.NotImplementedError(node);
         }
 
         public override void Visit(CodeBlockNode node)
         {
-            throw new NotImplementedException();
+            _createdSymbolTabe.NotImplementedError(node);
         }
 
         public override void Visit(VariableDclNode node)
         {
-            throw new NotImplementedException();
+            _createdSymbolTabe.NotImplementedError(node);
         }
+
     }
 }
