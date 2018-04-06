@@ -201,12 +201,6 @@ namespace Compiler.AST.SymbolTable
             SymbolTable.CloseScope();
         }
 
-        public override void Visit(ParameterNode node)
-        {
-            SymbolTable.SetCurrentNode(node);
-            SymbolTable.EnterSymbol(node.Name, node.Type_enum);
-        }
-
         public override void Visit(CollectionDeclNode node)
         {
             SymbolTable.NotImplementedError(node);

@@ -41,7 +41,6 @@ namespace Compiler.AST
         public abstract void Visit(ExpressionNode node);
         public abstract void Visit(CodeBlockNode node);
         public abstract void Visit(AddQueryNode node);
-        
 
         public abstract void Visit(PredicateNode node);
         public abstract void Visit(DequeueQueryNode node);
