@@ -264,6 +264,7 @@ namespace Compiler.AST
             if (node.WhereCondition != null)
             {
                 Visit(node.WhereCondition);
+                
             }
         }
 
@@ -281,7 +282,7 @@ namespace Compiler.AST
 
         public override void Visit(WhereNode node)
         {
-            throw new NotImplementedException();
+            node.Accept(this);
         }
 
         public override void Visit(EdgeNode node)
@@ -301,7 +302,9 @@ namespace Compiler.AST
 
         public override void Visit(FunctionNode node)
         {
-            throw new NotImplementedException();
+            AllType? funcType = _createdSymbolTabe.RetrieveSymbol(node.Name);
+
+            VisitChildren(node);
         }
 
         public override void Visit(AbstractNode node)
@@ -332,6 +335,11 @@ namespace Compiler.AST
         public override void Visit(ExpressionNode node)
         {
             throw new NotImplementedException();
+        }
+
+        public override void Visit(ReturnNode node)
+        {
+            VisitChildren(node);
         }
     }
 }
