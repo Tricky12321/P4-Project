@@ -43,7 +43,33 @@ namespace Compiler.AST
 
         public override void Visit(SetQueryNode node)
         {
-            _createdSymbolTabe.NotImplementedError(node);
+            AllType? variableType;
+            AllType? expressionType;
+            AllType? inVariableType;
+
+            foreach (Tuple<VariableAttributeNode, string, ExpressionNode> setQueryElements in node.Attributes)
+            {
+                variableType = _createdSymbolTabe.RetrieveSymbol(setQueryElements.Item1.Name);
+                expressionType = _createdSymbolTabe.RetrieveSymbol(setQueryElements.Item3.Name);
+                if (variableType == expressionType)
+                {
+                    //type correct
+                    if (node.InVariable != null)
+                    {
+                        //to be continue mads making new ting
+                    }
+                    else
+                    {
+
+                    }
+                }
+                else
+                {
+                    //type 
+                }
+
+            }
+            VisitChildren(node);
         }
 
         public override void Visit(ExtendNode node)
@@ -112,9 +138,9 @@ namespace Compiler.AST
             if (node.Parent != null && node.Parent is DeclarationNode)
             {
                 bool isCollectionInQuery;
-                AllType? collectionNameType = _createdSymbolTabe.RetrieveSymbol(node.Variable, out isCollectionInQuery , false);
+                AllType? collectionNameType = _createdSymbolTabe.RetrieveSymbol(node.Variable, out isCollectionInQuery, false);
                 bool isCollectionRetrieveVar;
-                AllType? nameDeclaredForRetrieve = _createdSymbolTabe.RetrieveSymbol(node.Parent.Name, out isCollectionRetrieveVar , false);
+                AllType? nameDeclaredForRetrieve = _createdSymbolTabe.RetrieveSymbol(node.Parent.Name, out isCollectionRetrieveVar, false);
 
                 if (nameDeclaredForRetrieve.ToString() == collectionNameType.ToString() && nameDeclaredForRetrieve.ToString() == node.Type && isCollectionInQuery && isCollectionRetrieveVar)
                 {
@@ -268,17 +294,17 @@ namespace Compiler.AST
                     _createdSymbolTabe.WrongTypeError(node, nameDeclaredForRetrieve, collection);
                 }
             }
-            
+
             if (node.WhereCondition != null)
             {
                 Visit(node.WhereCondition);
-                
+
             }
         }
 
         public override void Visit(AddQueryNode node)
         {//her
-            
+
         }
 
         public override void Visit(CollectionNode node)
@@ -341,7 +367,7 @@ namespace Compiler.AST
             AllType? funcType = _createdSymbolTabe.RetrieveSymbol(node.Parent.Name);
             AllType? returnChild = _createdSymbolTabe.RetrieveSymbol(node.LeftmostChild.Name);
 
-            if(funcType == AllType.VOID)
+            if (funcType == AllType.VOID)
             {
                 //calling return on void function error 
             }
