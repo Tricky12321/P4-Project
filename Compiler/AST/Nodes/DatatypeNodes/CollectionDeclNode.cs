@@ -5,6 +5,7 @@ namespace Compiler.AST.Nodes.DatatypeNodes
     {
         // test
         public string Type;
+        public AllType Type_enum => Utilities.FindTypeFromString(Type);
         public AbstractNode Assignment;
         public CollectionDeclNode(int LineNumber, int CharIndex) : base (LineNumber, CharIndex)
         {
