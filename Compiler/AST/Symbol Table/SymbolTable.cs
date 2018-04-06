@@ -8,7 +8,7 @@ namespace Compiler.AST.SymbolTable
 {
     public class SymTable
     {
-        private Dictionary<string, List<SymbolTableEntry>> _symTable = new Dictionary<string, List<SymbolTableEntry>>();
+        private Dictionary<string, SymbolTableEntry> _symTable = new Dictionary<string, SymbolTableEntry>();
         private List<Extension> _extensionTable = new List<Extension>();
         private Dictionary<AllType, Dictionary<string, ClassEntry>> _classesTable = new Dictionary<AllType, Dictionary<string, ClassEntry>>();
         private uint _globalDepth;
@@ -37,9 +37,8 @@ namespace Compiler.AST.SymbolTable
             }
             else if (!_symTable.ContainsKey(name))
             {
-                _symTable.Add(name, new List<SymbolTableEntry>());
+                _symTable.Add(name, new SymbolTableEntry(type, _globalDepth));
             }
-            _symTable[name].Add(new SymbolTableEntry(type, _globalDepth));
         }
 
 
@@ -101,42 +100,41 @@ namespace Compiler.AST.SymbolTable
                 // Split the string into the different subnames
                 List<string> names = Name.Split('.').ToList();
                 // Check if the symbol table contains the first name given, and that it is reachable
-                var SymbolTableIEnum = _symTable[names[0]].Where(x => x.Reachable && x.Depth <= _globalDepth);
-                // Check if there is any results to get
-                if (SymbolTableIEnum.Count() == 0)
-                {
+                if (_symTable.ContainsKey(names[0])) {
                     if (ShowErrors)
                     {
                         Console.WriteLine(names[0] + " is undeclared in this scope! On line:" + GetLineNumber());
                     }
                     IsCollection = false;
-                    return null;
+                    return null;  
                 }
+                // Check if there is any results to get
                 else
                 {
+                    var SymbolTableIEnum = _symTable[names[0]];
                     // Check how many names are left to handle
                     if (names.Count > 1)
                     {
                         // Remove the first element from the list, since it is now handled 
                         names.RemoveAt(0);
-                        return RetrieveTypeFromClasses(names, SymbolTableIEnum.First().Type, out IsCollection, ShowErrors);
+                        return RetrieveTypeFromClasses(names, SymbolTableIEnum.Type, out IsCollection, ShowErrors);
                     }
                     else
                     {
                         // There was no more names to handle, so the type is returned
-                        IsCollection = SymbolTableIEnum.First().IsCollection;
-                        return SymbolTableIEnum.First().Type;
+                        IsCollection = SymbolTableIEnum.IsCollection;
+                        return SymbolTableIEnum.Type;
                     }
                 }
             }
             else
             {
                 // Return the type of the variable
-                if (_symTable.ContainsKey(Name))
+                if (_symTable.ContainsKey(Name) && _symTable[Name].Reachable)
                 {
-                    var SymTab = _symTable[Name].Where(x => x.Reachable && x.Depth <= _globalDepth);
-                    IsCollection = SymTab.First().IsCollection;
-                    return SymTab.First().Type;
+                    var SymTab = _symTable[Name];
+                    IsCollection = SymTab.IsCollection;
+                    return SymTab.Type;
                 }
                 else
                 {
@@ -177,12 +175,7 @@ namespace Compiler.AST.SymbolTable
 
         public void CloseScope()
         {
-            //Makes variables unreachable, when their scope is exited
-            _symTable.Values.Where(x =>
-                                      x.Where(
-                                          y => y.Depth == _globalDepth).Any()).ToList().ForEach(
-                                              w => w.ForEach(
-                                                  x => x.Reachable = false));
+            _symTable.Values.Where(y => y.Depth == _globalDepth && y.Reachable == true).ToList().ForEach(y=>y.Reachable = false);
             --_globalDepth;
         }
 
@@ -200,16 +193,29 @@ namespace Compiler.AST.SymbolTable
             _classesTable[Type].Add(longAttribute, Long);
         }
 
-        private int GetLineNumber()
+        private string GetLineNumber()
         {
             if (_currentNode != null)
             {
-                return _currentNode.LineNumber;
+                return _currentNode.LineNumber + ":"+_currentNode.CharIndex;
             }
             else
             {
-                return -1;
+                return "";
             }
+        }
+
+
+
+        // ERRORS:
+        public void NotImplementedError(AbstractNode node)
+        {
+            Console.WriteLine("This node is visited, but its not implemented! - " + node.ToString());
+        }
+
+        public void AlreadyDeclaredError(string name)
+        {
+            Console.WriteLine(name + " is already declared " + GetLineNumber());
         }
     }
 }

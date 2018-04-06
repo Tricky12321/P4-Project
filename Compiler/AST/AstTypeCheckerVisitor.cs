@@ -309,11 +309,6 @@ namespace Compiler.AST
             throw new NotImplementedException();
         }
 
-        public override void Visit(ProgramNode node)
-        {
-            throw new NotImplementedException();
-        }
-
         public override void Visit(FunctionNode node)
         {
             AllType? funcType = _createdSymbolTabe.RetrieveSymbol(node.Name);
@@ -399,6 +394,11 @@ namespace Compiler.AST
         }
 
         public override void Visit(AddQueryNode node)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void Visit(VariableDclNode node)
         {
             throw new NotImplementedException();
         }
