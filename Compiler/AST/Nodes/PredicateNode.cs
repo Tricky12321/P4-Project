@@ -18,7 +18,7 @@ namespace Compiler.AST.Nodes
 
         public void AddParameter(string Type, string Name, int LineNumber, int CharIndex) {
             ParameterNode PParaNode = new ParameterNode(LineNumber, CharIndex);
-            PParaNode.Type = Utilities.FindTypeFromString(Type);
+            PParaNode.Type = Type;
             PParaNode.Name = Name;
             Parameters.Add(PParaNode);
         }

@@ -91,7 +91,7 @@ namespace Compiler.AST.SymbolTable
             if (!SymbolTable.DeclaredLocally(node.Name))
             {
 				SymbolTable.SetCurrentNode(node);
-				SymbolTable.EnterSymbol(node.Name, node.Type);
+				SymbolTable.EnterSymbol(node.Name, Utilities.FindTypeFromString(node.Type));
             }
         }
 
@@ -110,7 +110,7 @@ namespace Compiler.AST.SymbolTable
             }
         }
 
-        public override void Visit(VertexNode node)
+        public override void Visit(GraphDeclVertexNode node)
         {
             SymbolTable.SetCurrentNode(node);
             /* Missing the values of the vertex*/
@@ -118,7 +118,7 @@ namespace Compiler.AST.SymbolTable
             SymbolTable.EnterSymbol(vertexName, AllType.VERTEX);
         }
 
-        public override void Visit(EdgeNode node)
+        public override void Visit(GraphDeclEdgeNode node)
         {
             SymbolTable.SetCurrentNode(node);
             /* Missing the values of the edge*/
@@ -209,7 +209,7 @@ namespace Compiler.AST.SymbolTable
             SymbolTable.EnterSymbol(node.Name, node.Type);
         }
 
-        public override void Visit(CollectionNode node)
+        public override void Visit(CollectionDeclNode node)
         {
             SymbolTable.NotImplementedError(node);
         }
@@ -302,6 +302,7 @@ namespace Compiler.AST.SymbolTable
 
         public override void Visit(AddQueryNode node)
         {
+==== BASE ====
             SymbolTable.NotImplementedError(node);
         }
 
