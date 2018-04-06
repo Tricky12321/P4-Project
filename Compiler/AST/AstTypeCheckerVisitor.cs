@@ -28,7 +28,7 @@ namespace Compiler.AST
         //-----------------------------Visitor----------------------------------------------
         public override void Visit(ParameterNode node)
         {
-            throw new NotImplementedException();
+            _createdSymbolTabe.NotImplementedError(node);
         }
 
         public override void Visit(StartNode node)
@@ -38,22 +38,22 @@ namespace Compiler.AST
 
         public override void Visit(VertexNode node)
         {
-            throw new NotImplementedException();
+            _createdSymbolTabe.NotImplementedError(node);
         }
 
         public override void Visit(SetQueryNode node)
         {
-            throw new NotImplementedException();
+            _createdSymbolTabe.NotImplementedError(node);
         }
 
         public override void Visit(ExtendNode node)
         {
-            throw new NotImplementedException();
+            _createdSymbolTabe.NotImplementedError(node);
         }
 
         public override void Visit(PredicateNode node)
         {
-            throw new NotImplementedException();
+            _createdSymbolTabe.NotImplementedError(node);
         }
 
         public override void Visit(ExtractMaxQueryNode node)
@@ -182,7 +182,7 @@ namespace Compiler.AST
                 }
                 else
                 {
-                    Console.WriteLine($"Variable {varToAdd} and collection {collectionToAddTo} are not of same type, at line number {node.LineNumber}");
+                    _createdSymbolTabe.WrongTypeError(node, varToAdd, collectionToAddTo);
                 }
             }
             else
@@ -283,7 +283,7 @@ namespace Compiler.AST
 
         public override void Visit(CollectionNode node)
         {
-            throw new NotImplementedException();
+            _createdSymbolTabe.NotImplementedError(node);
         }
 
         public override void Visit(WhereNode node)
@@ -293,12 +293,12 @@ namespace Compiler.AST
 
         public override void Visit(EdgeNode node)
         {
-            throw new NotImplementedException();
+            _createdSymbolTabe.NotImplementedError(node);
         }
 
         public override void Visit(GraphNode node)
         {
-            throw new NotImplementedException();
+            _createdSymbolTabe.NotImplementedError(node);
         }
 
         public override void Visit(FunctionNode node)
@@ -310,32 +310,32 @@ namespace Compiler.AST
 
         public override void Visit(AbstractNode node)
         {
-            throw new NotImplementedException();
+            _createdSymbolTabe.NotImplementedError(node);
         }
 
         public override void Visit(IfElseIfElseNode node)
         {
-            throw new NotImplementedException();
+            _createdSymbolTabe.NotImplementedError(node);
         }
-                                                                                                                                                                                 
+
         public override void Visit(GraphSetQuery node)
         {
-            throw new NotImplementedException();
+            _createdSymbolTabe.NotImplementedError(node);
         }
 
         public override void Visit(DeclarationNode node)
         {
-            throw new NotImplementedException();
+            _createdSymbolTabe.NotImplementedError(node);
         }
 
         public override void Visit(BoolComparisonNode node)
         {
-            throw new NotImplementedException();
+            _createdSymbolTabe.NotImplementedError(node);
         }
 
         public override void Visit(ExpressionNode node)
         {
-            throw new NotImplementedException();
+            _createdSymbolTabe.NotImplementedError(node);
         }
 
         public override void Visit(ReturnNode node)
@@ -345,46 +345,46 @@ namespace Compiler.AST
 
         public override void Visit(ForLoopNode node)
         {
-            throw new NotImplementedException();
+            _createdSymbolTabe.NotImplementedError(node);
         }
 
         public override void Visit(ForeachLoopNode node)
         {
-            throw new NotImplementedException();
+            _createdSymbolTabe.NotImplementedError(node);
         }
 
         public override void Visit(WhileLoopNode node)
         {
-            throw new NotImplementedException();
+            _createdSymbolTabe.NotImplementedError(node);
         }
 
         public override void Visit(EdgeDclsNode node)
         {
-            throw new NotImplementedException();
+            _createdSymbolTabe.NotImplementedError(node);
         }
 
         public override void Visit(VariableAttributeNode node)
         {
-            throw new NotImplementedException();
+            _createdSymbolTabe.NotImplementedError(node);
         }
 
         public override void Visit(VariableNode node)
         {
-            throw new NotImplementedException();
+            _createdSymbolTabe.NotImplementedError(node);
         }
-	    public override void Visit(TerminalNode node)
+        public override void Visit(TerminalNode node)
         {
-            throw new NotImplementedException();
+            _createdSymbolTabe.NotImplementedError(node);
         }
 
         public override void Visit(CodeBlockNode node)
         {
-            throw new NotImplementedException();
+            _createdSymbolTabe.NotImplementedError(node);
         }
 
         public override void Visit(VariableDclNode node)
         {
-            throw new NotImplementedException();
+            _createdSymbolTabe.NotImplementedError(node);
         }
     }
 }
