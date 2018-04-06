@@ -296,11 +296,6 @@ namespace Compiler.AST
             throw new NotImplementedException();
         }
 
-        public override void Visit(ProgramNode node)
-        {
-            throw new NotImplementedException();
-        }
-
         public override void Visit(FunctionNode node)
         {
             throw new NotImplementedException();
@@ -379,6 +374,11 @@ namespace Compiler.AST
         }
 
         public override void Visit(AddQueryNode node)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void Visit(VariableDclNode node)
         {
             throw new NotImplementedException();
         }
