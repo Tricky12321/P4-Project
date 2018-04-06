@@ -75,7 +75,7 @@ namespace Compiler.AST.SymbolTable
             {
                 SymbolTable.EnterSymbol(functionName, type);
                 SymbolTable.OpenScope(node.Name);
-                foreach (FunctionParameterNode parameter in node.Parameters)
+                foreach (ParameterNode parameter in node.Parameters)
                 {
                     parameter.Accept(this);
                 }
@@ -195,7 +195,7 @@ namespace Compiler.AST.SymbolTable
             string predicateName = node.Name;
             SymbolTable.EnterSymbol(predicateName, AllType.BOOL);
             SymbolTable.OpenScope(node.Name);
-            foreach (PredicateParameterNode parameter in node.Parameters)
+            foreach (ParameterNode parameter in node.Parameters)
             {
                 parameter.Accept(this);
             }
@@ -203,10 +203,10 @@ namespace Compiler.AST.SymbolTable
             SymbolTable.CloseScope();
         }
 
-        public override void Visit(PredicateParameterNode node)
+        public override void Visit(ParameterNode node)
         {
             SymbolTable.SetCurrentNode(node);
-            SymbolTable.EnterSymbol(node.Name, ResolveFuncType(node.Type));
+            SymbolTable.EnterSymbol(node.Name, node.Type);
         }
 
         public override void Visit(CollectionNode node)
@@ -235,7 +235,7 @@ namespace Compiler.AST.SymbolTable
 
         public override void Visit(DeclarationNode node)
         {
-            SymbolTable.EnterSymbol(node.Name, Utilities.FindTypeFromString(node.Type));
+            SymbolTable.EnterSymbol(node.Name, node.Type);
         }
         
         public override void Visit(BoolComparisonNode node)
@@ -275,11 +275,6 @@ namespace Compiler.AST.SymbolTable
             SymbolTable.NotImplementedError(node);
         }
 
-        public override void Visit(ReturnNode node)
-        {
-            SymbolTable.NotImplementedError(node);
-        }
-
         public override void Visit(WhileLoopNode node)
         {
             SymbolTable.NotImplementedError(node);
@@ -312,7 +307,7 @@ namespace Compiler.AST.SymbolTable
 
         public override void Visit(VariableDclNode node)
         {
-            SymbolTable.EnterSymbol(node.Name, Utilities.FindTypeFromString(node.Type));
+            SymbolTable.EnterSymbol(node.Name, node.Type);
         }
     }
 }
