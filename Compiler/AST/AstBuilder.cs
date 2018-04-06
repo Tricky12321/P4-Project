@@ -45,7 +45,7 @@ namespace Compiler.AST
                     var Type = Parameter.allType().GetText();  // Parameter Type
                     var Name = Parameter.variable().GetText(); // Parameter Name
 
-                    FNode.AddParameter(Type, Name, context.Start.Line, context.Start.Column);
+                    FNode.AddParameter(Utilities.FindTypeFromString(Type), Name, context.Start.Line, context.Start.Column);
 				}
             }
             foreach (var Child in context.codeBlock().codeBlockContent())
