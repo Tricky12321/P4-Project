@@ -293,12 +293,28 @@ namespace Compiler.AST
 
         public override void Visit(SelectAllQueryNode node)
         {
-            throw new NotImplementedException();
+            ProgramCode.Append("SELECTALL ");
+            ProgramCode.Append(node.Type);
+            ProgramCode.Append("FROM");
+            ProgramCode.Append(node.Variable);
+            if (node.WhereCondition != null)
+            {
+                node.WhereCondition.Accept(this);
+            }
+            ProgramCode.Append(";\n");
         }
 
         public override void Visit(SelectQueryNode node)
         {
-            throw new NotImplementedException();
+            ProgramCode.Append("SELECT ");
+            ProgramCode.Append(node.Type);
+            ProgramCode.Append("FROM");
+            ProgramCode.Append(node.Variable);
+            if (node.WhereCondition != null)
+            {
+                node.WhereCondition.Accept(this);
+            }
+            ProgramCode.Append(";\n");
         }
 
         #endregion
@@ -323,6 +339,11 @@ namespace Compiler.AST
             throw new NotImplementedException();
         }
 
+        public override void Visit(AddQueryNode node)
+        {
+            throw new NotImplementedException();
+        }
+
         public override void Visit(AbstractNode node)
         {
             throw new NotImplementedException();
@@ -332,5 +353,7 @@ namespace Compiler.AST
         {
             throw new NotImplementedException();
         }
+
+
     }
 }
