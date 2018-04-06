@@ -378,8 +378,13 @@ namespace Compiler.AST
         {
             throw new NotImplementedException();
         }
-	
-	    public override void Visit(ReturnNode node)
+
+        public override void Visit(ForLoopNode node)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void Visit(ForeachLoopNode node)
         {
             throw new NotImplementedException();
         }

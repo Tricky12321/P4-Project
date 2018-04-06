@@ -377,5 +377,10 @@ namespace Compiler.AST
         {
             throw new NotImplementedException();
         }
+
+        public override void Visit(AddQueryNode node)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
