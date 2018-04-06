@@ -7,6 +7,7 @@ using Compiler.AST.Nodes.DatatypeNodes;
 using Compiler.AST.Nodes.LoopNodes;
 using Compiler.AST.Nodes.QueryNodes;
 using Compiler.AST.SymbolTable;
+using System.Diagnostics;
 
 namespace Compiler.AST
 {
@@ -58,8 +59,6 @@ namespace Compiler.AST
         {
             throw new NotImplementedException();
         }
-
-        #region CollopsVisits
 
         public override void Visit(ExtractMaxQueryNode node)
         {
@@ -271,8 +270,6 @@ namespace Compiler.AST
                 Visit(node.WhereCondition);
             }
         }
-
-        #endregion
 
         public override void Visit(PredicateParameterNode node)
         {

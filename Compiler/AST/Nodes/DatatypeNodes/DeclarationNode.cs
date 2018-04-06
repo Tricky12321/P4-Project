@@ -10,5 +10,10 @@ namespace Compiler.AST.Nodes.DatatypeNodes
         public DeclarationNode(int LineNumber, int CharIndex) : base(LineNumber, CharIndex)
         {
         }
+
+        public override void Accept(AstVisitorBase astVisitor)
+        {
+            astVisitor.Visit(this);
+        }
     }
 }

@@ -7,5 +7,10 @@ namespace Compiler.AST.Nodes.LoopNodes
         public WhileLoopNode(int LineNumber, int CharIndex) : base (LineNumber, CharIndex)
         {
         }
+
+        public override void Accept(AstVisitorBase astVisitor)
+        {
+            astVisitor.Visit(this);
+        }
     }
 }
