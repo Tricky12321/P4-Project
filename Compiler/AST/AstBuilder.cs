@@ -45,7 +45,7 @@ namespace Compiler.AST
                     var Type = Parameter.allType().GetText();  // Parameter Type
                     var Name = Parameter.variable().GetText(); // Parameter Name
 
-                    FNode.AddParameter(Type, Name, context.Start.Line, context.Start.Column);
+                    FNode.AddParameter(Utilities.FindTypeFromString(Type), Name, context.Start.Line, context.Start.Column);
 				}
             }
             foreach (var Child in context.codeBlock().codeBlockContent())
@@ -651,13 +651,13 @@ namespace Compiler.AST
             ForLoopNode ForLoop = new ForLoopNode(context.Start.Line, context.Start.Column);
             var contextInside = context.forCondition().forConditionInside();
 
-            if (contextInside.inlineDcl() != null && contextInside.inlineDcl().ChildCount > 0)
+            if (contextInside.inlineDcl() != null)
             {
                 ForLoop.VariableDeclaration = Visit(contextInside.inlineDcl());
             }
             #region First VarOrConst | Operation 
             //Check if the first is a VarOrConst, if it is, check if its a var or a const
-            if (contextInside.varOrConstOperation(0).varOrConst() != null && contextInside.varOrConstOperation(0).varOrConst().ChildCount > 0)
+            if (contextInside.varOrConstOperation(0).varOrConst() != null)
             {
                 //CHeck if its a var or const
                 // It was a variable
@@ -682,7 +682,7 @@ namespace Compiler.AST
             #endregion
             #region Second VarOrConst | Operation 
             //Check if the first is a VarOrConst, if it is, check if its a var or a const
-            if (contextInside.varOrConstOperation(1).varOrConst() != null && contextInside.varOrConstOperation(1).varOrConst().ChildCount > 0)
+            if (contextInside.varOrConstOperation(1).varOrConst() != null)
             {
                 //CHeck if its a var or const
                 // It was a variable

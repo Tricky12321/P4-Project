@@ -23,5 +23,11 @@ namespace Compiler.AST.SymbolTable
         {
             this.IsCollection = IsCollection;
         }
-    }
+
+		public override string ToString()
+		{
+            string collection = IsCollection ? "c:" : "";
+            return collection+Name+"|"+Type.ToString()+"|D:"+Depth+"|R:"+Reachable.ToString();
+		}
+	}
 }
