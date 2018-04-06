@@ -90,10 +90,12 @@ namespace Compiler.AST
         {
             if (node.Parent != null && node.Parent is ExpressionNode)
             {
-                AllType? collection = _createdSymbolTabe.RetrieveSymbol(node.Variable, false);
-                AllType? collectionParent = _createdSymbolTabe.RetrieveSymbol(node.Parent.Name, false);
+                bool isCollectionInQuery;
+                AllType? collection = _createdSymbolTabe.RetrieveSymbol(node.Variable, out isCollectionInQuery, false);
+                bool isCollectionRetriever;
+                AllType? collectionParent = _createdSymbolTabe.RetrieveSymbol(node.Parent.Name, out isCollectionRetriever, false);
 
-                if (collection == collectionParent)
+                if (collection == collectionParent && isCollectionInQuery && !isCollectionRetriever)
                 {
 
                 }
@@ -113,10 +115,10 @@ namespace Compiler.AST
         {
             if (node.Parent != null && node.Parent is DeclarationNode)
             {
-                bool isCollectionRetrieveVar;
-                AllType? nameDeclaredForRetrieve = _createdSymbolTabe.RetrieveSymbol(node.Parent.Name, out isCollectionRetrieveVar , false);
                 bool isCollectionInQuery;
                 AllType? collectionNameType = _createdSymbolTabe.RetrieveSymbol(node.Variable, out isCollectionInQuery , false);
+                bool isCollectionRetrieveVar;
+                AllType? nameDeclaredForRetrieve = _createdSymbolTabe.RetrieveSymbol(node.Parent.Name, out isCollectionRetrieveVar , false);
 
                 if (nameDeclaredForRetrieve.ToString() == collectionNameType.ToString() && nameDeclaredForRetrieve.ToString() == node.Type && isCollectionInQuery && isCollectionRetrieveVar)
                 {
@@ -138,10 +140,12 @@ namespace Compiler.AST
         {
             if (node.Parent != null && node.Parent is ExpressionNode)
             {
-                AllType? collectionNameType = _createdSymbolTabe.RetrieveSymbol(node.Variable, false);
-                AllType? nameDeclaredForRetrieve = _createdSymbolTabe.RetrieveSymbol(node.Parent.Name, false);
+                bool isCollectionInQuery;
+                AllType? collectionNameType = _createdSymbolTabe.RetrieveSymbol(node.Variable, out isCollectionInQuery, false);
+                bool isCollectionRetriever;
+                AllType? nameDeclaredForRetrieve = _createdSymbolTabe.RetrieveSymbol(node.Parent.Name, out isCollectionRetriever, false);
 
-                if (collectionNameType.ToString() == nameDeclaredForRetrieve.ToString() && nameDeclaredForRetrieve.ToString() == node.Type)
+                if (collectionNameType.ToString() == nameDeclaredForRetrieve.ToString() && nameDeclaredForRetrieve.ToString() == node.Type && isCollectionInQuery && !isCollectionRetriever)
                 {
 
                 }
@@ -159,15 +163,17 @@ namespace Compiler.AST
 
         public override void Visit(PushQueryNode node)
         {
+            bool isCollectionVarToAdd;
             AllType? varToAdd;
+            bool isCollectionInQuery;
             AllType? collectionToAddTo;
 
             if (_createdSymbolTabe.DeclaredLocally(node.VariableToAdd) && _createdSymbolTabe.DeclaredLocally(node.VariableAddTo))
             {
-                varToAdd = _createdSymbolTabe.RetrieveSymbol(node.VariableToAdd, false);
-                collectionToAddTo = _createdSymbolTabe.RetrieveSymbol(node.VariableAddTo, false);
+                varToAdd = _createdSymbolTabe.RetrieveSymbol(node.VariableToAdd, out isCollectionVarToAdd, false);
+                collectionToAddTo = _createdSymbolTabe.RetrieveSymbol(node.VariableAddTo, out isCollectionInQuery, false);
 
-                if (varToAdd == collectionToAddTo)
+                if (varToAdd == collectionToAddTo && !isCollectionVarToAdd && isCollectionInQuery)
                 {
                     if (node.WhereCondition != null)
                     {
@@ -195,10 +201,12 @@ namespace Compiler.AST
         {
             if (node.Parent != null && node.Parent is ExpressionNode)
             {
-                AllType? collection = _createdSymbolTabe.RetrieveSymbol(node.Variable, false);
-                AllType? collectionParent = _createdSymbolTabe.RetrieveSymbol(node.Parent.Name, false);
+                bool isCollectionInQuery;
+                AllType? collection = _createdSymbolTabe.RetrieveSymbol(node.Variable, out isCollectionInQuery, false);
+                bool isCollectionRetriever;
+                AllType? nameDeclaredForRetrieve = _createdSymbolTabe.RetrieveSymbol(node.Parent.Name, out isCollectionRetriever, false);
 
-                if (collection == collectionParent)
+                if (collection == nameDeclaredForRetrieve && isCollectionInQuery && !isCollectionRetriever)
                 {
 
                 }
@@ -216,15 +224,17 @@ namespace Compiler.AST
 
         public override void Visit(EnqueueQueryNode node)
         {
+            bool isCollectionVarToAdd;
             AllType? varToAdd;
+            bool isCollectionInQuery;
             AllType? collectionToAddTo;
 
             if (_createdSymbolTabe.DeclaredLocally(node.VariableToAdd) && _createdSymbolTabe.DeclaredLocally(node.VariableTo))
             {
-                varToAdd = _createdSymbolTabe.RetrieveSymbol(node.VariableToAdd, false);
-                collectionToAddTo = _createdSymbolTabe.RetrieveSymbol(node.VariableTo, false);
+                varToAdd = _createdSymbolTabe.RetrieveSymbol(node.VariableToAdd, out isCollectionVarToAdd, false);
+                collectionToAddTo = _createdSymbolTabe.RetrieveSymbol(node.VariableTo, out isCollectionInQuery, false);
 
-                if (varToAdd == collectionToAddTo)
+                if (varToAdd == collectionToAddTo && !isCollectionVarToAdd && isCollectionInQuery)
                 {
                     if (node.WhereCondition != null)
                     {
@@ -252,10 +262,12 @@ namespace Compiler.AST
         {
             if (node.Parent != null && node.Parent is ExpressionNode)
             {
-                AllType? collection = _createdSymbolTabe.RetrieveSymbol(node.Variable, false);
-                AllType? collectionParent = _createdSymbolTabe.RetrieveSymbol(node.Parent.Name, false);
+                bool isCollectionInQuery;
+                AllType? collection = _createdSymbolTabe.RetrieveSymbol(node.Variable, out isCollectionInQuery, false);
+                bool isCollectionRetrieve;
+                AllType? nameDeclaredForRetrieve = _createdSymbolTabe.RetrieveSymbol(node.Parent.Name, out isCollectionRetrieve, false);
 
-                if (collection == collectionParent)
+                if (collection == nameDeclaredForRetrieve && isCollectionInQuery && !isCollectionRetrieve)
                 {
 
                 }
