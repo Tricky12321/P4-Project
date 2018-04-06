@@ -18,10 +18,8 @@ namespace Compiler
         {
             GiraphParser.StartContext CST = BuildCST("kode.giraph");
             AbstractNode AST = BuildAST(CST);
-
             PrettyPrint(AST as StartNode);
-
-            SymTable SymbolTable = BuildSymbolTable(AST as StartNode);
+			SymTable SymbolTable = BuildSymbolTable(AST as StartNode);
             Console.ReadKey();
         }
 

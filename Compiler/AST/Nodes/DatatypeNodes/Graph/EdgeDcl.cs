@@ -10,5 +10,10 @@ namespace Compiler.AST.Nodes.DatatypeNodes.Graph
         {
             
         }
+
+        public override void Accept(AstVisitorBase astVisitor)
+        {
+            astVisitor.Visit(this);
+        }
     }
 }
