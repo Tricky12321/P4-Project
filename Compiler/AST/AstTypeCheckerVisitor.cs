@@ -58,8 +58,6 @@ namespace Compiler.AST
             throw new NotImplementedException();
         }
 
-        #region CollopsVisits
-
         public override void Visit(ExtractMaxQueryNode node)
         {
             if (node.Parent != null && node.Parent is ExpressionNode)
@@ -270,8 +268,6 @@ namespace Compiler.AST
                 Visit(node.WhereCondition);
             }
         }
-
-        #endregion
 
         public override void Visit(PredicateParameterNode node)
         {
