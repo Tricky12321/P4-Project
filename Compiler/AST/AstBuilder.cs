@@ -45,7 +45,7 @@ namespace Compiler.AST
                     var Type = Parameter.allType().GetText();  // Parameter Type
                     var Name = Parameter.variable().GetText(); // Parameter Name
 
-                    FNode.AddParameter(Type, Name, context.Start.Line, context.Start.Column);
+                    FNode.AddParameter(Utilities.FindTypeFromString(Type), Name, context.Start.Line, context.Start.Column);
 				}
             }
             foreach (var Child in context.codeBlock().codeBlockContent())
@@ -653,7 +653,7 @@ namespace Compiler.AST
 
             if (contextInside.inlineDcl() != null)
             {
-                ForLoop.VariableDeclartion = Visit(contextInside.inlineDcl());
+                ForLoop.VariableDeclaration = Visit(contextInside.inlineDcl());
             }
             #region First VarOrConst | Operation 
             //Check if the first is a VarOrConst, if it is, check if its a var or a const

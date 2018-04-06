@@ -13,6 +13,8 @@ namespace Compiler.AST.SymbolTable
         private Dictionary<AllType, Dictionary<string, ClassEntry>> _classesTable = new Dictionary<AllType, Dictionary<string, ClassEntry>>();
         private uint _globalDepth;
         private AbstractNode _currentNode;
+        public bool errorOccured = false;
+
 
         public void SetCurrentNode( AbstractNode node) {
             _currentNode = node;
@@ -208,14 +210,34 @@ namespace Compiler.AST.SymbolTable
 
 
         // ERRORS:
+
+        private void Error()
+        {
+            errorOccured = true;
+        }
+
         public void NotImplementedError(AbstractNode node)
         {
             Console.WriteLine("This node is visited, but its not implemented! - " + node.ToString());
+            Error();
         }
 
         public void AlreadyDeclaredError(string name)
         {
             Console.WriteLine(name + " is already declared " + GetLineNumber());
+            Error();
+        }
+
+        public void NotDeclaredError(AbstractNode node)
+        {
+            Console.WriteLine($"Variable or collection not declared at line number {node.LineNumber}");
+            Error();
+        }
+
+        public void WrongTypeError(AbstractNode node, AllType? variable1, AllType? variable2)
+        {
+            Console.WriteLine($"Variable {variable1} and collection {variable2} are missmatch of types. Line number {node.LineNumber}");
+            Error();
         }
     }
 }

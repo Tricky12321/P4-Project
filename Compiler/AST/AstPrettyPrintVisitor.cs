@@ -35,7 +35,7 @@ namespace Compiler.AST
             Debug.Print("FunctionNode");
             ProgramCode.Append($"{node.Name} -> {node.ReturnType}(");
             int i = 0;
-            foreach (FunctionParameterNode Param in node.Parameters)
+            foreach (ParameterNode Param in node.Parameters)
             {
                 InsertComma(ref i);
                 Param.Accept(this);
@@ -45,7 +45,7 @@ namespace Compiler.AST
             ProgramCode.Append("}\n");
         }
 
-        public override void Visit(FunctionParameterNode node)
+        public override void Visit(ParameterNode node)
         {
             ProgramCode.Append($"{node.Type} {node.Name}");
         }
@@ -318,12 +318,16 @@ namespace Compiler.AST
 
         public override void Visit(PredicateNode node)
         {
-            throw new NotImplementedException();
-        }
-
-        public override void Visit(PredicateParameterNode node)
-        {
-            throw new NotImplementedException();
+            ProgramCode.Append($"PREDICATE {node.Name}(");
+            int i = 0;
+            foreach (ParameterNode parameter in node.Parameters)
+            {
+                InsertComma(ref i);
+                ProgramCode.Append($"{parameter.Type} {parameter.Name}");
+            }
+            ProgramCode.Append("): {");
+            VisitChildren(node);
+            ProgramCode.Append("};\n");
         }
 
         public override void Visit(CollectionNode node)
@@ -353,7 +357,9 @@ namespace Compiler.AST
 
         public override void Visit(WhileLoopNode node)
         {
-            throw new NotImplementedException();
+            ProgramCode.Append("WHILE ");
+            node.BoolCompare.Accept(this);
+            VisitChildren(node);
         }
 
         public override void Visit(EdgeDclsNode node)

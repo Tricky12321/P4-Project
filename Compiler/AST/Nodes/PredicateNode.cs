@@ -4,7 +4,6 @@ namespace Compiler.AST.Nodes
 {
     public class PredicateNode : AbstractNode
     {
-        public string VariableName;
         public List<AbstractNode> Parameters = new List<AbstractNode>();
 
         public PredicateNode(int LineNumber, int CharIndex) : base(LineNumber, CharIndex)
@@ -18,11 +17,10 @@ namespace Compiler.AST.Nodes
         }
 
         public void AddParameter(string Type, string Name, int LineNumber, int CharIndex) {
-            PredicateParameterNode PParaNode = new PredicateParameterNode(LineNumber, CharIndex);
-            PParaNode.Type = Type;
+            ParameterNode PParaNode = new ParameterNode(LineNumber, CharIndex);
+            PParaNode.Type = Utilities.FindTypeFromString(Type);
             PParaNode.Name = Name;
             Parameters.Add(PParaNode);
-
         }
     }
 }
