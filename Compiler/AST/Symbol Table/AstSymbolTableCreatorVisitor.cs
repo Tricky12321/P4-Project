@@ -237,15 +237,14 @@ namespace Compiler.AST.SymbolTable
 
         public override void Visit(IfElseIfElseNode node)
         {
-         
             Visit(node.IfCondition);
             VisitChildrenNewScope(node.IfCodeBlock);
 
-            int count = node.ElseIfCodeBlocks.Count();
+            int count = node.ElseIfList.Count();
             for (int i = 0; i < count; i++)
             {
-                VisitChildren(node.ElseIfConditions[i]);
-                VisitChildrenNewScope(node.ElseIfCodeBlocks[i]);
+                VisitChildren(node.ElseIfList[i].Item1);
+                VisitChildrenNewScope(node.ElseIfList[i].Item2);
                 SymbolTable.CloseScope();
             }
             VisitChildren(node.ElseCodeBlock);
@@ -284,11 +283,40 @@ namespace Compiler.AST.SymbolTable
         }
 
         public override void Visit(ForeachLoopNode node)
+	    {
+            throw new NotImplementedException();
+        }
+	    public override void Visit(CodeBlockNode node)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void Visit(ReturnNode node)
         {
             throw new NotImplementedException();
         }
 
         public override void Visit(WhileLoopNode node)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void Visit(EdgeDclsNode node)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void Visit(VariableAttributeNode node)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void Visit(VariableNode node)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void Visit(TerminalNode node)
         {
             throw new NotImplementedException();
         }

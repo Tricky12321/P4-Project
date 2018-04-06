@@ -350,6 +350,7 @@ namespace Compiler.AST
             switch (type)
             {
                 case "GiraphParser+BoolContext":
+                case "GiraphParser+BoolComparisonsContext":
                     return ExpressionPartType.BOOL;
                 case "GiraphParser+FloatnumContext":
                     return ExpressionPartType.DECIMAL;
@@ -369,6 +370,8 @@ namespace Compiler.AST
                 case "GiraphParser+PushOPContext":
                 case "GiraphParser+EnqueueOPContext":
                 case "GiraphPArser+DequeueOPContext":
+                //case "GiraphParser+ObjectsContext":
+                case "GiraphParser+WhereContext":
                     return ExpressionPartType.QUERYTYPE;
                 case "GiraphParser+AttributeContext":
                     return ExpressionPartType.ATTRIBUTE;
@@ -467,16 +470,15 @@ namespace Compiler.AST
         public override AbstractNode VisitIfElseIfElse([NotNull] GiraphParser.IfElseIfElseContext context)
         {
             IfElseIfElseNode IfNode = new IfElseIfElseNode(context.Start.Line, context.Start.Column);
-            IfNode.IfCondition = Visit(context.boolComparisons());
-            IfNode.IfCodeBlock = Visit(context.codeBlock());
+            IfNode.IfCondition = Visit(context.boolComparisons()) as BoolComparisonNode;
+            IfNode.IfCodeBlock = Visit(context.codeBlock()) as CodeBlockNode;
             if (context.elseifCond() != null)
             {
                 // Loop though all the ElseIf(s)
                 foreach (var ElseIf in context.elseifCond())
                 {
                     // Add their conditions and codeblocks
-                    IfNode.ElseIfConditions.Add(Visit(ElseIf.boolComparisons()));
-                    IfNode.ElseIfCodeBlocks.Add(Visit(ElseIf.codeBlock()));
+                    IfNode.ElseIfList.Add(Tuple.Create((Visit(ElseIf.boolComparisons()) as BoolComparisonNode), (Visit(ElseIf.codeBlock()) as CodeBlockNode)));
                 }
             }
 
@@ -486,7 +488,7 @@ namespace Compiler.AST
                 // There will never be more then one Else block, and it does not have a boolcomparison
                 if (context.elseCond().codeBlock().ChildCount > 0)
                 {
-                    IfNode.ElseCodeBlock = Visit(context.elseCond().codeBlock());
+                    IfNode.ElseCodeBlock = Visit(context.elseCond().codeBlock()) as CodeBlockNode;
                 }
             }
             return IfNode;
