@@ -247,13 +247,13 @@ namespace Compiler.AST.SymbolTable
 
         public override void Visit(ForLoopNode node)
         {
-            if (node.VariableDeclartion != null)
+            if (node.VariableDeclaration != null)
             {
-                Visit(node.VariableDeclartion);
+                Visit(node.VariableDeclaration);
             }
-            if (node.VariableDeclartion != null)
+            if (node.VariableDeclaration != null)
             {
-                Visit(node.VariableDeclartion);
+                Visit(node.VariableDeclaration);
             }
             VisitChildrenNewScope(node);
         }
