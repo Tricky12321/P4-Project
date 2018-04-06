@@ -813,7 +813,7 @@ namespace Compiler.AST
                     AddNode.TypeOrVariable = context.addToColl().allType().GetText();
                 }
                 // ITS A VARIABLE
-                else if (context.addToColl().variable() != null)
+                else if (context.addToColl().variable() != null && context.addToColl().variable().Count() > 1)
                 {
                     AddNode.IsVariable = true;
                     AddNode.TypeOrVariable = context.addToColl().variable(0).GetText();
