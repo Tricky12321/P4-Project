@@ -26,7 +26,6 @@ namespace Compiler.AST
         public abstract void Visit(FunctionNode node);
         public abstract void Visit(ReturnNode node);
         public abstract void Visit(ParameterNode node);
-        public abstract void Visit(ProgramNode node);
         public abstract void Visit(StartNode node);
         public abstract void Visit(GraphNode node);
         public abstract void Visit(VertexNode node);
@@ -41,7 +40,7 @@ namespace Compiler.AST
         public abstract void Visit(ExpressionNode node);
         public abstract void Visit(CodeBlockNode node);
         public abstract void Visit(AddQueryNode node);
-
+        
 
         public abstract void Visit(PredicateNode node);
         public abstract void Visit(DequeueQueryNode node);
@@ -59,5 +58,6 @@ namespace Compiler.AST
         public abstract void Visit(VariableAttributeNode node);
         public abstract void Visit(VariableNode node);
         public abstract void Visit(TerminalNode node);
+        public abstract void Visit(VariableDclNode node);
     }
 }
