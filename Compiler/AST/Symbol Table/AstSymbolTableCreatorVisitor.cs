@@ -201,11 +201,6 @@ namespace Compiler.AST.SymbolTable
             SymbolTable.CloseScope();
         }
 
-        public override void Visit(CollectionDeclNode node)
-        {
-            SymbolTable.NotImplementedError(node);
-        }
-
         public override void Visit(IfElseIfElseNode node)
         {
             Visit(node.IfCondition);

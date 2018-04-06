@@ -330,13 +330,9 @@ namespace Compiler.AST
             ProgramCode.Append("};\n");
         }
 
-        public override void Visit(CollectionDeclNode node)
-        {
-            throw new NotImplementedException();
-        }
-
         public override void Visit(DeclarationNode node)
         {
+
         }
 
         public override void Visit(AddQueryNode node)

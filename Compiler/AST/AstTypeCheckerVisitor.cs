@@ -290,11 +290,6 @@ namespace Compiler.AST
 
         }
 
-        public override void Visit(CollectionDeclNode node)
-        {
-            _createdSymbolTabe.NotImplementedError(node);
-        }
-
         public override void Visit(WhereNode node)
         {
             node.Accept(this);
