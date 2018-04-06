@@ -58,6 +58,7 @@ namespace Compiler.AST
 
         public override void Visit(ExtractMaxQueryNode node)
         {
+            _createdSymbolTabe.SetCurrentNode(node);
             if (node.Parent != null && node.Parent is ExpressionNode)
             {
                 bool isCollectionInQuery;
@@ -72,7 +73,7 @@ namespace Compiler.AST
                 else
                 {
 
-                    _createdSymbolTabe.WrongTypeError(node, RetrieveVar, collectionInQuery);
+                    _createdSymbolTabe.WrongTypeError(RetrieveVar, collectionInQuery);
                 }
             }
 
@@ -84,6 +85,7 @@ namespace Compiler.AST
 
         public override void Visit(ExtractMinQueryNode node)
         {
+            _createdSymbolTabe.SetCurrentNode(node);
             if (node.Parent != null && node.Parent is ExpressionNode)
             {
                 bool isCollectionInQuery;
@@ -97,7 +99,7 @@ namespace Compiler.AST
                 }
                 else
                 {
-                    _createdSymbolTabe.WrongTypeError(node, RetrieveVar, collection);
+                    _createdSymbolTabe.WrongTypeError(RetrieveVar, collection);
                 }
             }
 
@@ -109,6 +111,7 @@ namespace Compiler.AST
 
         public override void Visit(SelectAllQueryNode node)
         {
+            _createdSymbolTabe.SetCurrentNode(node);
             if (node.Parent != null && node.Parent is DeclarationNode)
             {
                 bool isCollectionInQuery;
@@ -122,7 +125,7 @@ namespace Compiler.AST
                 }
                 else
                 {
-                    _createdSymbolTabe.WrongTypeError(node, nameDeclaredForRetrieve, collectionNameType);
+                    _createdSymbolTabe.WrongTypeError(nameDeclaredForRetrieve, collectionNameType);
                 }
             }
 
@@ -134,6 +137,7 @@ namespace Compiler.AST
 
         public override void Visit(SelectQueryNode node)
         {
+            _createdSymbolTabe.SetCurrentNode(node);
             if (node.Parent != null && node.Parent is ExpressionNode)
             {
                 bool isCollectionInQuery;
@@ -147,7 +151,7 @@ namespace Compiler.AST
                 }
                 else
                 {
-                    _createdSymbolTabe.WrongTypeError(node, nameDeclaredForRetrieve, collectionNameType);
+                    _createdSymbolTabe.WrongTypeError(nameDeclaredForRetrieve, collectionNameType);
                 }
             }
 
@@ -159,6 +163,7 @@ namespace Compiler.AST
 
         public override void Visit(PushQueryNode node)
         {
+            _createdSymbolTabe.SetCurrentNode(node);
             bool isCollectionVarToAdd;
             AllType? varToAdd;
             bool isCollectionInQuery;
@@ -182,17 +187,18 @@ namespace Compiler.AST
                 }
                 else
                 {
-                    _createdSymbolTabe.WrongTypeError(node, varToAdd, collectionToAddTo);
+                    _createdSymbolTabe.WrongTypeError(varToAdd, collectionToAddTo);
                 }
             }
             else
             {
-                _createdSymbolTabe.NotDeclaredError(node);
+                _createdSymbolTabe.NotDeclaredError();
             }
         }
 
         public override void Visit(PopQueryNode node)
         {
+            _createdSymbolTabe.SetCurrentNode(node);
             if (node.Parent != null && node.Parent is ExpressionNode)
             {
                 bool isCollectionInQuery;
@@ -206,7 +212,7 @@ namespace Compiler.AST
                 }
                 else
                 {
-                    _createdSymbolTabe.WrongTypeError(node, nameDeclaredForRetrieve, collection);
+                    _createdSymbolTabe.WrongTypeError(nameDeclaredForRetrieve, collection);
                 }
             }
 
@@ -218,6 +224,7 @@ namespace Compiler.AST
 
         public override void Visit(EnqueueQueryNode node)
         {
+            _createdSymbolTabe.SetCurrentNode(node);
             bool isCollectionVarToAdd;
             AllType? varToAdd;
             bool isCollectionInQuery;
@@ -241,17 +248,18 @@ namespace Compiler.AST
                 }
                 else
                 {
-                    _createdSymbolTabe.WrongTypeError(node, varToAdd, collectionToAddTo);
+                    _createdSymbolTabe.WrongTypeError(varToAdd, collectionToAddTo);
                 }
             }
             else
             {
-                _createdSymbolTabe.NotDeclaredError(node);
+                _createdSymbolTabe.NotDeclaredError();
             }
         }
 
         public override void Visit(DequeueQueryNode node)
         {
+            _createdSymbolTabe.SetCurrentNode(node);
             if (node.Parent != null && node.Parent is ExpressionNode)
             {
                 bool isCollectionInQuery;
@@ -265,7 +273,7 @@ namespace Compiler.AST
                 }
                 else
                 {
-                    _createdSymbolTabe.WrongTypeError(node, nameDeclaredForRetrieve, collection);
+                    _createdSymbolTabe.WrongTypeError(nameDeclaredForRetrieve, collection);
                 }
             }
             
@@ -277,8 +285,9 @@ namespace Compiler.AST
         }
 
         public override void Visit(AddQueryNode node)
-        {//her
-            
+        {
+            _createdSymbolTabe.SetCurrentNode(node);
+
         }
 
         public override void Visit(CollectionDeclNode node)
