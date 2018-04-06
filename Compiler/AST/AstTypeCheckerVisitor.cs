@@ -283,6 +283,11 @@ namespace Compiler.AST
             }
         }
 
+        public override void Visit(AddQueryNode node)
+        {//her
+            
+        }
+
         public override void Visit(PredicateParameterNode node)
         {
             throw new NotImplementedException();
@@ -390,9 +395,6 @@ namespace Compiler.AST
             throw new NotImplementedException();
         }
 
-        public override void Visit(AddQueryNode node)
-        {
-            throw new NotImplementedException();
-        }
+
     }
 }
