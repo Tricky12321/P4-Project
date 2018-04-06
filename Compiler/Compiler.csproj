@@ -61,6 +61,7 @@
     <Compile Include="AST\Symbol Table\AstSymbolTableCreatorVisitor.cs" />
     <Compile Include="AST\Nodes\TerminalNode.cs" />
     <Compile Include="AST\Symbol Table\SymbolTableEntry.cs" />
+    <Compile Include="Program\Utilities.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program\Program.cs" />
     <Compile Include="AST\Nodes\AbstractNode.cs" />
@@ -69,7 +70,7 @@
     <Compile Include="AST\Nodes\StartNode.cs" />
     <Compile Include="AST\AstBuilder.cs" />
     <Compile Include="AST\AstVisitorBase.cs" />
-    <Compile Include="AST\Nodes\FunctionParameterNode.cs" />
+    <Compile Include="AST\Nodes\ParameterNode.cs" />
     <Compile Include="AST\Nodes\DatatypeNodes\EdgeNode.cs" />
     <Compile Include="AST\Nodes\DatatypeNodes\VertexNode.cs" />
     <Compile Include="AST\Nodes\CodeBlockNode.cs" />
@@ -96,7 +97,6 @@
     <Compile Include="AST\Nodes\QueryNodes\SetAtriQueryNode.cs" />
     <Compile Include="AST\Nodes\IfElseIfElseNode.cs" />
     <Compile Include="AST\Nodes\PredicateNode.cs" />
-    <Compile Include="AST\Nodes\PredicateParameterNode.cs" />
     <Compile Include="AST\Nodes\QueryNodes\SelectQueryNode.cs" />
     <Compile Include="AST\Nodes\QueryNodes\SelectAllQueryNode.cs" />
     <Compile Include="AST\Nodes\QueryNodes\EnqueueQueryNode.cs" />

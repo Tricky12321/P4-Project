@@ -1,10 +1,10 @@
 ﻿using System;
 namespace Compiler.AST.Nodes
 {
-    public class FunctionParameterNode : TerminalNode
+    public class ParameterNode : TerminalNode
     {
-        public string Type;
-        public FunctionParameterNode(int LineNumber, int CharIndex) : base(LineNumber,CharIndex)
+        public AllType Type;
+        public ParameterNode(int LineNumber, int CharIndex) : base(LineNumber,CharIndex)
         {
             
         }

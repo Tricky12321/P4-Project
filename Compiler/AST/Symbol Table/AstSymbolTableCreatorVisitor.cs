@@ -24,32 +24,6 @@ namespace Compiler.AST.SymbolTable
             }
         }
 
-        public AllType ResolveFuncType(string Type)
-        {
-            switch (Type)
-            {
-                case "VOID":
-                    return AllType.VOID;
-                case "STRING":
-                    return AllType.STRING;
-                case "BOOL":
-                    return AllType.BOOL;
-                case "DECIMAL":
-                    return AllType.DECIMAL;
-                case "INT":
-                    return AllType.INT;
-                case "GRAPH":
-                    return AllType.GRAPH;
-                case "EDGE":
-                    return AllType.EDGE;
-                case "VERTEX":
-                    return AllType.VERTEX;
-                case "COLLECTION":
-                    return AllType.COLLECTION;
-            }
-            throw new Exception("Unknown type");
-        }
-
         public void BuildSymbolTable(AbstractNode root)
         {
             VisitRoot(root);
@@ -95,7 +69,7 @@ namespace Compiler.AST.SymbolTable
         public override void Visit(FunctionNode node)
         {
             SymbolTable.SetCurrentNode(node);
-            AllType type = ResolveFuncType(node.ReturnType);
+            AllType type = Utilities.FindTypeFromString(node.ReturnType);
             string functionName = node.Name;
             if (!SymbolTable.DeclaredLocally(functionName))
             {
@@ -112,13 +86,12 @@ namespace Compiler.AST.SymbolTable
             }
         }
 
-        public override void Visit(FunctionParameterNode node)
+        public override void Visit(ParameterNode node)
         {
             if (!SymbolTable.DeclaredLocally(node.Name))
             {
-                SymbolTable.SetCurrentNode(node);
-                AllType parameterType = ResolveFuncType(node.Type);
-                SymbolTable.EnterSymbol(node.Name, parameterType);
+				SymbolTable.SetCurrentNode(node);
+				SymbolTable.EnterSymbol(node.Name, node.Type);
             }
         }
 
@@ -167,7 +140,7 @@ namespace Compiler.AST.SymbolTable
         {
             SymbolTable.SetCurrentNode(node);
             string longAttributeName = node.ExtensionName;
-            AllType attributeType = ResolveFuncType(node.ExtendWithType);
+            AllType attributeType = Utilities.FindTypeFromString(node.ExtendWithType);
             // If there is a shortname AND a long name, create 2 entries in the class table
             if (node.ExtensionShortName != null && node.ExtensionShortName.Length > 0)
             {
@@ -262,9 +235,9 @@ namespace Compiler.AST.SymbolTable
 
         public override void Visit(DeclarationNode node)
         {
-            SymbolTable.EnterSymbol(node.Name, ResolveFuncType(node.Type));
+            SymbolTable.EnterSymbol(node.Name, Utilities.FindTypeFromString(node.Type));
         }
-
+        
         public override void Visit(BoolComparisonNode node)
         {
             SymbolTable.NotImplementedError(node);
@@ -275,15 +248,20 @@ namespace Compiler.AST.SymbolTable
             SymbolTable.NotImplementedError(node);
         }
 
+        public override void Visit(ReturnNode node)
+        {
+            throw new NotImplementedException();
+        }
+
         public override void Visit(ForLoopNode node)
         {
-            if (node.VariableDeclartion != null)
+            if (node.VariableDeclaration != null)
             {
-                Visit(node.VariableDeclartion);
+                Visit(node.VariableDeclaration);
             }
-            if (node.VariableDeclartion != null)
+            if (node.VariableDeclaration != null)
             {
-                Visit(node.VariableDeclartion);
+                Visit(node.VariableDeclaration);
             }
             VisitChildrenNewScope(node);
         }
@@ -334,7 +312,7 @@ namespace Compiler.AST.SymbolTable
 
         public override void Visit(VariableDclNode node)
         {
-            SymbolTable.EnterSymbol(node.Name, ResolveFuncType(node.Type));
+            SymbolTable.EnterSymbol(node.Name, Utilities.FindTypeFromString(node.Type));
         }
     }
 }
