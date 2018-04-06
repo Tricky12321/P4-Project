@@ -5,7 +5,7 @@ namespace Compiler.AST.Nodes
     public class VertexNode : AbstractNode
     {
         public Dictionary<string, string> ValueList = new Dictionary<string, string>();
-        public VertexNode(int LineNumber) : base(LineNumber)
+        public VertexNode(int LineNumber, int CharIndex) : base(LineNumber, CharIndex)
         {
             
         }

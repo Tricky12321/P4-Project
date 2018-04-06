@@ -12,7 +12,7 @@ namespace Compiler.AST.Nodes.QueryNodes
         public string InVariable;
         public string AssignmentOperator;
 
-        public SetQueryNode(int LineNumber) : base(LineNumber)
+        public SetQueryNode(int LineNumber, int CharIndex) : base(LineNumber, CharIndex)
         {
             
         }

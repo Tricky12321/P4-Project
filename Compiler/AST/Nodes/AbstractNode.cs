@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 namespace Compiler.AST.Nodes
 {
-    public class AbstractNode
+    abstract public class AbstractNode
     {
         public AbstractNode Parent;
         public AbstractNode LeftmostSibling;
@@ -11,16 +11,14 @@ namespace Compiler.AST.Nodes
         public int LineNumber;
         public string Name;
         public int ChildCount;
-
-        public AbstractNode(int LineNumber)
+        public int CharIndex;
+        public AbstractNode(int LineNumber, int CharIndex)
         {
             this.LineNumber = LineNumber;
+            this.CharIndex = CharIndex;
         }
 
-        public virtual void Accept(AstVisitorBase astVisitor)
-        {
-            astVisitor.Visit(this);
-        }
+        public abstract void Accept(AstVisitorBase astVisitor);
 
         public virtual IEnumerable<AbstractNode> GetChildren()
         {

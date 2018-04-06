@@ -7,17 +7,27 @@ namespace Compiler.AST.Nodes
         public string VariableName;
         public List<AbstractNode> Parameters = new List<AbstractNode>();
 
-        public PredicateNode(int LineNumber) : base(LineNumber)
+        public PredicateNode(int LineNumber, int CharIndex) : base(LineNumber, CharIndex)
         {
             
         }
 
-        public void AddParameter(string Type, string Name, int LineNumber) {
-            PredicateParameterNode PParaNode = new PredicateParameterNode(LineNumber);
+        public override void Accept(AstVisitorBase astVisitor)
+        {
+            astVisitor.Visit(this);
+        }
+
+        public void AddParameter(string Type, string Name, int LineNumber, int CharIndex) {
+            PredicateParameterNode PParaNode = new PredicateParameterNode(LineNumber, CharIndex);
             PParaNode.Type = Type;
             PParaNode.Name = Name;
             Parameters.Add(PParaNode);
 
+        }
+
+        public override void Accept(AstVisitorBase astVisitor)
+        {
+            astVisitor.Visit(this);
         }
     }
 }

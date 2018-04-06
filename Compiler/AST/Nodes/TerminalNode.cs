@@ -8,9 +8,14 @@ namespace Compiler.AST.Nodes
 {
     public class TerminalNode : AbstractNode
     {
-        public TerminalNode(int LineNumber) : base(LineNumber)
+        public TerminalNode(int LineNumber, int CharIndex) : base(LineNumber,CharIndex)
         {
             
+        }
+
+        public override void Accept(AstVisitorBase astVisitor)
+        {
+            astVisitor.Visit(this);
         }
     }
 }

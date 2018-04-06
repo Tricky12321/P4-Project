@@ -5,8 +5,13 @@ namespace Compiler.AST.Nodes.DatatypeNodes
     {
         public string Value;
 
-        public ConstantNode(int LineNumber) : base(LineNumber)
+        public ConstantNode(int LineNumber, int CharIndex) : base(LineNumber, CharIndex)
         {
+        }
+
+        public override void Accept(AstVisitorBase astVisitor)
+        {
+            astVisitor.Visit(this);
         }
     }
 }

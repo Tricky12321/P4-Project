@@ -20,7 +20,7 @@ namespace Compiler.AST
         public override AbstractNode VisitStart([NotNull] GiraphParser.StartContext context)
         {
             AstBuildTimer.Start();
-            root = new StartNode(context.Start.Line);
+            root = new StartNode(context.Start.Line, context.Start.Column);
             // Program+ (Multiple Program children, atleast one)
             foreach (var child in context.children)
             {
@@ -34,11 +34,10 @@ namespace Compiler.AST
 
         public override AbstractNode VisitFunctionDcl([NotNull] GiraphParser.FunctionDclContext context)
         {
-            FunctionNode FNode = new FunctionNode(context.Start.Line);
+            FunctionNode FNode = new FunctionNode(context.Start.Line, context.Start.Column);
             // Extract the Name of the function, and the return type
             FNode.Name = context.variable().GetText(); // Name
             FNode.ReturnType = context.allTypeWithColl().GetText(); // Return Type
-            int i = 0;
             // Extract the parameters from the function
             if (context.formalParams() != null) {
 				foreach (var Parameter in context.formalParams().formalParam())
@@ -46,7 +45,7 @@ namespace Compiler.AST
                     var Type = Parameter.allType().GetText();  // Parameter Type
                     var Name = Parameter.variable().GetText(); // Parameter Name
 
-                    FNode.AddParameter(Type, Name, context.Start.Line);
+                    FNode.AddParameter(Type, Name, context.Start.Line, context.Start.Column);
 				}
             }
             foreach (var Child in context.codeBlock().codeBlockContent())
@@ -63,8 +62,8 @@ namespace Compiler.AST
 
         public override AbstractNode VisitCodeBlock([NotNull] GiraphParser.CodeBlockContext context)
         {
-            //VertexDclsNode VerDclsNode = new VertexDclsNode(context.Start.Line);
-            CodeBlockNode CodeNode = new CodeBlockNode(context.Start.Line);
+            //VertexDclsNode VerDclsNode = new VertexDclsNode(context.Start.Line, context.Start.Column);
+            CodeBlockNode CodeNode = new CodeBlockNode(context.Start.Line, context.Start.Column);
             foreach (var Child in context.codeBlockContent())
             {
                 CodeNode.AdoptChildren(Visit(Child.GetChild(0)));
@@ -79,14 +78,14 @@ namespace Compiler.AST
 
         public override AbstractNode VisitGraphInitDcl([NotNull] GiraphParser.GraphInitDclContext context)
         {
-            GraphNode GNode = new GraphNode(context.Start.Line);
+            GraphNode GNode = new GraphNode(context.Start.Line, context.Start.Column);
             GNode.Name = context.variable().GetText();
             // Handle all VetexDcl's and add them to the list in the GraphNode
             foreach (var Child in context.graphDclBlock().vertexDcls())
             {
                 foreach (var NestedChild in Child.vertexDcl())
                 {
-                    VertexNode VNode = new VertexNode(context.Start.Line);
+                    VertexNode VNode = new VertexNode(context.Start.Line, context.Start.Column);
                     if (NestedChild.variable() != null)
                     {
                         VNode.Name = NestedChild.variable().GetText();
@@ -106,7 +105,7 @@ namespace Compiler.AST
             {
                 foreach (var NestedChild in Child.edgeDcl())
                 {
-                    EdgeNode ENode = new EdgeNode(context.Start.Line);
+                    EdgeNode ENode = new EdgeNode(context.Start.Line, context.Start.Column);
                     // If there is a name for the Edge
                     if (NestedChild.variable().GetLength(0) > 2)
                     {
@@ -145,7 +144,7 @@ namespace Compiler.AST
 
         public override AbstractNode VisitGraphSetQuery([NotNull] GiraphParser.GraphSetQueryContext context)
         {
-            GraphSetQuery SetQuery = new GraphSetQuery(context.Start.Line);
+            GraphSetQuery SetQuery = new GraphSetQuery(context.Start.Line, context.Start.Column);
 
             VariableAttributeNode attribute = Visit(context.GetChild(1).GetChild(0)) as VariableAttributeNode;
             ExpressionNode expression = Visit(context.GetChild(1).GetChild(2)) as ExpressionNode;
@@ -157,7 +156,7 @@ namespace Compiler.AST
 
         public override AbstractNode VisitWhileLoop([NotNull] GiraphParser.WhileLoopContext context)
         {
-            WhileLoopNode WhileNode = new WhileLoopNode(context.Start.Line);
+            WhileLoopNode WhileNode = new WhileLoopNode(context.Start.Line, context.Start.Column);
             // Read the boolComparison for the while loop.
             WhileNode.BoolCompare = Visit(context.GetChild(1));
             // Read the codeblock in the whileLoop
@@ -171,7 +170,7 @@ namespace Compiler.AST
 
         public override AbstractNode VisitBoolComparisons([NotNull] GiraphParser.BoolComparisonsContext context)
         {
-            BoolComparisonNode BCompare = new BoolComparisonNode(context.Start.Line);
+            BoolComparisonNode BCompare = new BoolComparisonNode(context.Start.Line, context.Start.Column);
             // Checks if there is a prefix, if there is, add it to the Node
             if (context.prefix != null)
             {
@@ -221,7 +220,7 @@ namespace Compiler.AST
 
         public override AbstractNode VisitExpression([NotNull] GiraphParser.ExpressionContext context)
         {
-            ExpressionNode ExpNode = new ExpressionNode(context.Start.Line);
+            ExpressionNode ExpNode = new ExpressionNode(context.Start.Line, context.Start.Column);
             ExpNode.ExpressionParts = VisitVarOrconstExpressionExtRecursive(context);
             //ExpNode.AdoptChildren(Visit(context.GetChild(0)));
             return ExpNode;
@@ -229,7 +228,7 @@ namespace Compiler.AST
 
         public override AbstractNode VisitVariable([NotNull] GiraphParser.VariableContext context)
         {
-            VariableNode VarNode = new VariableNode(context.Start.Line);
+            VariableNode VarNode = new VariableNode(context.Start.Line, context.Start.Column);
             VarNode.Name = context.GetChild(0).GetText();
             return VarNode;
         }
@@ -262,7 +261,7 @@ namespace Compiler.AST
 
         public override AbstractNode VisitSetQuery([NotNull] GiraphParser.SetQueryContext context)
         {
-            SetQueryNode SetNode = new SetQueryNode(context.Start.Line);
+            SetQueryNode SetNode = new SetQueryNode(context.Start.Line, context.Start.Column);
             Dictionary<string, int> indexList = new Dictionary<string, int>();
 
             for (int i = 0; i < context.children.Count; i++)
@@ -304,7 +303,7 @@ namespace Compiler.AST
 
         public override AbstractNode VisitVarOrconstExpressionExt([NotNull] GiraphParser.VarOrconstExpressionExtContext context)
         {
-            ExpressionNode exNode = new ExpressionNode(context.Start.Line);
+            ExpressionNode exNode = new ExpressionNode(context.Start.Line, context.Start.Column);
             exNode.ExpressionParts = VisitVarOrconstExpressionExtRecursive(context);
             return exNode;
         }
@@ -351,6 +350,7 @@ namespace Compiler.AST
             switch (type)
             {
                 case "GiraphParser+BoolContext":
+                case "GiraphParser+BoolComparisonsContext":
                     return ExpressionPartType.BOOL;
                 case "GiraphParser+FloatnumContext":
                     return ExpressionPartType.DECIMAL;
@@ -363,12 +363,18 @@ namespace Compiler.AST
                 case "GiraphParser+AdvancedOperatorsContext":
                     return ExpressionPartType.ADVANCED_OPERATOR;
                 case "GiraphParser+VariableContext":
+                case "GiraphParser+ObjectsContext":
                     return ExpressionPartType.VARIABLE;
                 case "GiraphParser+SelectContext":
                 case "GiraphParser+PopOPContext":
                 case "GiraphParser+PushOPContext":
                 case "GiraphParser+EnqueueOPContext":
                 case "GiraphPArser+DequeueOPContext":
+                //case "GiraphParser+ObjectsContext":
+                case "GiraphParser+WhereContext":
+                case "GiraphParser+ExtractMaxOPContext":
+                case "GiraphParser+ExtractMinOPContext":
+                case "GiraphParser+DequeueOPContext":
                     return ExpressionPartType.QUERYTYPE;
                 case "GiraphParser+AttributeContext":
                     return ExpressionPartType.ATTRIBUTE;
@@ -381,11 +387,11 @@ namespace Compiler.AST
             VariableAttributeNode vaNode;
             if (context.GetChild(0).ToString() == "'")
             {
-                vaNode = new AttributeNode(context.Start.Line);
+                vaNode = new AttributeNode(context.Start.Line, context.Start.Column);
             }
             else
             {
-                vaNode = new VariableNode(context.Start.Line);
+                vaNode = new VariableNode(context.Start.Line, context.Start.Column);
             }
             vaNode.Name = context.GetChild(1).GetChild(0).ToString();
 
@@ -395,14 +401,14 @@ namespace Compiler.AST
 
         public override AbstractNode VisitVarOrConst([NotNull] GiraphParser.VarOrConstContext context)
         {
-            ExpressionNode exNode = new ExpressionNode(context.Start.Line);
+            ExpressionNode exNode = new ExpressionNode(context.Start.Line, context.Start.Column);
 
             return exNode;
         }
 
         public override AbstractNode VisitWhere([NotNull] GiraphParser.WhereContext context)
         {
-            WhereNode WNode = new WhereNode(context.Start.Line);
+            WhereNode WNode = new WhereNode(context.Start.Line, context.Start.Column);
             WNode.AdoptChildren(Visit(context.boolComparisons()));
             /*foreach (var Child in context.boolComparisons().children)
             {
@@ -413,7 +419,7 @@ namespace Compiler.AST
 
         public override AbstractNode VisitExtend([NotNull] GiraphParser.ExtendContext context)
         {
-            ExtendNode ENode = new ExtendNode(context.Start.Line);
+            ExtendNode ENode = new ExtendNode(context.Start.Line, context.Start.Column);
             ENode.ExtensionName = context.variable(0).GetText();
             if (context.variable().Length == 2)
             {
@@ -435,7 +441,7 @@ namespace Compiler.AST
 
         public override AbstractNode VisitSingleObjectDcl([NotNull] GiraphParser.SingleObjectDclContext context)
         {
-            DeclarationNode DclNode = new DeclarationNode(context.Start.Line);
+            DeclarationNode DclNode = new DeclarationNode(context.Start.Line, context.Start.Column);
             DclNode.Type = context.objects().GetText();
             DclNode.Name = context.variable().GetText();
             if (context.expression() != null)
@@ -447,7 +453,7 @@ namespace Compiler.AST
 
         public override AbstractNode VisitCollectionDcl([NotNull] GiraphParser.CollectionDclContext context)
         {
-            DeclarationNode dclNode = new DeclarationNode(context.Start.Line);
+            DeclarationNode dclNode = new DeclarationNode(context.Start.Line, context.Start.Column);
             dclNode.CollectionDcl = true;
             dclNode.Type = context.allType().GetText();
             dclNode.Name = context.variable().GetText();
@@ -466,17 +472,16 @@ namespace Compiler.AST
 
         public override AbstractNode VisitIfElseIfElse([NotNull] GiraphParser.IfElseIfElseContext context)
         {
-            IfElseIfElseNode IfNode = new IfElseIfElseNode(context.Start.Line);
-            IfNode.IfCondition = Visit(context.boolComparisons());
-            IfNode.IfCodeBlock = Visit(context.codeBlock());
+            IfElseIfElseNode IfNode = new IfElseIfElseNode(context.Start.Line, context.Start.Column);
+            IfNode.IfCondition = Visit(context.boolComparisons()) as BoolComparisonNode;
+            IfNode.IfCodeBlock = Visit(context.codeBlock()) as CodeBlockNode;
             if (context.elseifCond() != null)
             {
                 // Loop though all the ElseIf(s)
                 foreach (var ElseIf in context.elseifCond())
                 {
                     // Add their conditions and codeblocks
-                    IfNode.ElseIfConditions.Add(Visit(ElseIf.boolComparisons()));
-                    IfNode.ElseIfCodeBlocks.Add(Visit(ElseIf.codeBlock()));
+                    IfNode.ElseIfList.Add(Tuple.Create((Visit(ElseIf.boolComparisons()) as BoolComparisonNode), (Visit(ElseIf.codeBlock()) as CodeBlockNode)));
                 }
             }
 
@@ -486,7 +491,7 @@ namespace Compiler.AST
                 // There will never be more then one Else block, and it does not have a boolcomparison
                 if (context.elseCond().codeBlock().ChildCount > 0)
                 {
-                    IfNode.ElseCodeBlock = Visit(context.elseCond().codeBlock());
+                    IfNode.ElseCodeBlock = Visit(context.elseCond().codeBlock()) as CodeBlockNode;
                 }
             }
             return IfNode;
@@ -494,7 +499,7 @@ namespace Compiler.AST
 
         public override AbstractNode VisitPredicate([NotNull] GiraphParser.PredicateContext context)
         {
-            PredicateNode PNode = new PredicateNode(context.Start.Line);
+            PredicateNode PNode = new PredicateNode(context.Start.Line, context.Start.Column);
             PNode.Name = context.variable().GetText();
             // Check if there is any parameters
             if (context.formalParams().formalParam() != null)
@@ -505,7 +510,7 @@ namespace Compiler.AST
                     string ParameterName = Param.variable().GetText();
                     string ParameterType = Param.allType().GetText();
                     // Add them to the paramter list
-                    PNode.AddParameter(ParameterType, ParameterName, context.Start.Line);
+                    PNode.AddParameter(ParameterType, ParameterName, context.Start.Line, context.Start.Column);
                 }
             }
             // Adopt the boolcomparisons of the Predicate as children to the PNode
@@ -515,10 +520,10 @@ namespace Compiler.AST
 
         public override AbstractNode VisitSelect([NotNull] GiraphParser.SelectContext context)
         {
-            SelectQueryNode SelectNode = new SelectQueryNode(context.Start.Line);
+            SelectQueryNode SelectNode = new SelectQueryNode(context.Start.Line, context.Start.Column);
             SelectNode.Type = context.allTypeWithColl().GetText();
             SelectNode.Variable = context.variableFunc().GetText();
-            if (context.where() != null && context.where().ChildCount > 0)
+            if (context.where() != null)
             {
                 SelectNode.WhereCondition = Visit(context.where());
             }
@@ -528,10 +533,10 @@ namespace Compiler.AST
 
         public override AbstractNode VisitSelectAll([NotNull] GiraphParser.SelectAllContext context)
         {
-            SelectAllQueryNode SelectNode = new SelectAllQueryNode(context.Start.Line);
+            SelectAllQueryNode SelectNode = new SelectAllQueryNode(context.Start.Line, context.Start.Column);
             SelectNode.Type = context.allTypeWithColl().GetText();
             SelectNode.Variable = context.variableFunc().GetText();
-            if (context.where() != null && context.where().ChildCount > 0)
+            if (context.where() != null)
             {
                 SelectNode.WhereCondition = Visit(context.where());
             }
@@ -540,7 +545,7 @@ namespace Compiler.AST
 
         public override AbstractNode VisitEnqueueOP([NotNull] GiraphParser.EnqueueOPContext context)
         {
-            EnqueueQueryNode EnqueueNode = new EnqueueQueryNode(context.Start.Line);
+            EnqueueQueryNode EnqueueNode = new EnqueueQueryNode(context.Start.Line, context.Start.Column);
             EnqueueNode.VariableTo = context.variable(1).GetText();
             EnqueueNode.VariableToAdd = context.variable(0).GetText();
 
@@ -549,21 +554,21 @@ namespace Compiler.AST
 
         public override AbstractNode VisitDequeueOP([NotNull] GiraphParser.DequeueOPContext context)
         {
-            DequeueQueryNode DequeueNode = new DequeueQueryNode(context.Start.Line);
+            DequeueQueryNode DequeueNode = new DequeueQueryNode(context.Start.Line, context.Start.Column);
             DequeueNode.Variable = context.variable().GetText();
             return DequeueNode;
         }
 
         public override AbstractNode VisitPopOP([NotNull] GiraphParser.PopOPContext context)
         {
-            PopQueryNode PopNode = new PopQueryNode(context.Start.Line);
+            PopQueryNode PopNode = new PopQueryNode(context.Start.Line, context.Start.Column);
             PopNode.Variable = context.variable().GetText();
             return PopNode;
         }
 
         public override AbstractNode VisitPushOP([NotNull] GiraphParser.PushOPContext context)
         {
-            PushQueryNode PushNode = new PushQueryNode(context.Start.Line);
+            PushQueryNode PushNode = new PushQueryNode(context.Start.Line, context.Start.Column);
             PushNode.VariableToAdd = context.variable(0).GetText();
             PushNode.VariableAddTo = context.variable(1).GetText();
             return PushNode;
@@ -571,14 +576,14 @@ namespace Compiler.AST
 
         public override AbstractNode VisitExtractMinOP([NotNull] GiraphParser.ExtractMinOPContext context)
         {
-            ExtractMinQueryNode ExtractQuery = new ExtractMinQueryNode(context.Start.Line);
+            ExtractMinQueryNode ExtractQuery = new ExtractMinQueryNode(context.Start.Line, context.Start.Column);
 
             ExtractQuery.Variable = context.variable().GetText();
-            if (context.attribute() != null && context.attribute().ChildCount > 0)
+            if (context.attribute() != null)
             {
                 ExtractQuery.Attribute = context.attribute().GetText();
             }
-            if (context.where() != null && context.where().ChildCount > 0)
+            if (context.where() != null)
             {
                 ExtractQuery.WhereCondition = Visit(context.where());
             }
@@ -587,14 +592,14 @@ namespace Compiler.AST
 
         public override AbstractNode VisitExtractMaxOP([NotNull] GiraphParser.ExtractMaxOPContext context)
         {
-            ExtractMaxQueryNode ExtractQuery = new ExtractMaxQueryNode(context.Start.Line);
+            ExtractMaxQueryNode ExtractQuery = new ExtractMaxQueryNode(context.Start.Line, context.Start.Column);
 
             ExtractQuery.Variable = context.variable().GetText();
-            if (context.attribute() != null && context.attribute().ChildCount > 0)
+            if (context.attribute() != null)
             {
                 ExtractQuery.Attribute = context.attribute().GetText();
             }
-            if (context.where() != null && context.where().ChildCount > 0)
+            if (context.where() != null)
             {
                 ExtractQuery.WhereCondition = Visit(context.where());
             }
@@ -603,9 +608,9 @@ namespace Compiler.AST
 
         public override AbstractNode VisitDequeueOPOneLine([NotNull] GiraphParser.DequeueOPOneLineContext context)
         {
-            DequeueQueryNode DequeueNode = new DequeueQueryNode(context.Start.Line);
+            DequeueQueryNode DequeueNode = new DequeueQueryNode(context.Start.Line, context.Start.Column);
             DequeueNode.Variable = context.variable().GetText();
-            if (context.where() != null && context.where().ChildCount > 0)
+            if (context.where() != null)
             {
                 DequeueNode.WhereCondition = Visit(context.where());
             }
@@ -624,7 +629,7 @@ namespace Compiler.AST
 
         public override AbstractNode VisitVariableDcl([NotNull] GiraphParser.VariableDclContext context)
         {
-            VariableDclNode VariableNode = new VariableDclNode(context.Start.Line);
+            VariableDclNode VariableNode = new VariableDclNode(context.Start.Line, context.Start.Column);
             VariableNode.Type = context.TYPE().GetText();
             VariableNode.Name = context.variable().GetText();
             if (context.EQUALS() != null)
@@ -636,14 +641,14 @@ namespace Compiler.AST
 
         public override AbstractNode VisitReturnBlock([NotNull] GiraphParser.ReturnBlockContext context)
         {
-            ReturnNode RNode = new ReturnNode(context.Start.Line);
+            ReturnNode RNode = new ReturnNode(context.Start.Line, context.Start.Column);
             RNode.AdoptChildren(Visit(context.GetChild(1)));
             return RNode;
         }
 
         public override AbstractNode VisitForLoop([NotNull] GiraphParser.ForLoopContext context)
         {
-            ForLoopNode ForLoop = new ForLoopNode(context.Start.Line);
+            ForLoopNode ForLoop = new ForLoopNode(context.Start.Line, context.Start.Column);
             var contextInside = context.forCondition().forConditionInside();
 
             if (contextInside.inlineDcl() != null && contextInside.inlineDcl().ChildCount > 0)
@@ -711,7 +716,7 @@ namespace Compiler.AST
 
         public override AbstractNode VisitInlineDcl([NotNull] GiraphParser.InlineDclContext context)
         {
-            VariableDclNode VarDcl = new VariableDclNode(context.Start.Line);
+            VariableDclNode VarDcl = new VariableDclNode(context.Start.Line, context.Start.Column);
             VarDcl.Type = context.allType().GetText();
             VarDcl.Name = context.VARIABLENAME().GetText();
             VarDcl.AdoptChildren(Visit(context.operation()));
@@ -730,7 +735,7 @@ namespace Compiler.AST
 
         public override AbstractNode VisitPrint([NotNull] GiraphParser.PrintContext context)
         {
-            PrintQueryNode PNode = new PrintQueryNode(context.Start.Line);
+            PrintQueryNode PNode = new PrintQueryNode(context.Start.Line, context.Start.Column);
             foreach (var child in context.printOptions().printOption())
             {
                 if (child.VARIABLENAME() != null && child.VARIABLENAME().GetText().Length > 0)
@@ -750,7 +755,7 @@ namespace Compiler.AST
 
         public override AbstractNode VisitForeachLoop([NotNull] GiraphParser.ForeachLoopContext context)
         {
-            ForeachLoopNode ForeachNode = new ForeachLoopNode(context.Start.Line);
+            ForeachLoopNode ForeachNode = new ForeachLoopNode(context.Start.Line, context.Start.Column);
             ForeachNode.VariableName = context.foreachCondition().variable().GetText();
             ForeachNode.VariableType = context.foreachCondition().allType().GetText();
             ForeachNode.InVariableName = context.foreachCondition().variableFunc().GetText();
@@ -769,7 +774,7 @@ namespace Compiler.AST
 
         public override AbstractNode VisitAddQuery([NotNull] GiraphParser.AddQueryContext context)
         {
-            AddQueryNode AddNode = new AddQueryNode(context.Start.Line);
+            AddQueryNode AddNode = new AddQueryNode(context.Start.Line, context.Start.Column);
             // ITS A GRAPH ADD
             if (context.addToGraph() != null)
             {
@@ -846,7 +851,7 @@ namespace Compiler.AST
 
         public override AbstractNode VisitEdgeDcl([NotNull] GiraphParser.EdgeDclContext context)
         {
-            EdgeNode VarNode = new EdgeNode(context.Start.Line);
+            EdgeNode VarNode = new EdgeNode(context.Start.Line, context.Start.Column);
             if (context.GetChild(0).GetText() != "(")
             {
                 VarNode.Name = context.variable(0).GetText();
@@ -867,7 +872,7 @@ namespace Compiler.AST
 
         public override AbstractNode VisitVertexDcl([NotNull] GiraphParser.VertexDclContext context)
         {
-            VariableDclNode VarNode = new VariableDclNode(context.Start.Line);
+            VariableDclNode VarNode = new VariableDclNode(context.Start.Line, context.Start.Column);
             VarNode.Type = "VERTEX";
             if (context.GetChild(0).GetText() != "(")
             {

@@ -6,7 +6,7 @@ namespace Compiler.AST.Nodes.QueryNodes
         public string VariableToAdd;
         public string VariableTo;
         public AbstractNode WhereCondition;
-        public EnqueueQueryNode(int LineNumber) : base (LineNumber)
+        public EnqueueQueryNode(int LineNumber, int CharIndex) : base (LineNumber, CharIndex)
         {
         }
         public override void Accept(AstVisitorBase astVisitor)

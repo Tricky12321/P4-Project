@@ -8,6 +8,7 @@ using System.IO;
 using Compiler.AST;
 using Compiler.AST.SymbolTable;
 using Compiler.AST.Nodes;
+using System.Diagnostics;
 
 namespace Compiler
 {
@@ -15,10 +16,10 @@ namespace Compiler
     {
         static void Main(string[] args)
         {
-            var CST = BuildCST("kode.giraph");
-            var AST = BuildAST(CST);
+            GiraphParser.StartContext CST = BuildCST("kode.giraph");
+            AbstractNode AST = BuildAST(CST);
             PrettyPrint(AST as StartNode);
-            SymTable SymbolTable = BuildSymbolTable(AST as StartNode);
+			SymTable SymbolTable = BuildSymbolTable(AST as StartNode);
             Console.ReadKey();
         }
 
@@ -28,10 +29,15 @@ namespace Compiler
             return ast;
         }
 
-        public static void PrettyPrint(StartNode start) {
-            AstPrettyPrintVisitor visitor = new AstPrettyPrintVisitor();
-            visitor.VisitRoot(start);
-            Console.WriteLine(visitor.ProgramCode);
+        public static void PrettyPrint(StartNode start)
+        {
+            Stopwatch PPTimer = new Stopwatch();
+            AstPrettyPrintVisitor PPVisitor = new AstPrettyPrintVisitor();
+            PPTimer.Start();
+            PPVisitor.VisitRoot(start);
+            PPTimer.Stop();
+            Console.WriteLine($"Pretty Printer took: {PPTimer.ElapsedMilliseconds}ms");
+            Console.WriteLine(PPVisitor.ProgramCode);
         }
 
         public static GiraphParser.StartContext BuildCST(string FilePath) {

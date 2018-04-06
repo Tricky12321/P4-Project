@@ -3,12 +3,15 @@ using Compiler.AST.Nodes;
 using Compiler.AST.Nodes.DatatypeNodes;
 using System.Collections.Generic;
 using Compiler.AST.Nodes.QueryNodes;
+using System.Text;
+using Compiler.AST.Nodes.LoopNodes;
+using System.Diagnostics;
 
 namespace Compiler.AST
 {
     public class AstPrettyPrintVisitor : AstVisitorBase
     {
-        public string ProgramCode;
+        public StringBuilder ProgramCode = new StringBuilder();
         private int _currentLineNumber;
 
         public override void VisitRoot(AbstractNode root)
@@ -21,187 +24,189 @@ namespace Compiler.AST
         {
             if (i > 0)
             {
-                ProgramCode += ", ";
+                ProgramCode.Append(", ");
             }
             i++;
         }
 
         public override void Visit(FunctionNode node)
         {
-            Console.WriteLine("FunctionNode");
-            ProgramCode += $"{node.Name} -> {node.ReturnType}(";
+            
+            Debug.Print("FunctionNode");
+            ProgramCode.Append($"{node.Name} -> {node.ReturnType}(");
             int i = 0;
             foreach (FunctionParameterNode Param in node.Parameters)
             {
                 InsertComma(ref i);
                 Param.Accept(this);
             }
-            ProgramCode += $")\n{{\n";
+            ProgramCode.Append($")\n{{\n");
             VisitChildren(node);
-            ProgramCode += "}\n";
+            ProgramCode.Append("}\n");
         }
 
         public override void Visit(FunctionParameterNode node)
         {
-            ProgramCode += $"{node.Type} {node.Name}";
+            ProgramCode.Append($"{node.Type} {node.Name}");
         }
 
         public override void Visit(ProgramNode node)
         {
-            Console.WriteLine("ProgramNode");
+            Debug.Print("ProgramNode");
             VisitChildren(node);
         }
 
         public override void Visit(StartNode node)
         {
-            Console.WriteLine("StartNode");
+            Debug.Print("StartNode");
             VisitChildren(node);
         }
 
         public override void Visit(GraphNode node)
         {
-            Console.WriteLine("GraphNode");
-            ProgramCode += $"GRAPH {node.Name}\n{{\n";
+            Debug.Print("GraphNode");
+            ProgramCode.Append($"GRAPH {node.Name}\n{{\n");
 
             if (node.Vertices.Count != 0)
             {
-                ProgramCode += $"VERTEX ";
+                ProgramCode.Append($"VERTEX ");
                 int i = 0;
                 foreach (VertexNode vertex in node.Vertices)
                 {
                     InsertComma(ref i);
                     vertex.Accept(this);
                 }
-                ProgramCode += ";\n";
+                ProgramCode.Append(");\n");
             }
             if (node.Edges.Count != 0)
             {
-                ProgramCode += $"EDGE ";
+                ProgramCode.Append($"EDGE ");
                 int i = 0;
                 foreach (EdgeNode edge in node.Edges)
                 {
                     InsertComma(ref i);
                     edge.Accept(this);
                 }
-                ProgramCode += ";\n";
+                ProgramCode.Append(");\n");
             }
             if (node.LeftmostChild != null)
             {
                 VisitChildren(node);
             }
-            ProgramCode += $"}}\n";
+            ProgramCode.Append($"}}\n");
         }
 
         public override void Visit(VertexNode node)
         {
-            Console.WriteLine("VertexNode");
-            ProgramCode += $"{node.Name}(";
+            Debug.Print("VertexNode");
+            ProgramCode.Append($"{node.Name}(");
             int i = 0;
             foreach (KeyValuePair<string, string> item in node.ValueList)
             {
                 InsertComma(ref i);
-                ProgramCode += $"{item.Key} = {item.Value}";
+                ProgramCode.Append($"{item.Key} = {item.Value}");
             }
-            ProgramCode += ")";
+            ProgramCode.Append(")");
         }
 
         public override void Visit(EdgeNode node)
         {
-            Console.WriteLine("EdgeNode");
-            ProgramCode += $"{node.Name}(";
+            Debug.Print("EdgeNode");
+            ProgramCode.Append($"{node.Name}(");
             int i = 0;
-            ProgramCode += $"{node.VertexNameFrom}, {node.VertexNameTo}";
+            ProgramCode.Append($"{node.VertexNameFrom}, {node.VertexNameTo}");
             if (node.ValueList.Count > 0)
             {
-                ProgramCode += ", ";
+                ProgramCode.Append(", ");
             }
 
             foreach (KeyValuePair<string, string> item in node.ValueList)
             {
                 InsertComma(ref i);
-                ProgramCode += $"{item.Key} = {item.Value}";
+                ProgramCode.Append($"{item.Key} = {item.Value}");
             }
-            ProgramCode += ")";
+            ProgramCode.Append(")");
         }
 
         public override void Visit(GraphSetQuery node)
         {
-            Console.WriteLine("GraphSetQueryNode");
-            ProgramCode += $"SET {node.Attributes.Item1.Name} = {node.Attributes.Item3.ExpressionString()};\n";
+            Debug.Print("GraphSetQueryNode");
+            ProgramCode.Append($"SET {node.Attributes.Item1.Name} = {node.Attributes.Item3.ExpressionString()};\n");
         }
 
         public override void Visit(SetQueryNode node)
         {
-            Console.WriteLine("SetQueryNode");
-            ProgramCode += "SET ";
+            Debug.Print("SetQueryNode");
+            ProgramCode.Append("SET ");
             int i = 0;
 
             foreach (var attribute in node.Attributes)
             {
                 InsertComma(ref i);
-                ProgramCode += $"'{attribute.Item1.Name}' = {attribute.Item3.ExpressionString()}";
+                ProgramCode.Append($"'{attribute.Item1.Name}' = {attribute.Item3.ExpressionString()}");
             }
-            ProgramCode += $" IN {node.InVariable}";
-            if (node.WhereCondition == null)
-            {
-                ProgramCode += ";\n";
-            }
-            else
+            ProgramCode.Append($" IN {node.InVariable}");
+            if (node.WhereCondition != null)
             {
                 node.WhereCondition.Accept(this);
             }
+            ProgramCode.Append(");\n");
         }
 
         public override void Visit(WhereNode node)
         {
-            Console.WriteLine("WhereNode");
-            ProgramCode += " WHERE ";
+            Debug.Print("WhereNode");
+            ProgramCode.Append(" WHERE ");
             VisitChildren(node);
         }
 
         public override void Visit(PushQueryNode node)
         {
-            Console.WriteLine("PushNode");
-            ProgramCode += $"PUSH {node.VariableToAdd} TO {node.VariableAddTo}";
-            node.WhereCondition.Accept(this);
-            ProgramCode += ";\n";
+            Debug.Print("PushNode");
+            ProgramCode.Append($"PUSH {node.VariableToAdd} TO {node.VariableAddTo}");
+            ProgramCode.Append(");\n");
         }
 
         public override void Visit(PopQueryNode node)
         {
-            Console.WriteLine("PopNode");
-            ProgramCode += $"POP FROM {node.Variable}";
-            node.WhereCondition.Accept(this);
-            ProgramCode += ";\n";
+            Debug.Print("PopNode");
+            ProgramCode.Append($"POP FROM {node.Variable}");
+            ProgramCode.Append(");\n");
         }
 
         public override void Visit(IfElseIfElseNode node)
         {
-            Console.WriteLine("IfElseIfElseNode");
-            ProgramCode += "IF (";
+            Debug.Print("IfElseIfElseNode");
+            ProgramCode.Append("IF (");
             node.IfCondition.Accept(this);
-            ProgramCode += ")\n{\n";
-            VisitChildren(node.IfCodeBlock);
-            ProgramCode += "}\n";
-            for (int i = 0; i < node.ElseIfCodeBlocks.Count; i++)
+            ProgramCode.Append(")\n{\n");
+            node.IfCodeBlock.Accept(this);
+            ProgramCode.Append("}\n");
+            for (int i = 0; i < node.ElseIfList.Count; i++)
             {
-                ProgramCode += "ELSEIF (";
-                node.ElseIfConditions[i].Accept(this);
-                ProgramCode += ")\n{\n";
-                VisitChildren(node.ElseIfCodeBlocks[i]);
-                ProgramCode += "}\n";
+                ProgramCode.Append("ELSEIF (");
+                node.ElseIfList[i].Item1.Accept(this);
+                ProgramCode.Append(")\n{\n");
+                node.ElseIfList[i].Item2.Accept(this);
+                ProgramCode.Append("}\n");
             }
             if (node.ElseCodeBlock != null)
             {
-                ProgramCode += "ELSE\n{\n";
-                VisitChildren(node.ElseCodeBlock);
-                ProgramCode += "}\n";
+                ProgramCode.Append("ELSE\n{\n");
+                node.ElseCodeBlock.Accept(this);
+                ProgramCode.Append("}\n");
             }
+        }
+
+        public override void Visit(CodeBlockNode node)
+        {
+            Debug.Print("CodeBlockNode");
+            VisitChildren(node);
         }
 
         public override void Visit(BoolComparisonNode node)
         {
-            Console.WriteLine("BoolComparisonNode");
+            Debug.Print("BoolComparisonNode");
             if (node.LeftmostChild != null)
             {
                 VisitChildren(node);
@@ -211,7 +216,7 @@ namespace Compiler.AST
                 if (node.Left != null)
                 {
                     node.Left.Accept(this);
-                    ProgramCode += $" {node.ComparisonOperator} ";
+                    ProgramCode.Append($" {node.ComparisonOperator} ");
                     node.Right.Accept(this);
                 }
             }
@@ -219,63 +224,100 @@ namespace Compiler.AST
 
         public override void Visit(ExpressionNode node)
         {
-            ProgramCode += node.ExpressionString();
+            ProgramCode.Append(node.ExpressionString());
         }
 
         #region CollOPSvisits
         public override void Visit(ExtendNode node)
         {
-            Console.WriteLine("ExtendNode");
-            ProgramCode += "EXTEND ";
-            ProgramCode += $"{node.ClassToExtend} {node.ExtendWithType} ";
-            ProgramCode += $"'{node.ExtensionName}'";
+            Debug.Print("ExtendNode");
+            ProgramCode.Append("EXTEND ");
+            ProgramCode.Append($"{node.ClassToExtend} {node.ExtendWithType} ");
+            ProgramCode.Append($"'{node.ExtensionName}'");
             if (node.ExtensionShortName != null)
             {
-                ProgramCode += $":'{node.ExtensionShortName}'";
+                ProgramCode.Append($":'{node.ExtensionShortName}'");
             }
             if (node.ExtensionDefaultValue != null)
             {
-                ProgramCode += $"= {node.ExtensionDefaultValue}";
+                ProgramCode.Append($"= {node.ExtensionDefaultValue}");
             }
-            ProgramCode += ";\n";
+            ProgramCode.Append(");\n");
         }
 
         public override void Visit(DequeueQueryNode node)
         {
-            Console.WriteLine("DequeueQueryNode");
-            ProgramCode += "DEQUEUE FROM ";
-            ProgramCode += $"{node.Variable}";
-            node.WhereCondition.Accept(this);
-            ProgramCode += ";\n";
+            Debug.Print("DequeueQueryNode");
+            ProgramCode.Append("DEQUEUE FROM ");
+            ProgramCode.Append($"{node.Variable}");
+            ProgramCode.Append(");\n");
         }
 
         public override void Visit(EnqueueQueryNode node)
         {
-            Console.WriteLine("EnqueueQueryNode");
-            ProgramCode += "ENQUEUE ";
-            ProgramCode += $"{node.VariableToAdd} TO {node.VariableTo}";
-            node.WhereCondition.Accept(this);
-            ProgramCode += ";\n";
+            Debug.Print("EnqueueQueryNode");
+            ProgramCode.Append("ENQUEUE ");
+            ProgramCode.Append($"{node.VariableToAdd} TO {node.VariableTo}");
+            ProgramCode.Append(");\n");
         }
 
         public override void Visit(ExtractMaxQueryNode node)
         {
-            throw new NotImplementedException();
+            Debug.Print("ExtractMaxQueryNode");
+            ProgramCode.Append("EXTRACTMAX ");
+            if (node.Attribute != null)
+            {
+                ProgramCode.Append($"{node.Attribute} ");
+            }
+            ProgramCode.Append($"FROM {node.Variable}");
+            if (node.WhereCondition != null)
+            {
+                node.WhereCondition.Accept(this);
+            }
+            ProgramCode.Append(");\n");
         }
 
         public override void Visit(ExtractMinQueryNode node)
         {
-            throw new NotImplementedException();
+            Debug.Print("ExtractMinQueryNode");
+            ProgramCode.Append("EXTRACTMIN ");
+            if (node.Attribute != null)
+            {
+                ProgramCode.Append($"{node.Attribute} ");
+            }
+            ProgramCode.Append($"FROM {node.Variable}");
+            if (node.WhereCondition != null)
+            {
+                node.WhereCondition.Accept(this);
+            }
+            ProgramCode.Append(");\n");
+
         }
 
         public override void Visit(SelectAllQueryNode node)
         {
-            throw new NotImplementedException();
+            ProgramCode.Append("SELECTALL ");
+            ProgramCode.Append(node.Type);
+            ProgramCode.Append("FROM");
+            ProgramCode.Append(node.Variable);
+            if (node.WhereCondition != null)
+            {
+                node.WhereCondition.Accept(this);
+            }
+            ProgramCode.Append(";\n");
         }
 
         public override void Visit(SelectQueryNode node)
         {
-            throw new NotImplementedException();
+            ProgramCode.Append("SELECT ");
+            ProgramCode.Append(node.Type);
+            ProgramCode.Append("FROM");
+            ProgramCode.Append(node.Variable);
+            if (node.WhereCondition != null)
+            {
+                node.WhereCondition.Accept(this);
+            }
+            ProgramCode.Append(";\n");
         }
 
         #endregion
@@ -300,7 +342,52 @@ namespace Compiler.AST
             throw new NotImplementedException();
         }
 
+        public override void Visit(AddQueryNode node)
+        {
+            throw new NotImplementedException();
+        }
+
         public override void Visit(AbstractNode node)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void Visit(ReturnNode node)
+        {
+            ProgramCode.Append("RETURN ");
+            VisitChildren(node);
+        }
+
+        public override void Visit(WhileLoopNode node)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void Visit(EdgeDclsNode node)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void Visit(VariableAttributeNode node)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void Visit(VariableNode node)
+        {
+            throw new NotImplementedException();
+        }
+        public override void Visit(TerminalNode node)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void Visit(ForLoopNode node)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void Visit(ForeachLoopNode node)
         {
             throw new NotImplementedException();
         }

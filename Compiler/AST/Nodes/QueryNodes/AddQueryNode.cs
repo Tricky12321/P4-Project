@@ -21,9 +21,14 @@ namespace Compiler.AST.Nodes.QueryNodes
         public string ToVariable;
         public AbstractNode WhereCondition;
 
-        public AddQueryNode(int LineNumber) : base (LineNumber)
+        public AddQueryNode(int LineNumber, int CharIndex) : base (LineNumber, CharIndex)
         {
             
+        }
+
+        public override void Accept(AstVisitorBase astVisitor)
+        {
+            astVisitor.Visit(this);
         }
     }
 }

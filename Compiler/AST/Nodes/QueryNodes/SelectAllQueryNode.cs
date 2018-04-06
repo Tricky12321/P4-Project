@@ -6,8 +6,13 @@ namespace Compiler.AST.Nodes.QueryNodes
         public string Type;
         public string Variable;
         public AbstractNode WhereCondition;
-        public SelectAllQueryNode(int LineNumber) : base(LineNumber)
+        public SelectAllQueryNode(int LineNumber, int CharIndex) : base(LineNumber, CharIndex)
         {
+        }
+
+        public override void Accept(AstVisitorBase astVisitor)
+        {
+            astVisitor.Visit(this);
         }
     }
 }

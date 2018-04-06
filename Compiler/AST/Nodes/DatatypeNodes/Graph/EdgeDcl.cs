@@ -6,9 +6,14 @@ namespace Compiler.AST.Nodes.DatatypeNodes.Graph
         public string VertexFrom;
         public string VertexTo;
 
-        public EdgeDcl(int LineNumber) : base(LineNumber)
+        public EdgeDcl(int LineNumber, int CharIndex) : base(LineNumber, CharIndex)
         {
             
+        }
+
+        public override void Accept(AstVisitorBase astVisitor)
+        {
+            astVisitor.Visit(this);
         }
     }
 }
