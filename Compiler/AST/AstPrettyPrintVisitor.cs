@@ -346,7 +346,8 @@ namespace Compiler.AST
 
         public override void Visit(ReturnNode node)
         {
-            throw new NotImplementedException();
+            ProgramCode.Append("RETURN ");
+            VisitChildren(node);
         }
     }
 }
