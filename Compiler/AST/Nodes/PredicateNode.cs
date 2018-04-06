@@ -24,10 +24,5 @@ namespace Compiler.AST.Nodes
             Parameters.Add(PParaNode);
 
         }
-
-        public override void Accept(AstVisitorBase astVisitor)
-        {
-            astVisitor.Visit(this);
-        }
     }
 }
