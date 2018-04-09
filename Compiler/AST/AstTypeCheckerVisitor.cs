@@ -159,6 +159,7 @@ namespace Compiler.AST
 
         public override void Visit(PushQueryNode node)
         {
+            /*
             bool isCollectionVarToAdd;
             AllType? varToAdd;
             bool isCollectionInQuery;
@@ -189,6 +190,7 @@ namespace Compiler.AST
             {
                 _createdSymbolTabe.NotDeclaredError(node);
             }
+            */
         }
 
         public override void Visit(PopQueryNode node)
@@ -218,6 +220,7 @@ namespace Compiler.AST
 
         public override void Visit(EnqueueQueryNode node)
         {
+            /*
             bool isCollectionVarToAdd;
             AllType? varToAdd;
             bool isCollectionInQuery;
@@ -248,6 +251,7 @@ namespace Compiler.AST
             {
                 _createdSymbolTabe.NotDeclaredError(node);
             }
+            */
         }
 
         public override void Visit(DequeueQueryNode node)

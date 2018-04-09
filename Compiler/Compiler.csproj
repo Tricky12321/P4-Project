@@ -115,7 +115,7 @@
     <Compile Include="AST\Symbol Table\ClassEntry.cs" />
     <Compile Include="AST\Symbol Table\SymbolTable.cs" />
     <Compile Include="AST\Symbol Table\Scope.cs" />
-    <Compile Include="AST\Symbol Table\LoopType.cs" />
+    <Compile Include="AST\Symbol Table\BlockType.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

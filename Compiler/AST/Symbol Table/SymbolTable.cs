@@ -175,11 +175,11 @@ namespace Compiler.AST.SymbolTable
             return RetrieveSymbol(GetName(name), out IsCollection, false) != null;
         }
 
-        public void OpenScope(LoopType type)
+        public void OpenScope(BlockType type)
         {
             Scope NewScope = new Scope(_currentScope,_globalDepth,_currentScope.GetPrefixes());
             _currentScope = NewScope;
-            _currentScope.AddPrefix(type);
+            _currentScope.AddPrefix(type, NewScope);
             ++_globalDepth;
         }
 
@@ -245,7 +245,12 @@ namespace Compiler.AST.SymbolTable
 
         public void AlreadyDeclaredError(string name)
         {
-            Console.WriteLine(name + " is already declared " + GetLineNumber());
+            Console.WriteLine(name + " is already declared! - " + GetLineNumber());
+            Error();
+        }
+
+        public void UndeclaredError(string name) {
+            Console.WriteLine(name + " is defined in this scope! - " + GetLineNumber());
             Error();
         }
 
