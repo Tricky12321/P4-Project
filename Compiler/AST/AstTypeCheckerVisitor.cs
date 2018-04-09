@@ -74,12 +74,12 @@ namespace Compiler.AST
 
         public override void Visit(ExtendNode node)
         {
-            _createdSymbolTabe.NotImplementedError(node);
+            VisitChildren(node);
         }
 
         public override void Visit(PredicateNode node)
         {
-            _createdSymbolTabe.NotImplementedError(node);
+            VisitChildren(node);
         }
 
         public override void Visit(ExtractMaxQueryNode node)
@@ -311,6 +311,11 @@ namespace Compiler.AST
         }
 
         public override void Visit(AddQueryNode node)
+        {//her
+
+        }
+
+        public override void Visit(CollectionNode node)
         {
             _createdSymbolTabe.SetCurrentNode(node);
 
