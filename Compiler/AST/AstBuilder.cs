@@ -39,14 +39,15 @@ namespace Compiler.AST
             FNode.Name = context.variable().GetText(); // Name
             FNode.ReturnType = context.allTypeWithColl().GetText(); // Return Type
             // Extract the parameters from the function
-            if (context.formalParams() != null) {
-				foreach (var Parameter in context.formalParams().formalParam())
-				{
+            if (context.formalParams() != null)
+            {
+                foreach (var Parameter in context.formalParams().formalParam())
+                {
                     var Type = Parameter.allType().GetText();  // Parameter Type
                     var Name = Parameter.variable().GetText(); // Parameter Name
 
                     FNode.AddParameter(Type, Name, context.Start.Line, context.Start.Column);
-				}
+                }
             }
             foreach (var Child in context.codeBlock().codeBlockContent())
             {
@@ -597,9 +598,8 @@ namespace Compiler.AST
         public override AbstractNode VisitEnqueueOP([NotNull] GiraphParser.EnqueueOPContext context)
         {
             EnqueueQueryNode EnqueueNode = new EnqueueQueryNode(context.Start.Line, context.Start.Column);
-            EnqueueNode.VariableTo = context.variable(1).GetText();
-            EnqueueNode.VariableToAdd = context.variable(0).GetText();
-
+            EnqueueNode.VariableToAdd = Visit(context.varOrConst());
+            EnqueueNode.VariableTo = context.variable().GetText();
             return EnqueueNode;
         }
 
@@ -620,12 +620,12 @@ namespace Compiler.AST
         public override AbstractNode VisitPushOP([NotNull] GiraphParser.PushOPContext context)
         {
             PushQueryNode PushNode = new PushQueryNode(context.Start.Line, context.Start.Column);
-            PushNode.VariableToAdd = context.variable(0).GetText();
-            PushNode.VariableAddTo = context.variable(1).GetText();
+            PushNode.VariableToAdd = Visit(context.varOrConst());
+            PushNode.VariableAddTo = context.variable().GetText();
             return PushNode;
         }
 
-        public override AbstractNode VisitExtractMinOP([NotNull] GiraphParser.ExtractMinOPContext context)
+		public override AbstractNode VisitExtractMinOP([NotNull] GiraphParser.ExtractMinOPContext context)
         {
             ExtractMinQueryNode ExtractQuery = new ExtractMinQueryNode(context.Start.Line, context.Start.Column);
 
@@ -927,10 +927,12 @@ namespace Compiler.AST
         {
             VariableDclNode VarNode = new VariableDclNode(context.Start.Line, context.Start.Column);
             VarNode.Type = "VERTEX";
+
             if (context.GetChild(0).GetText() != "(")
             {
                 VarNode.Name = context.variable().GetText();
             }
+
             if (context.assignment() != null)
             {
                 foreach (var Child in context.assignment())
@@ -946,5 +948,11 @@ namespace Compiler.AST
             throw new Exception("Error at " + node.GetText() + " " + node.Parent.SourceInterval);
         }
 
-    }
+		public override AbstractNode VisitVarOrFuncOrConst([NotNull] GiraphParser.VarOrFuncOrConstContext context)
+		{
+            return Visit(context.GetChild(0));
+		}
+
+
+	}
 }
