@@ -254,15 +254,15 @@ namespace Compiler.AST.SymbolTable
             Error();
         }
 
-        public void NotDeclaredError(AbstractNode node)
+        public void NotDeclaredError()
         {
-            Console.WriteLine($"Variable or collection not declared at line number {node.LineNumber}");
+            Console.WriteLine($"Variable or collection not declared at line number {GetLineNumber()}");
             Error();
         }
 
-        public void WrongTypeError(AbstractNode node, AllType? variable1, AllType? variable2)
+        public void WrongTypeError(AllType? variable1, AllType? variable2)
         {
-            Console.WriteLine($"Variable {variable1} and collection {variable2} are missmatch of types. Line number {node.LineNumber}");
+            Console.WriteLine($"Variable {variable1} and collection {variable2} are missmatch of types. Line number {GetLineNumber()}");
             Error();
         }
     }

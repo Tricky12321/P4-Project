@@ -35,7 +35,6 @@ namespace Compiler.AST
         public abstract void Visit(SetQueryNode node);
         public abstract void Visit(WhereNode node);
         public abstract void Visit(ExtendNode node);
-        public abstract void Visit(CollectionDeclNode node);
         public abstract void Visit(IfElseIfElseNode node);
         public abstract void Visit(BoolComparisonNode node);
         public abstract void Visit(ExpressionNode node);

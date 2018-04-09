@@ -105,7 +105,6 @@
     <Compile Include="AST\Nodes\ReturnNode.cs" />
     <Compile Include="AST\Nodes\LoopNodes\WhileLoopNode.cs" />
     <Compile Include="AST\Nodes\LoopNodes\ForLoopNode.cs" />
-    <Compile Include="AST\Nodes\DatatypeNodes\CollectionDeclNode.cs" />
     <Compile Include="AST\Nodes\QueryNodes\PrintQueryNode.cs" />
     <Compile Include="AST\Nodes\QueryNodes\PrintOption.cs" />
     <Compile Include="AST\Nodes\LoopNodes\ForeachLoopNode.cs" />
