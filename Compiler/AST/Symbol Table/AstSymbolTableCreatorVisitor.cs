@@ -237,7 +237,7 @@ namespace Compiler.AST.SymbolTable
         public override void Visit(PushQueryNode node)
         {
             SymbolTable.SetCurrentNode(node);
-            if (CheckDeclared(node.VariableAddTo)) {
+            if (CheckDeclared(node.VariableCollection)) {
                 node.VariableToAdd.Accept(this);
             }
         }
