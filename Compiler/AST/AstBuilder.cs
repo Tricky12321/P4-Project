@@ -359,7 +359,7 @@ namespace Compiler.AST
                     return ExpressionPartType.INT;
                 case "GiraphParser+SimpleOperatorsContext":
                     return ExpressionPartType.OPERATOR;
-                case "¨GiraphParser+StringContext":
+                case "GiraphParser+StringContext":
                     return ExpressionPartType.STRING;
                 case "GiraphParser+AdvancedOperatorsContext":
                     return ExpressionPartType.ADVANCED_OPERATOR;

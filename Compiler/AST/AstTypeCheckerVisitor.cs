@@ -318,12 +318,6 @@ namespace Compiler.AST
 
         }
 
-        public override void Visit(CollectionNode node)
-        {
-            _createdSymbolTabe.SetCurrentNode(node);
-
-        }
-
         public override void Visit(WhereNode node)
         {
             node.Accept(this);
@@ -376,26 +370,36 @@ namespace Compiler.AST
 
         public override void Visit(ReturnNode node)
         {
-            AllType? funcType = _createdSymbolTabe.RetrieveSymbol(node.Parent.Name);
-            AllType? returnChild = _createdSymbolTabe.RetrieveSymbol(node.LeftmostChild.Name);
+            bool isFuncTypeCollection = false;
+            AllType? funcType = _createdSymbolTabe.RetrieveSymbol(node.Parent.Name, out isFuncTypeCollection, false);
+            bool isRetrunType = false;
+            AllType? returnType = _createdSymbolTabe.RetrieveSymbol(node.LeftmostChild.Name, out isRetrunType, false);
 
             if (funcType == AllType.VOID)
             {
                 //calling return on void function error 
             }
-            else if (returnChild == funcType)
+            else if (isRetrunType == isFuncTypeCollection)
             {
+                if(funcType == returnType)
+                {
 
+                }
+                else
+                {
+                    //ERROR, conflicting function and return type
+                }
             }
             else
             {
-                //conflicting types, on return and function
+                //ERROR, one is collection, other isn't
             }
             VisitChildren(node);
         }
 
         public override void Visit(ForLoopNode node)
         {
+            //fejl i parser, forloopnode gemmer ikke variablen som er udgangspunkt for loop, hvis den allerede er deklareret
             _createdSymbolTabe.NotImplementedError(node);
         }
 
@@ -406,6 +410,7 @@ namespace Compiler.AST
 
         public override void Visit(WhileLoopNode node)
         {
+            //fejl i parser, mærkelig exception ved codeblock
             _createdSymbolTabe.NotImplementedError(node);
         }
 
@@ -421,7 +426,7 @@ namespace Compiler.AST
 
         public override void Visit(CodeBlockNode node)
         {
-            _createdSymbolTabe.NotImplementedError(node);
+            VisitChildren(node);
         }
 
         public override void Visit(VariableDclNode node)
