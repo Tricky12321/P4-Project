@@ -2394,11 +2394,11 @@ public partial class GiraphParser : Parser {
 		public ITerminalNode DOT() { return GetToken(GiraphParser.DOT, 0); }
 		public ITerminalNode LP() { return GetToken(GiraphParser.LP, 0); }
 		public ITerminalNode RP() { return GetToken(GiraphParser.RP, 0); }
-		public VarOrConstContext[] varOrConst() {
-			return GetRuleContexts<VarOrConstContext>();
+		public VariableContext[] variable() {
+			return GetRuleContexts<VariableContext>();
 		}
-		public VarOrConstContext varOrConst(int i) {
-			return GetRuleContext<VarOrConstContext>(i);
+		public VariableContext variable(int i) {
+			return GetRuleContext<VariableContext>(i);
 		}
 		public ITerminalNode[] COMMA() { return GetTokens(GiraphParser.COMMA); }
 		public ITerminalNode COMMA(int i) {
@@ -2434,9 +2434,9 @@ public partial class GiraphParser : Parser {
 			State = 470;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
-			if (((((_la - 61)) & ~0x3f) == 0 && ((1L << (_la - 61)) & ((1L << (INF - 61)) | (1L << (BOOL - 61)) | (1L << (INTEGER - 61)) | (1L << (FLOATNUM - 61)) | (1L << (VARIABLENAME - 61)) | (1L << (STRING - 61)))) != 0)) {
+			if (_la==VARIABLENAME) {
 				{
-				State = 462; varOrConst();
+				State = 462; variable();
 				State = 467;
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
@@ -2444,7 +2444,7 @@ public partial class GiraphParser : Parser {
 					{
 					{
 					State = 463; Match(COMMA);
-					State = 464; varOrConst();
+					State = 464; variable();
 					}
 					}
 					State = 469;
@@ -5441,13 +5441,13 @@ public partial class GiraphParser : Parser {
 
 	public partial class EnqueueOPContext : ParserRuleContext {
 		public ITerminalNode ENQUEUE() { return GetToken(GiraphParser.ENQUEUE, 0); }
-		public VariableContext[] variable() {
-			return GetRuleContexts<VariableContext>();
-		}
-		public VariableContext variable(int i) {
-			return GetRuleContext<VariableContext>(i);
+		public VarOrConstContext varOrConst() {
+			return GetRuleContext<VarOrConstContext>(0);
 		}
 		public ITerminalNode TO() { return GetToken(GiraphParser.TO, 0); }
+		public VariableContext variable() {
+			return GetRuleContext<VariableContext>(0);
+		}
 		public ITerminalNode SC() { return GetToken(GiraphParser.SC, 0); }
 		public EnqueueOPContext(ParserRuleContext parent, int invokingState)
 			: base(parent, invokingState)
@@ -5469,7 +5469,7 @@ public partial class GiraphParser : Parser {
 			EnterOuterAlt(_localctx, 1);
 			{
 			State = 857; Match(ENQUEUE);
-			State = 858; variable();
+			State = 858; varOrConst();
 			State = 859; Match(TO);
 			State = 860; variable();
 			{
@@ -5572,13 +5572,13 @@ public partial class GiraphParser : Parser {
 
 	public partial class PushOPContext : ParserRuleContext {
 		public ITerminalNode PUSH() { return GetToken(GiraphParser.PUSH, 0); }
-		public VariableContext[] variable() {
-			return GetRuleContexts<VariableContext>();
-		}
-		public VariableContext variable(int i) {
-			return GetRuleContext<VariableContext>(i);
-		}
 		public ITerminalNode TO() { return GetToken(GiraphParser.TO, 0); }
+		public VariableContext variable() {
+			return GetRuleContext<VariableContext>(0);
+		}
+		public VarOrConstContext varOrConst() {
+			return GetRuleContext<VarOrConstContext>(0);
+		}
 		public ITerminalNode SC() { return GetToken(GiraphParser.SC, 0); }
 		public PushOPContext(ParserRuleContext parent, int invokingState)
 			: base(parent, invokingState)
@@ -5600,7 +5600,9 @@ public partial class GiraphParser : Parser {
 			EnterOuterAlt(_localctx, 1);
 			{
 			State = 871; Match(PUSH);
-			State = 872; variable();
+			{
+			State = 872; varOrConst();
+			}
 			State = 873; Match(TO);
 			State = 874; variable();
 			{
@@ -6615,8 +6617,8 @@ public partial class GiraphParser : Parser {
 		'\x2', '\x1CC', '\x43', '\x3', '\x2', '\x2', '\x2', '\x1CD', '\x1CE', 
 		'\a', '\x1C', '\x2', '\x2', '\x1CE', '\x1CF', '\a', '\b', '\x2', '\x2', 
 		'\x1CF', '\x1D8', '\a', '\x16', '\x2', '\x2', '\x1D0', '\x1D5', '\x5', 
-		'<', '\x1F', '\x2', '\x1D1', '\x1D2', '\a', '\x13', '\x2', '\x2', '\x1D2', 
-		'\x1D4', '\x5', '<', '\x1F', '\x2', '\x1D3', '\x1D1', '\x3', '\x2', '\x2', 
+		'@', '!', '\x2', '\x1D1', '\x1D2', '\a', '\x13', '\x2', '\x2', '\x1D2', 
+		'\x1D4', '\x5', '@', '!', '\x2', '\x1D3', '\x1D1', '\x3', '\x2', '\x2', 
 		'\x2', '\x1D4', '\x1D7', '\x3', '\x2', '\x2', '\x2', '\x1D5', '\x1D3', 
 		'\x3', '\x2', '\x2', '\x2', '\x1D5', '\x1D6', '\x3', '\x2', '\x2', '\x2', 
 		'\x1D6', '\x1D9', '\x3', '\x2', '\x2', '\x2', '\x1D7', '\x1D5', '\x3', 
@@ -6896,7 +6898,7 @@ public partial class GiraphParser : Parser {
 		'\x3', '\x2', '\x2', '\x2', '\x359', '\x356', '\x3', '\x2', '\x2', '\x2', 
 		'\x359', '\x357', '\x3', '\x2', '\x2', '\x2', '\x359', '\x358', '\x3', 
 		'\x2', '\x2', '\x2', '\x35A', '\xA1', '\x3', '\x2', '\x2', '\x2', '\x35B', 
-		'\x35C', '\a', '\x38', '\x2', '\x2', '\x35C', '\x35D', '\x5', '@', '!', 
+		'\x35C', '\a', '\x38', '\x2', '\x2', '\x35C', '\x35D', '\x5', '<', '\x1F', 
 		'\x2', '\x35D', '\x35E', '\a', '\"', '\x2', '\x2', '\x35E', '\x35F', '\x5', 
 		'@', '!', '\x2', '\x35F', '\x360', '\a', '\x12', '\x2', '\x2', '\x360', 
 		'\xA3', '\x3', '\x2', '\x2', '\x2', '\x361', '\x362', '\a', '\x39', '\x2', 
@@ -6905,7 +6907,7 @@ public partial class GiraphParser : Parser {
 		'\x366', '\a', '\x35', '\x2', '\x2', '\x366', '\x367', '\a', ',', '\x2', 
 		'\x2', '\x367', '\x368', '\x5', '@', '!', '\x2', '\x368', '\xA7', '\x3', 
 		'\x2', '\x2', '\x2', '\x369', '\x36A', '\a', '\x36', '\x2', '\x2', '\x36A', 
-		'\x36B', '\x5', '@', '!', '\x2', '\x36B', '\x36C', '\a', '\"', '\x2', 
+		'\x36B', '\x5', '<', '\x1F', '\x2', '\x36B', '\x36C', '\a', '\"', '\x2', 
 		'\x2', '\x36C', '\x36D', '\x5', '@', '!', '\x2', '\x36D', '\x36E', '\a', 
 		'\x12', '\x2', '\x2', '\x36E', '\xA9', '\x3', '\x2', '\x2', '\x2', '\x36F', 
 		'\x371', '\a', '<', '\x2', '\x2', '\x370', '\x372', '\x5', '\x9A', 'N', 

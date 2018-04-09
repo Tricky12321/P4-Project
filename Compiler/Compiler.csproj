@@ -55,7 +55,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AST\AstTypeCheckerVisitor.cs" />
-    <Compile Include="AST\Exceptions\WrongExpressionPartTypeFound.cs" />
+    <Compile Include="AST\Exceptions\WrongExpressionPartTypeFoundException.cs" />
     <Compile Include="AST\Nodes\DatatypeNodes\AttributeNode.cs" />
     <Compile Include="AST\Nodes\DatatypeNodes\VariableAttributeNode.cs" />
     <Compile Include="AST\Nodes\DatatypeNodes\VariableDclNode.cs" />
@@ -114,7 +114,7 @@
     <Compile Include="AST\Symbol Table\ClassEntry.cs" />
     <Compile Include="AST\Symbol Table\SymbolTable.cs" />
     <Compile Include="AST\Symbol Table\Scope.cs" />
-    <Compile Include="AST\Symbol Table\LoopType.cs" />
+    <Compile Include="AST\Symbol Table\BlockType.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -125,7 +125,9 @@
     <None Include="Program\packages.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Compile Include="AST\Exceptions\VisitVarOrConstWrongTypeException.cs" />
+  </ItemGroup>
   <ItemGroup />
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
