@@ -14,11 +14,20 @@ namespace Compiler.AST.SymbolTable
         public SymTable SymbolTable = new SymTable();
 
         public bool CheckDeclared(string name) {
-            if (!SymbolTable.DeclaredLocally(name)) {
-                return true;
+            if (!SymbolTable.DeclaredLocally(SymbolTable.GetName(name))) {
+                SymbolTable.UndeclaredError(name);
+                return false;
             } else {
+                return true;
+            }
+        }
+
+        public bool CheckAlreadyDeclared(string name) {
+            if (SymbolTable.DeclaredLocally(SymbolTable.GetName(name))) {
                 SymbolTable.AlreadyDeclaredError(name);
                 return false;
+            } else {
+                return true;
             }
         }
 
@@ -175,14 +184,18 @@ namespace Compiler.AST.SymbolTable
 
         public override void Visit(PushQueryNode node)
         {
+            CheckDeclared(node.VariableAddTo);
+            Visit(node.VariableToAdd);
         }
 
         public override void Visit(SelectAllQueryNode node)
         {
+            CheckDeclared(node.Variable);
         }
 
         public override void Visit(SelectQueryNode node)
         {
+            CheckDeclared(node.Variable);
         }
 
         #endregion
@@ -242,15 +255,13 @@ namespace Compiler.AST.SymbolTable
 
         public override void Visit(ForLoopNode node)
         {
+            SymbolTable.OpenScope(BlockType.ForLoop);
             if (node.VariableDeclaration != null)
             {
                 Visit(node.VariableDeclaration);
             }
-            if (node.VariableDeclaration != null)
-            {
-                Visit(node.VariableDeclaration);
-            }
-            VisitChildrenNewScope(node);
+            VisitChildren(node);
+            SymbolTable.CloseScope();
         }
 
         public override void Visit(ForeachLoopNode node)
@@ -284,7 +295,9 @@ namespace Compiler.AST.SymbolTable
 
         public override void Visit(VariableDclNode node)
         {
-            SymbolTable.EnterSymbol(node.Name, node.Type_enum);
+            if (CheckAlreadyDeclared(node.Name)) {
+				SymbolTable.EnterSymbol(node.Name, node.Type_enum);
+            }
         }
     }
 }

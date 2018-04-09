@@ -189,7 +189,7 @@ namespace Compiler.AST
 
         public override void Visit(PushQueryNode node)
         {
-            _createdSymbolTabe.SetCurrentNode(node);
+            /*
             bool isCollectionVarToAdd;
             AllType? varToAdd;
             bool isCollectionInQuery;
@@ -220,6 +220,7 @@ namespace Compiler.AST
             {
                 _createdSymbolTabe.NotDeclaredError();
             }
+            */
         }
 
         public override void Visit(PopQueryNode node)
@@ -249,7 +250,8 @@ namespace Compiler.AST
         }
 
         public override void Visit(EnqueueQueryNode node)
-        {
+        {/*
+	    //TODO enqueue push og add skal have type tjekke efter konstanter - lav en ny metode der finder hvad type en konstant er. 
             _createdSymbolTabe.SetCurrentNode(node);
             bool isCollectionVarToAdd;
             AllType? varToAdd;
@@ -281,6 +283,7 @@ namespace Compiler.AST
             {
                 _createdSymbolTabe.NotDeclaredError();
             }
+            */
         }
 
         public override void Visit(DequeueQueryNode node)

@@ -11,9 +11,13 @@ namespace Compiler.AST.SymbolTable
         private uint _forLoopCounter = 0;
         private uint _foreachLoopCounter = 0;
         private uint _whileLoopCounter = 0;
-        private LoopType _loopType;
+        private uint _predicateCounter = 0;
+        private BlockType _loopType;
         public uint depth;
-        public string Prefix { get {
+        public string Prefix
+        {
+            get
+            {
                 StringBuilder strBuild = new StringBuilder();
                 foreach (var prefix in _prefixes)
                 {
@@ -32,40 +36,61 @@ namespace Compiler.AST.SymbolTable
             this.depth++;
         }
 
-        public Scope CloseScope() {
+        public Scope CloseScope()
+        {
             return ParentScope;
         }
 
-        public void AddPrefix(LoopType type)
+        public void AddPrefix(BlockType type, Scope Parent)
         {
             string prefix = "";
             switch (type)
             {
-                case LoopType.ForEachLoop:
-                    _foreachLoopCounter++;
-                    prefix = "for"+_foreachLoopCounter;
+                case BlockType.ForLoop:
+                    prefix = "for";
                     break;
-                case LoopType.ForLoop:
-                    _forLoopCounter++;
-                    prefix = "foreach" + _foreachLoopCounter;
-
+                case BlockType.ForEachLoop:
+                    prefix = "foreach";
                     break;
-                case LoopType.WhileLoop:
-                    _whileLoopCounter++;
-                    prefix = "while" + _foreachLoopCounter;
+                case BlockType.WhileLoop:
+                    prefix = "while";
                     break;
-                default:
+                case BlockType.Predicate:
+                    prefix = "predicate";
+                    _predicateCounter++;
                     break;
             }
-                _prefixes.Add(prefix);
+            _prefixes.Add(prefix+GetCounter(type));
         }
-        public void AddPrefix(string prefix) {
+        public void AddPrefix(string prefix)
+        {
             _prefixes.Add(prefix);
 
         }
 
-        public List<string> GetPrefixes() {
+        public List<string> GetPrefixes()
+        {
             return _prefixes;
+        }
+
+        public uint GetCounter(BlockType type, bool OneStep = false)
+        {
+            if (ParentScope != null && !OneStep)
+            {
+                return ParentScope.GetCounter(type, true);
+            }
+            switch (type)
+            {
+                case BlockType.ForLoop:
+                    return _forLoopCounter++;
+                case BlockType.ForEachLoop:
+                    return _foreachLoopCounter++;
+                case BlockType.WhileLoop:
+                    return _whileLoopCounter++;
+                case BlockType.Predicate:
+                    return _predicateCounter++;
+            }
+            return 0;
         }
     }
 }
