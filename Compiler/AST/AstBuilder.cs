@@ -454,6 +454,10 @@ namespace Compiler.AST
                     return "DECIMAL";
                 case "GiraphParser+IntegerContext":
                     return "INT";
+                case "GiraphParser+BoolContext":
+                    return "BOOL";
+                case "GiraphParser+StringContext":
+                    return "STRING";
             }
             throw new WrongExpressionPartTypeFoundException("Spørg Mads");
         }

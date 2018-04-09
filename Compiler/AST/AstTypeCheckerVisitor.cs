@@ -13,51 +13,12 @@ namespace Compiler.AST
 {
     public class AstTypeCheckerVisitor : AstVisitorBase
     {
-        private AllType collectionRetrieveType = AllType.VOID;
-        bool isCollection;
-
         SymTable _createdSymbolTabe;
 
         public AstTypeCheckerVisitor(SymTable symbolTable)
         {
             _createdSymbolTabe = symbolTable;
         }
-
-        private AllType? ConstantConverter(string variable)
-        {
-            int isInt = 0;
-            if (IsDouble(variable))
-            {
-                return AllType.DECIMAL;
-            }
-            else if (Int32.TryParse(variable, out isInt))
-            {
-                return AllType.INT;
-            }
-            else if (variable == "TRUE" || variable == "FALSE")
-            {
-                return AllType.BOOL;
-            }
-            else if (variable == null)
-            {
-                return null;
-            }
-            else return AllType.STRING;
-        }
-
-        public bool IsDouble(string variable)
-        {
-            foreach (char c in variable)
-            {
-                if (!(char.IsDigit(c)) || c != '.')
-                {
-                    return false;
-                }
-            }
-            return true;
-        }
-
-
 
         //-----------------------------Visitor----------------------------------------------
         public override void Visit(ParameterNode node)
