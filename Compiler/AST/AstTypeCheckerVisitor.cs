@@ -394,6 +394,7 @@ namespace Compiler.AST
             {
                 _createdSymbolTabe.WrongTypeError(node.VariableName, node.InVariableName);
             }
+            VisitChildren(node);
         }
 
         public override void Visit(WhileLoopNode node)
