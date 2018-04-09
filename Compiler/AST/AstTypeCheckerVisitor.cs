@@ -348,15 +348,16 @@ namespace Compiler.AST
 
         public override void Visit(ReturnNode node)
         {
-            /*
-            AllType? funcType = _createdSymbolTabe.RetrieveSymbol(node.Parent.Name);
-            AllType? returnChild = _createdSymbolTabe.RetrieveSymbol(node.LeftmostChild.Name);
+            bool isReturnTypeCollection = false;
+            AllType? funcType = _createdSymbolTabe.RetrieveSymbol(node.Parent.Name, out isReturnTypeCollection, false);
+            bool isFunctionTypeCollection = false;
+            AllType? returnType = _createdSymbolTabe.RetrieveSymbol(node.LeftmostChild.Name, out isFunctionTypeCollection, false);
 
             if (funcType == AllType.VOID)
             {
                 //calling return on void function error 
             }
-            else if (isRetrunType == isFuncTypeCollection)
+            else if (isReturnTypeCollection == isFunctionTypeCollection)
             {
                 if (funcType == returnType)
                 {
@@ -372,7 +373,7 @@ namespace Compiler.AST
                 //ERROR, one is collection, other isn't
             }
             VisitChildren(node);
-            */
+            
         }
 
         public override void Visit(ForLoopNode node)
