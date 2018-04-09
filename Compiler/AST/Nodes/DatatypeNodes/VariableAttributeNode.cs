@@ -2,6 +2,8 @@
 {
     public class VariableAttributeNode : AbstractNode
     {
+        public string Type;
+        public AllType Type_enum => Utilities.FindTypeFromString(Type);
         public VariableAttributeNode(int LineNumber, int CharIndex) : base(LineNumber, CharIndex)
         {
         }
