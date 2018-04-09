@@ -255,7 +255,7 @@ namespace Compiler.AST.SymbolTable
             Error();
         }
 
-        public void WrongTypeError(AllType? variable1, AllType? variable2)
+        public void WrongTypeError(string variable1, string variable2)
         {
             Console.WriteLine($"Variable {variable1} and collection {variable2} are missmatch of types. Line number {GetLineNumber()}");
             Error();

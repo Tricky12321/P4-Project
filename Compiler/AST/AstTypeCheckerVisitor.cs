@@ -23,6 +23,40 @@ namespace Compiler.AST
             _createdSymbolTabe = symbolTable;
         }
 
+        private AllType? ConstantConverter(string variable)
+        {
+            int isInt = 0;
+            if (IsDouble(variable))
+            {
+                return AllType.DECIMAL;
+            }
+            else if (Int32.TryParse(variable, out isInt))
+            {
+                return AllType.INT;
+            }
+            else if (variable == "TRUE" || variable == "FALSE")
+            {
+                return AllType.BOOL;
+            }
+            else if (variable == null)
+            {
+                return null;
+            }
+            else return AllType.STRING;
+        }
+
+        public bool IsDouble(string variable)
+        {
+            foreach(char c in variable)
+            {
+                if(!(char.IsDigit(c)) || c != '.')
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
 
 
         //-----------------------------Visitor----------------------------------------------
@@ -73,7 +107,7 @@ namespace Compiler.AST
                 else
                 {
 
-                    _createdSymbolTabe.WrongTypeError(RetrieveVar, collectionInQuery);
+                    _createdSymbolTabe.WrongTypeError(node.Variable, node.Parent.Name);
                 }
             }
 
@@ -99,7 +133,7 @@ namespace Compiler.AST
                 }
                 else
                 {
-                    _createdSymbolTabe.WrongTypeError(RetrieveVar, collection);
+                    _createdSymbolTabe.WrongTypeError(node.Variable, node.Parent.Name);
                 }
             }
 
@@ -125,7 +159,7 @@ namespace Compiler.AST
                 }
                 else
                 {
-                    _createdSymbolTabe.WrongTypeError(nameDeclaredForRetrieve, collectionNameType);
+                    _createdSymbolTabe.WrongTypeError(node.Variable, node.Parent.Name);
                 }
             }
 
@@ -151,7 +185,7 @@ namespace Compiler.AST
                 }
                 else
                 {
-                    _createdSymbolTabe.WrongTypeError(nameDeclaredForRetrieve, collectionNameType);
+                    _createdSymbolTabe.WrongTypeError(node.Variable, node.Parent.Name);
                 }
             }
 
@@ -171,8 +205,8 @@ namespace Compiler.AST
 
             if (_createdSymbolTabe.DeclaredLocally(node.VariableToAdd) && _createdSymbolTabe.DeclaredLocally(node.VariableAddTo))
             {
-                varToAdd = _createdSymbolTabe.RetrieveSymbol(node.VariableToAdd, out isCollectionVarToAdd, false);
                 collectionToAddTo = _createdSymbolTabe.RetrieveSymbol(node.VariableAddTo, out isCollectionInQuery, false);
+                varToAdd = _createdSymbolTabe.RetrieveSymbol(node.VariableToAdd, out isCollectionVarToAdd, false);
 
                 if (varToAdd == collectionToAddTo && !isCollectionVarToAdd && isCollectionInQuery)
                 {
@@ -187,8 +221,22 @@ namespace Compiler.AST
                 }
                 else
                 {
-                    _createdSymbolTabe.WrongTypeError(varToAdd, collectionToAddTo);
+                    _createdSymbolTabe.WrongTypeError(node.VariableToAdd, node.VariableAddTo);
                 }
+            }
+            else if (_createdSymbolTabe.DeclaredLocally(node.VariableAddTo) && !_createdSymbolTabe.DeclaredLocally(node.VariableToAdd))
+            {
+                collectionToAddTo = _createdSymbolTabe.RetrieveSymbol(node.VariableAddTo, out isCollectionInQuery, false);
+                AllType? constantType = ConstantConverter(node.VariableToAdd);
+                if (constantType == collectionToAddTo && isCollectionInQuery)
+                {
+                    //constant is fine, collection is fine.
+                }
+                else
+                {
+                    _createdSymbolTabe.WrongTypeError($"{node.VariableToAdd}(constant)", node.VariableAddTo);
+                }
+
             }
             else
             {
@@ -212,7 +260,7 @@ namespace Compiler.AST
                 }
                 else
                 {
-                    _createdSymbolTabe.WrongTypeError(nameDeclaredForRetrieve, collection);
+                    _createdSymbolTabe.WrongTypeError(node.Variable, node.Parent.Name);
                 }
             }
 
@@ -223,7 +271,7 @@ namespace Compiler.AST
         }
 
         public override void Visit(EnqueueQueryNode node)
-        {//TODO enqueue push og add skal have type tjekke efter konstanter - lav en ny metode der finder hvad type en konstant er. 
+        {
             _createdSymbolTabe.SetCurrentNode(node);
             bool isCollectionVarToAdd;
             AllType? varToAdd;
@@ -232,8 +280,8 @@ namespace Compiler.AST
 
             if (_createdSymbolTabe.DeclaredLocally(node.VariableToAdd) && _createdSymbolTabe.DeclaredLocally(node.VariableTo))
             {
-                varToAdd = _createdSymbolTabe.RetrieveSymbol(node.VariableToAdd, out isCollectionVarToAdd, false);
                 collectionToAddTo = _createdSymbolTabe.RetrieveSymbol(node.VariableTo, out isCollectionInQuery, false);
+                varToAdd = _createdSymbolTabe.RetrieveSymbol(node.VariableToAdd, out isCollectionVarToAdd, false);
 
                 if (varToAdd == collectionToAddTo && !isCollectionVarToAdd && isCollectionInQuery)
                 {
@@ -248,7 +296,20 @@ namespace Compiler.AST
                 }
                 else
                 {
-                    _createdSymbolTabe.WrongTypeError(varToAdd, collectionToAddTo);
+                    _createdSymbolTabe.WrongTypeError(node.VariableToAdd, node.VariableTo);
+                }
+            }
+            else if (_createdSymbolTabe.DeclaredLocally(node.VariableTo) && !_createdSymbolTabe.DeclaredLocally(node.VariableToAdd))
+            {
+                collectionToAddTo = _createdSymbolTabe.RetrieveSymbol(node.VariableTo, out isCollectionInQuery, false);
+                AllType? constantType = ConstantConverter(node.VariableToAdd);
+                if(constantType == collectionToAddTo && isCollectionInQuery)
+                {
+                    //constant is fine, collection is fine.
+                }
+                else
+                {
+                    _createdSymbolTabe.WrongTypeError($"{node.VariableToAdd}(constant)", node.VariableTo);
                 }
             }
             else
@@ -273,7 +334,7 @@ namespace Compiler.AST
                 }
                 else
                 {
-                    _createdSymbolTabe.WrongTypeError(nameDeclaredForRetrieve, collection);
+                    _createdSymbolTabe.WrongTypeError(node.Variable, node.Parent.Name);
                 }
             }
             
