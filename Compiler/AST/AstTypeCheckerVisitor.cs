@@ -198,7 +198,7 @@ namespace Compiler.AST
                 {
                     //constant is fine, collection is fine
                 }
-                VisitChildren(node.VariableToAdd);
+                Visit(node.VariableToAdd);
             }
             else
             {
@@ -211,7 +211,7 @@ namespace Compiler.AST
                 {
                     _createdSymbolTabe.WrongTypeError(node.variableName, node.VariableCollection);
                 }
-                VisitChildren(node.VariableToAdd);
+                Visit(node.VariableToAdd);
             }
         }
 
@@ -252,7 +252,7 @@ namespace Compiler.AST
                 {
                     //constant is fine, collection is fine
                 }
-                VisitChildren(node.VariableToAdd);
+                Visit(node.VariableToAdd);
             }
             else
             {
@@ -265,7 +265,7 @@ namespace Compiler.AST
                 {
                     _createdSymbolTabe.WrongTypeError(node.variableName, node.VariableCollection);
                 }
-                VisitChildren(node.VariableToAdd);
+                Visit(node.VariableToAdd);
             }
         }
 
@@ -383,7 +383,17 @@ namespace Compiler.AST
 
         public override void Visit(ForeachLoopNode node)
         {
-            _createdSymbolTabe.NotImplementedError(node);
+            bool isCollectionInForeach;
+            AllType? collectionType = _createdSymbolTabe.RetrieveSymbol(node.InVariableName, out isCollectionInForeach, false);
+            
+            if(node.VariableType_enum == collectionType)
+            {
+                //collection type and variable type is the same.
+            }
+            else
+            {
+                _createdSymbolTabe.WrongTypeError(node.VariableName, node.InVariableName);
+            }
         }
 
         public override void Visit(WhileLoopNode node)
