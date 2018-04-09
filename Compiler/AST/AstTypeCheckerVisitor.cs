@@ -318,12 +318,6 @@ namespace Compiler.AST
 
         }
 
-        public override void Visit(CollectionNode node)
-        {
-            _createdSymbolTabe.SetCurrentNode(node);
-
-        }
-
         public override void Visit(WhereNode node)
         {
             node.Accept(this);
