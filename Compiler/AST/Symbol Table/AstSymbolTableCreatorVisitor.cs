@@ -184,7 +184,7 @@ namespace Compiler.AST.SymbolTable
 
         public override void Visit(PushQueryNode node)
         {
-            CheckDeclared(node.VariableAddTo);
+            CheckDeclared(node.VariableCollection);
             Visit(node.VariableToAdd);
         }
 

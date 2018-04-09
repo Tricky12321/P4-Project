@@ -599,7 +599,7 @@ namespace Compiler.AST
         {
             EnqueueQueryNode EnqueueNode = new EnqueueQueryNode(context.Start.Line, context.Start.Column);
             EnqueueNode.VariableToAdd = Visit(context.varOrConst());
-            EnqueueNode.VariableTo = context.variable().GetText();
+            EnqueueNode.VariableCollection = context.variable().GetText();
             return EnqueueNode;
         }
 
@@ -621,7 +621,7 @@ namespace Compiler.AST
         {
             PushQueryNode PushNode = new PushQueryNode(context.Start.Line, context.Start.Column);
             PushNode.VariableToAdd = Visit(context.varOrConst());
-            PushNode.VariableAddTo = context.variable().GetText();
+            PushNode.VariableCollection = context.variable().GetText();
             return PushNode;
         }
 
@@ -661,10 +661,6 @@ namespace Compiler.AST
         {
             DequeueQueryNode DequeueNode = new DequeueQueryNode(context.Start.Line, context.Start.Column);
             DequeueNode.Variable = context.variable().GetText();
-            if (context.where() != null)
-            {
-                DequeueNode.WhereCondition = Visit(context.where());
-            }
             return DequeueNode;
         }
 
