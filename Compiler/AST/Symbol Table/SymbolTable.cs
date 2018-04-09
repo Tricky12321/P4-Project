@@ -14,15 +14,22 @@ namespace Compiler.AST.SymbolTable
         private uint _globalDepth;
         private AbstractNode _currentNode;
         public bool errorOccured = false;
-        private Scope _currentScope = new Scope(null,0,new List<string>());
-        public void SetCurrentNode( AbstractNode node) {
+        private Scope _currentScope = new Scope(null, 0, new List<string>());
+
+        public void SetCurrentNode(AbstractNode node)
+        {
             _currentNode = node;
         }
 
         public string Prefix => _currentScope.Prefix;
 
-        public string GetName(string name) {
-			return Prefix + name;
+        public string GetName(string Name)
+        {
+            if (Prefix != "") {
+                return Prefix +"."+ Name;
+            } else {
+                return Name;
+            }
         }
 
         public SymTable()
@@ -33,21 +40,78 @@ namespace Compiler.AST.SymbolTable
             ClassEntry VertexFrom = new ClassEntry("VertexFrom", AllType.VERTEX);
             ClassEntry VertexTo = new ClassEntry("VertexTo", AllType.VERTEX);
             _classesTable[AllType.EDGE].Add(VertexFrom.Name, VertexFrom);
-            _classesTable[AllType.EDGE].Add(VertexTo.Name, VertexTo); 
+            _classesTable[AllType.EDGE].Add(VertexTo.Name, VertexTo);
+        }
+
+
+        public bool CheckIfDefined(string name)
+        {
+            // Store the prefix of the current scope
+            string prefix = _currentScope.Prefix;
+            // Determine what to check for
+            string toCheckFor;
+            if (prefix != "")
+            {
+                toCheckFor = prefix + "." + name;
+            }
+            else
+            {
+                toCheckFor = name;
+            }
+            // Loop, until there is only the name left to check, this is because we check all scopes above this, to ensure a variable isnt declared
+            while (toCheckFor != name)
+            {
+                
+                if (_symTable.ContainsKey(toCheckFor))
+                {
+                    return true;
+                }
+
+                int DotIndex = prefix.LastIndexOf('.');
+                if (prefix.Contains("."))
+                {
+                    prefix = prefix.Substring(0, DotIndex);
+                    toCheckFor = prefix + "." + name;
+                }
+                else
+                {
+                    toCheckFor = name;
+                }
+            }
+            // Now that there is only the name left to check, check that too
+            if (_symTable.ContainsKey(toCheckFor))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         public void EnterSymbol(string name, AllType type)
         {
-            if (DeclaredLocally(GetName(name)))
-            {
-                Console.WriteLine($"Duplicate definition of {name} at line number {GetLineNumber()}");
-            }
-            else if (!_symTable.ContainsKey(GetName(name)))
+            if (!_symTable.ContainsKey(GetName(name)))
             {
                 _symTable.Add(GetName(name), new SymbolTableEntry(type, _globalDepth));
             }
+            else
+            {
+                AlreadyDeclaredError(name);
+            }
         }
 
+
+        public bool AttributeDefined(string name, AllType type) {
+            bool IsCollection;
+            List<string> names = new List<string>();
+            names.Add(name);
+            bool output = RetrieveTypeFromClasses(names, type, out IsCollection, false) != null;
+            if (!output) {
+                AttributeUndeclared(name, type);
+            }
+            return output;
+        }
 
 
         private AllType? RetrieveTypeFromClasses(List<string> names, AllType type, out bool IsCollection, bool ShowErrors = true)
@@ -94,11 +158,6 @@ namespace Compiler.AST.SymbolTable
             }
         }
 
-        public AllType? RetrieveSymbol(string Name, bool ShowErrors = true) {
-            bool IsCollection;
-            return RetrieveSymbol(Name, out IsCollection, ShowErrors);
-        }
-
         public AllType? RetrieveSymbol(string Name, out bool IsCollection, bool ShowErrors = true)
         {
             // Check if its a dot function
@@ -107,13 +166,15 @@ namespace Compiler.AST.SymbolTable
                 // Split the string into the different subnames
                 List<string> names = Name.Split('.').ToList();
                 // Check if the symbol table contains the first name given, and that it is reachable
-                if (_symTable.ContainsKey(names[0])) {
+                if (_symTable.ContainsKey(names[0]))
+                {
                     if (ShowErrors)
                     {
+                        UndeclaredError(names[0]);
                         Console.WriteLine(names[0] + " is undeclared in this scope! On line:" + GetLineNumber());
                     }
                     IsCollection = false;
-                    return null;  
+                    return null;
                 }
                 // Check if there is any results to get
                 else
@@ -171,13 +232,12 @@ namespace Compiler.AST.SymbolTable
 
         public bool DeclaredLocally(string name)
         {
-            bool IsCollection;
-            return RetrieveSymbol(GetName(name), out IsCollection, false) != null;
+            return CheckIfDefined(name);
         }
 
         public void OpenScope(BlockType type)
         {
-            Scope NewScope = new Scope(_currentScope,_globalDepth,_currentScope.GetPrefixes());
+            Scope NewScope = new Scope(_currentScope, _globalDepth, _currentScope.GetPrefixes());
             _currentScope = NewScope;
             _currentScope.AddPrefix(type, NewScope);
             ++_globalDepth;
@@ -193,34 +253,37 @@ namespace Compiler.AST.SymbolTable
 
         public void CloseScope()
         {
-            if (_currentScope.ParentScope == null) {
+            if (_currentScope.ParentScope == null)
+            {
                 Console.WriteLine("Cannot close scope, since its the last scope!");
-            } else {
+            }
+            else
+            {
                 _currentScope = _currentScope.CloseScope();
-				_symTable.Values.Where(y => y.Depth == _globalDepth && y.Reachable == true).ToList().ForEach(y=>y.Reachable = false);
-				--_globalDepth;
+                _symTable.Values.Where(y => y.Depth == _globalDepth && y.Reachable == true).ToList().ForEach(y => y.Reachable = false);
+                --_globalDepth;
             }
         }
 
-        public void ExtendClass(AllType Type, string longAttribute, string shortAttribute)
+        public void ExtendClass(AllType Type, string longAttribute, string shortAttribute, AllType ClassType)
         {
             ClassEntry Short = new ClassEntry(shortAttribute, Type);
             ClassEntry Long = new ClassEntry(longAttribute, Type);
-            _classesTable[Type].Add(shortAttribute, Short);
-            _classesTable[Type].Add(longAttribute, Long);
+            _classesTable[ClassType].Add(shortAttribute, Short);
+            _classesTable[ClassType].Add(longAttribute, Long);
         }
 
-        public void ExtendClass(AllType Type, string longAttribute)
+        public void ExtendClass(AllType Type, string longAttribute, AllType ClassType)
         {
             ClassEntry Long = new ClassEntry(longAttribute, Type);
-            _classesTable[Type].Add(longAttribute, Long);
+            _classesTable[ClassType].Add(longAttribute, Long);
         }
 
         private string GetLineNumber()
         {
             if (_currentNode != null)
             {
-                return _currentNode.LineNumber + ":"+_currentNode.CharIndex;
+                return _currentNode.LineNumber + ":" + _currentNode.CharIndex;
             }
             else
             {
@@ -249,7 +312,8 @@ namespace Compiler.AST.SymbolTable
             Error();
         }
 
-        public void UndeclaredError(string name) {
+        public void UndeclaredError(string name)
+        {
             Console.WriteLine(name + " is defined in this scope! - " + GetLineNumber());
             Error();
         }
@@ -257,6 +321,12 @@ namespace Compiler.AST.SymbolTable
         public void NotDeclaredError()
         {
             Console.WriteLine($"Variable or collection not declared at line number {GetLineNumber()}");
+            Error();
+        }
+
+        public void AttributeUndeclared(string name, AllType type)
+        {
+            Console.WriteLine($"Attribute {name} does not exist in class {type} {GetLineNumber()}");
             Error();
         }
 

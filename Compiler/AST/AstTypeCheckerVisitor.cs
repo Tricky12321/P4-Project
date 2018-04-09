@@ -344,6 +344,7 @@ namespace Compiler.AST
 
         public override void Visit(ReturnNode node)
         {
+            /*
             AllType? funcType = _createdSymbolTabe.RetrieveSymbol(node.Parent.Name);
             AllType? returnChild = _createdSymbolTabe.RetrieveSymbol(node.LeftmostChild.Name);
 
@@ -360,6 +361,7 @@ namespace Compiler.AST
                 //conflicting types, on return and function
             }
             VisitChildren(node);
+            */
         }
 
         public override void Visit(ForLoopNode node)

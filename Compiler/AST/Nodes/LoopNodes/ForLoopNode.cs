@@ -4,6 +4,7 @@ namespace Compiler.AST.Nodes.LoopNodes
     public class ForLoopNode : AbstractNode
     {
         public AbstractNode VariableDeclaration;
+        public AllType VariableDeclartionType;
         public AbstractNode ToValueOperation;
         public string ToValue;
         public bool ToVariable = false; // If the ToValue is a Variable

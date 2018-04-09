@@ -30,7 +30,7 @@ namespace Compiler
         }
 
         public static void PrettyPrint(StartNode start)
-        {
+        {   
             Stopwatch PPTimer = new Stopwatch();
             AstPrettyPrintVisitor PPVisitor = new AstPrettyPrintVisitor();
             PPTimer.Start();

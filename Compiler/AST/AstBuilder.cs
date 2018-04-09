@@ -655,6 +655,7 @@ namespace Compiler.AST
 
             if (contextInside.inlineDcl() != null)
             {
+                ForLoop.VariableDeclartionType = Utilities.FindTypeFromString(contextInside.inlineDcl().allType().GetText());
                 ForLoop.VariableDeclaration = Visit(contextInside.inlineDcl());
             }
             #region First VarOrConst | Operation 
