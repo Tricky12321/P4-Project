@@ -1,9 +1,10 @@
 ﻿using System;
 namespace Compiler.AST.Nodes
 {
-    public class ParameterNode : TerminalNode
+    public class ParameterNode : AbstractNode
     {
-        public AllType Type;
+        public string Type;
+        public AllType Type_enum => Utilities.FindTypeFromString(Type);
         public ParameterNode(int LineNumber, int CharIndex) : base(LineNumber,CharIndex)
         {
             

@@ -2,12 +2,15 @@
 using System.Collections.Generic;
 namespace Compiler.AST.Nodes
 {
-    public class VertexNode : AbstractNode
+    public class GraphDeclEdgeNode : AbstractNode
     {
+        public string VertexNameFrom;
+        public string VertexNameTo;
+
         public Dictionary<string, string> ValueList = new Dictionary<string, string>();
-        public VertexNode(int LineNumber, int CharIndex) : base(LineNumber, CharIndex)
+
+        public GraphDeclEdgeNode(int LineNumber, int CharIndex) : base(LineNumber, CharIndex)
         {
-            
         }
 
         public override void Accept(AstVisitorBase astVisitor)

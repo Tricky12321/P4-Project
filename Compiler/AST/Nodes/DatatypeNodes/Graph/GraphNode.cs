@@ -4,8 +4,8 @@ namespace Compiler.AST.Nodes.DatatypeNodes
 {
     public class GraphNode : AbstractNode
     {
-        public List<EdgeNode> Edges = new List<EdgeNode>();
-        public List<VertexNode> Vertices = new List<VertexNode>();
+        public List<GraphDeclEdgeNode> Edges = new List<GraphDeclEdgeNode>();
+        public List<GraphDeclVertexNode> Vertices = new List<GraphDeclVertexNode>();
 
         public bool Directed = false;
 

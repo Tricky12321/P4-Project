@@ -45,7 +45,7 @@ namespace Compiler.AST
                     var Type = Parameter.allType().GetText();  // Parameter Type
                     var Name = Parameter.variable().GetText(); // Parameter Name
 
-                    FNode.AddParameter(Utilities.FindTypeFromString(Type), Name, context.Start.Line, context.Start.Column);
+                    FNode.AddParameter(Type, Name, context.Start.Line, context.Start.Column);
 				}
             }
             foreach (var Child in context.codeBlock().codeBlockContent())
@@ -85,7 +85,7 @@ namespace Compiler.AST
             {
                 foreach (var NestedChild in Child.vertexDcl())
                 {
-                    VertexNode VNode = new VertexNode(context.Start.Line, context.Start.Column);
+                    GraphDeclVertexNode VNode = new GraphDeclVertexNode(context.Start.Line, context.Start.Column);
                     if (NestedChild.variable() != null)
                     {
                         VNode.Name = NestedChild.variable().GetText();
@@ -105,7 +105,7 @@ namespace Compiler.AST
             {
                 foreach (var NestedChild in Child.edgeDcl())
                 {
-                    EdgeNode ENode = new EdgeNode(context.Start.Line, context.Start.Column);
+                    GraphDeclEdgeNode ENode = new GraphDeclEdgeNode(context.Start.Line, context.Start.Column);
                     // If there is a name for the Edge
                     if (NestedChild.variable().GetLength(0) > 2)
                     {
@@ -639,6 +639,8 @@ namespace Compiler.AST
             return VariableNode;
         }
 
+
+
         public override AbstractNode VisitReturnBlock([NotNull] GiraphParser.ReturnBlockContext context)
         {
             ReturnNode RNode = new ReturnNode(context.Start.Line, context.Start.Column);
@@ -811,7 +813,7 @@ namespace Compiler.AST
                     AddNode.TypeOrVariable = context.addToColl().allType().GetText();
                 }
                 // ITS A VARIABLE
-                else if (context.addToColl().variable() != null)
+                else if (context.addToColl().variable() != null && context.addToColl().variable().Count() > 1)
                 {
                     AddNode.IsVariable = true;
                     AddNode.TypeOrVariable = context.addToColl().variable(0).GetText();
@@ -851,7 +853,7 @@ namespace Compiler.AST
 
         public override AbstractNode VisitEdgeDcl([NotNull] GiraphParser.EdgeDclContext context)
         {
-            EdgeNode VarNode = new EdgeNode(context.Start.Line, context.Start.Column);
+            GraphDeclEdgeNode VarNode = new GraphDeclEdgeNode(context.Start.Line, context.Start.Column);
             if (context.GetChild(0).GetText() != "(")
             {
                 VarNode.Name = context.variable(0).GetText();
