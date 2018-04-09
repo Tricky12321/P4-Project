@@ -5,6 +5,7 @@ namespace Compiler.AST.Nodes.LoopNodes
     {
         public AbstractNode VariableDeclaration;
         public AbstractNode ToValueOperation;
+        public string FromValue;
         public string ToValue;
         public bool ToVariable = false; // If the ToValue is a Variable
         public bool ToConst = false; // If the ToValue is a Constant

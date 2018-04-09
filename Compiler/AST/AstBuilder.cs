@@ -703,10 +703,14 @@ namespace Compiler.AST
         {
             ForLoopNode ForLoop = new ForLoopNode(context.Start.Line, context.Start.Column);
             var contextInside = context.forCondition().forConditionInside();
-
+            
             if (contextInside.inlineDcl() != null)
             {
                 ForLoop.VariableDeclaration = Visit(contextInside.inlineDcl());
+            }
+            else if(contextInside.varOrConst() != null)
+            {
+                ForLoop.FromValue = contextInside.varOrConst().variable().GetText();
             }
             #region First VarOrConst | Operation 
             //Check if the first is a VarOrConst, if it is, check if its a var or a const

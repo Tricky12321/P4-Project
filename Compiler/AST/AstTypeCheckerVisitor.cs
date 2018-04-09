@@ -383,7 +383,7 @@ namespace Compiler.AST
             {
                 if(funcType == returnType)
                 {
-
+                    
                 }
                 else
                 {
@@ -421,7 +421,7 @@ namespace Compiler.AST
 
         public override void Visit(VariableNode node)
         {
-            _createdSymbolTabe.NotImplementedError(node);
+            VisitChildren(node);
         }
 
         public override void Visit(CodeBlockNode node)
