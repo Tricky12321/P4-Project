@@ -158,6 +158,11 @@ namespace Compiler.AST.SymbolTable
             }
         }
 
+        public AllType? RetrieveSymbol(string Name, bool ShowErrors = true) {
+            bool IsCollection;
+            return RetrieveSymbol(Name, out IsCollection, ShowErrors);
+        }
+
         public AllType? RetrieveSymbol(string Name, out bool IsCollection, bool ShowErrors = true)
         {
             // Check if its a dot function
