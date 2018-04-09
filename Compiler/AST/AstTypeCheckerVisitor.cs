@@ -305,31 +305,24 @@ namespace Compiler.AST
             bool isCollectionInQuery;
             AllType? collectionToAddTo;
 
-            if (_createdSymbolTabe.DeclaredLocally(node.VariableToAdd) && _createdSymbolTabe.DeclaredLocally(node.VariableTo))
+            if (_createdSymbolTabe.DeclaredLocally(node.variableName) && _createdSymbolTabe.DeclaredLocally(node.VariableTo))
             {
                 collectionToAddTo = _createdSymbolTabe.RetrieveSymbol(node.VariableTo, out isCollectionInQuery, false);
-                varToAdd = _createdSymbolTabe.RetrieveSymbol(node.VariableToAdd, out isCollectionVarToAdd, false);
+                varToAdd = _createdSymbolTabe.RetrieveSymbol(node.variableName, out isCollectionVarToAdd, false);
 
                 if (varToAdd == collectionToAddTo && !isCollectionVarToAdd && isCollectionInQuery)
                 {
-                    if (node.WhereCondition != null)
-                    {
-                        Visit(node.WhereCondition);
-                    }
-                    else
-                    {
-                        //very gud :)))
-                    }
+                    
                 }
                 else
                 {
-                    _createdSymbolTabe.WrongTypeError(node.VariableToAdd, node.VariableTo);
+                    _createdSymbolTabe.WrongTypeError(node.variableName, node.VariableTo);
                 }
             }
-            else if (_createdSymbolTabe.DeclaredLocally(node.VariableTo) && !_createdSymbolTabe.DeclaredLocally(node.VariableToAdd))
+            else if (_createdSymbolTabe.DeclaredLocally(node.VariableTo) && !_createdSymbolTabe.DeclaredLocally(node.variableName))
             {
                 collectionToAddTo = _createdSymbolTabe.RetrieveSymbol(node.VariableTo, out isCollectionInQuery, false);
-                AllType? constantType = ConstantConverter(node.VariableToAdd);
+                AllType? constantType = ConstantConverter(node.variableName);
                 if(constantType == collectionToAddTo && isCollectionInQuery)
                 {
                     //constant is fine, collection is fine.
