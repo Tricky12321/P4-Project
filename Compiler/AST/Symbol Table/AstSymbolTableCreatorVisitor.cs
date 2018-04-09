@@ -173,10 +173,15 @@ namespace Compiler.AST.SymbolTable
         public override void Visit(SetQueryNode node)
         {
             SymbolTable.SetCurrentNode(node);
+            foreach (var Exp in node.Attributes)
+            {
+                Exp.Item1.Accept(this);
+                Exp.Item3.Accept(this);
+            }
             if (CheckDeclared(node.InVariable)) {
                 
             }
-            SymbolTable.NotImplementedError(node);
+
         }
 
         public override void Visit(WhereNode node)
