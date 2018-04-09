@@ -4,6 +4,7 @@ namespace Compiler.AST.Nodes.LoopNodes
     public class ForLoopNode : AbstractNode
     {
         public AbstractNode VariableDeclaration;
+        public AllType VariableDeclartionType;
         public AbstractNode ToValueOperation;
         public string FromValue;
         public string ToValue;

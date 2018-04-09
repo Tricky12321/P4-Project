@@ -22,7 +22,6 @@ namespace Compiler.AST
         }
 
         public abstract void Visit(DeclarationNode node);
-        public abstract void Visit(AbstractNode node);
         public abstract void Visit(FunctionNode node);
         public abstract void Visit(ReturnNode node);
         public abstract void Visit(ParameterNode node);
@@ -55,5 +54,7 @@ namespace Compiler.AST
         public abstract void Visit(WhileLoopNode node);
         public abstract void Visit(VariableAttributeNode node);
         public abstract void Visit(VariableNode node);
+        public abstract void Visit(AbstractNode node);
+
     }
 }

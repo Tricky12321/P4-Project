@@ -157,7 +157,7 @@ namespace Compiler.AST
         public override void Visit(PushQueryNode node)
         {
             Debug.Print("PushNode");
-            ProgramCode.Append($"PUSH {node.VariableToAdd} TO {node.VariableAddTo}");
+            ProgramCode.Append($"PUSH {node.VariableToAdd} TO {node.VariableCollection}");
             ProgramCode.Append(");\n");
         }
 
@@ -251,7 +251,7 @@ namespace Compiler.AST
         {
             Debug.Print("EnqueueQueryNode");
             ProgramCode.Append("ENQUEUE ");
-            ProgramCode.Append($"{node.VariableToAdd} TO {node.VariableTo}");
+            ProgramCode.Append($"{node.VariableToAdd} TO {node.VariableCollection}");
             ProgramCode.Append(");\n");
         }
 

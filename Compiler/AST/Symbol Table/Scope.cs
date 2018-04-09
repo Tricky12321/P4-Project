@@ -23,7 +23,8 @@ namespace Compiler.AST.SymbolTable
                 {
                     strBuild.Append(prefix + ".");
                 }
-                return strBuild.ToString();
+                int length = strBuild.Length;
+                return strBuild.ToString().Substring(0,length > 0 ? length-1 : 0);
             }
         }
 

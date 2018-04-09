@@ -5,6 +5,7 @@ namespace Compiler.AST.Nodes.QueryNodes
     {
         //EXTEND EDGE INT 'weight':'w' = 0;
         public string ClassToExtend;
+        public AllType ClassToExtend_enum => Utilities.FindTypeFromString(ClassToExtend);
         public string ExtendWithType;
         public string ExtensionName;
         public string ExtensionShortName;
