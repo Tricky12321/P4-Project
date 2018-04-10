@@ -8,6 +8,7 @@ namespace Compiler.AST.SymbolTable
     {
         public Scope ParentScope;
         private List<string> _prefixes = new List<string>();
+        // Unnamed block types
         private uint _forLoopCounter = 0;
         private uint _foreachLoopCounter = 0;
         private uint _whileLoopCounter = 0;
@@ -15,6 +16,7 @@ namespace Compiler.AST.SymbolTable
         private uint _ifStatementCounter = 0;
         private uint _elseIfStatementCounter = 0;
         private uint _elseStatementCounter = 0;
+
         private BlockType _loopType;
         public uint depth;
         public string Prefix

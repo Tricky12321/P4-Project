@@ -321,8 +321,11 @@ namespace Compiler.AST.SymbolTable
 
         public override void Visit(ExpressionNode node)
         {
-            SymbolTable.SetCurrentNode(node);
-            SymbolTable.NotImplementedError(node);
+			SymbolTable.SetCurrentNode(node);
+            foreach (var Exp in node.ExpressionParts)
+            {
+                Exp.Accept(this);
+            }
         }
 
         public override void Visit(ReturnNode node)

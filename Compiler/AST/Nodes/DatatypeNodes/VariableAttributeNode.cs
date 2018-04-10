@@ -15,7 +15,6 @@ namespace Compiler.AST.Nodes.DatatypeNodes
 
         public override void Accept(AstVisitorBase astVisitor)
         {
-            throw new NotImplementedException("Skal også kende klasse");
             astVisitor.Visit(this);
         }
     }

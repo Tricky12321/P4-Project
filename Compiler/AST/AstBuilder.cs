@@ -270,7 +270,7 @@ namespace Compiler.AST
                     VariableAttributeNode attribute = Visit(ExpNode.attribute()) as VariableAttributeNode;
                     attribute.ClassVariableName = SetNode.InVariable; //  Only set Class Variable if its an attribute
                     attribute.IsAttribute = true;
-                    ExpressionNode expression = Visit(ExpNode.varOrconstExpressionExt()) as ExpressionNode;
+                    ExpressionNode expression = Visit(ExpNode.expression()) as ExpressionNode;
                     SetNode.Attributes.Add(Tuple.Create(attribute, ExpNode.compoundAssign().GetText(), expression));
                 }
             } else {
@@ -279,7 +279,7 @@ namespace Compiler.AST
                 foreach (var ExpNode in context.setExpressionVari())
                 {
                     VariableAttributeNode attribute = Visit(ExpNode.variable()) as VariableAttributeNode;
-                    ExpressionNode expression = Visit(ExpNode.varOrconstExpressionExt()) as ExpressionNode;
+                    ExpressionNode expression = Visit(ExpNode.expression()) as ExpressionNode;
                     SetNode.Attributes.Add(Tuple.Create(attribute, ExpNode.compoundAssign().GetText(), expression));
                 }
             }
