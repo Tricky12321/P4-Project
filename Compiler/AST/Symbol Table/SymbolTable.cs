@@ -34,10 +34,12 @@ namespace Compiler.AST.SymbolTable
 
         public SymTable()
         {
+            // Class definitions
             _classesTable.Add(AllType.GRAPH, new Dictionary<string, ClassEntry>());
             _classesTable.Add(AllType.VERTEX, new Dictionary<string, ClassEntry>());
             _classesTable.Add(AllType.EDGE, new Dictionary<string, ClassEntry>());
             _classesTable.Add(AllType.COLLECTION, new Dictionary<string, ClassEntry>());
+            // ClassEntries
             ClassEntry VertexFrom = new ClassEntry("VertexFrom", AllType.VERTEX);
             ClassEntry VertexTo = new ClassEntry("VertexTo", AllType.VERTEX);
             ClassEntry Adjacent = new ClassEntry("Adjacent", AllType.VERTEX, true);
@@ -57,6 +59,7 @@ namespace Compiler.AST.SymbolTable
             _classesTable[AllType.GRAPH].Add("Adjacent", Adjacent);
             _classesTable[AllType.GRAPH].Add("IsAdjacent", Adjacent);
             _classesTable[AllType.GRAPH].Add("Directed", Directed);
+            // Collections
             _classesTable[AllType.GRAPH].Add("Vertices", Vertices);
             _classesTable[AllType.GRAPH].Add("Edges", Edges);
 
@@ -69,14 +72,7 @@ namespace Compiler.AST.SymbolTable
             string prefix = _currentScope.Prefix;
             // Determine what to check for
             string toCheckFor;
-            if (prefix != "")
-            {
-                toCheckFor = prefix + "." + name;
-            }
-            else
-            {
-                toCheckFor = name;
-            }
+            toCheckFor = prefix != "" ? prefix + "." + name : name;
             // Loop, until there is only the name left to check, this is because we check all scopes above this, to ensure a variable isnt declared
             while (toCheckFor != name)
             {
@@ -376,7 +372,7 @@ namespace Compiler.AST.SymbolTable
 
         public void UndeclaredError(string name)
         {
-            Console.WriteLine(name + " is defined in this scope! - " + GetLineNumber());
+            Console.WriteLine(name + " is undefined in this scope! - " + GetLineNumber());
             Error();
         }
 
