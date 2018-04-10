@@ -1,4 +1,6 @@
-﻿namespace Compiler.AST.Nodes.DatatypeNodes
+﻿using System;
+
+namespace Compiler.AST.Nodes.DatatypeNodes
 {
     public class VariableAttributeNode : AbstractNode
     {
@@ -13,6 +15,7 @@
 
         public override void Accept(AstVisitorBase astVisitor)
         {
+            throw new NotImplementedException("Skal også kende klasse");
             astVisitor.Visit(this);
         }
     }

@@ -269,7 +269,6 @@ namespace Compiler.AST
             }
         }
 
-
         public override void Visit(DequeueQueryNode node)
         {
             _createdSymbolTabe.SetCurrentNode(node);
@@ -308,7 +307,7 @@ namespace Compiler.AST
 
         public override void Visit(GraphNode node)
         {
-            _createdSymbolTabe.NotImplementedError(node);
+            VisitChildren(node);
         }
 
         public override void Visit(FunctionNode node)
@@ -328,7 +327,16 @@ namespace Compiler.AST
 
         public override void Visit(GraphSetQuery node)
         {
-            _createdSymbolTabe.NotImplementedError(node);
+            AllType? targetType = node.Attributes.Item1.Type_enum;
+            AllType? setType = AllType.BOOL; //TODO når expression node er færdig, kan vi finde ud af hvad settype er.
+            if(targetType == setType)
+            {
+
+            }
+            else
+            {
+                _createdSymbolTabe.WrongTypeError(node.Attributes.Item1.Name, node.Attributes.Item3.Name);
+            }
         }
 
         public override void Visit(DeclarationNode node)
@@ -400,8 +408,7 @@ namespace Compiler.AST
 
         public override void Visit(WhileLoopNode node)
         {
-            //fejl i parser, mærkelig exception ved codeblock
-            _createdSymbolTabe.NotImplementedError(node);
+            VisitChildren(node);
         }
 
         public override void Visit(VariableAttributeNode node)
@@ -411,6 +418,7 @@ namespace Compiler.AST
 
         public override void Visit(VariableNode node)
         {
+            //måske ikke helt færdig, mangler expression bliver done 
             VisitChildren(node);
         }
 
