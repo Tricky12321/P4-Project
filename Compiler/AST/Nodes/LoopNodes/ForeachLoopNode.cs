@@ -7,7 +7,7 @@ namespace Compiler.AST.Nodes.LoopNodes
         public string VariableType;
         public string InVariableName;
         public AbstractNode WhereCondition;
-
+        public AllType VariableType_enum => Utilities.FindTypeFromString(VariableType);
         public ForeachLoopNode(int LineNumber, int CharIndex) : base(LineNumber, CharIndex)
         {
             

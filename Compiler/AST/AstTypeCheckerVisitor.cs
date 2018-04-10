@@ -13,17 +13,12 @@ namespace Compiler.AST
 {
     public class AstTypeCheckerVisitor : AstVisitorBase
     {
-        private AllType collectionRetrieveType = AllType.VOID;
-        bool isCollection;
-
         SymTable _createdSymbolTabe;
 
         public AstTypeCheckerVisitor(SymTable symbolTable)
         {
             _createdSymbolTabe = symbolTable;
         }
-
-
 
         //-----------------------------Visitor----------------------------------------------
         public override void Visit(ParameterNode node)
@@ -99,7 +94,7 @@ namespace Compiler.AST
                 else
                 {
 
-                    _createdSymbolTabe.WrongTypeError(RetrieveVar, collectionInQuery);
+                    _createdSymbolTabe.WrongTypeError(node.Variable, node.Parent.Name);
                 }
             }
 
@@ -125,7 +120,7 @@ namespace Compiler.AST
                 }
                 else
                 {
-                    _createdSymbolTabe.WrongTypeError(RetrieveVar, collection);
+                    _createdSymbolTabe.WrongTypeError(node.Variable, node.Parent.Name);
                 }
             }
 
@@ -151,7 +146,7 @@ namespace Compiler.AST
                 }
                 else
                 {
-                    _createdSymbolTabe.WrongTypeError(nameDeclaredForRetrieve, collectionNameType);
+                    _createdSymbolTabe.WrongTypeError(node.Variable, node.Parent.Name);
                 }
             }
 
@@ -177,7 +172,7 @@ namespace Compiler.AST
                 }
                 else
                 {
-                    _createdSymbolTabe.WrongTypeError(nameDeclaredForRetrieve, collectionNameType);
+                    _createdSymbolTabe.WrongTypeError(node.Variable, node.Parent.Name);
                 }
             }
 
@@ -189,38 +184,35 @@ namespace Compiler.AST
 
         public override void Visit(PushQueryNode node)
         {
-            /*
+            _createdSymbolTabe.SetCurrentNode(node);
             bool isCollectionVarToAdd;
             AllType? varToAdd;
             bool isCollectionInQuery;
-            AllType? collectionToAddTo;
+            AllType? collectionToAddTo = _createdSymbolTabe.RetrieveSymbol(node.VariableCollection, out isCollectionInQuery, false);
 
-            if (_createdSymbolTabe.DeclaredLocally(node.VariableToAdd) && _createdSymbolTabe.DeclaredLocally(node.VariableAddTo))
+            if (node.VariableToAdd is ConstantNode)
             {
-                varToAdd = _createdSymbolTabe.RetrieveSymbol(node.VariableToAdd, out isCollectionVarToAdd, false);
-                collectionToAddTo = _createdSymbolTabe.RetrieveSymbol(node.VariableAddTo, out isCollectionInQuery, false);
-
-                if (varToAdd == collectionToAddTo && !isCollectionVarToAdd && isCollectionInQuery)
+                ConstantNode test = (ConstantNode)node.VariableToAdd;
+                varToAdd = test.Type_enum;
+                if (varToAdd == collectionToAddTo && isCollectionInQuery)
                 {
-                    if (node.WhereCondition != null)
-                    {
-                        Visit(node.WhereCondition);
-                    }
-                    else
-                    {
-                        //very gud :)))
-                    }
+                    //constant is fine, collection is fine
                 }
-                else
-                {
-                    _createdSymbolTabe.WrongTypeError(varToAdd, collectionToAddTo);
-                }
+                Visit(node.VariableToAdd);
             }
             else
             {
-                _createdSymbolTabe.NotDeclaredError();
+                varToAdd = _createdSymbolTabe.RetrieveSymbol(node.variableName, out isCollectionVarToAdd, false);
+                if (varToAdd == collectionToAddTo && !isCollectionVarToAdd && isCollectionInQuery)
+                {
+                    //varie is fine, collection is fine
+                }
+                else
+                {
+                    _createdSymbolTabe.WrongTypeError(node.variableName, node.VariableCollection);
+                }
+                Visit(node.VariableToAdd);
             }
-            */
         }
 
         public override void Visit(PopQueryNode node)
@@ -239,51 +231,42 @@ namespace Compiler.AST
                 }
                 else
                 {
-                    _createdSymbolTabe.WrongTypeError(nameDeclaredForRetrieve, collection);
+                    _createdSymbolTabe.WrongTypeError(node.Variable, node.Parent.Name);
                 }
-            }
-
-            if (node.WhereCondition != null)
-            {
-                Visit(node.WhereCondition);
             }
         }
 
         public override void Visit(EnqueueQueryNode node)
-        {/*
-	    //TODO enqueue push og add skal have type tjekke efter konstanter - lav en ny metode der finder hvad type en konstant er. 
+        {
             _createdSymbolTabe.SetCurrentNode(node);
             bool isCollectionVarToAdd;
             AllType? varToAdd;
             bool isCollectionInQuery;
-            AllType? collectionToAddTo;
+            AllType? collectionToAddTo = _createdSymbolTabe.RetrieveSymbol(node.VariableCollection, out isCollectionInQuery, false);
 
-            if (_createdSymbolTabe.DeclaredLocally(node.VariableToAdd) && _createdSymbolTabe.DeclaredLocally(node.VariableTo))
+            if (node.VariableToAdd is ConstantNode)
             {
-                varToAdd = _createdSymbolTabe.RetrieveSymbol(node.VariableToAdd, out isCollectionVarToAdd, false);
-                collectionToAddTo = _createdSymbolTabe.RetrieveSymbol(node.VariableTo, out isCollectionInQuery, false);
-
-                if (varToAdd == collectionToAddTo && !isCollectionVarToAdd && isCollectionInQuery)
+                ConstantNode test = (ConstantNode)node.VariableToAdd;
+                varToAdd = test.Type_enum;
+                if (varToAdd == collectionToAddTo && isCollectionInQuery)
                 {
-                    if (node.WhereCondition != null)
-                    {
-                        Visit(node.WhereCondition);
-                    }
-                    else
-                    {
-                        //very gud :)))
-                    }
+                    //constant is fine, collection is fine
                 }
-                else
-                {
-                    _createdSymbolTabe.WrongTypeError(varToAdd, collectionToAddTo);
-                }
+                Visit(node.VariableToAdd);
             }
             else
             {
-                _createdSymbolTabe.NotDeclaredError();
+                varToAdd = _createdSymbolTabe.RetrieveSymbol(node.variableName, out isCollectionVarToAdd, false);
+                if (varToAdd == collectionToAddTo && !isCollectionVarToAdd && isCollectionInQuery)
+                {
+                    //varie is fine, collection is fine
+                }
+                else
+                {
+                    _createdSymbolTabe.WrongTypeError(node.variableName, node.VariableCollection);
+                }
+                Visit(node.VariableToAdd);
             }
-            */
         }
 
         public override void Visit(DequeueQueryNode node)
@@ -302,14 +285,8 @@ namespace Compiler.AST
                 }
                 else
                 {
-                    _createdSymbolTabe.WrongTypeError(nameDeclaredForRetrieve, collection);
+                    _createdSymbolTabe.WrongTypeError(node.Variable, node.Parent.Name);
                 }
-            }
-
-            if (node.WhereCondition != null)
-            {
-                Visit(node.WhereCondition);
-
             }
         }
 
@@ -330,7 +307,7 @@ namespace Compiler.AST
 
         public override void Visit(GraphNode node)
         {
-            _createdSymbolTabe.NotImplementedError(node);
+            VisitChildren(node);
         }
 
         public override void Visit(FunctionNode node)
@@ -350,7 +327,16 @@ namespace Compiler.AST
 
         public override void Visit(GraphSetQuery node)
         {
-            _createdSymbolTabe.NotImplementedError(node);
+            AllType? targetType = node.Attributes.Item1.Type_enum;
+            AllType? setType = AllType.BOOL; //TODO når expression node er færdig, kan vi finde ud af hvad settype er.
+            if(targetType == setType)
+            {
+
+            }
+            else
+            {
+                _createdSymbolTabe.WrongTypeError(node.Attributes.Item1.Name, node.Attributes.Item3.Name);
+            }
         }
 
         public override void Visit(DeclarationNode node)
@@ -370,37 +356,59 @@ namespace Compiler.AST
 
         public override void Visit(ReturnNode node)
         {
-            AllType? funcType = _createdSymbolTabe.RetrieveSymbol(node.Parent.Name);
-            AllType? returnChild = _createdSymbolTabe.RetrieveSymbol(node.LeftmostChild.Name);
+            bool isReturnTypeCollection = false;
+            AllType? funcType = _createdSymbolTabe.RetrieveSymbol(node.Parent.Name, out isReturnTypeCollection, false);
+            bool isFunctionTypeCollection = false;
+            AllType? returnType = _createdSymbolTabe.RetrieveSymbol(node.LeftmostChild.Name, out isFunctionTypeCollection, false);
 
             if (funcType == AllType.VOID)
             {
                 //calling return on void function error 
             }
-            else if (returnChild == funcType)
+            else if (isReturnTypeCollection == isFunctionTypeCollection)
             {
-
+                if (funcType == returnType)
+                {
+                    
+                }
+                else
+                {
+                    //ERROR, conflicting function and return type
+                }
             }
             else
             {
-                //conflicting types, on return and function
+                //ERROR, one is collection, other isn't
             }
             VisitChildren(node);
+            
         }
 
         public override void Visit(ForLoopNode node)
         {
+            //fejl i parser, forloopnode gemmer ikke variablen som er udgangspunkt for loop, hvis den allerede er deklareret
             _createdSymbolTabe.NotImplementedError(node);
         }
 
         public override void Visit(ForeachLoopNode node)
         {
-            _createdSymbolTabe.NotImplementedError(node);
+            bool isCollectionInForeach;
+            AllType? collectionType = _createdSymbolTabe.RetrieveSymbol(node.InVariableName, out isCollectionInForeach, false);
+            
+            if(node.VariableType_enum == collectionType)
+            {
+                //collection type and variable type is the same.
+            }
+            else
+            {
+                _createdSymbolTabe.WrongTypeError(node.VariableName, node.InVariableName);
+            }
+            VisitChildren(node);
         }
 
         public override void Visit(WhileLoopNode node)
         {
-            _createdSymbolTabe.NotImplementedError(node);
+            VisitChildren(node);
         }
 
         public override void Visit(VariableAttributeNode node)
@@ -410,12 +418,13 @@ namespace Compiler.AST
 
         public override void Visit(VariableNode node)
         {
-            _createdSymbolTabe.NotImplementedError(node);
+            //måske ikke helt færdig, mangler expression bliver done 
+            VisitChildren(node);
         }
 
         public override void Visit(CodeBlockNode node)
         {
-            _createdSymbolTabe.NotImplementedError(node);
+            VisitChildren(node);
         }
 
         public override void Visit(VariableDclNode node)

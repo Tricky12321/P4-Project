@@ -148,6 +148,7 @@ namespace Compiler.AST
             GraphSetQuery SetQuery = new GraphSetQuery(context.Start.Line, context.Start.Column);
 
             VariableAttributeNode attribute = Visit(context.GetChild(1).GetChild(0)) as VariableAttributeNode;
+            attribute.Type = "GRAPH";
             ExpressionNode expression = Visit(context.GetChild(1).GetChild(2)) as ExpressionNode;
             string expType = context.GetChild(1).GetChild(1).GetText();
             SetQuery.Attributes = (Tuple.Create<VariableAttributeNode, string, ExpressionNode>(attribute, expType, expression));
@@ -161,11 +162,11 @@ namespace Compiler.AST
             // Read the boolComparison for the while loop.
             WhileNode.BoolCompare = Visit(context.GetChild(1));
             // Read the codeblock in the whileLoop
-            int CodeBlockContentCount = context.GetChild(2).ChildCount;
-            for (int i = 0; i < CodeBlockContentCount; i++)
+            foreach (var Child in context.codeBlock().codeBlockContent())
             {
-                WhileNode.AdoptChildren(Visit(context.GetChild(2).GetChild(i)));
+                WhileNode.AdoptChildren(Visit(Child.GetChild(0)));
             }
+
             return WhileNode;
         }
 
@@ -398,7 +399,7 @@ namespace Compiler.AST
                     return ExpressionPartType.INT;
                 case "GiraphParser+SimpleOperatorsContext":
                     return ExpressionPartType.OPERATOR;
-                case "¨GiraphParser+StringContext":
+                case "GiraphParser+StringContext":
                     return ExpressionPartType.STRING;
                 case "GiraphParser+AdvancedOperatorsContext":
                     return ExpressionPartType.ADVANCED_OPERATOR;
@@ -479,6 +480,8 @@ namespace Compiler.AST
                     return "INT";
                 case "GiraphParser+BoolContext":
                     return "BOOL";
+                case "GiraphParser+StringContext":
+                    return "STRING";
             }
             throw new WrongExpressionPartTypeFoundException("Spørg Mads");
         }
@@ -622,8 +625,8 @@ namespace Compiler.AST
         public override AbstractNode VisitEnqueueOP([NotNull] GiraphParser.EnqueueOPContext context)
         {
             EnqueueQueryNode EnqueueNode = new EnqueueQueryNode(context.Start.Line, context.Start.Column);
-            EnqueueNode.VariableToAdd = Visit(context.children[1]);
-            EnqueueNode.VariableTo = context.children[3].GetText();
+            EnqueueNode.VariableToAdd = Visit(context.varOrConst());
+            EnqueueNode.VariableCollection = context.variable().GetText();
             return EnqueueNode;
         }
 
@@ -644,8 +647,8 @@ namespace Compiler.AST
         public override AbstractNode VisitPushOP([NotNull] GiraphParser.PushOPContext context)
         {
             PushQueryNode PushNode = new PushQueryNode(context.Start.Line, context.Start.Column);
-            PushNode.VariableToAdd = Visit(context.children[1]);
-            PushNode.VariableAddTo = context.children[3].GetText();
+            PushNode.VariableToAdd = Visit(context.varOrConst());
+            PushNode.VariableCollection = context.variable().GetText();
             return PushNode;
         }
 
@@ -685,10 +688,6 @@ namespace Compiler.AST
         {
             DequeueQueryNode DequeueNode = new DequeueQueryNode(context.Start.Line, context.Start.Column);
             DequeueNode.Variable = context.variable().GetText();
-            if (context.where() != null)
-            {
-                DequeueNode.WhereCondition = Visit(context.where());
-            }
             return DequeueNode;
         }
 
@@ -725,10 +724,15 @@ namespace Compiler.AST
         {
             ForLoopNode ForLoop = new ForLoopNode(context.Start.Line, context.Start.Column);
             var contextInside = context.forCondition().forConditionInside();
-
+            
             if (contextInside.inlineDcl() != null)
             {
+                ForLoop.VariableDeclartionType = Utilities.FindTypeFromString(contextInside.inlineDcl().allType().GetText());
                 ForLoop.VariableDeclaration = Visit(contextInside.inlineDcl());
+            }
+            else if(contextInside.varOrConst() != null)
+            {
+                ForLoop.FromValue = contextInside.varOrConst().variable().GetText();
             }
             #region First VarOrConst | Operation 
             //Check if the first is a VarOrConst, if it is, check if its a var or a const
