@@ -37,10 +37,23 @@ namespace Compiler.AST.SymbolTable
             _classesTable.Add(AllType.GRAPH, new Dictionary<string, ClassEntry>());
             _classesTable.Add(AllType.VERTEX, new Dictionary<string, ClassEntry>());
             _classesTable.Add(AllType.EDGE, new Dictionary<string, ClassEntry>());
+            _classesTable.Add(AllType.COLLECTION, new Dictionary<string, ClassEntry>());
             ClassEntry VertexFrom = new ClassEntry("VertexFrom", AllType.VERTEX);
             ClassEntry VertexTo = new ClassEntry("VertexTo", AllType.VERTEX);
+            ClassEntry Adjacent = new ClassEntry("Adjacent", AllType.VERTEX, true);
+            ClassEntry IsAdjacent = new ClassEntry("IsAdjacent", AllType.BOOL);
+            ClassEntry EdgeBetween = new ClassEntry("EdgeBetween", AllType.EDGE);
+            ClassEntry EdgesBetween = new ClassEntry("EdgesBetween", AllType.EDGE, true);
+            ClassEntry IsEmpty = new ClassEntry("IsEmpty", AllType.BOOL);
             _classesTable[AllType.EDGE].Add(VertexFrom.Name, VertexFrom);
             _classesTable[AllType.EDGE].Add(VertexTo.Name, VertexTo);
+            // Method Calls
+            _classesTable[AllType.GRAPH].Add("EdgeBetween", EdgeBetween);
+            _classesTable[AllType.GRAPH].Add("EdgesBetween", EdgesBetween);
+            _classesTable[AllType.COLLECTION].Add("IsEmpty", IsEmpty);
+            _classesTable[AllType.GRAPH].Add("Adjacent", Adjacent);
+            _classesTable[AllType.GRAPH].Add("IsAdjacent", Adjacent);
+
         }
 
 
@@ -335,7 +348,7 @@ namespace Compiler.AST.SymbolTable
             Error();
         }
 
-        public void WrongTypeError(AllType? variable1, AllType? variable2)
+        public void WrongTypeError(string variable1, string variable2)
         {
             Console.WriteLine($"Variable {variable1} and collection {variable2} are missmatch of types. Line number {GetLineNumber()}");
             Error();

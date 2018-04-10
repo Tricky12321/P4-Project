@@ -54,6 +54,7 @@ namespace Compiler.AST.SymbolTable
         //All the visit stuff-----------------------------------------
         public override void Visit(VariableDclNode node)
         {
+            var name = node.Name;
             SymbolTable.SetCurrentNode(node);
             if (CheckAlreadyDeclared(node.Name))
             {
@@ -101,8 +102,6 @@ namespace Compiler.AST.SymbolTable
                 }
                 VisitChildren(node);
                 SymbolTable.CloseScope();
-            } else {
-                
             }
         }
 
@@ -125,7 +124,6 @@ namespace Compiler.AST.SymbolTable
         {
             SymbolTable.SetCurrentNode(node);
             if (CheckAlreadyDeclared(node.Name)) {
-				SymbolTable.SetCurrentNode(node);
                 SymbolTable.EnterSymbol(node.Name, AllType.GRAPH);
                 foreach (var Vertex in node.Vertices)
                 {
@@ -178,9 +176,10 @@ namespace Compiler.AST.SymbolTable
                 Exp.Item1.Accept(this);
                 Exp.Item3.Accept(this);
             }
-            if (CheckDeclared(node.InVariable)) {
-                
+            if (node.HasChildren) {
+                VisitChildren(node);
             }
+            CheckDeclared(node.InVariable);
 
         }
 
@@ -211,31 +210,42 @@ namespace Compiler.AST.SymbolTable
         #region CollOPSvisits
         public override void Visit(DequeueQueryNode node)
         {
+            // TODO: Check if a its a variable that is being added or a constant
             SymbolTable.SetCurrentNode(node);
+            CheckDeclared(node.Variable);
         }
 
         public override void Visit(EnqueueQueryNode node)
         {
+            // TODO: Check if a its a variable that is being added or a constant
             SymbolTable.SetCurrentNode(node);
+            CheckDeclared(node.VariableCollection);
+
         }
 
         public override void Visit(ExtractMaxQueryNode node)
         {
             SymbolTable.SetCurrentNode(node);
+            CheckDeclared(node.Variable);
+
         }
 
         public override void Visit(ExtractMinQueryNode node)
         {
             SymbolTable.SetCurrentNode(node);
+            CheckDeclared(node.Variable);
+
         }
 
         public override void Visit(PopQueryNode node)
         {
             SymbolTable.SetCurrentNode(node);
+            CheckDeclared(node.Variable);
         }
 
         public override void Visit(PushQueryNode node)
         {
+            // TODO: Check if a its a variable that is being added or a constant
             SymbolTable.SetCurrentNode(node);
             if (CheckDeclared(node.VariableCollection)) {
                 node.VariableToAdd.Accept(this);
@@ -324,8 +334,8 @@ namespace Compiler.AST.SymbolTable
         public override void Visit(ForLoopNode node)
         {
             SymbolTable.SetCurrentNode(node);
-            //TODO: VariableDcl in the forloop does not work...
-            //Remake of the forloop node is needed (ASTBuilder)
+            // TODO: VariableDcl in the forloop does not work...
+            // Remake of the forloop node is needed (ASTBuilder)
             // Check if the InlineDCL isnt declared already, if it isnt, add it to the symbolTable
             SymbolTable.OpenScope(BlockType.ForLoop);
 
@@ -353,6 +363,7 @@ namespace Compiler.AST.SymbolTable
             // Close the scope again
             SymbolTable.CloseScope();
         }
+
         public override void Visit(CodeBlockNode node)
         {
             SymbolTable.SetCurrentNode(node);
@@ -362,7 +373,7 @@ namespace Compiler.AST.SymbolTable
         public override void Visit(WhileLoopNode node)
         {
             SymbolTable.SetCurrentNode(node);
-            Visit(node.BoolCompare);
+            node.BoolCompare.Accept(this);
             SymbolTable.OpenScope(BlockType.WhileLoop);
             VisitChildren(node);
             SymbolTable.CloseScope();
@@ -371,7 +382,11 @@ namespace Compiler.AST.SymbolTable
         public override void Visit(VariableAttributeNode node)
         {
             SymbolTable.SetCurrentNode(node);
-            SymbolTable.NotImplementedError(node);
+            if (node.Type == "") {
+				SymbolTable.AttributeDefined(node.Name, node.Type_enum);
+            } else {
+                Console.WriteLine($"Missing type information in attributeNode {node.Name}");
+            }
         }
 
         public override void Visit(VariableNode node)
@@ -389,14 +404,12 @@ namespace Compiler.AST.SymbolTable
 					item.Accept(this);
 				}
             }
+
             CheckDeclared(node.ToVariable);
 
             if (node.WhereCondition != null) {
-                node.Accept(this);
+                node.WhereCondition.Accept(this);
             }
         }
-
-
-
     }
 }

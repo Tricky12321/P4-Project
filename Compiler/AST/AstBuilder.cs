@@ -148,6 +148,7 @@ namespace Compiler.AST
             GraphSetQuery SetQuery = new GraphSetQuery(context.Start.Line, context.Start.Column);
 
             VariableAttributeNode attribute = Visit(context.GetChild(1).GetChild(0)) as VariableAttributeNode;
+            attribute.Type = "GRAPH";
             ExpressionNode expression = Visit(context.GetChild(1).GetChild(2)) as ExpressionNode;
             string expType = context.GetChild(1).GetChild(1).GetText();
             SetQuery.Attributes = (Tuple.Create<VariableAttributeNode, string, ExpressionNode>(attribute, expType, expression));
@@ -161,11 +162,11 @@ namespace Compiler.AST
             // Read the boolComparison for the while loop.
             WhileNode.BoolCompare = Visit(context.GetChild(1));
             // Read the codeblock in the whileLoop
-            int CodeBlockContentCount = context.GetChild(2).ChildCount;
-            for (int i = 0; i < CodeBlockContentCount; i++)
+            foreach (var Child in context.codeBlock().codeBlockContent())
             {
-                WhileNode.AdoptChildren(Visit(context.GetChild(2).GetChild(i)));
+                WhileNode.AdoptChildren(Visit(Child.GetChild(0)));
             }
+
             return WhileNode;
         }
 

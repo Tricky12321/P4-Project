@@ -13,6 +13,21 @@ namespace Compiler.AST.Nodes
         public int ChildCount;
         public int CharIndex;
         public bool HasChildren => LeftmostChild != null;
+
+        public List<AbstractNode> Children
+        {
+            get
+            {
+                AbstractNode Child = LeftmostChild;
+                List<AbstractNode> Children = new List<AbstractNode>();
+                while (Child != null) {
+                    Children.Add(Child);
+                    Child = Child.RightSibling;
+                }
+                return Children;
+            }
+        }
+
         public AbstractNode(int LineNumber, int CharIndex)
         {
             this.LineNumber = LineNumber;
