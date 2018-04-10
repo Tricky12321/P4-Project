@@ -13,7 +13,6 @@ namespace Compiler.AST.SymbolTable
     {
         public SymTable SymbolTable = new SymTable();
 
-
         public bool CheckDeclared(string name) {
             if (!SymbolTable.DeclaredLocally(name)) {
                 SymbolTable.UndeclaredError(name);
@@ -68,17 +67,17 @@ namespace Compiler.AST.SymbolTable
             SymbolTable.NotImplementedError(node);
         }
 
-        public void VisitChildrenNewScope(AbstractNode node)
+        public void VisitChildrenNewScope(AbstractNode node, BlockType Type)
         {
-            SymbolTable.SetCurrentNode(node);
-            SymbolTable.OpenScope(node.Name);
-
-            foreach (AbstractNode child in node.GetChildren())
-            {
-                child.Accept(this);
+            if (node != null) {
+				SymbolTable.OpenScope(Type);
+				foreach (AbstractNode child in node.GetChildren())
+				{
+					child.Accept(this);
+				}
+				
+				SymbolTable.CloseScope();
             }
-
-            SymbolTable.CloseScope();
         }
 
         public override void VisitRoot(AbstractNode root)
@@ -227,14 +226,14 @@ namespace Compiler.AST.SymbolTable
         {
             SymbolTable.SetCurrentNode(node);
             CheckDeclared(node.Variable);
-
+            node.WhereCondition.Accept(this);
         }
 
         public override void Visit(ExtractMinQueryNode node)
         {
             SymbolTable.SetCurrentNode(node);
             CheckDeclared(node.Variable);
-
+            node.WhereCondition.Accept(this);
         }
 
         public override void Visit(PopQueryNode node)
@@ -282,16 +281,17 @@ namespace Compiler.AST.SymbolTable
         public override void Visit(IfElseIfElseNode node)
         {
             SymbolTable.SetCurrentNode(node);
+            // If statements
             Visit(node.IfCondition);
-            VisitChildrenNewScope(node.IfCodeBlock);
+            VisitChildrenNewScope(node.IfCodeBlock, BlockType.IfStatement);
 
-            int count = node.ElseIfList.Count();
-            for (int i = 0; i < count; i++)
+            foreach (var ElseIf in node.ElseIfList)
             {
-                VisitChildren(node.ElseIfList[i].Item1);
-                VisitChildrenNewScope(node.ElseIfList[i].Item2);
+                VisitChildren(ElseIf.Item1);
+                VisitChildrenNewScope(ElseIf.Item2, BlockType.ElseifStatement);
             }
-            VisitChildren(node.ElseCodeBlock);
+
+            VisitChildrenNewScope(node.ElseCodeBlock, BlockType.ElseStatement);
         }
 
         public override void Visit(GraphSetQuery node)
@@ -328,15 +328,12 @@ namespace Compiler.AST.SymbolTable
         public override void Visit(ReturnNode node)
         {
             SymbolTable.SetCurrentNode(node);
-            SymbolTable.NotImplementedError(node);
+            VisitChildren(node);
         }
 
         public override void Visit(ForLoopNode node)
         {
             SymbolTable.SetCurrentNode(node);
-            // TODO: VariableDcl in the forloop does not work...
-            // Remake of the forloop node is needed (ASTBuilder)
-            // Check if the InlineDCL isnt declared already, if it isnt, add it to the symbolTable
             SymbolTable.OpenScope(BlockType.ForLoop);
 
 			if (node.VariableDeclaration != null) {
@@ -367,7 +364,7 @@ namespace Compiler.AST.SymbolTable
         public override void Visit(CodeBlockNode node)
         {
             SymbolTable.SetCurrentNode(node);
-            SymbolTable.NotImplementedError(node);
+            VisitChildren(node);
         }
 
         public override void Visit(WhileLoopNode node)
@@ -381,11 +378,12 @@ namespace Compiler.AST.SymbolTable
 
         public override void Visit(VariableAttributeNode node)
         {
-            SymbolTable.SetCurrentNode(node);
-            if (node.Type == "") {
-				SymbolTable.AttributeDefined(node.Name, node.Type_enum);
+			SymbolTable.SetCurrentNode(node);
+            if (node.IsAttribute && CheckDeclared(node.ClassVariableName)) {
+                node.ClassType = SymbolTable.GetVariableType(node.ClassVariableName);
+				SymbolTable.AttributeDefined(node.Name, node.ClassType);
             } else {
-                Console.WriteLine($"Missing type information in attributeNode {node.Name}");
+                CheckDeclared(node.Name);
             }
         }
 

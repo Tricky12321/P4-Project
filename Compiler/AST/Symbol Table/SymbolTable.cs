@@ -45,14 +45,20 @@ namespace Compiler.AST.SymbolTable
             ClassEntry EdgeBetween = new ClassEntry("EdgeBetween", AllType.EDGE);
             ClassEntry EdgesBetween = new ClassEntry("EdgesBetween", AllType.EDGE, true);
             ClassEntry IsEmpty = new ClassEntry("IsEmpty", AllType.BOOL);
+            ClassEntry Directed = new ClassEntry("Directed", AllType.BOOL);
+            ClassEntry Vertices = new ClassEntry("Vertices", AllType.VERTEX, true);
+            ClassEntry Edges = new ClassEntry("Edges", AllType.EDGE, true);
+			// Method Calls
             _classesTable[AllType.EDGE].Add(VertexFrom.Name, VertexFrom);
             _classesTable[AllType.EDGE].Add(VertexTo.Name, VertexTo);
-            // Method Calls
             _classesTable[AllType.GRAPH].Add("EdgeBetween", EdgeBetween);
             _classesTable[AllType.GRAPH].Add("EdgesBetween", EdgesBetween);
             _classesTable[AllType.COLLECTION].Add("IsEmpty", IsEmpty);
             _classesTable[AllType.GRAPH].Add("Adjacent", Adjacent);
             _classesTable[AllType.GRAPH].Add("IsAdjacent", Adjacent);
+            _classesTable[AllType.GRAPH].Add("Directed", Directed);
+            _classesTable[AllType.GRAPH].Add("Vertices", Vertices);
+            _classesTable[AllType.GRAPH].Add("Edges", Edges);
 
         }
 
@@ -74,7 +80,6 @@ namespace Compiler.AST.SymbolTable
             // Loop, until there is only the name left to check, this is because we check all scopes above this, to ensure a variable isnt declared
             while (toCheckFor != name)
             {
-                
                 if (_symTable.ContainsKey(toCheckFor))
                 {
                     return true;
@@ -92,14 +97,44 @@ namespace Compiler.AST.SymbolTable
                 }
             }
             // Now that there is only the name left to check, check that too
-            if (_symTable.ContainsKey(toCheckFor))
+            return _symTable.ContainsKey(toCheckFor);
+        }
+
+        public AllType GetVariableType(string name)
+        {
+            // Store the prefix of the current scope
+            string prefix = _currentScope.Prefix;
+            // Determine what to check for
+            string toCheckFor;
+            if (prefix != "")
             {
-                return true;
+                toCheckFor = prefix + "." + name;
             }
             else
             {
-                return false;
+                toCheckFor = name;
             }
+            // Loop, until there is only the name left to check, this is because we check all scopes above this, to ensure a variable isnt declared
+            while (toCheckFor != name)
+            {
+                if (_symTable.ContainsKey(toCheckFor))
+                {
+                    return _symTable[toCheckFor].Type;
+                }
+
+                int DotIndex = prefix.LastIndexOf('.');
+                if (prefix.Contains("."))
+                {
+                    prefix = prefix.Substring(0, DotIndex);
+                    toCheckFor = prefix + "." + name;
+                }
+                else
+                {
+                    toCheckFor = name;
+                }
+            }
+            // Now that there is only the name left to check, check that too
+            return _symTable[toCheckFor].Type;
         }
 
         public void EnterSymbol(string name, AllType type)
@@ -112,6 +147,15 @@ namespace Compiler.AST.SymbolTable
             {
                 AlreadyDeclaredError(name);
             }
+        }
+
+        public AllType? GetAttributeType(string name, AllType type)
+        {
+            bool IsCollection;
+            List<string> names = new List<string>();
+            names.Add(name);
+            AllType? output = RetrieveTypeFromClasses(names, type, out IsCollection, false);
+            return output;
         }
 
 

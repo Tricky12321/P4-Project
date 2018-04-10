@@ -9,6 +9,7 @@ namespace Compiler.AST.Nodes.QueryNodes
         public List<Tuple<VariableAttributeNode, string, ExpressionNode>> Attributes = new List<Tuple<VariableAttributeNode, string, ExpressionNode>>();
         public AbstractNode WhereCondition;
         public bool SetAttributes = false;
+        public bool SetVariables = false;
         public string InVariable;
         public string AssignmentOperator;
 
