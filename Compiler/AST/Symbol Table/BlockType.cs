@@ -3,6 +3,6 @@ namespace Compiler.AST.SymbolTable
 {
     public enum BlockType
     {
-        ForLoop, WhileLoop, ForEachLoop, Predicate
+        ForLoop, WhileLoop, ForEachLoop, Predicate, IfStatement, ElseifStatement, ElseStatement
     }
 }
