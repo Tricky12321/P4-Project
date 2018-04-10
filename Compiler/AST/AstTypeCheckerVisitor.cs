@@ -13,51 +13,12 @@ namespace Compiler.AST
 {
     public class AstTypeCheckerVisitor : AstVisitorBase
     {
-        private AllType collectionRetrieveType = AllType.VOID;
-        bool isCollection;
-
         SymTable _createdSymbolTabe;
 
         public AstTypeCheckerVisitor(SymTable symbolTable)
         {
             _createdSymbolTabe = symbolTable;
         }
-
-        private AllType? ConstantConverter(string variable)
-        {
-            int isInt = 0;
-            if (IsDouble(variable))
-            {
-                return AllType.DECIMAL;
-            }
-            else if (Int32.TryParse(variable, out isInt))
-            {
-                return AllType.INT;
-            }
-            else if (variable == "TRUE" || variable == "FALSE")
-            {
-                return AllType.BOOL;
-            }
-            else if (variable == null)
-            {
-                return null;
-            }
-            else return AllType.STRING;
-        }
-
-        public bool IsDouble(string variable)
-        {
-            foreach (char c in variable)
-            {
-                if (!(char.IsDigit(c)) || c != '.')
-                {
-                    return false;
-                }
-            }
-            return true;
-        }
-
-
 
         //-----------------------------Visitor----------------------------------------------
         public override void Visit(ParameterNode node)
@@ -237,7 +198,7 @@ namespace Compiler.AST
                 {
                     //constant is fine, collection is fine
                 }
-                VisitChildren(node.VariableToAdd);
+                Visit(node.VariableToAdd);
             }
             else
             {
@@ -250,7 +211,7 @@ namespace Compiler.AST
                 {
                     _createdSymbolTabe.WrongTypeError(node.variableName, node.VariableCollection);
                 }
-                VisitChildren(node.VariableToAdd);
+                Visit(node.VariableToAdd);
             }
         }
 
@@ -291,7 +252,7 @@ namespace Compiler.AST
                 {
                     //constant is fine, collection is fine
                 }
-                VisitChildren(node.VariableToAdd);
+                Visit(node.VariableToAdd);
             }
             else
             {
@@ -304,7 +265,7 @@ namespace Compiler.AST
                 {
                     _createdSymbolTabe.WrongTypeError(node.variableName, node.VariableCollection);
                 }
-                VisitChildren(node.VariableToAdd);
+                Visit(node.VariableToAdd);
             }
         }
 
@@ -387,19 +348,20 @@ namespace Compiler.AST
 
         public override void Visit(ReturnNode node)
         {
-            /*
-            AllType? funcType = _createdSymbolTabe.RetrieveSymbol(node.Parent.Name);
-            AllType? returnChild = _createdSymbolTabe.RetrieveSymbol(node.LeftmostChild.Name);
+            bool isReturnTypeCollection = false;
+            AllType? funcType = _createdSymbolTabe.RetrieveSymbol(node.Parent.Name, out isReturnTypeCollection, false);
+            bool isFunctionTypeCollection = false;
+            AllType? returnType = _createdSymbolTabe.RetrieveSymbol(node.LeftmostChild.Name, out isFunctionTypeCollection, false);
 
             if (funcType == AllType.VOID)
             {
                 //calling return on void function error 
             }
-            else if (isRetrunType == isFuncTypeCollection)
+            else if (isReturnTypeCollection == isFunctionTypeCollection)
             {
                 if (funcType == returnType)
                 {
-
+                    
                 }
                 else
                 {
@@ -411,7 +373,7 @@ namespace Compiler.AST
                 //ERROR, one is collection, other isn't
             }
             VisitChildren(node);
-            */
+            
         }
 
         public override void Visit(ForLoopNode node)
@@ -422,7 +384,18 @@ namespace Compiler.AST
 
         public override void Visit(ForeachLoopNode node)
         {
-            _createdSymbolTabe.NotImplementedError(node);
+            bool isCollectionInForeach;
+            AllType? collectionType = _createdSymbolTabe.RetrieveSymbol(node.InVariableName, out isCollectionInForeach, false);
+            
+            if(node.VariableType_enum == collectionType)
+            {
+                //collection type and variable type is the same.
+            }
+            else
+            {
+                _createdSymbolTabe.WrongTypeError(node.VariableName, node.InVariableName);
+            }
+            VisitChildren(node);
         }
 
         public override void Visit(WhileLoopNode node)
@@ -438,7 +411,7 @@ namespace Compiler.AST
 
         public override void Visit(VariableNode node)
         {
-            _createdSymbolTabe.NotImplementedError(node);
+            VisitChildren(node);
         }
 
         public override void Visit(CodeBlockNode node)
