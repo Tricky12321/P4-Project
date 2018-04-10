@@ -308,7 +308,7 @@ namespace Compiler.AST
 
         public override void Visit(GraphNode node)
         {
-            _createdSymbolTabe.NotImplementedError(node);
+            VisitChildren(node);
         }
 
         public override void Visit(FunctionNode node)
@@ -400,8 +400,7 @@ namespace Compiler.AST
 
         public override void Visit(WhileLoopNode node)
         {
-            //fejl i parser, mærkelig exception ved codeblock
-            _createdSymbolTabe.NotImplementedError(node);
+            VisitChildren(node);
         }
 
         public override void Visit(VariableAttributeNode node)
@@ -411,6 +410,7 @@ namespace Compiler.AST
 
         public override void Visit(VariableNode node)
         {
+            //måske ikke helt færdig, mangler expression bliver done 
             VisitChildren(node);
         }
 
