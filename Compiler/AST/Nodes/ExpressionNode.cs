@@ -7,7 +7,7 @@ namespace Compiler.AST.Nodes
     public class ExpressionNode : AbstractNode
     {
         //public List<KeyValuePair<ExpressionPartType, string>> ExpressionParts = new List<KeyValuePair<ExpressionPartType, string>>();
-        public List<Tuple<string, AbstractNode, string>> ExpressionParts = new List<Tuple<string, AbstractNode, string>>();
+        public List<AbstractNode> ExpressionParts = new List<AbstractNode>();
 
         public ExpressionNode(int LineNumber, int CharIndex) : base(LineNumber, CharIndex) { }
 
@@ -24,9 +24,9 @@ namespace Compiler.AST.Nodes
                 placeholderString += part.Value.ToString();
             }*/
 
-            foreach (Tuple<string, AbstractNode, string> part in ExpressionParts)
+            foreach (AbstractNode part in ExpressionParts)
             {
-                placeholderString += part.Item2.Name.ToString();
+                placeholderString += part.Name;
             }
             return placeholderString;
         }
