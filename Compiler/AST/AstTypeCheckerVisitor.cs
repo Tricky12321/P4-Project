@@ -495,5 +495,10 @@ namespace Compiler.AST
         {
             throw new NotImplementedException();
         }
+
+        public override void Visit(ConstantNode node)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
