@@ -464,7 +464,6 @@ namespace Compiler.AST.SymbolTable
             {
                 node.WhereCondition.Accept(this);
             }
-            node.WhereCondition.Accept(this);
         }
 
         public override void Visit(OperatorNode node)
