@@ -328,15 +328,23 @@ namespace Compiler.AST
                 }
                 else
                 {//control statement for extended collections on graph
-                    StringBuilder dclList = new StringBuilder();
-                    dclList.Append($"declaration_set(");
-                    foreach (AbstractNode v in node.Dcls)
+
+                    if (false)
                     {
-                        dclList.Append($"{v.Name}, ");
+
                     }
-                    dclList.Remove(dclList.Length - 2, 2);
-                    dclList.Append(")");
-                    _createdSymbolTabe.WrongTypeError(dclList.ToString(), node.ToVariable);
+                    else
+                    {
+                        StringBuilder dclList = new StringBuilder();
+                        dclList.Append($"declaration_set(");
+                        foreach (AbstractNode v in node.Dcls)
+                        {
+                            dclList.Append($"{v.Name}, ");
+                        }
+                        dclList.Remove(dclList.Length - 2, 2);
+                        dclList.Append(")");
+                        _createdSymbolTabe.WrongTypeError(dclList.ToString(), node.ToVariable);
+                    }
                 }
             }
             //if the ToVariable is a collection:
@@ -400,6 +408,8 @@ namespace Compiler.AST
 
         public override void Visit(DeclarationNode node)
         {
+            node.Assignment.Accept(this);
+            VisitChildren(node);
             _createdSymbolTabe.NotImplementedError(node);
         }
 
