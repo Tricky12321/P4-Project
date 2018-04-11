@@ -228,7 +228,7 @@ namespace Compiler.AST
         public override AbstractNode VisitVariable([NotNull] GiraphParser.VariableContext context)
         {
             VariableNode VarNode = new VariableNode(context.Start.Line, context.Start.Column);
-            VarNode.Name = context.GetChild(0).GetText();
+            VarNode.Name = context.GetText();
             return VarNode;
         }
 
@@ -283,7 +283,10 @@ namespace Compiler.AST
                     SetNode.Attributes.Add(Tuple.Create(attribute, ExpNode.compoundAssign().GetText(), expression));
                 }
             }
-            SetNode.WhereCondition = Visit(context.where());
+            if (context.where() != null)
+            {
+                SetNode.WhereCondition = Visit(context.where());
+            }
             return SetNode;
         }
 
@@ -296,7 +299,6 @@ namespace Compiler.AST
             for (int i = 0; i < context.ChildCount; i++)
             {
                 expressionPart.Add(Visit(context.GetChild(i)));
-
             }
             return expressionPart;
         }
@@ -410,6 +412,7 @@ namespace Compiler.AST
         public override AbstractNode VisitAttribute([NotNull] GiraphParser.AttributeContext context)
         {
             VariableAttributeNode vaNode;
+
             if (context.GetChild(0).ToString() == "'")
             {
                 vaNode = new AttributeNode(context.Start.Line, context.Start.Column);
@@ -418,7 +421,7 @@ namespace Compiler.AST
             {
                 vaNode = new VariableNode(context.Start.Line, context.Start.Column);
             }
-            vaNode.Name = context.GetChild(1).GetChild(0).ToString();
+            vaNode.Name = context.GetText();
 
             return vaNode;
         }
