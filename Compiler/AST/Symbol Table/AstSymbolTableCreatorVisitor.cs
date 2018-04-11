@@ -18,7 +18,9 @@ namespace Compiler.AST.SymbolTable
             // Means it is a function call, or a Attribute call on a class
             if (name.Contains("."))
             {
-                name = name.Substring(0, name.IndexOf('('));
+                if (name.Contains("(")) {
+					name = name.Substring(0, name.IndexOf('('));
+                }
                 List<string> Names = name.Split('.').ToList();
                 if (CheckDeclared(Names[0]))
                 {
@@ -212,7 +214,9 @@ namespace Compiler.AST.SymbolTable
                 VisitChildren(node);
             }
             CheckDeclared(node.InVariable);
-            node.WhereCondition.Accept(this);
+            if (node.WhereCondition != null) {
+				node.WhereCondition.Accept(this);
+            }
         }
 
         public override void Visit(WhereNode node)
