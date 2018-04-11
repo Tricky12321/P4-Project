@@ -346,7 +346,7 @@ namespace Compiler.AST.SymbolTable
             SymbolTable.SetCurrentNode(node);
             if (CheckAlreadyDeclared(node.Name))
             {
-                SymbolTable.EnterSymbol(node.Name, node.Type_enum);
+                SymbolTable.EnterSymbol(node.Name, node.Type_enum, node.CollectionDcl);
             }
         }
 
@@ -478,5 +478,6 @@ namespace Compiler.AST.SymbolTable
             // Constants are note entered into the symbol table, so these can be ignored
             // SymbolTable.NotImplementedError(node);
         }
+
     }
 }

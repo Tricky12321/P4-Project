@@ -143,14 +143,14 @@ namespace Compiler.AST.SymbolTable
             return _symTable[toCheckFor].Type;
         }
 
-        public void EnterSymbol(string name, AllType type)
-        {
+        public void EnterSymbol(string name, AllType type, bool IsCollection = false)
+        {   
             if (name != null && name != "")
             {
 
                 if (!_symTable.ContainsKey(GetName(name)))
                 {
-                    _symTable.Add(GetName(name), new SymbolTableEntry(type, _globalDepth));
+                    _symTable.Add(GetName(name), new SymbolTableEntry(type, IsCollection ,_globalDepth));
                 }
                 else
                 {
