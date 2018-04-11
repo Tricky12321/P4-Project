@@ -12,7 +12,10 @@ namespace Compiler.AST
         {
             foreach (AbstractNode child in node.GetChildren())
             {
-                child.Accept(this);
+                if (child != null)
+                {
+                    child.Accept(this);
+                }
             }
         }
 
