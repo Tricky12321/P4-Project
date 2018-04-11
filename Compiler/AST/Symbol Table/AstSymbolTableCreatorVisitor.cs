@@ -178,7 +178,7 @@ namespace Compiler.AST.SymbolTable
             if (node.HasChildren) {
                 VisitChildren(node);
             }
-            CheckDeclared(node.InVariable);
+            CheckDeclared(node.InVariable.Name);
 
         }
 
