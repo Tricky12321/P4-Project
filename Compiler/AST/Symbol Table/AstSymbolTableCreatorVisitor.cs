@@ -213,7 +213,9 @@ namespace Compiler.AST.SymbolTable
             {
                 VisitChildren(node);
             }
-            CheckDeclared(node.InVariable);
+            if (node.InVariable != null) {
+				CheckDeclared(node.InVariable);
+            }
             if (node.WhereCondition != null) {
 				node.WhereCondition.Accept(this);
             }
@@ -263,14 +265,19 @@ namespace Compiler.AST.SymbolTable
         {
             SymbolTable.SetCurrentNode(node);
             CheckDeclared(node.Variable);
-            node.WhereCondition.Accept(this);
+            if (node.WhereCondition != null) {
+				node.WhereCondition.Accept(this);
+            }
         }
 
         public override void Visit(ExtractMinQueryNode node)
         {
             SymbolTable.SetCurrentNode(node);
             CheckDeclared(node.Variable);
-            node.WhereCondition.Accept(this);
+            if (node.WhereCondition != null)
+            {
+                node.WhereCondition.Accept(this);
+            }
         }
 
         public override void Visit(PopQueryNode node)
@@ -293,7 +300,10 @@ namespace Compiler.AST.SymbolTable
         {
             SymbolTable.SetCurrentNode(node);
             CheckDeclared(node.Variable);
-            node.WhereCondition.Accept(this);
+            if (node.WhereCondition != null)
+            {
+                node.WhereCondition.Accept(this);
+            }
 
         }
 
@@ -301,7 +311,10 @@ namespace Compiler.AST.SymbolTable
         {
             SymbolTable.SetCurrentNode(node);
             CheckDeclared(node.Variable);
-            node.WhereCondition.Accept(this);
+            if (node.WhereCondition != null)
+            {
+                node.WhereCondition.Accept(this);
+            }
         }
         #endregion
 
@@ -464,7 +477,6 @@ namespace Compiler.AST.SymbolTable
             {
                 node.WhereCondition.Accept(this);
             }
-            node.WhereCondition.Accept(this);
         }
 
         public override void Visit(OperatorNode node)
