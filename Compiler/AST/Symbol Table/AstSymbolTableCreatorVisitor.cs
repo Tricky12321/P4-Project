@@ -14,10 +14,23 @@ namespace Compiler.AST.SymbolTable
         public SymTable SymbolTable = new SymTable();
 
         public bool CheckDeclared(string name) {
-            if (!SymbolTable.DeclaredLocally(name)) {
-                SymbolTable.UndeclaredError(name);
-                return false;
+            // Means it is a function call, or a Attribute call on a class
+            if (name.Contains(".")) {
+                name = name.Substring(0, name.IndexOf('('));
+                List<string> Names = name.Split('.').ToList();
+                if (CheckDeclared(Names[0])) {
+                    AllType type = SymbolTable.GetVariableType(Names[0]);
+                    return SymbolTable.AttributeDefined(Names[1],type);
+                } else {
+                    SymbolTable.UndeclaredError(name);
+                    return false;
+                }
             } else {
+                if (!SymbolTable.DeclaredLocally(name))
+                {
+                    SymbolTable.UndeclaredError(name);
+                    return false;
+                }
                 return true;
             }
         }
@@ -39,6 +52,7 @@ namespace Compiler.AST.SymbolTable
 
         public bool IsClass(AllType Type)
         {
+
             switch (Type)
             {
                 case AllType.EDGE:
@@ -405,12 +419,16 @@ namespace Compiler.AST.SymbolTable
 					item.Accept(this);
 				}
             }
-
             CheckDeclared(node.ToVariable);
 
             if (node.WhereCondition != null) {
                 node.WhereCondition.Accept(this);
             }
         }
-    }
+
+		public override void Visit(OperatorNode node)
+        {
+            throw new NotImplementedException();
+        }
+	}
 }

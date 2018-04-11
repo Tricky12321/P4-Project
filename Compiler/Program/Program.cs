@@ -23,6 +23,7 @@ namespace Compiler
             GiraphParser.StartContext CST = BuildCST("kode.giraph");
             AbstractNode AST = BuildAST(CST);
             SymTable SymbolTable = BuildSymbolTable(AST as StartNode);
+            TypeCheck(SymbolTable, AST as StartNode);
             PrettyPrint(AST as StartNode);
             Console.ReadKey();
         }
@@ -66,6 +67,14 @@ namespace Compiler
             SymbolTableTimer.Stop();
             Console.WriteLine("Building Symbol Table took: "+SymbolTableTimer.ElapsedMilliseconds + "ms");
             return SymbolTable.SymbolTable;
+        }
+
+        public static void TypeCheck(SymTable SymbolTable, StartNode node) {
+            Stopwatch SymbolTableTimer = new Stopwatch();
+            SymbolTableTimer.Start();
+            AstTypeCheckerVisitor TypeChecker = new AstTypeCheckerVisitor(SymbolTable);
+            TypeChecker.VisitRoot(node);
+            SymbolTableTimer.Stop();
 
         }
     }

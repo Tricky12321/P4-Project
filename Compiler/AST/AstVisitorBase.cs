@@ -55,6 +55,6 @@ namespace Compiler.AST
         public abstract void Visit(VariableAttributeNode node);
         public abstract void Visit(VariableNode node);
         public abstract void Visit(AbstractNode node);
-
+        public abstract void Visit(OperatorNode node);
     }
 }
