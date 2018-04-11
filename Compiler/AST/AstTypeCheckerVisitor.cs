@@ -291,7 +291,46 @@ namespace Compiler.AST
         }
 
         public override void Visit(AddQueryNode node)
-        {//her
+        {
+            if(node.Dcls.Count > 0)
+            {//control statement for input to graphs
+                bool isCollectionTargetColl;
+                AllType? TypeOfTargetCollection = _createdSymbolTabe.RetrieveSymbol(node.ToVariable, out isCollectionTargetColl, false);
+                if(TypeOfTargetCollection == AllType.VERTEX && isCollectionTargetColl)
+                {
+                    foreach(VariableDclNode vertexdcl in node.Dcls)
+                    {
+                        if(vertexdcl.Type_enum == AllType.VERTEX)
+                        {
+                            //both collection is vertex, and current dcl is a vertexdcl
+                        }
+                        else
+                        {
+                            //error raised, because af dcl is not of type vertex.
+                            _createdSymbolTabe.WrongTypeError(vertexdcl.Name, node.ToVariable);
+                        }
+                    }
+                }
+                else if(TypeOfTargetCollection == AllType.EDGE && isCollectionTargetColl)
+                {
+                    foreach (VariableDclNode edgedcl in node.Dcls)
+                    {
+                        if (edgedcl.Type_enum == AllType.VERTEX)
+                        {
+                            //both collection is edge, and current dcl is a edgedcl
+                        }
+                        else
+                        {
+                            //error raised, because af dcl is not of type edge.
+                            _createdSymbolTabe.WrongTypeError(edgedcl.Name, node.ToVariable);
+                        }
+                    }
+                }
+                else
+                {
+                    //error
+                }
+            }
 
         }
 
