@@ -881,22 +881,22 @@ namespace Compiler.AST
             {
                 AddNode.IsColl = true;
                 // ITS ALL TYPE
-                if (context.addToColl().allType() != null)
+                if (context.addToColl().expression() != null)
                 {
                     AddNode.IsType = true;
-                    AddNode.TypeOrVariable = context.addToColl().allType().GetText();
+                    AddNode.TypeOrVariable = context.addToColl().expression().GetText();
                 }
                 // ITS A VARIABLE
-                else if (context.addToColl().variable() != null && context.addToColl().variable().Count() > 1)
+                else if (context.addToColl().variable() != null && context.addToColl().variable().ChildCount > 1)
                 {
                     AddNode.IsVariable = true;
-                    AddNode.TypeOrVariable = context.addToColl().variable(0).GetText();
+                    AddNode.TypeOrVariable = context.addToColl().variable().GetText();
                 }
                 // ITS A QUERY
-                else if (context.addToColl().returnQuery() != null)
+                else if (context.addToColl().expression() != null)
                 {
                     AddNode.IsQuery = true;
-                    AddNode.Query = Visit(context.addToColl().returnQuery());
+                    AddNode.Query = Visit(context.addToColl().expression());
 
                 }
                 else
@@ -906,11 +906,11 @@ namespace Compiler.AST
                 // Shared
                 if (AddNode.IsVariable)
                 {
-                    AddNode.ToVariable = context.addToColl().variable(1).GetText();
+                    AddNode.ToVariable = context.addToColl().variable().GetText();
                 }
                 else
                 {
-                    AddNode.ToVariable = context.addToColl().variable(0).GetText();
+                    AddNode.ToVariable = context.addToColl().variable().GetText();
                 }
                 if (context.addToColl().where() != null)
                 {
