@@ -432,5 +432,9 @@ namespace Compiler.AST
             _createdSymbolTabe.NotImplementedError(node);
         }
 
+        public override void Visit(OperatorNode node)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
