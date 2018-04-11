@@ -329,12 +329,12 @@ namespace Compiler.AST
                 else
                 {//control statement for extended collections on graph
                     StringBuilder dclList = new StringBuilder();
-                    dclList.Append($"Declaration set(");
+                    dclList.Append($"declaration_set(");
                     foreach (AbstractNode v in node.Dcls)
                     {
                         dclList.Append($"{v.Name}, ");
                     }
-                    dclList.Remove(dclList.Length - 1, 1);
+                    dclList.Remove(dclList.Length - 2, 2);
                     dclList.Append(")");
                     _createdSymbolTabe.WrongTypeError(dclList.ToString(), node.ToVariable);
                 }
@@ -385,7 +385,7 @@ namespace Compiler.AST
         }
 
         public override void Visit(GraphSetQuery node)
-        {
+        {/*
             AllType? targetType = node.Attributes.Item1.Type_enum;
             AllType? setType = AllType.BOOL; //TODO når expression node er færdig, kan vi finde ud af hvad settype er.
             if (targetType == setType)
@@ -395,7 +395,7 @@ namespace Compiler.AST
             else
             {
                 _createdSymbolTabe.WrongTypeError(node.Attributes.Item1.Name, node.Attributes.Item3.Name);
-            }
+            }*/
         }
 
         public override void Visit(DeclarationNode node)
