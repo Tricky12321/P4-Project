@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Compiler.AST.Nodes
 {
-    class OperatorNode : AbstractNode
+    public class OperatorNode : AbstractNode
     {
         public string Operator;
 

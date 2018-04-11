@@ -398,5 +398,15 @@ namespace Compiler.AST
             }
             ProgramCode.Append(";\n");
         }
+
+        public override void Visit(OperatorNode node)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void Visit(ConstantNode node)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
