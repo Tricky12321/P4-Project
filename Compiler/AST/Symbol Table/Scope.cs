@@ -8,10 +8,15 @@ namespace Compiler.AST.SymbolTable
     {
         public Scope ParentScope;
         private List<string> _prefixes = new List<string>();
+        // Unnamed block types
         private uint _forLoopCounter = 0;
         private uint _foreachLoopCounter = 0;
         private uint _whileLoopCounter = 0;
         private uint _predicateCounter = 0;
+        private uint _ifStatementCounter = 0;
+        private uint _elseIfStatementCounter = 0;
+        private uint _elseStatementCounter = 0;
+
         private BlockType _loopType;
         public uint depth;
         public string Prefix
@@ -48,17 +53,25 @@ namespace Compiler.AST.SymbolTable
             switch (type)
             {
                 case BlockType.ForLoop:
-                    prefix = "for";
+                    prefix = "[for]";
                     break;
                 case BlockType.ForEachLoop:
-                    prefix = "foreach";
+                    prefix = "[foreach]";
                     break;
                 case BlockType.WhileLoop:
-                    prefix = "while";
+                    prefix = "[while]";
                     break;
                 case BlockType.Predicate:
-                    prefix = "predicate";
-                    _predicateCounter++;
+                    prefix = "[predicate]";
+                    break;
+                case BlockType.IfStatement:
+                    prefix = "[if]";
+                    break;
+                case BlockType.ElseifStatement:
+                    prefix = "[elseif]";
+                    break;
+                case BlockType.ElseStatement:
+                    prefix = "[else]";
                     break;
             }
             _prefixes.Add(prefix+GetCounter(type));
@@ -90,6 +103,12 @@ namespace Compiler.AST.SymbolTable
                     return _whileLoopCounter++;
                 case BlockType.Predicate:
                     return _predicateCounter++;
+				case BlockType.IfStatement:
+					return _ifStatementCounter++;
+                case BlockType.ElseifStatement:
+                    return _elseIfStatementCounter++;
+                case BlockType.ElseStatement:
+                    return _elseStatementCounter++;
             }
             return 0;
         }

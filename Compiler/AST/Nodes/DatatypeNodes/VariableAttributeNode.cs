@@ -6,13 +6,15 @@ namespace Compiler.AST.Nodes.DatatypeNodes
     {
         public string Type;
         public AllType Type_enum => Utilities.FindTypeFromString(Type);
+        public AllType ClassType;
+        public string ClassVariableName;
+        public bool IsAttribute = false;
         public VariableAttributeNode(int LineNumber, int CharIndex) : base(LineNumber, CharIndex)
         {
         }
 
         public override void Accept(AstVisitorBase astVisitor)
         {
-            throw new NotImplementedException("Skal også kende klasse");
             astVisitor.Visit(this);
         }
     }

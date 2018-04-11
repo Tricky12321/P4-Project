@@ -16,16 +16,25 @@ namespace Compiler
     {
         static void Main(string[] args)
         {
+            Compile();
+        }
+
+        public static void Compile() {
             GiraphParser.StartContext CST = BuildCST("kode.giraph");
             AbstractNode AST = BuildAST(CST);
-			SymTable SymbolTable = BuildSymbolTable(AST as StartNode);
+            SymTable SymbolTable = BuildSymbolTable(AST as StartNode);
+            TypeCheck(SymbolTable, AST as StartNode);
             PrettyPrint(AST as StartNode);
             Console.ReadKey();
         }
 
         public static AbstractNode BuildAST(GiraphParser.StartContext start)
         {
+            Stopwatch AstBuildTimer = new Stopwatch();
+            AstBuildTimer.Start();
             AbstractNode ast = new AstBuilder().VisitStart(start);
+            AstBuildTimer.Stop();
+            Console.WriteLine("AstBuilder took: " + AstBuildTimer.ElapsedMilliseconds + "ms");
             return ast;
         }
 
@@ -58,7 +67,15 @@ namespace Compiler
             SymbolTableTimer.Stop();
             Console.WriteLine("Building Symbol Table took: "+SymbolTableTimer.ElapsedMilliseconds + "ms");
             return SymbolTable.SymbolTable;
-
         }
+
+        public static void TypeCheck(SymTable SymbolTable, StartNode node) {
+            Stopwatch SymbolTableTimer = new Stopwatch();
+            SymbolTableTimer.Start();
+            AstTypeCheckerVisitor TypeChecker = new AstTypeCheckerVisitor(SymbolTable);
+            TypeChecker.VisitRoot(node);
+            SymbolTableTimer.Stop();
+        }
+
     }
 }

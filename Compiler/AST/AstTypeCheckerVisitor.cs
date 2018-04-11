@@ -291,7 +291,66 @@ namespace Compiler.AST
         }
 
         public override void Visit(AddQueryNode node)
-        {//her
+        {
+            bool isCollectionTargetColl;
+            AllType? TypeOfTargetCollection = _createdSymbolTabe.RetrieveSymbol(node.ToVariable, out isCollectionTargetColl, false);
+            if (node.IsGraph)
+            {//control statement for input to graphs
+                if (TypeOfTargetCollection == AllType.VERTEX && isCollectionTargetColl)
+                {
+                    foreach (VariableDclNode vertexdcl in node.Dcls)
+                    {
+                        if (vertexdcl.Type_enum == AllType.VERTEX)
+                        {
+                            //both collection is vertex, and current dcl is a vertexdcl
+                        }
+                        else
+                        {
+                            //error raised, because af dcl is not of type vertex.
+                            _createdSymbolTabe.WrongTypeError(vertexdcl.Name, node.ToVariable);
+                        }
+                    }
+                }
+                else if (TypeOfTargetCollection == AllType.EDGE && isCollectionTargetColl)
+                {
+                    foreach (VariableDclNode edgedcl in node.Dcls)
+                    {
+                        if (edgedcl.Type_enum == AllType.VERTEX)
+                        {
+                            //both collection is edge, and current dcl is a edgedcl
+                        }
+                        else
+                        {
+                            //error raised, because af dcl is not of type edge.
+                            _createdSymbolTabe.WrongTypeError(edgedcl.Name, node.ToVariable);
+                        }
+                    }
+                }
+                else
+                {//control statement for extended collections on graph
+                    StringBuilder dclList = new StringBuilder();
+                    dclList.Append($"declaration_set(");
+                    foreach (AbstractNode v in node.Dcls)
+                    {
+                        dclList.Append($"{v.Name}, ");
+                    }
+                    dclList.Remove(dclList.Length - 2, 2);
+                    dclList.Append(")");
+                    _createdSymbolTabe.WrongTypeError(dclList.ToString(), node.ToVariable);
+                }
+            }
+            //if the ToVariable is a collection:
+            else
+            {
+                if (_createdSymbolTabe.CheckIfDefined(node.ToVariable))
+                {
+
+                }
+                else
+                {
+                    _createdSymbolTabe.UndeclaredError(node.ToVariable);
+                }
+            }
 
         }
 
@@ -326,17 +385,17 @@ namespace Compiler.AST
         }
 
         public override void Visit(GraphSetQuery node)
-        {
+        {/*
             AllType? targetType = node.Attributes.Item1.Type_enum;
             AllType? setType = AllType.BOOL; //TODO når expression node er færdig, kan vi finde ud af hvad settype er.
-            if(targetType == setType)
+            if (targetType == setType)
             {
 
             }
             else
             {
                 _createdSymbolTabe.WrongTypeError(node.Attributes.Item1.Name, node.Attributes.Item3.Name);
-            }
+            }*/
         }
 
         public override void Visit(DeclarationNode node)
@@ -369,7 +428,7 @@ namespace Compiler.AST
             {
                 if (funcType == returnType)
                 {
-                    
+
                 }
                 else
                 {
@@ -381,7 +440,7 @@ namespace Compiler.AST
                 //ERROR, one is collection, other isn't
             }
             VisitChildren(node);
-            
+
         }
 
         public override void Visit(ForLoopNode node)
@@ -394,8 +453,8 @@ namespace Compiler.AST
         {
             bool isCollectionInForeach;
             AllType? collectionType = _createdSymbolTabe.RetrieveSymbol(node.InVariableName, out isCollectionInForeach, false);
-            
-            if(node.VariableType_enum == collectionType)
+
+            if (node.VariableType_enum == collectionType)
             {
                 //collection type and variable type is the same.
             }
@@ -432,5 +491,14 @@ namespace Compiler.AST
             _createdSymbolTabe.NotImplementedError(node);
         }
 
+        public override void Visit(OperatorNode node)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void Visit(ConstantNode node)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

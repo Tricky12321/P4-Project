@@ -16,10 +16,8 @@ namespace Compiler.AST
     internal class AstBuilder : GiraphParserBaseVisitor<AbstractNode>
     {
         public AbstractNode root;
-        public Stopwatch AstBuildTimer = new Stopwatch();
         public override AbstractNode VisitStart([NotNull] GiraphParser.StartContext context)
         {
-            AstBuildTimer.Start();
             root = new StartNode(context.Start.Line, context.Start.Column);
             // Program+ (Multiple Program children, atleast one)
             foreach (var child in context.children)
@@ -27,8 +25,6 @@ namespace Compiler.AST
                 root.AdoptChildren(Visit(child));
             }
             root.Name = "Root";
-            AstBuildTimer.Stop();
-            Console.WriteLine("AstBuilder took: " + AstBuildTimer.ElapsedMilliseconds + "ms");
             return root;
         }
 
@@ -148,7 +144,8 @@ namespace Compiler.AST
             GraphSetQuery SetQuery = new GraphSetQuery(context.Start.Line, context.Start.Column);
 
             VariableAttributeNode attribute = Visit(context.GetChild(1).GetChild(0)) as VariableAttributeNode;
-            attribute.Type = "GRAPH";
+
+            attribute.ClassType = AllType.GRAPH;
             ExpressionNode expression = Visit(context.GetChild(1).GetChild(2)) as ExpressionNode;
             string expType = context.GetChild(1).GetChild(1).GetText();
             SetQuery.Attributes = (Tuple.Create<VariableAttributeNode, string, ExpressionNode>(attribute, expType, expression));
@@ -231,7 +228,7 @@ namespace Compiler.AST
         public override AbstractNode VisitVariable([NotNull] GiraphParser.VariableContext context)
         {
             VariableNode VarNode = new VariableNode(context.Start.Line, context.Start.Column);
-            VarNode.Name = context.GetChild(0).GetText();
+            VarNode.Name = context.GetText();
             return VarNode;
         }
 
@@ -264,41 +261,31 @@ namespace Compiler.AST
         public override AbstractNode VisitSetQuery([NotNull] GiraphParser.SetQueryContext context)
         {
             SetQueryNode SetNode = new SetQueryNode(context.Start.Line, context.Start.Column);
-            Dictionary<string, int> indexList = new Dictionary<string, int>();
-
-            for (int i = 0; i < context.children.Count; i++)
-            {
-                if (context.children[i] is TerminalNodeImpl)
+            // If its Attributes being set
+            if (context.variable() != null) {
+				SetNode.InVariable = context.variable().GetText();
+                SetNode.SetAttributes = true;
+                foreach (var ExpNode in context.setExpressionAtri())
                 {
-                    indexList.Add(((TerminalNodeImpl)context.children[i]).ToString(), i);
+                    VariableAttributeNode attribute = Visit(ExpNode.attribute()) as VariableAttributeNode;
+                    attribute.ClassVariableName = SetNode.InVariable; //  Only set Class Variable if its an attribute
+                    attribute.IsAttribute = true;
+                    ExpressionNode expression = Visit(ExpNode.expression()) as ExpressionNode;
+                    SetNode.Attributes.Add(Tuple.Create(attribute, ExpNode.compoundAssign().GetText(), expression));
+                }
+            } else {
+				// If its variables being set
+                SetNode.SetVariables = true;
+                foreach (var ExpNode in context.setExpressionVari())
+                {
+                    VariableAttributeNode attribute = Visit(ExpNode.variable()) as VariableAttributeNode;
+                    ExpressionNode expression = Visit(ExpNode.expression()) as ExpressionNode;
+                    SetNode.Attributes.Add(Tuple.Create(attribute, ExpNode.compoundAssign().GetText(), expression));
                 }
             }
-
-            int j = 0;
-            foreach (var child in context.children)
+            if (context.where() != null)
             {
-                if (child.ToString() == "SET" || child.ToString() == "IN" || child is GiraphParser.WhereContext)
-                {
-                    j++;
-                }
-
-                if (!(child is TerminalNodeImpl))
-                {
-                    if (j == 1)
-                    {
-                        VariableAttributeNode attribute = Visit(child.GetChild(0)) as VariableAttributeNode;
-                        ExpressionNode expression = Visit(child.GetChild(2)) as ExpressionNode;
-                        SetNode.Attributes.Add(Tuple.Create<VariableAttributeNode, string, ExpressionNode>(attribute, child.GetChild(1).GetChild(0).ToString(), expression));
-                    }
-                    else if (j == 2)
-                    {
-                        SetNode.InVariable = child.GetChild(0).ToString();
-                    }
-                    else if (j == 3)
-                    {
-                        SetNode.WhereCondition = Visit(child);
-                    }
-                }
+                SetNode.WhereCondition = Visit(context.where());
             }
             return SetNode;
         }
@@ -312,7 +299,6 @@ namespace Compiler.AST
             for (int i = 0; i < context.ChildCount; i++)
             {
                 expressionPart.Add(Visit(context.GetChild(i)));
-
             }
             return expressionPart;
         }
@@ -426,6 +412,7 @@ namespace Compiler.AST
         public override AbstractNode VisitAttribute([NotNull] GiraphParser.AttributeContext context)
         {
             VariableAttributeNode vaNode;
+
             if (context.GetChild(0).ToString() == "'")
             {
                 vaNode = new AttributeNode(context.Start.Line, context.Start.Column);
@@ -434,7 +421,7 @@ namespace Compiler.AST
             {
                 vaNode = new VariableNode(context.Start.Line, context.Start.Column);
             }
-            vaNode.Name = context.GetChild(1).GetChild(0).ToString();
+            vaNode.Name = context.GetText();
 
             return vaNode;
         }
