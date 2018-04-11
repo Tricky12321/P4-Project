@@ -75,7 +75,7 @@ namespace Compiler
             AstTypeCheckerVisitor TypeChecker = new AstTypeCheckerVisitor(SymbolTable);
             TypeChecker.VisitRoot(node);
             SymbolTableTimer.Stop();
-
         }
+
     }
 }

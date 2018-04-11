@@ -25,9 +25,12 @@ namespace Compiler.AST.SymbolTable
 
         public string GetName(string Name)
         {
-            if (Prefix != "") {
-                return Prefix +"."+ Name;
-            } else {
+            if (Prefix != "")
+            {
+                return Prefix + "." + Name;
+            }
+            else
+            {
                 return Name;
             }
         }
@@ -50,7 +53,7 @@ namespace Compiler.AST.SymbolTable
             ClassEntry Directed = new ClassEntry("Directed", AllType.BOOL);
             ClassEntry Vertices = new ClassEntry("Vertices", AllType.VERTEX, true);
             ClassEntry Edges = new ClassEntry("Edges", AllType.EDGE, true);
-			// Method Calls
+            // Method Calls
             _classesTable[AllType.EDGE].Add(VertexFrom.Name, VertexFrom);
             _classesTable[AllType.EDGE].Add(VertexTo.Name, VertexTo);
             _classesTable[AllType.GRAPH].Add("EdgeBetween", EdgeBetween);
@@ -71,8 +74,15 @@ namespace Compiler.AST.SymbolTable
             // Store the prefix of the current scope
             string prefix = _currentScope.Prefix;
             // Determine what to check for
-            string toCheckFor;
-            toCheckFor = prefix != "" ? prefix + "." + name : name;
+            string toCheckFor = "";
+            if (prefix != "")
+            {
+                toCheckFor = prefix + "." + name;
+            }
+            else
+            {
+                toCheckFor = name;
+            }
             // Loop, until there is only the name left to check, this is because we check all scopes above this, to ensure a variable isnt declared
             while (toCheckFor != name)
             {
@@ -135,14 +145,19 @@ namespace Compiler.AST.SymbolTable
 
         public void EnterSymbol(string name, AllType type)
         {
-            if (!_symTable.ContainsKey(GetName(name)))
+            if (name != null && name != "")
             {
-                _symTable.Add(GetName(name), new SymbolTableEntry(type, _globalDepth));
+
+                if (!_symTable.ContainsKey(GetName(name)))
+                {
+                    _symTable.Add(GetName(name), new SymbolTableEntry(type, _globalDepth));
+                }
+                else
+                {
+                    AlreadyDeclaredError(name);
+                }
             }
-            else
-            {
-                AlreadyDeclaredError(name);
-            }
+
         }
 
         public AllType? GetAttributeType(string name, AllType type)
@@ -155,12 +170,22 @@ namespace Compiler.AST.SymbolTable
         }
 
 
-        public bool AttributeDefined(string name, AllType type) {
+        public bool AttributeDefined(string name, AllType type)
+        {
+            if (name == null || name == "")
+            {
+                return true;
+            }
+            // Remove ' from attributes
+            if (name.Contains("'")) {
+                name = name.Substring(1, name.Length - 2);
+            }
             bool IsCollection;
             List<string> names = new List<string>();
             names.Add(name);
             bool output = RetrieveTypeFromClasses(names, type, out IsCollection, false) != null;
-            if (!output) {
+            if (!output)
+            {
                 AttributeUndeclared(name, type);
             }
             return output;
@@ -211,7 +236,8 @@ namespace Compiler.AST.SymbolTable
             }
         }
 
-        public AllType? RetrieveSymbol(string Name, bool ShowErrors = true) {
+        public AllType? RetrieveSymbol(string Name, bool ShowErrors = true)
+        {
             bool IsCollection;
             return RetrieveSymbol(Name, out IsCollection, ShowErrors);
         }
