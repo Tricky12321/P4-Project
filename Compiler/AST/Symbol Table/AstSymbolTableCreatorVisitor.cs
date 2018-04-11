@@ -231,17 +231,16 @@ namespace Compiler.AST.SymbolTable
         {
             SymbolTable.SetCurrentNode(node);
             string longAttributeName = node.ExtensionName;
-            AllType attributeType = Utilities.FindTypeFromString(node.ExtendWithType);
             // If there is a shortname AND a long name, create 2 entries in the class table
             if (node.ExtensionShortName != null && node.ExtensionShortName.Length > 0)
             {
                 string shortAttributeName = node.ExtensionShortName;
-                SymbolTable.ExtendClass(attributeType, longAttributeName, shortAttributeName, node.ClassToExtend_enum);
+                SymbolTable.ExtendClass(node.ExtendWithType_enum, longAttributeName, shortAttributeName, node.ClassToExtend_enum, node.IsCollection);
             }
             else
             {
                 // If only a long name is used, ignore the shortAttribute
-                SymbolTable.ExtendClass(attributeType, longAttributeName, node.ClassToExtend_enum);
+                SymbolTable.ExtendClass(node.ExtendWithType_enum, longAttributeName, node.ClassToExtend_enum, node.IsCollection);
             }
         }
 

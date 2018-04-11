@@ -492,7 +492,8 @@ namespace Compiler.AST
             {
                 ENode.ExtensionShortName = context.variable(1).GetText();
             }
-            ENode.ExtendWithType = context.allTypeWithColl().GetText();
+            ENode.IsCollection = context.allTypeWithColl().COLLECTION() != null;
+            ENode.ExtendWithType = context.allTypeWithColl().allType().GetText();
             ENode.ClassToExtend = context.objects().GetText();
             if (context.constant() != null)
             {
@@ -915,12 +916,13 @@ namespace Compiler.AST
         public override AbstractNode VisitEdgeDcl([NotNull] GiraphParser.EdgeDclContext context)
         {
             GraphDeclEdgeNode VarNode = new GraphDeclEdgeNode(context.Start.Line, context.Start.Column);
+            int i = 0;
             if (context.GetChild(0).GetText() != "(")
             {
-                VarNode.Name = context.variable(0).GetText();
+                VarNode.Name = context.variable(i++).GetText();
             }
-            VarNode.VertexNameFrom = context.variable(1).GetText();
-            VarNode.VertexNameFrom = context.variable(2).GetText();
+            VarNode.VertexNameFrom = context.variable(i++).GetText();
+            VarNode.VertexNameFrom = context.variable(i++).GetText();
 
             // Visit all assignments and add them as children, if there are any
             if (context.assignment() != null)

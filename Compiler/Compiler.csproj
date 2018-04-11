@@ -111,7 +111,6 @@
     <Compile Include="AST\Nodes\LoopNodes\ForeachLoopNode.cs" />
     <Compile Include="AST\Nodes\QueryNodes\AddQueryNode.cs" />
     <Compile Include="AST\Nodes\DatatypeNodes\Graph\EdgeDcl.cs" />
-    <Compile Include="AST\Symbol Table\Extension.cs" />
     <Compile Include="AST\Symbol Table\ClassEntry.cs" />
     <Compile Include="AST\Symbol Table\SymbolTable.cs" />
     <Compile Include="AST\Symbol Table\Scope.cs" />

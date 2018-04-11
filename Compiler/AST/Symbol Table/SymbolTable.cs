@@ -9,12 +9,36 @@ namespace Compiler.AST.SymbolTable
     public class SymTable
     {
         private Dictionary<string, SymbolTableEntry> _symTable = new Dictionary<string, SymbolTableEntry>();
-        private List<Extension> _extensionTable = new List<Extension>();
         private Dictionary<AllType, Dictionary<string, ClassEntry>> _classesTable = new Dictionary<AllType, Dictionary<string, ClassEntry>>();
-        private uint _globalDepth;
+        // Get/Set to keep track of what is the deepest methods are stored!
+        public string CurrentLine => GetLineNumber();
+
+        private uint _globalDepthTrue = 0;
+
+        private uint _globalDepth
+        {
+            get
+            {
+                return _globalDepthTrue;
+            }
+            set
+            {
+                if (value > _maxDepth)
+                {
+                    _maxDepth = value;
+                    _globalDepthTrue = value;
+                }
+                else
+                {
+                    _globalDepthTrue = value;
+                }
+            }
+
+        }
         private AbstractNode _currentNode;
         public bool errorOccured = false;
-        private Scope _currentScope = new Scope(null, 0, new List<string>());
+        private Scope _currentScope = new Scope(null, 0);
+        private uint _maxDepth = 0;
 
         public void SetCurrentNode(AbstractNode node)
         {
@@ -105,7 +129,13 @@ namespace Compiler.AST.SymbolTable
             // Now that there is only the name left to check, check that too
             return _symTable.ContainsKey(toCheckFor);
         }
-
+        /// <summary>
+        /// Gets the type of the variable.
+        /// This is only for use in the TypeChecker, if the symbol table was constructed properbly
+        /// </summary>
+        /// <returns>The variable type.</returns>
+        /// <param name="name">Name of the variable to find in the symbol table</param>
+        /// 
         public AllType GetVariableType(string name)
         {
             // Store the prefix of the current scope
@@ -142,15 +172,20 @@ namespace Compiler.AST.SymbolTable
             // Now that there is only the name left to check, check that too
             return _symTable[toCheckFor].Type;
         }
-
+        /// <summary>
+        /// Adds a varaible to the symbol table
+        /// </summary>
+        /// <param name="name">Name of variable</param>
+        /// <param name="type">Type of varialbe</param>
+        /// <param name="IsCollection">If set to <c>true</c> its a collection.</param>
         public void EnterSymbol(string name, AllType type, bool IsCollection = false)
-        {   
+        {
             if (name != null && name != "")
             {
 
                 if (!_symTable.ContainsKey(GetName(name)))
                 {
-                    _symTable.Add(GetName(name), new SymbolTableEntry(type, IsCollection ,_globalDepth));
+                    _symTable.Add(GetName(name), new SymbolTableEntry(type, IsCollection, _globalDepth));
                 }
                 else
                 {
@@ -160,16 +195,38 @@ namespace Compiler.AST.SymbolTable
 
         }
 
-        public AllType? GetAttributeType(string name, AllType type)
+        /// <summary>
+        /// Gets the type of the attribute.
+        /// </summary>
+        /// <returns>The attribute type. returns null if it does not exist!, does not support collection</returns>
+        /// <param name="name">Name.</param>
+        /// <param name="type">Type.</param>
+        public AllType? GetAttributeType(string name, AllType type, out bool IsCollection)
         {
-            bool IsCollection;
             List<string> names = new List<string>();
             names.Add(name);
             AllType? output = RetrieveTypeFromClasses(names, type, out IsCollection, false);
             return output;
         }
 
+        /// <summary>
+        /// Does the same as GetAttribyteType, but ignores the collection requirement
+        /// </summary>
+        /// <returns>The attribute type.</returns>
+        /// <param name="name">Name.</param>
+        /// <param name="type">Type.</param>
+        public AllType? GetAttributeType(string name, AllType type)
+        {
+            bool IsCollection;
+            return GetAttributeType(name, type, out IsCollection);
+        }
 
+        /// <summary>
+        /// Returns if a AttributeDefined in the symbol table
+        /// </summary>
+        /// <returns><c>true</c>, if defined was attributed, <c>false</c> otherwise.</returns>
+        /// <param name="name">Name of the attribute</param>
+        /// <param name="type">Must be a class, and used for lookup in symbol table</param>
         public bool AttributeDefined(string name, AllType type)
         {
             if (name == null || name == "")
@@ -177,7 +234,8 @@ namespace Compiler.AST.SymbolTable
                 return true;
             }
             // Remove ' from attributes
-            if (name.Contains("'")) {
+            if (name.Contains("'"))
+            {
                 name = name.Substring(1, name.Length - 2);
             }
             bool IsCollection;
@@ -191,7 +249,14 @@ namespace Compiler.AST.SymbolTable
             return output;
         }
 
-
+        /// <summary>
+        /// Retrieves the type from classes.
+        /// </summary>
+        /// <returns>The type from classes.</returns>
+        /// <param name="names">Names.</param>
+        /// <param name="type">Type.</param>
+        /// <param name="IsCollection">If set to <c>true</c> is collection.</param>
+        /// <param name="ShowErrors">If set to <c>true</c> show errors.</param>
         private AllType? RetrieveTypeFromClasses(List<string> names, AllType type, out bool IsCollection, bool ShowErrors = true)
         {
             // [GRAPH/VERTEX/EDGE]-><KEYS>->ClassEntry
@@ -235,13 +300,24 @@ namespace Compiler.AST.SymbolTable
                 return null;
             }
         }
-
+        /// <summary>
+        /// Retrieves the symbol.
+        /// </summary>
+        /// <returns>The symbol.</returns>
+        /// <param name="Name">Name.</param>
+        /// <param name="ShowErrors">If set to <c>true</c> show errors.</param>
         public AllType? RetrieveSymbol(string Name, bool ShowErrors = true)
         {
             bool IsCollection;
             return RetrieveSymbol(Name, out IsCollection, ShowErrors);
         }
-
+        /// <summary>
+        /// Retrieves the symbol.
+        /// </summary>
+        /// <returns>The symbol.</returns>
+        /// <param name="Name">Name.</param>
+        /// <param name="IsCollection">If set to <c>true</c> is collection.</param>
+        /// <param name="ShowErrors">If set to <c>true</c> show errors.</param>
         public AllType? RetrieveSymbol(string Name, out bool IsCollection, bool ShowErrors = true)
         {
             // Check if its a dot function
@@ -300,7 +376,11 @@ namespace Compiler.AST.SymbolTable
                 }
             }
         }
-
+        /// <summary>
+        /// Returns if the type given is a class.
+        /// </summary>
+        /// <returns><c>true</c>, if class was ised, <c>false</c> otherwise.</returns>
+        /// <param name="Type">Type.</param>
         public bool IsClass(AllType Type)
         {
             switch (Type)
@@ -313,33 +393,47 @@ namespace Compiler.AST.SymbolTable
                     return false; ;
             }
         }
-
+        /// <summary>
+        /// Returns if a variable is avalible in the current scope
+        /// </summary>
+        /// <returns><c>true</c>, if locally was declareded, <c>false</c> otherwise.</returns>
+        /// <param name="name">Name.</param>
         public bool DeclaredLocally(string name)
         {
             return CheckIfDefined(name);
         }
-
+        /// <summary>
+        /// Opens a new scope.
+        /// </summary>
+        /// <param name="type">Type of the scope to open *IMPORTANT*</param>
         public void OpenScope(BlockType type)
         {
-            Scope NewScope = new Scope(_currentScope, _globalDepth, _currentScope.GetPrefixes());
+            Scope NewScope = new Scope(_currentScope, _globalDepth);
             _currentScope = NewScope;
-            _currentScope.AddPrefix(type, NewScope);
+            _currentScope.AddPrefix(type);
             ++_globalDepth;
         }
-
+        /// <summary>
+        /// Opens a new scope for functions or predicates.
+        /// </summary>
+        /// <param name="value">Value.</param>
         public void OpenScope(string value)
         {
-            Scope NewScope = new Scope(_currentScope, _globalDepth, _currentScope.GetPrefixes());
+            Scope NewScope = new Scope(_currentScope, _globalDepth);
             _currentScope = NewScope;
             _currentScope.AddPrefix(value);
             ++_globalDepth;
         }
-
+        /// <summary>
+        /// Closes the current scope, and sets the current scope, to the previous.
+        /// Also sets all variables that were created in the current scope, to unreacheable. 
+        /// </summary>
         public void CloseScope()
         {
             if (_currentScope.ParentScope == null)
             {
                 Console.WriteLine("Cannot close scope, since its the last scope!");
+                errorOccured = true;
             }
             else
             {
@@ -349,18 +443,65 @@ namespace Compiler.AST.SymbolTable
             }
         }
 
-        public void ExtendClass(AllType Type, string longAttribute, string shortAttribute, AllType ClassType)
-        {
-            ClassEntry Short = new ClassEntry(shortAttribute, Type);
-            ClassEntry Long = new ClassEntry(longAttribute, Type);
-            _classesTable[ClassType].Add(shortAttribute, Short);
-            _classesTable[ClassType].Add(longAttribute, Long);
+        public bool CheckAttributeDefined(string name, AllType Class) {
+            bool IsCollection;
+            List<string> names = new List<string>{ name };
+            return RetrieveTypeFromClasses(names, Class, out IsCollection, false) != null;
         }
 
-        public void ExtendClass(AllType Type, string longAttribute, AllType ClassType)
+        /// <summary>
+        /// Extends the class with a long and a short name
+        /// </summary>
+        /// <param name="Type">Type.</param>
+        /// <param name="longAttribute">Long attribute.</param>
+        /// <param name="shortAttribute">Short attribute.</param>
+        /// <param name="ClassType">Class type.</param>
+        public void ExtendClass(AllType Type, string longAttribute, string shortAttribute, AllType ClassType, bool IsCollection = false)
         {
-            ClassEntry Long = new ClassEntry(longAttribute, Type);
-            _classesTable[ClassType].Add(longAttribute, Long);
+            if (longAttribute == shortAttribute)
+            {
+                AttributeIdenticalError(longAttribute, shortAttribute);
+            }
+
+            if (CheckAttributeDefined(longAttribute, ClassType))
+            {
+                AlreadyDeclaredError(longAttribute);
+            }
+
+            if (CheckAttributeDefined(longAttribute, ClassType))
+            {
+                AlreadyDeclaredError(shortAttribute);
+            }
+
+            if (errorOccured == false)
+            {
+                ClassEntry Short = new ClassEntry(shortAttribute, Type, IsCollection);
+                ClassEntry Long = new ClassEntry(longAttribute, Type, IsCollection);
+                Short.Collection = IsCollection;
+                Long.Collection = IsCollection;
+                _classesTable[ClassType].Add(shortAttribute, Short);
+                _classesTable[ClassType].Add(longAttribute, Long);
+            }
+        }
+        /// <summary>
+        /// Extends the class with only one attribute name
+        /// </summary>
+        /// <param name="Type">Type.</param>
+        /// <param name="longAttribute">Long attribute.</param>
+        /// <param name="ClassType">Class type.</param>
+        /// <param name="IsCollection">If set to <c>true</c> is collection.</param>
+        public void ExtendClass(AllType Type, string longAttribute, AllType ClassType, bool IsCollection = false)
+        {
+            if (CheckAttributeDefined(longAttribute,ClassType))
+            {
+                AlreadyDeclaredError(longAttribute);
+            }
+            if (errorOccured == false)
+            {
+                ClassEntry Long = new ClassEntry(longAttribute, Type, IsCollection);
+                Long.Collection = IsCollection;
+                _classesTable[ClassType].Add(longAttribute, Long);
+            }
         }
 
         private string GetLineNumber()
@@ -375,10 +516,9 @@ namespace Compiler.AST.SymbolTable
             }
         }
 
-
-
+        // -------------------------------------------------------
         // ERRORS:
-
+        // -------------------------------------------------------
         private void Error()
         {
             errorOccured = true;
@@ -417,6 +557,12 @@ namespace Compiler.AST.SymbolTable
         public void WrongTypeError(string variable1, string variable2)
         {
             Console.WriteLine($"Variable {variable1} and collection {variable2} are missmatch of types. Line number {GetLineNumber()}");
+            Error();
+        }
+
+        public void AttributeIdenticalError(string variable1, string variable2)
+        {
+            Console.WriteLine($"Attribute name {variable1} is identical with {variable2} which is illegal! {GetLineNumber()}");
             Error();
         }
     }
