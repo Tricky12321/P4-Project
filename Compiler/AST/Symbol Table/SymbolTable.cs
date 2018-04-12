@@ -14,7 +14,14 @@ namespace Compiler.AST.SymbolTable
         public string CurrentLine => GetLineNumber();
 
         private uint _globalDepthTrue = 0;
-
+        private List<string> _reservedKeywords = new List<string> {
+            "VertexFrom","VertexTo","IsEmpty","Adjacent",
+            "IsAdjacent","EdgeBetween","EdgesBetween","IsEmpty","Directed","Vertices","Edges","vertex",
+            "edge","graph","int","decimal","double","string","void","bool","if","elseif","else","to",
+            "in","for","foreach","return","while","do","set","select","selectall","from","where",
+            "add","collection","run","with","extend","predicate","pop","push","peek","enqueue",
+            "dequeue","extractmin","extractmax","print","inf","true","false","isin"
+        };
         private uint _globalDepth
         {
             get
@@ -67,6 +74,7 @@ namespace Compiler.AST.SymbolTable
             _classesTable.Add(AllType.EDGE, new Dictionary<string, ClassEntry>());
             _classesTable.Add(AllType.COLLECTION, new Dictionary<string, ClassEntry>());
             // ClassEntries
+
             ClassEntry VertexFrom = new ClassEntry("VertexFrom", AllType.VERTEX);
             ClassEntry VertexTo = new ClassEntry("VertexTo", AllType.VERTEX);
             ClassEntry Adjacent = new ClassEntry("Adjacent", AllType.VERTEX, true);
@@ -82,16 +90,17 @@ namespace Compiler.AST.SymbolTable
             _classesTable[AllType.EDGE].Add(VertexTo.Name, VertexTo);
             _classesTable[AllType.GRAPH].Add("EdgeBetween", EdgeBetween);
             _classesTable[AllType.GRAPH].Add("EdgesBetween", EdgesBetween);
-            _classesTable[AllType.COLLECTION].Add("IsEmpty", IsEmpty);
             _classesTable[AllType.GRAPH].Add("Adjacent", Adjacent);
             _classesTable[AllType.GRAPH].Add("IsAdjacent", Adjacent);
             _classesTable[AllType.GRAPH].Add("Directed", Directed);
+            _classesTable[AllType.COLLECTION].Add("IsEmpty", IsEmpty);
             // Collections
             _classesTable[AllType.GRAPH].Add("Vertices", Vertices);
             _classesTable[AllType.GRAPH].Add("Edges", Edges);
 
         }
 
+        private bool CheckReserved(string name) => _reservedKeywords.Contains(name);
 
         public bool CheckIfDefined(string name)
         {
@@ -180,17 +189,25 @@ namespace Compiler.AST.SymbolTable
         /// <param name="IsCollection">If set to <c>true</c> its a collection.</param>
         public void EnterSymbol(string name, AllType type, bool IsCollection = false)
         {
-            if (name != null && name != "")
+            if (!CheckReserved(name))
             {
 
-                if (!_symTable.ContainsKey(GetName(name)))
+                if (name != null && name != "")
                 {
-                    _symTable.Add(GetName(name), new SymbolTableEntry(type, IsCollection, _globalDepth));
+
+                    if (!_symTable.ContainsKey(GetName(name)))
+                    {
+                        _symTable.Add(GetName(name), new SymbolTableEntry(type, IsCollection, _globalDepth));
+                    }
+                    else
+                    {
+                        AlreadyDeclaredError(name);
+                    }
                 }
-                else
-                {
-                    AlreadyDeclaredError(name);
-                }
+            }
+            else
+            {
+                ReservedKeyword(name);
             }
 
         }
@@ -443,9 +460,10 @@ namespace Compiler.AST.SymbolTable
             }
         }
 
-        public bool CheckAttributeDefined(string name, AllType Class) {
+        public bool CheckAttributeDefined(string name, AllType Class)
+        {
             bool IsCollection;
-            List<string> names = new List<string>{ name };
+            List<string> names = new List<string> { name };
             return RetrieveTypeFromClasses(names, Class, out IsCollection, false) != null;
         }
 
@@ -492,7 +510,7 @@ namespace Compiler.AST.SymbolTable
         /// <param name="IsCollection">If set to <c>true</c> is collection.</param>
         public void ExtendClass(AllType Type, string longAttribute, AllType ClassType, bool IsCollection = false)
         {
-            if (CheckAttributeDefined(longAttribute,ClassType))
+            if (CheckAttributeDefined(longAttribute, ClassType))
             {
                 AlreadyDeclaredError(longAttribute);
             }
@@ -563,6 +581,12 @@ namespace Compiler.AST.SymbolTable
         public void AttributeIdenticalError(string variable1, string variable2)
         {
             Console.WriteLine($"Attribute name {variable1} is identical with {variable2} which is illegal! {GetLineNumber()}");
+            Error();
+        }
+
+        public void ReservedKeyword(string name)
+        {
+            Console.WriteLine($"Variable or Attribute name {name} is a reserved keyword, and cannot be used! {GetLineNumber()}");
             Error();
         }
     }

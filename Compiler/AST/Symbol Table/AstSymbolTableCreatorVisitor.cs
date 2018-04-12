@@ -15,6 +15,8 @@ namespace Compiler.AST.SymbolTable
 
         public bool CheckDeclared(string name)
         {
+            if (name != null) {
+                
             // Means it is a function call, or a Attribute call on a class
             if (name.Contains("."))
             {
@@ -41,7 +43,9 @@ namespace Compiler.AST.SymbolTable
                     return false;
                 }
                 return true;
+                }
             }
+            throw new Exception("Name is null in CheckDeclared!");
         }
 
         public bool CheckAlreadyDeclared(string name)
@@ -187,13 +191,11 @@ namespace Compiler.AST.SymbolTable
         {
             SymbolTable.SetCurrentNode(node);
             /* Missing the values of the edge*/
-            string edgeName = node.Name;
-            if (CheckAlreadyDeclared(edgeName))
+            if (CheckAlreadyDeclared(node.Name))
             {
-                SymbolTable.EnterSymbol(edgeName, AllType.EDGE);
+                SymbolTable.EnterSymbol(node.Name, AllType.EDGE);
                 CheckDeclared(node.VertexNameFrom);
                 CheckDeclared(node.VertexNameTo);
-                // TODO: ValueList i Graph skal laves om til at understøtte expressions
                 foreach (var attribute in node.ValueList)
                 {
                     SymbolTable.AttributeDefined(attribute.Key, AllType.EDGE);

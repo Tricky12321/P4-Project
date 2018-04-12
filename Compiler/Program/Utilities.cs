@@ -12,23 +12,23 @@ namespace Compiler
         {
             switch (Type)
             {
-                case "VOID":
+                case "void":
                     return AllType.VOID;
-                case "STRING":
+                case "string":
                     return AllType.STRING;
-                case "BOOL":
+                case "bool":
                     return AllType.BOOL;
-                case "DECIMAL":
+                case "decimal":
                     return AllType.DECIMAL;
-                case "INT":
+                case "int":
                     return AllType.INT;
-                case "GRAPH":
+                case "graph":
                     return AllType.GRAPH;
-                case "EDGE":
+                case "edge":
                     return AllType.EDGE;
-                case "VERTEX":
+                case "vertex":
                     return AllType.VERTEX;
-                case "COLLECTION":
+                case "collection":
                     return AllType.COLLECTION;
             }
             throw new Exception("Unknown type");

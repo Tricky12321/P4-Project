@@ -43,11 +43,10 @@ public partial class GiraphParser : Parser {
 		ELSE=31, TO=32, IN=33, FOR=34, FOREACH=35, RETURN=36, WHILE=37, DO=38, 
 		SET=39, SELECT=40, SELECTALL=41, FROM=42, WHERE=43, ADD=44, COLLECTION=45, 
 		RIGHTARROW=46, RUN=47, WITH=48, EXTEND=49, PREDICATE=50, POP=51, PUSH=52, 
-		PEEK=53, ENQUEUE=54, DEQUEUE=55, INITIALLY=56, CONDITIONSEP=57, EXTRACTMIN=58, 
-		EXTRACTMAX=59, PRINT=60, INF=61, UNDERSCORE=62, COMMENTSTART=63, BOOL=64, 
-		COMPOUNDASSIGN=65, INTEGER=66, FLOATNUM=67, VARIABLENAME=68, LETTER=69, 
-		LOWLETTER=70, CAPLETTER=71, ZERO=72, DIGITNZ=73, FUNCTIONID=74, WhiteSpace=75, 
-		WS=76, STRING=77, SPECIALCHARS=78;
+		PEEK=53, ENQUEUE=54, DEQUEUE=55, CONDITIONSEP=56, EXTRACTMIN=57, EXTRACTMAX=58, 
+		PRINT=59, INF=60, UNDERSCORE=61, COMMENTSTART=62, BOOL=63, COMPOUNDASSIGN=64, 
+		INTEGER=65, FLOATNUM=66, VARIABLENAME=67, LETTER=68, LOWLETTER=69, CAPLETTER=70, 
+		ZERO=71, DIGITNZ=72, FUNCTIONID=73, WhiteSpace=74, WS=75, STRING=76, SPECIALCHARS=77;
 	public const int
 		RULE_start = 0, RULE_program = 1, RULE_dcls = 2, RULE_objectDcl = 3, RULE_singleObjectDcl = 4, 
 		RULE_variableDcl = 5, RULE_graphInitDcl = 6, RULE_graphDclBlock = 7, RULE_vertexDcls = 8, 
@@ -97,15 +96,14 @@ public partial class GiraphParser : Parser {
 	};
 
 	private static readonly string[] _LiteralNames = {
-		null, null, null, "'GRAPH'", "'VERTEX'", "'EDGE'", null, "'ISEMPTY'", 
+		null, null, null, "'graph'", "'vertex'", "'edge'", null, "'IsEmpty'", 
 		"'+'", "'-'", "'/'", "'*'", "'%'", "'!'", "'&'", "'|'", "';'", "','", 
-		"':'", "'IF'", "'('", "')'", "'{'", "'}'", "'['", "']'", "'.'", "'''", 
-		"'='", "'\"'", "'ELSEIF'", "'ELSE'", "'TO'", "'IN'", "'FOR'", "'FOREACH'", 
-		"'RETURN'", "'WHILE'", "'DO'", "'SET'", "'SELECT'", "'SELECTALL'", "'FROM'", 
-		"'WHERE'", "'ADD'", "'COLLECTION'", "'->'", "'RUN'", "'WITH'", "'EXTEND'", 
-		"'PREDICATE'", "'POP'", "'PUSH'", "'PEEK'", "'ENQUEUE'", "'DEQUEUE'", 
-		"'INITIALLY'", null, "'EXTRACTMIN'", "'EXTRACTMAX'", "'PRINT'", "'INF'", 
-		"'_'", "'//'"
+		"':'", "'if'", "'('", "')'", "'{'", "'}'", "'['", "']'", "'.'", "'''", 
+		"'='", "'\"'", "'elseif'", "'else'", "'to'", "'in'", "'for'", "'foreach'", 
+		"'return'", "'while'", "'do'", "'set'", "'select'", "'selectall'", "'from'", 
+		"'where'", "'add'", "'collection'", "'->'", "'run'", "'with'", "'extend'", 
+		"'predicate'", "'pop'", "'push'", "'peek'", "'enqueue'", "'dequeue'", 
+		null, "'extractmin'", "'extractmax'", "'print'", "'inf'", "'_'", "'//'"
 	};
 	private static readonly string[] _SymbolicNames = {
 		null, "BOOLOPERATOR", "TYPE", "GRAPHOBJ", "VERTEXOBJ", "EDGEOBJ", "RESERVEDFUNC", 
@@ -114,10 +112,10 @@ public partial class GiraphParser : Parser {
 		"DOT", "SINGLEQUOTE", "EQUALS", "QUOTE", "ELSEIF", "ELSE", "TO", "IN", 
 		"FOR", "FOREACH", "RETURN", "WHILE", "DO", "SET", "SELECT", "SELECTALL", 
 		"FROM", "WHERE", "ADD", "COLLECTION", "RIGHTARROW", "RUN", "WITH", "EXTEND", 
-		"PREDICATE", "POP", "PUSH", "PEEK", "ENQUEUE", "DEQUEUE", "INITIALLY", 
-		"CONDITIONSEP", "EXTRACTMIN", "EXTRACTMAX", "PRINT", "INF", "UNDERSCORE", 
-		"COMMENTSTART", "BOOL", "COMPOUNDASSIGN", "INTEGER", "FLOATNUM", "VARIABLENAME", 
-		"LETTER", "LOWLETTER", "CAPLETTER", "ZERO", "DIGITNZ", "FUNCTIONID", "WhiteSpace", 
+		"PREDICATE", "POP", "PUSH", "PEEK", "ENQUEUE", "DEQUEUE", "CONDITIONSEP", 
+		"EXTRACTMIN", "EXTRACTMAX", "PRINT", "INF", "UNDERSCORE", "COMMENTSTART", 
+		"BOOL", "COMPOUNDASSIGN", "INTEGER", "FLOATNUM", "VARIABLENAME", "LETTER", 
+		"LOWLETTER", "CAPLETTER", "ZERO", "DIGITNZ", "FUNCTIONID", "WhiteSpace", 
 		"WS", "STRING", "SPECIALCHARS"
 	};
 	public static readonly IVocabulary DefaultVocabulary = new Vocabulary(_LiteralNames, _SymbolicNames);
@@ -2444,7 +2442,7 @@ public partial class GiraphParser : Parser {
 			State = 470;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
-			if (((((_la - 61)) & ~0x3f) == 0 && ((1L << (_la - 61)) & ((1L << (INF - 61)) | (1L << (BOOL - 61)) | (1L << (INTEGER - 61)) | (1L << (FLOATNUM - 61)) | (1L << (VARIABLENAME - 61)) | (1L << (STRING - 61)))) != 0)) {
+			if (((((_la - 60)) & ~0x3f) == 0 && ((1L << (_la - 60)) & ((1L << (INF - 60)) | (1L << (BOOL - 60)) | (1L << (INTEGER - 60)) | (1L << (FLOATNUM - 60)) | (1L << (VARIABLENAME - 60)) | (1L << (STRING - 60)))) != 0)) {
 				{
 				State = 462; varOrConst();
 				State = 467;
@@ -5788,7 +5786,7 @@ public partial class GiraphParser : Parser {
 					State = 896;
 					ErrorHandler.Sync(this);
 					_la = TokenStream.LA(1);
-					if (((((_la - 61)) & ~0x3f) == 0 && ((1L << (_la - 61)) & ((1L << (INF - 61)) | (1L << (BOOL - 61)) | (1L << (INTEGER - 61)) | (1L << (FLOATNUM - 61)) | (1L << (VARIABLENAME - 61)) | (1L << (STRING - 61)))) != 0)) {
+					if (((((_la - 60)) & ~0x3f) == 0 && ((1L << (_la - 60)) & ((1L << (INF - 60)) | (1L << (BOOL - 60)) | (1L << (INTEGER - 60)) | (1L << (FLOATNUM - 60)) | (1L << (VARIABLENAME - 60)) | (1L << (STRING - 60)))) != 0)) {
 						{
 						State = 895; parameters();
 						}
@@ -6024,7 +6022,7 @@ public partial class GiraphParser : Parser {
 
 	private static char[] _serializedATN = {
 		'\x3', '\x608B', '\xA72A', '\x8133', '\xB9ED', '\x417C', '\x3BE7', '\x7786', 
-		'\x5964', '\x3', 'P', '\x39D', '\x4', '\x2', '\t', '\x2', '\x4', '\x3', 
+		'\x5964', '\x3', 'O', '\x39D', '\x4', '\x2', '\t', '\x2', '\x4', '\x3', 
 		'\t', '\x3', '\x4', '\x4', '\t', '\x4', '\x4', '\x5', '\t', '\x5', '\x4', 
 		'\x6', '\t', '\x6', '\x4', '\a', '\t', '\a', '\x4', '\b', '\t', '\b', 
 		'\x4', '\t', '\t', '\t', '\x4', '\n', '\t', '\n', '\x4', '\v', '\t', '\v', 
@@ -6214,7 +6212,7 @@ public partial class GiraphParser : Parser {
 		'\xA6', '\xA8', '\xAA', '\xAC', '\xAE', '\xB0', '\xB2', '\xB4', '\xB6', 
 		'\xB8', '\x2', '\a', '\x3', '\x2', '\n', '\v', '\x3', '\x2', '\f', '\xE', 
 		'\x3', '\x2', '\x5', '\a', '\x3', '\x2', '\x10', '\x11', '\x4', '\x2', 
-		'\x1E', '\x1E', '\x43', '\x43', '\x2', '\x3BE', '\x2', '\xBB', '\x3', 
+		'\x1E', '\x1E', '\x42', '\x42', '\x2', '\x3BE', '\x2', '\xBB', '\x3', 
 		'\x2', '\x2', '\x2', '\x4', '\xC6', '\x3', '\x2', '\x2', '\x2', '\x6', 
 		'\xCB', '\x3', '\x2', '\x2', '\x2', '\b', '\xCF', '\x3', '\x2', '\x2', 
 		'\x2', '\n', '\xD1', '\x3', '\x2', '\x2', '\x2', '\f', '\xDC', '\x3', 
@@ -6466,8 +6464,8 @@ public partial class GiraphParser : Parser {
 		'\x1BD', '\x1C0', '\x5', '\x46', '$', '\x2', '\x1BE', '\x1C0', '\x5', 
 		'\x42', '\"', '\x2', '\x1BF', '\x1BD', '\x3', '\x2', '\x2', '\x2', '\x1BF', 
 		'\x1BE', '\x3', '\x2', '\x2', '\x2', '\x1C0', '?', '\x3', '\x2', '\x2', 
-		'\x2', '\x1C1', '\x1C6', '\a', '\x46', '\x2', '\x2', '\x1C2', '\x1C3', 
-		'\a', '\x1C', '\x2', '\x2', '\x1C3', '\x1C5', '\a', '\x46', '\x2', '\x2', 
+		'\x2', '\x1C1', '\x1C6', '\a', '\x45', '\x2', '\x2', '\x1C2', '\x1C3', 
+		'\a', '\x1C', '\x2', '\x2', '\x1C3', '\x1C5', '\a', '\x45', '\x2', '\x2', 
 		'\x1C4', '\x1C2', '\x3', '\x2', '\x2', '\x2', '\x1C5', '\x1C8', '\x3', 
 		'\x2', '\x2', '\x2', '\x1C6', '\x1C4', '\x3', '\x2', '\x2', '\x2', '\x1C6', 
 		'\x1C7', '\x3', '\x2', '\x2', '\x2', '\x1C7', '\x41', '\x3', '\x2', '\x2', 
@@ -6488,15 +6486,15 @@ public partial class GiraphParser : Parser {
 		'\x3', '\x2', '\x2', '\x2', '\x1DC', '\x1E2', '\x5', 'J', '&', '\x2', 
 		'\x1DD', '\x1E2', '\x5', 'L', '\'', '\x2', '\x1DE', '\x1E2', '\x5', 'N', 
 		'(', '\x2', '\x1DF', '\x1E2', '\x5', 'H', '%', '\x2', '\x1E0', '\x1E2', 
-		'\a', '?', '\x2', '\x2', '\x1E1', '\x1DC', '\x3', '\x2', '\x2', '\x2', 
+		'\a', '>', '\x2', '\x2', '\x1E1', '\x1DC', '\x3', '\x2', '\x2', '\x2', 
 		'\x1E1', '\x1DD', '\x3', '\x2', '\x2', '\x2', '\x1E1', '\x1DE', '\x3', 
 		'\x2', '\x2', '\x2', '\x1E1', '\x1DF', '\x3', '\x2', '\x2', '\x2', '\x1E1', 
 		'\x1E0', '\x3', '\x2', '\x2', '\x2', '\x1E2', 'G', '\x3', '\x2', '\x2', 
-		'\x2', '\x1E3', '\x1E4', '\a', 'O', '\x2', '\x2', '\x1E4', 'I', '\x3', 
-		'\x2', '\x2', '\x2', '\x1E5', '\x1E6', '\a', '\x44', '\x2', '\x2', '\x1E6', 
-		'K', '\x3', '\x2', '\x2', '\x2', '\x1E7', '\x1E8', '\a', '\x45', '\x2', 
+		'\x2', '\x1E3', '\x1E4', '\a', 'N', '\x2', '\x2', '\x1E4', 'I', '\x3', 
+		'\x2', '\x2', '\x2', '\x1E5', '\x1E6', '\a', '\x43', '\x2', '\x2', '\x1E6', 
+		'K', '\x3', '\x2', '\x2', '\x2', '\x1E7', '\x1E8', '\a', '\x44', '\x2', 
 		'\x2', '\x1E8', 'M', '\x3', '\x2', '\x2', '\x2', '\x1E9', '\x1EA', '\a', 
-		'\x42', '\x2', '\x2', '\x1EA', 'O', '\x3', '\x2', '\x2', '\x2', '\x1EB', 
+		'\x41', '\x2', '\x2', '\x1EA', 'O', '\x3', '\x2', '\x2', '\x2', '\x1EB', 
 		'\x1EC', '\t', '\x4', '\x2', '\x2', '\x1EC', 'Q', '\x3', '\x2', '\x2', 
 		'\x2', '\x1ED', '\x1EE', '\a', '\x15', '\x2', '\x2', '\x1EE', '\x1EF', 
 		'\a', '\x16', '\x2', '\x2', '\x1EF', '\x1F0', '\x5', 'X', '-', '\x2', 
@@ -6655,7 +6653,7 @@ public partial class GiraphParser : Parser {
 		'\x2CB', '\x3', '\x2', '\x2', '\x2', '\x2CA', '\x2B5', '\x3', '\x2', '\x2', 
 		'\x2', '\x2CA', '\x2BE', '\x3', '\x2', '\x2', '\x2', '\x2CB', '\x81', 
 		'\x3', '\x2', '\x2', '\x2', '\x2CC', '\x2CD', '\x5', '\x86', '\x44', '\x2', 
-		'\x2CD', '\x2CE', '\a', '\x46', '\x2', '\x2', '\x2CE', '\x2CF', '\a', 
+		'\x2CD', '\x2CE', '\a', '\x45', '\x2', '\x2', '\x2CE', '\x2CF', '\a', 
 		'\x1E', '\x2', '\x2', '\x2CF', '\x2D0', '\x5', '\x80', '\x41', '\x2', 
 		'\x2D0', '\x83', '\x3', '\x2', '\x2', '\x2', '\x2D1', '\x2D2', '\a', '\x16', 
 		'\x2', '\x2', '\x2D2', '\x2D3', '\x5', '\x86', '\x44', '\x2', '\x2D3', 
@@ -6755,13 +6753,13 @@ public partial class GiraphParser : Parser {
 		'\x359', '\x5', '<', '\x1F', '\x2', '\x359', '\x35A', '\a', '\"', '\x2', 
 		'\x2', '\x35A', '\x35B', '\x5', '@', '!', '\x2', '\x35B', '\x35C', '\a', 
 		'\x12', '\x2', '\x2', '\x35C', '\xA7', '\x3', '\x2', '\x2', '\x2', '\x35D', 
-		'\x35F', '\a', '<', '\x2', '\x2', '\x35E', '\x360', '\x5', '\x98', 'M', 
+		'\x35F', '\a', ';', '\x2', '\x2', '\x35E', '\x360', '\x5', '\x98', 'M', 
 		'\x2', '\x35F', '\x35E', '\x3', '\x2', '\x2', '\x2', '\x35F', '\x360', 
 		'\x3', '\x2', '\x2', '\x2', '\x360', '\x361', '\x3', '\x2', '\x2', '\x2', 
 		'\x361', '\x362', '\a', ',', '\x2', '\x2', '\x362', '\x364', '\x5', '@', 
 		'!', '\x2', '\x363', '\x365', '\x5', '^', '\x30', '\x2', '\x364', '\x363', 
 		'\x3', '\x2', '\x2', '\x2', '\x364', '\x365', '\x3', '\x2', '\x2', '\x2', 
-		'\x365', '\xA9', '\x3', '\x2', '\x2', '\x2', '\x366', '\x368', '\a', '=', 
+		'\x365', '\xA9', '\x3', '\x2', '\x2', '\x2', '\x366', '\x368', '\a', '<', 
 		'\x2', '\x2', '\x367', '\x369', '\x5', '\x98', 'M', '\x2', '\x368', '\x367', 
 		'\x3', '\x2', '\x2', '\x2', '\x368', '\x369', '\x3', '\x2', '\x2', '\x2', 
 		'\x369', '\x36A', '\x3', '\x2', '\x2', '\x2', '\x36A', '\x36B', '\a', 
@@ -6779,7 +6777,7 @@ public partial class GiraphParser : Parser {
 		'\x3', '\x2', '\x2', '\x2', '\x37B', '\x37E', '\x3', '\x2', '\x2', '\x2', 
 		'\x37C', '\x37A', '\x3', '\x2', '\x2', '\x2', '\x37C', '\x37D', '\x3', 
 		'\x2', '\x2', '\x2', '\x37D', '\xAF', '\x3', '\x2', '\x2', '\x2', '\x37E', 
-		'\x37C', '\x3', '\x2', '\x2', '\x2', '\x37F', '\x385', '\a', '\x46', '\x2', 
+		'\x37C', '\x3', '\x2', '\x2', '\x2', '\x37F', '\x385', '\a', '\x45', '\x2', 
 		'\x2', '\x380', '\x382', '\a', '\x16', '\x2', '\x2', '\x381', '\x383', 
 		'\x5', '\xAC', 'W', '\x2', '\x382', '\x381', '\x3', '\x2', '\x2', '\x2', 
 		'\x382', '\x383', '\x3', '\x2', '\x2', '\x2', '\x383', '\x384', '\x3', 
@@ -6792,14 +6790,14 @@ public partial class GiraphParser : Parser {
 		'\x387', '\x3', '\x2', '\x2', '\x2', '\x38B', '\x388', '\x3', '\x2', '\x2', 
 		'\x2', '\x38B', '\x389', '\x3', '\x2', '\x2', '\x2', '\x38B', '\x38A', 
 		'\x3', '\x2', '\x2', '\x2', '\x38C', '\xB1', '\x3', '\x2', '\x2', '\x2', 
-		'\x38D', '\x38E', '\a', '>', '\x2', '\x2', '\x38E', '\x38F', '\x5', '\xAE', 
+		'\x38D', '\x38E', '\a', '=', '\x2', '\x2', '\x38E', '\x38F', '\x5', '\xAE', 
 		'X', '\x2', '\x38F', '\x390', '\a', '\x12', '\x2', '\x2', '\x390', '\xB3', 
 		'\x3', '\x2', '\x2', '\x2', '\x391', '\x392', '\a', '\x39', '\x2', '\x2', 
 		'\x392', '\x393', '\a', ',', '\x2', '\x2', '\x393', '\x395', '\x5', '@', 
 		'!', '\x2', '\x394', '\x396', '\x5', '^', '\x30', '\x2', '\x395', '\x394', 
 		'\x3', '\x2', '\x2', '\x2', '\x395', '\x396', '\x3', '\x2', '\x2', '\x2', 
-		'\x396', '\xB5', '\x3', '\x2', '\x2', '\x2', '\x397', '\x398', '\a', '\x41', 
-		'\x2', '\x2', '\x398', '\x399', '\a', 'O', '\x2', '\x2', '\x399', '\xB7', 
+		'\x396', '\xB5', '\x3', '\x2', '\x2', '\x2', '\x397', '\x398', '\a', '@', 
+		'\x2', '\x2', '\x398', '\x399', '\a', 'N', '\x2', '\x2', '\x399', '\xB7', 
 		'\x3', '\x2', '\x2', '\x2', '\x39A', '\x39B', '\x5', '\xB6', '\\', '\x2', 
 		'\x39B', '\xB9', '\x3', '\x2', '\x2', '\x2', '`', '\xBD', '\xC6', '\xCB', 
 		'\xCF', '\xD6', '\xD8', '\xE0', '\xF0', '\xF2', '\xFD', '\x101', '\x109', 
