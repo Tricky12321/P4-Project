@@ -853,6 +853,7 @@ namespace Compiler.AST
                         AddNode.Dcls.Add(Visit(Child));
                     }
                 }
+                var test = context.addToGraph().edgeDcls();
                 if (context.addToGraph().edgeDcls() != null)
                 {
                     foreach (var Child in context.addToGraph().edgeDcls().edgeDcl())
@@ -922,7 +923,7 @@ namespace Compiler.AST
                 VarNode.Name = context.variable(i++).GetText();
             }
             VarNode.VertexNameFrom = context.variable(i++).GetText();
-            VarNode.VertexNameFrom = context.variable(i++).GetText();
+            VarNode.VertexNameTo = context.variable(i++).GetText();
 
             // Visit all assignments and add them as children, if there are any
             if (context.assignment() != null)
