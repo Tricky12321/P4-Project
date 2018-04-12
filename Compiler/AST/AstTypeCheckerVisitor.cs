@@ -312,6 +312,7 @@ namespace Compiler.AST
                         if (declarationIsVertex)
                         {
                             //both collection is vertex, and current dcl is a vertexdcl
+                            Console.WriteLine("Hello :))");
                         }
                         else
                         {
