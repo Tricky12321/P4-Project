@@ -462,13 +462,13 @@ namespace Compiler.AST
             switch (nodeType)
             {
                 case "GiraphParser+FloatnumContext":
-                    return "DECIMAL";
+                    return "decimal";
                 case "GiraphParser+IntegerContext":
-                    return "INT";
+                    return "int";
                 case "GiraphParser+BoolContext":
-                    return "BOOL";
+                    return "bool";
                 case "GiraphParser+StringContext":
-                    return "STRING";
+                    return "string";
             }
             throw new WrongExpressionPartTypeFoundException("Spørg Mads");
         }
@@ -939,7 +939,7 @@ namespace Compiler.AST
         public override AbstractNode VisitVertexDcl([NotNull] GiraphParser.VertexDclContext context)
         {
             VariableDclNode VarNode = new VariableDclNode(context.Start.Line, context.Start.Column);
-            VarNode.Type = "VERTEX";
+            VarNode.Type = "vertex";
 
             if (context.GetChild(0).GetText() != "(")
             {
