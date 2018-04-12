@@ -298,9 +298,9 @@ namespace Compiler.AST
 
         public override void Visit(AddQueryNode node)
         {
-            AllType? TypeOfTargetCollection = _createdSymbolTabe.RetrieveSymbol(node.ToVariable, out bool isCollectionTargetColl, false);
             if (node.IsGraph)
             {//control statement for input to graphs
+                AllType? TypeOfTargetCollection = _createdSymbolTabe.GetAttributeType(node.ToVariable, AllType.GRAPH, out bool isCollectionTargetColl);
                 bool IsGraphVertexCollection = TypeOfTargetCollection == AllType.VERTEX && isCollectionTargetColl;
                 bool isGraphEdgeCollection = TypeOfTargetCollection == AllType.EDGE && isCollectionTargetColl;
                 if (IsGraphVertexCollection)
@@ -340,22 +340,25 @@ namespace Compiler.AST
                 else
                 {//control statement for extended collections on graph
 
-                    if (false)
+                    if (isCollectionTargetColl)
                     {
 
                     }
                     else
                     {
-                        StringBuilder dclList = new StringBuilder();
-                        dclList.Append($"declaration_set(");
-                        foreach (AbstractNode v in node.Dcls)
-                        {
-                            dclList.Append($"{v.Name}, ");
-                        }
-                        dclList.Remove(dclList.Length - 2, 2);
-                        dclList.Append(")");
-                        _createdSymbolTabe.WrongTypeError(dclList.ToString(), node.ToVariable);
+                        //not a collection - type error
                     }
+
+                    StringBuilder dclList = new StringBuilder();
+                    dclList.Append($"declaration_set(");
+                    foreach (AbstractNode v in node.Dcls)
+                    {
+                        dclList.Append($"{v.Name}, ");
+                    }
+                    dclList.Remove(dclList.Length - 2, 2);
+                    dclList.Append(")");
+                    _createdSymbolTabe.WrongTypeError(dclList.ToString(), node.ToVariable);
+
                 }
             }
             //if the ToVariable is a collection:
