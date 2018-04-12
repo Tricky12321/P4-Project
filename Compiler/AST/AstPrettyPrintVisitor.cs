@@ -59,11 +59,11 @@ namespace Compiler.AST
         public override void Visit(GraphNode node)
         {
             Debug.Print("GraphNode");
-            ProgramCode.Append($"GRAPH {node.Name}\n{{\n");
+            ProgramCode.Append($"graph {node.Name}\n{{\n");
 
             if (node.Vertices.Count != 0)
             {
-                ProgramCode.Append($"VERTEX ");
+                ProgramCode.Append($"vertex ");
                 int i = 0;
                 foreach (GraphDeclVertexNode vertex in node.Vertices)
                 {
@@ -74,7 +74,7 @@ namespace Compiler.AST
             }
             if (node.Edges.Count != 0)
             {
-                ProgramCode.Append($"EDGE ");
+                ProgramCode.Append($"edge ");
                 int i = 0;
                 foreach (GraphDeclEdgeNode edge in node.Edges)
                 {
