@@ -16,6 +16,7 @@ namespace Compiler.AST.Nodes
             NewParameter.Name = ParameterName;
             NewParameter.Type = ParameterType;
             Parameters.Add(NewParameter);
+            NewParameter.Parent = this;
         }
 
         public override void Accept(AstVisitorBase astVisitor)
