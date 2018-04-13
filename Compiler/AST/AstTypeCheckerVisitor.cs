@@ -82,8 +82,15 @@ namespace Compiler.AST
             _createdSymbolTabe.SetCurrentNode(node);
             if (node.Parent != null && node.Parent is ExpressionNode)
             {
-                AllType? collectionInQuery = _createdSymbolTabe.RetrieveSymbol(node.Variable, out bool isCollectionInQuery, false);
-                AllType? RetrieveVar = _createdSymbolTabe.RetrieveSymbol(node.Parent.Name, out bool isCollectionRetrieveVar, false);
+                AllType? collectionInQuery;
+                AllType? RetrieveVar;
+                bool isCollectionInQuery;
+                bool isCollectionRetrieveVar;
+
+
+                collectionInQuery = _createdSymbolTabe.RetrieveSymbol(node.Variable, out isCollectionInQuery, false);
+                RetrieveVar = _createdSymbolTabe.RetrieveSymbol(node.Parent.Name, out isCollectionRetrieveVar, false);
+
                 bool isSameType = collectionInQuery == RetrieveVar;
                 bool varNotCollAndFromIsColl = isCollectionInQuery && !isCollectionRetrieveVar;
                 bool typeCorrect = isSameType && varNotCollAndFromIsColl;
@@ -135,9 +142,15 @@ namespace Compiler.AST
             _createdSymbolTabe.SetCurrentNode(node);
             if (node.Parent != null && node.Parent is DeclarationNode)
             {
-                AllType? collectionNameType = _createdSymbolTabe.RetrieveSymbol(node.Variable, out bool isCollectionInQuery, false);
-                AllType? nameDeclaredForRetrieve = _createdSymbolTabe.RetrieveSymbol(node.Parent.Name, out bool isCollectionRetrieveVar, false);
-                bool isSameType = nameDeclaredForRetrieve.ToString() == collectionNameType.ToString() && nameDeclaredForRetrieve.ToString() == node.Type;
+                AllType? collectionNameType;
+                AllType? nameDeclaredForRetrieve;
+                bool isCollectionInQuery;
+                bool isCollectionRetrieveVar;
+
+                collectionNameType = _createdSymbolTabe.RetrieveSymbol(node.Variable, out isCollectionInQuery, false);
+                nameDeclaredForRetrieve = _createdSymbolTabe.RetrieveSymbol(node.Parent.Name, out isCollectionRetrieveVar, false);
+
+                bool isSameType = nameDeclaredForRetrieve.ToString() == collectionNameType.ToString() && nameDeclaredForRetrieve.ToString() == node.Type.ToUpper();
                 bool bothIsCollection = isCollectionInQuery && isCollectionRetrieveVar;
                 bool typeCorrect = isSameType && bothIsCollection;
 
@@ -298,6 +311,7 @@ namespace Compiler.AST
 
         public override void Visit(AddQueryNode node)
         {
+            _createdSymbolTabe.SetCurrentNode(node);
             if (node.IsGraph)
             {//control statement for input to graphs
                 AllType? TypeOfTargetCollection = _createdSymbolTabe.GetAttributeType(node.ToVariable, AllType.GRAPH, out bool isCollectionTargetColl);
