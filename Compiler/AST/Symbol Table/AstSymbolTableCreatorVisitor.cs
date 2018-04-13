@@ -137,6 +137,7 @@ namespace Compiler.AST.SymbolTable
 
         public override void Visit(FunctionNode node)
         {
+
             SymbolTable.SetCurrentNode(node);
             AllType type = Utilities.FindTypeFromString(node.ReturnType);
             string functionName = node.Name;

@@ -435,9 +435,7 @@ namespace Compiler.AST
 
         public override void Visit(FunctionNode node)
         {
-            _createdSymbolTabe.OpenScope(node.Name);
-            
-            _createdSymbolTabe.CloseScope();
+            VisitChildren(node);
         }
 
         public override void Visit(AbstractNode node)

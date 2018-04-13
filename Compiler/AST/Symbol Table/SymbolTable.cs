@@ -358,8 +358,8 @@ namespace Compiler.AST.SymbolTable
                 // Check if there is any results to get
                 else
                 {
-                    var entry = GetName(names[0]);
-                    var SymbolTableIEnum = _symTable[entry];
+                    var test = GetName(names[0]);
+                    var SymbolTableIEnum = _symTable[test];
                     // Check how many names are left to handle
                     if (names.Count > 1)
                     {
