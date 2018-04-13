@@ -84,9 +84,6 @@ namespace Compiler.AST.SymbolTable
                 case BlockType.WhileLoop:
                     prefix = "[WHILE]";
                     break;
-                case BlockType.Predicate:
-                    prefix = "[PREDICATE]";
-                    break;
                 case BlockType.IfStatement:
                     prefix = "[IF]";
                     break;
