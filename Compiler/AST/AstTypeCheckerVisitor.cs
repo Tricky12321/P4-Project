@@ -156,7 +156,7 @@ namespace Compiler.AST
 
                 if (typeCorrect)
                 {
-
+                    Console.WriteLine("hello");
                 }
                 else
                 {
@@ -408,7 +408,9 @@ namespace Compiler.AST
 
         public override void Visit(FunctionNode node)
         {
-            VisitChildren(node);
+            _createdSymbolTabe.OpenScope(node.Name);
+            
+            _createdSymbolTabe.CloseScope();
         }
 
         public override void Visit(AbstractNode node)
