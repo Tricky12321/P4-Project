@@ -10,6 +10,8 @@ namespace Compiler.AST.SymbolTable
     {
         private Dictionary<string, SymbolTableEntry> _symTable = new Dictionary<string, SymbolTableEntry>();
         private Dictionary<AllType, Dictionary<string, ClassEntry>> _classesTable = new Dictionary<AllType, Dictionary<string, ClassEntry>>();
+        private Dictionary<string, Dictionary<string, FunctionParameterEntry>> _functionTable = new Dictionary<string, Dictionary<string, FunctionParameterEntry>>();
+
         // Get/Set to keep track of what is the deepest methods are stored!
         public string CurrentLine => GetLineNumber();
 
@@ -356,7 +358,8 @@ namespace Compiler.AST.SymbolTable
                 // Check if there is any results to get
                 else
                 {
-                    var SymbolTableIEnum = _symTable[names[0]];
+                    var entry = GetName(names[0]);
+                    var SymbolTableIEnum = _symTable[entry];
                     // Check how many names are left to handle
                     if (names.Count > 1)
                     {
@@ -534,6 +537,30 @@ namespace Compiler.AST.SymbolTable
             }
         }
 
+        public void EnterFunctionParameter(string FunctionName, string ParameterName, AllType ParameterType) {
+            FunctionParameterEntry FuncParEntry = new FunctionParameterEntry(ParameterName, ParameterType);
+            if (!_functionTable.ContainsKey(FunctionName)) {
+				_functionTable.Add(FunctionName, new Dictionary<string, FunctionParameterEntry>());
+                _functionTable[FunctionName].Add(ParameterName, FuncParEntry);
+            } else {
+                _functionTable[FunctionName].Add(ParameterName, FuncParEntry);
+            }
+        }
+
+        public AllType? GetParameterType(string FunctionName, string ParameterName) {
+            if (_functionTable.ContainsKey(FunctionName)) {
+                if (_functionTable[FunctionName].ContainsKey(ParameterName)) {
+					return _functionTable[FunctionName][ParameterName].Type;
+                } else {
+                    UndefinedParameter(ParameterName, FunctionName);
+                    return null;
+                }
+            } else {
+                return null;
+            }
+        }
+
+
         // -------------------------------------------------------
         // ERRORS:
         // -------------------------------------------------------
@@ -588,6 +615,23 @@ namespace Compiler.AST.SymbolTable
         {
             Console.WriteLine($"Variable or Attribute name {name} is a reserved keyword, and cannot be used! {GetLineNumber()}");
             Error();
+        }
+
+        public void NoFunctionWithNameDeclaredError(string name)
+        {
+            Console.WriteLine($"There is no function with the name {name} declared {GetLineNumber()}");
+            Error();
+        }
+
+        public void DuplicateParameterInFunction(string ParameterName, string FunctionName) {
+            Console.WriteLine($"There is already a parameter with the name {ParameterName} in function {FunctionName} declared {GetLineNumber()}");
+            Error();
+        }
+
+        public void UndefinedParameter(string ParameterName, string FunctionName) {
+            Console.WriteLine($"There is no parameter defined with the name {ParameterName} in function {FunctionName} {GetLineNumber()}");
+            Error();
+
         }
     }
 }

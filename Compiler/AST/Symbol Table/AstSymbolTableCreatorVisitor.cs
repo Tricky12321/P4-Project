@@ -142,9 +142,14 @@ namespace Compiler.AST.SymbolTable
         public override void Visit(ParameterNode node)
         {
             SymbolTable.SetCurrentNode(node);
+
             if (CheckAlreadyDeclared(node.Name))
             {
                 SymbolTable.EnterSymbol(node.Name, node.Type_enum);
+                if (node.Parent != null && (node.Parent is FunctionNode)) {
+					SymbolTable.EnterFunctionParameter(node.Parent.Name, node.Name, node.Type_enum);
+                    
+                }
             }
         }
 
@@ -246,7 +251,6 @@ namespace Compiler.AST.SymbolTable
             }
         }
 
-        #region CollOPSvisits
         public override void Visit(DequeueQueryNode node)
         {
             // TODO: Check if a its a variable that is being added or a constant
@@ -317,7 +321,6 @@ namespace Compiler.AST.SymbolTable
                 node.WhereCondition.Accept(this);
             }
         }
-        #endregion
 
         public override void Visit(PredicateNode node)
         {
