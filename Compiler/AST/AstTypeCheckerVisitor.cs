@@ -20,6 +20,33 @@ namespace Compiler.AST
             _createdSymbolTabe = symbolTable;
         }
 
+        public void VisitChildrenNewScope(AbstractNode node, string Name)
+        {
+            if (node != null)
+            {
+                _createdSymbolTabe.OpenScope(Name);
+                foreach (AbstractNode child in node.GetChildren())
+                {
+                    child.Accept(this);
+                }
+                _createdSymbolTabe.CloseScope();
+            }
+        }
+
+        public void VisitChildrenNewScope(AbstractNode node, BlockType Type)
+        {
+            if (node != null)
+            {
+                _createdSymbolTabe.OpenScope(Type);
+                foreach (AbstractNode child in node.GetChildren())
+                {
+                    child.Accept(this);
+                }
+                _createdSymbolTabe.CloseScope();
+            }
+        }
+
+
         //-----------------------------Visitor----------------------------------------------
         public override void Visit(ParameterNode node)
         {

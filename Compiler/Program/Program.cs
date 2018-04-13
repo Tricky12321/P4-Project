@@ -27,7 +27,8 @@ namespace Compiler
             AbstractNode AST = BuildAST(CST);
             SymTable SymbolTable = BuildSymbolTable(AST as StartNode);
 			SymbolTable.OpenScope("Main");
-            var test = SymbolTable.RetrieveSymbol("g1.Vertices");
+            bool IsCollection;
+            var test = SymbolTable.RetrieveSymbol("g1.Vertices", out IsCollection);
             TypeCheck(SymbolTable, AST as StartNode);
             PrettyPrint(AST as StartNode);
             TotalTimer.Stop();

@@ -101,6 +101,20 @@ namespace Compiler.AST.SymbolTable
             SymbolTable.NotImplementedError(node);
         }
 
+        public void VisitChildrenNewScope(AbstractNode node, string Name)
+        {
+            if (node != null)
+            {
+                SymbolTable.OpenScope(Name);
+                foreach (AbstractNode child in node.GetChildren())
+                {
+                    child.Accept(this);
+                }
+
+                SymbolTable.CloseScope();
+            }
+        }
+
         public void VisitChildrenNewScope(AbstractNode node, BlockType Type)
         {
             if (node != null)
