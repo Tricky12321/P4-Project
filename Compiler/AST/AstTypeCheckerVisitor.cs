@@ -435,7 +435,7 @@ namespace Compiler.AST
 
         public override void Visit(FunctionNode node)
         {
-            VisitChildren(node);
+            VisitChildrenNewScope(node, node.Name);
         }
 
         public override void Visit(AbstractNode node)
