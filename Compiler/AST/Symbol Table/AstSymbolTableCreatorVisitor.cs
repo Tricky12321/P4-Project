@@ -118,7 +118,7 @@ namespace Compiler.AST.SymbolTable
         public void VisitChildrenNewScope(AbstractNode node, BlockType Type)
         {
             if (node != null)
-            {
+            {   
                 SymbolTable.OpenScope(Type);
                 foreach (AbstractNode child in node.GetChildren())
                 {
