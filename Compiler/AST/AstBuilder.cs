@@ -598,7 +598,6 @@ namespace Compiler.AST
         public override AbstractNode VisitSelect([NotNull] GiraphParser.SelectContext context)
         {
             SelectQueryNode SelectNode = new SelectQueryNode(context.Start.Line, context.Start.Column);
-            SelectNode.Type = context.allTypeWithColl().GetText();
             SelectNode.Variable = context.variableFunc().GetText();
             if (context.where() != null)
             {
@@ -610,7 +609,6 @@ namespace Compiler.AST
         public override AbstractNode VisitSelectAll([NotNull] GiraphParser.SelectAllContext context)
         {
             SelectAllQueryNode SelectNode = new SelectAllQueryNode(context.Start.Line, context.Start.Column);
-            SelectNode.Type = context.allTypeWithColl().GetText();
             SelectNode.Variable = context.variableFunc().GetText();
             if (context.where() != null)
             {
