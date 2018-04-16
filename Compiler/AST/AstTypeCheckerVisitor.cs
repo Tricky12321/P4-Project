@@ -424,17 +424,32 @@ namespace Compiler.AST
                 bool IsGraphVertexCollection = TypeOfTargetCollection == AllType.VERTEX && isCollectionTargetColl;
                 bool isGraphEdgeCollection = TypeOfTargetCollection == AllType.EDGE && isCollectionTargetColl;
                 bool isPreDefVerOrEdgeCollInGraph = TypeOfTargetCollection == AllType.GRAPH;
-                if (IsGraphVertexCollection)
+                if (isPreDefVerOrEdgeCollInGraph)
                 {
-                    //TODO skal have gjort så man kan bare tilføje til en graf med ispredef ^  lige nu går alt under denne. 
-                    //også når det er en edge. fix det
-                    bool declarationIsVertex;
-                    foreach (VariableDclNode vertexdcl in node.Dcls)
+                    foreach (AbstractNode edgeOrVertexdcl in node.Dcls)
                     {
-                        declarationIsVertex = vertexdcl.Type_enum == AllType.VERTEX;
-                        if (declarationIsVertex)
+                        if (edgeOrVertexdcl is GraphDeclVertexNode)
                         {
-                            //both collection is vertex, and current dcl is a vertexdcl
+                            
+                        }
+                        else if (edgeOrVertexdcl is GraphDeclEdgeNode)
+                        {
+                            
+                        }
+                        else
+                        {
+                            //error raised, because af dcl is not of type edge.
+                            _createdSymbolTabe.WrongTypeError(edgeOrVertexdcl.Name, node.ToVariable);
+                        }
+                    }
+                }
+                else if (IsGraphVertexCollection)
+                {
+                    foreach (AbstractNode vertexdcl in node.Dcls)
+                    {
+                        if(vertexdcl is GraphDeclVertexNode)
+                        {
+
                         }
                         else
                         {
@@ -445,13 +460,11 @@ namespace Compiler.AST
                 }
                 else if (isGraphEdgeCollection)
                 {
-                    bool declarationIsEdge;
-                    foreach (VariableDclNode edgedcl in node.Dcls)
+                    foreach (AbstractNode edgedcl in node.Dcls)
                     {
-                        declarationIsEdge = edgedcl.Type_enum == AllType.EDGE;
-                        if (declarationIsEdge)
+                        if (edgedcl is GraphDeclEdgeNode)
                         {
-                            //both collection is edge, and current dcl is a edgedcl
+
                         }
                         else
                         {
@@ -460,26 +473,7 @@ namespace Compiler.AST
                         }
                     }
                 }
-                else if (isPreDefVerOrEdgeCollInGraph)
-                {
-                    bool declarationIsEdge;
-                    bool declarationIsVertex;
-                    foreach (VariableDclNode vardcl in node.Dcls)
-                    {
-                        declarationIsEdge = vardcl.Type_enum == AllType.EDGE;
-                        declarationIsVertex = vardcl.Type_enum == AllType.VERTEX;
-                        if (declarationIsEdge || declarationIsVertex)
-                        {
-                            //collection is graph, both edge or vertex can be added. applies to Add bla bla to g1.  and not to g1.something
-                            //predefined are only the original vertices and edge in the graph. 
-                        }
-                        else
-                        {
-                            //error raised, because af dcl is not of type edge.
-                            _createdSymbolTabe.WrongTypeError(vardcl.Name, node.ToVariable);
-                        }
-                    }
-                }
+                
                 else
                 {//control statement for extended collections on graph
 
