@@ -111,12 +111,8 @@ namespace Compiler.AST
             {
                 AllType? collectionInQuery;
                 AllType? RetrieveVar;
-                bool isCollectionInQuery;
-                bool isCollectionRetrieveVar;
-
-
-                collectionInQuery = _createdSymbolTabe.RetrieveSymbol(node.Variable, out isCollectionInQuery, false);
-                RetrieveVar = _createdSymbolTabe.RetrieveSymbol(node.Parent.Name, out isCollectionRetrieveVar, false);
+                collectionInQuery = _createdSymbolTabe.RetrieveSymbol(node.Variable, out bool isCollectionInQuery, false);
+                RetrieveVar = _createdSymbolTabe.RetrieveSymbol(node.Parent.Name, out bool isCollectionRetrieveVar, false);
 
                 bool isSameType = collectionInQuery == RetrieveVar;
                 bool varNotCollAndFromIsColl = isCollectionInQuery && !isCollectionRetrieveVar;
@@ -171,11 +167,9 @@ namespace Compiler.AST
             {
                 AllType? collectionNameType;
                 AllType? nameDeclaredForRetrieve;
-                bool isCollectionInQuery;
-                bool isCollectionRetrieveVar;
 
-                collectionNameType = _createdSymbolTabe.RetrieveSymbol(node.Variable, out isCollectionInQuery, false);
-                nameDeclaredForRetrieve = _createdSymbolTabe.RetrieveSymbol(node.Parent.Name, out isCollectionRetrieveVar, false);
+                collectionNameType = _createdSymbolTabe.RetrieveSymbol(node.Variable, out bool isCollectionInQuery, false);
+                nameDeclaredForRetrieve = _createdSymbolTabe.RetrieveSymbol(node.Parent.Name, out bool isCollectionRetrieveVar, false);
 
                 bool isSameType = nameDeclaredForRetrieve.ToString() == collectionNameType.ToString() && nameDeclaredForRetrieve.ToString() == node.Type.ToUpper();
                 bool bothIsCollection = isCollectionInQuery && isCollectionRetrieveVar;
@@ -183,7 +177,7 @@ namespace Compiler.AST
 
                 if (typeCorrect)
                 {
-                    Console.WriteLine("hello");
+
                 }
                 else
                 {
@@ -341,11 +335,14 @@ namespace Compiler.AST
             _createdSymbolTabe.SetCurrentNode(node);
             if (node.IsGraph)
             {//control statement for input to graphs
-                AllType? TypeOfTargetCollection = _createdSymbolTabe.GetAttributeType(node.ToVariable, AllType.GRAPH, out bool isCollectionTargetColl);
+                AllType? TypeOfTargetCollection = _createdSymbolTabe.RetrieveSymbol(node.ToVariable, out bool isCollectionTargetColl, false);
                 bool IsGraphVertexCollection = TypeOfTargetCollection == AllType.VERTEX && isCollectionTargetColl;
                 bool isGraphEdgeCollection = TypeOfTargetCollection == AllType.EDGE && isCollectionTargetColl;
+                bool isPreDefVerOrEdgeCollInGraph = TypeOfTargetCollection == AllType.GRAPH;
                 if (IsGraphVertexCollection)
                 {
+                    //TODO skal have gjort så man kan bare tilføje til en graf med ispredef ^  lige nu går alt under denne. 
+                    //også når det er en edge. fix det
                     bool declarationIsVertex;
                     foreach (VariableDclNode vertexdcl in node.Dcls)
                     {
@@ -353,7 +350,6 @@ namespace Compiler.AST
                         if (declarationIsVertex)
                         {
                             //both collection is vertex, and current dcl is a vertexdcl
-                            Console.WriteLine("Hello :))");
                         }
                         else
                         {
@@ -367,7 +363,7 @@ namespace Compiler.AST
                     bool declarationIsEdge;
                     foreach (VariableDclNode edgedcl in node.Dcls)
                     {
-                        declarationIsEdge = edgedcl.Type_enum == AllType.VERTEX;
+                        declarationIsEdge = edgedcl.Type_enum == AllType.EDGE;
                         if (declarationIsEdge)
                         {
                             //both collection is edge, and current dcl is a edgedcl
@@ -376,6 +372,26 @@ namespace Compiler.AST
                         {
                             //error raised, because af dcl is not of type edge.
                             _createdSymbolTabe.WrongTypeError(edgedcl.Name, node.ToVariable);
+                        }
+                    }
+                }
+                else if (isPreDefVerOrEdgeCollInGraph)
+                {
+                    bool declarationIsEdge;
+                    bool declarationIsVertex;
+                    foreach (VariableDclNode vardcl in node.Dcls)
+                    {
+                        declarationIsEdge = vardcl.Type_enum == AllType.EDGE;
+                        declarationIsVertex = vardcl.Type_enum == AllType.VERTEX;
+                        if (declarationIsEdge || declarationIsVertex)
+                        {
+                            //collection is graph, both edge or vertex can be added. applies to Add bla bla to g1.  and not to g1.something
+                            //predefined are only the original vertices and edge in the graph. 
+                        }
+                        else
+                        {
+                            //error raised, because af dcl is not of type edge.
+                            _createdSymbolTabe.WrongTypeError(vardcl.Name, node.ToVariable);
                         }
                     }
                 }

@@ -377,8 +377,9 @@ namespace Compiler.AST.SymbolTable
             }
             else
             {
+                Name = GetName(Name);
                 // Return the type of the variable
-                if (_symTable.ContainsKey(Name) && _symTable[Name].Reachable)
+                if (_symTable.ContainsKey(Name))
                 {
                     var SymTab = _symTable[Name];
                     IsCollection = SymTab.IsCollection;
