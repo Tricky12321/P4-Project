@@ -10,7 +10,7 @@ namespace Compiler.AST.Nodes.QueryNodes
         public AbstractNode WhereCondition;
         public bool SetAttributes = false;
         public bool SetVariables = false;
-        public string InVariable;
+        public AbstractNode InVariable;
         public string AssignmentOperator;
 
         public SetQueryNode(int LineNumber, int CharIndex) : base(LineNumber, CharIndex)

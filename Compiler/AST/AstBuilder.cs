@@ -222,6 +222,7 @@ namespace Compiler.AST
             ExpressionNode ExpNode = new ExpressionNode(context.Start.Line, context.Start.Column);
             ExpNode.ExpressionParts = (EvaluateExpression(context));
             //ExpNode.AdoptChildren(Visit(context.GetChild(0)));
+
             return ExpNode;
         }
 
@@ -229,6 +230,13 @@ namespace Compiler.AST
         {
             VariableNode VarNode = new VariableNode(context.Start.Line, context.Start.Column);
             VarNode.Name = context.GetText();
+            foreach (var child in context.children)
+            {
+                if (child.GetText() != ".")
+                {
+                    VarNode.variableParts.Add(child.GetText());
+                }
+            }
             return VarNode;
         }
 
@@ -263,12 +271,13 @@ namespace Compiler.AST
             SetQueryNode SetNode = new SetQueryNode(context.Start.Line, context.Start.Column);
             // If its Attributes being set
             if (context.variable() != null) {
-				SetNode.InVariable = context.variable().GetText();
+                SetNode.InVariable = Visit(context.variable());
+				//SetNode.InVariable.Name = context.variable().GetText();
                 SetNode.SetAttributes = true;
                 foreach (var ExpNode in context.setExpressionAtri())
                 {
                     VariableAttributeNode attribute = Visit(ExpNode.attribute()) as VariableAttributeNode;
-                    attribute.ClassVariableName = SetNode.InVariable; //  Only set Class Variable if its an attribute
+                    attribute.ClassVariableName = SetNode.InVariable.Name; //  Only set Class Variable if its an attribute
                     attribute.IsAttribute = true;
                     ExpressionNode expression = Visit(ExpNode.expression()) as ExpressionNode;
                     SetNode.Attributes.Add(Tuple.Create(attribute, ExpNode.compoundAssign().GetText(), expression));
@@ -938,8 +947,7 @@ namespace Compiler.AST
 
         public override AbstractNode VisitVertexDcl([NotNull] GiraphParser.VertexDclContext context)
         {
-            VariableDclNode VarNode = new VariableDclNode(context.Start.Line, context.Start.Column);
-            VarNode.Type = "vertex";
+            GraphDeclVertexNode VarNode = new GraphDeclVertexNode(context.Start.Line, context.Start.Column);
 
             if (context.GetChild(0).GetText() != "(")
             {
