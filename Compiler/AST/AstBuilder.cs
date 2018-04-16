@@ -947,8 +947,7 @@ namespace Compiler.AST
 
         public override AbstractNode VisitVertexDcl([NotNull] GiraphParser.VertexDclContext context)
         {
-            VariableDclNode VarNode = new VariableDclNode(context.Start.Line, context.Start.Column);
-            VarNode.Type = "vertex";
+            GraphDeclVertexNode VarNode = new GraphDeclVertexNode(context.Start.Line, context.Start.Column);
 
             if (context.GetChild(0).GetText() != "(")
             {
