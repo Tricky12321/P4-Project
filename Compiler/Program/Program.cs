@@ -22,12 +22,12 @@ namespace Compiler
         public static void Compile() {
             Stopwatch TotalTimer = new Stopwatch();
             TotalTimer.Start();
-            Console.WriteLine("Giraph Compiler 1.0.0");
+            Console.WriteLine("Giraph Compiler 5000");
             GiraphParser.StartContext CST = BuildCST("kode.giraph");
             AbstractNode AST = BuildAST(CST);
             SymTable SymbolTable = BuildSymbolTable(AST as StartNode);
             TypeCheck(SymbolTable, AST as StartNode);
-            PrettyPrint(AST as StartNode);
+            //PrettyPrint(AST as StartNode);
             TotalTimer.Stop();
             Console.WriteLine($"Total compile timer: {TotalTimer.ElapsedMilliseconds}ms");
         }
@@ -78,12 +78,12 @@ namespace Compiler
         }
 
         public static void TypeCheck(SymTable SymbolTable, StartNode node) {
-            Stopwatch SymbolTableTimer = new Stopwatch();
-            SymbolTableTimer.Start();
+            Stopwatch TypeCheckTimer = new Stopwatch();
+            TypeCheckTimer.Start();
             AstTypeCheckerVisitor TypeChecker = new AstTypeCheckerVisitor(SymbolTable);
             TypeChecker.VisitRoot(node);
-            SymbolTableTimer.Stop();
+            TypeCheckTimer.Stop();
+            Console.WriteLine("Type checking took: " + TypeCheckTimer.ElapsedMilliseconds + "ms");
         }
-
     }
 }

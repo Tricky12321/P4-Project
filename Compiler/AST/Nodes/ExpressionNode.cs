@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using Compiler;
+using Compiler.AST.Nodes;
+using Compiler.AST.Nodes.DatatypeNodes;
 
 namespace Compiler.AST.Nodes
 {
@@ -9,7 +11,11 @@ namespace Compiler.AST.Nodes
         //public List<KeyValuePair<ExpressionPartType, string>> ExpressionParts = new List<KeyValuePair<ExpressionPartType, string>>();
         public List<AbstractNode> ExpressionParts = new List<AbstractNode>();
 
+        public List<AllType> ExpressionTypes = new List<AllType>();
+
         public ExpressionNode(int LineNumber, int CharIndex) : base(LineNumber, CharIndex) { }
+
+        public AllType? OverAllType;
 
         public override void Accept(AstVisitorBase astVisitor)
         {
@@ -30,6 +36,25 @@ namespace Compiler.AST.Nodes
             }
             return placeholderString;
         }
+
+        public void FindOverAllType() {
+            foreach (var item in ExpressionTypes)
+            {
+                if (OverAllType == null) {
+                    OverAllType = item;
+                } else {
+                    // There is a potential type mismatch
+                    if (item != OverAllType) {
+                        if (!((item == AllType.INT && OverAllType == AllType.DECIMAL) || (item == AllType.DECIMAL && OverAllType == AllType.INT))) {
+                            throw new Exception("Type mismatch in expression!");
+                        } else {
+                            OverAllType = AllType.DECIMAL;
+                        }
+                    }
+                }
+            }
+        }
+
 
     }
 }

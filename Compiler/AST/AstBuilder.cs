@@ -193,6 +193,7 @@ namespace Compiler.AST
             {
                 BCompare.Left = Visit(context.left);
                 BCompare.Right = Visit(context.right);
+
                 if (context.BOOLOPERATOR() != null)
                 {
                     BCompare.ComparisonOperator = context.BOOLOPERATOR().GetText();
@@ -334,42 +335,6 @@ namespace Compiler.AST
             opNode.Operator = context.GetText();
             return opNode;
         }
-
-        /*private List<AbstractNode> VisitVarOrconstExpressionExtRecursive([NotNull] IParseTree context)
-        {
-            List<AbstractNode> expression = new List<AbstractNode>();
-
-            if (context.GetType().ToString() == "GiraphParser+VariableContext")
-            {
-                string placeholderString = string.Empty;
-                for (int i = 0; i < context.ChildCount; i++)
-                {
-                    placeholderString += context.GetChild(i).GetText();
-                    expression.AddRange(VisitVarOrconstExpressionExtRecursive(context.GetChild(i)));
-                }
-                List<AbstractNode> listPlaceholder = new List<AbstractNode>();
-                listPlaceholder.Add(new OperatorNode(1,1));
-                return listPlaceholder;
-            }
-
-
-            if (context.ChildCount == 0)
-            {
-                List<AbstractNode> expressionPlaceholder = new List<AbstractNode>();
-
-                expressionPlaceholder.Add(new OperatorNode(1,2));
-                return expressionPlaceholder;
-                //context.ToString();
-            }
-            else
-            {
-                for (int i = 0; i < context.ChildCount; i++)
-                {
-                    expression.AddRange(VisitVarOrconstExpressionExtRecursive(context.GetChild(i)));
-                }
-            }
-            return expression;
-        }*/
 
         private ExpressionPartType ExpressionPartTypeFinder(IParseTree context)
         {
@@ -589,7 +554,7 @@ namespace Compiler.AST
         public override AbstractNode VisitSelect([NotNull] GiraphParser.SelectContext context)
         {
             SelectQueryNode SelectNode = new SelectQueryNode(context.Start.Line, context.Start.Column);
-            SelectNode.Type = context.allTypeWithColl().GetText();
+            //SelectNode.Type = context.allTypeWithColl().GetText();
             SelectNode.Variable = context.variableFunc().GetText();
             if (context.where() != null)
             {
@@ -601,7 +566,7 @@ namespace Compiler.AST
         public override AbstractNode VisitSelectAll([NotNull] GiraphParser.SelectAllContext context)
         {
             SelectAllQueryNode SelectNode = new SelectAllQueryNode(context.Start.Line, context.Start.Column);
-            SelectNode.Type = context.allTypeWithColl().GetText();
+            //SelectNode.Type = context.allTypeWithColl().GetText();
             SelectNode.Variable = context.variableFunc().GetText();
             if (context.where() != null)
             {

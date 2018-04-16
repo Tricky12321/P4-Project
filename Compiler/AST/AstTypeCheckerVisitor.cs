@@ -177,7 +177,7 @@ namespace Compiler.AST
                 collectionNameType = _createdSymbolTabe.RetrieveSymbol(node.Variable, out isCollectionInQuery, false);
                 nameDeclaredForRetrieve = _createdSymbolTabe.RetrieveSymbol(node.Parent.Name, out isCollectionRetrieveVar, false);
 
-                bool isSameType = nameDeclaredForRetrieve.ToString() == collectionNameType.ToString() && nameDeclaredForRetrieve.ToString() == node.Type.ToUpper();
+                bool isSameType = nameDeclaredForRetrieve.ToString() == collectionNameType.ToString();
                 bool bothIsCollection = isCollectionInQuery && isCollectionRetrieveVar;
                 bool typeCorrect = isSameType && bothIsCollection;
 
@@ -204,7 +204,7 @@ namespace Compiler.AST
             {
                 AllType? collectionNameType = _createdSymbolTabe.RetrieveSymbol(node.Variable, out bool isCollectionInQuery, false);
                 AllType? nameDeclaredForRetrieve = _createdSymbolTabe.RetrieveSymbol(node.Parent.Name, out bool isCollectionRetriever, false);
-                bool isSameTypeAndCollectionCorrect = nameDeclaredForRetrieve.ToString() == collectionNameType.ToString() && nameDeclaredForRetrieve.ToString() == node.Type;
+                bool isSameTypeAndCollectionCorrect = nameDeclaredForRetrieve.ToString() == collectionNameType.ToString();
                 bool varNotCollAndFromIsColl = isCollectionInQuery && !isCollectionRetriever;
                 bool typeCorrect = isSameTypeAndCollectionCorrect && varNotCollAndFromIsColl;
 
@@ -471,11 +471,36 @@ namespace Compiler.AST
 
         public override void Visit(BoolComparisonNode node)
         {
-            _createdSymbolTabe.NotImplementedError(node);
+            AllType type_check;
+            if (node.Left != null && node.Right != null) {
+                // Check if the nodes are boolcomparisons
+                if (node.Left is BoolComparisonNode) {
+                    node.Left.Accept(this);
+                }
+                if (node.Right is BoolComparisonNode)
+                {
+                    node.Right.Accept(this);
+                }
+
+
+
+                if (node.Left is VariableNode) {
+                    type_check = (node.Left as VariableNode).Type_enum;
+                }
+                if (node.Right is VariableNode)
+                {
+                    /*
+                    if (type_check != (node.Right as VariableNode).Type_enum) {
+                        
+                    }
+                    */
+                }
+            }
         }
 
         public override void Visit(ExpressionNode node)
         {
+            
             _createdSymbolTabe.NotImplementedError(node);
         }
 
@@ -509,6 +534,7 @@ namespace Compiler.AST
 
         public override void Visit(ForLoopNode node)
         {
+            
             //fejl i parser, forloopnode gemmer ikke variablen som er udgangspunkt for loop, hvis den allerede er deklareret
             _createdSymbolTabe.NotImplementedError(node);
         }
@@ -530,7 +556,8 @@ namespace Compiler.AST
 
         public override void Visit(WhileLoopNode node)
         {
-            VisitChildren(node);
+            node.BoolCompare.Accept(this);
+            VisitChildrenNewScope(node, BlockType.WhileLoop);
         }
 
         public override void Visit(VariableAttributeNode node)
