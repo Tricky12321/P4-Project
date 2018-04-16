@@ -42,27 +42,112 @@ namespace Compiler.AST
             AllType? expressionType;
             AllType? inVariableType;
 
-            foreach (Tuple<VariableAttributeNode, string, ExpressionNode> setQueryElements in node.Attributes)
+            if (node.Attributes != null)
             {
-                variableType = _createdSymbolTabe.RetrieveSymbol(setQueryElements.Item1.Name);
-                expressionType = _createdSymbolTabe.RetrieveSymbol(setQueryElements.Item3.Name);
-                if (variableType == expressionType)
+                //set query has attributes which is placed in a list
+                foreach (Tuple<VariableAttributeNode, string, ExpressionNode> Attributes in node.Attributes)
                 {
-                    //type correct
-                    if (node.InVariable != null)
-                    {
-                        //to be continue mads making new ting
-                    }
-                    else
-                    {
+                    variableType = _createdSymbolTabe.RetrieveSymbol(Attributes.Item1.Name);
 
+
+
+                    //item 3 is an expression node, item 3 of that includes the parts of it
+                    foreach (var ExpressionPart in Attributes.Item3.ExpressionParts)
+                    {
+                        // bool should only be set to bool, and no addition of bools is allowed
+                        if (variableType == AllType.BOOL && Attributes.Item3.ExpressionParts.Count < 0)
+                        {
+                            break;
+                        }
+
+                        //no type check om operator item
+                        if (!(ExpressionPart is OperatorNode))
+                        {
+
+                            if (ExpressionPart is ConstantNode constant)
+                            {
+                                if (constant.Type_enum == variableType)
+                                {
+                                    // type correct
+                                }
+                            }
+
+                            //can be variable og attribute, therefore using VariableAttributeNode
+                            else if (ExpressionPart is VariableAttributeNode expressionVariable)
+                            {
+                                expressionType = _createdSymbolTabe.RetrieveSymbol(expressionVariable.Name);
+
+                                if (expressionType == variableType)
+                                {
+                                    // type correct
+                                }
+                            }
+
+
+                            else if (ExpressionPart is SelectQueryNode selectQuery)
+                            {
+                                expressionType = _createdSymbolTabe.RetrieveSymbol(selectQuery.Variable);
+
+                                if (expressionType == variableType)
+                                {
+                                    // type correct
+                                }
+                                VisitChildren(selectQuery);
+                            }
+
+                            else if (ExpressionPart is SelectAllQueryNode selectAllQuery)
+                            {
+                                expressionType = _createdSymbolTabe.RetrieveSymbol(selectAllQuery.Variable);
+                                if (expressionType == variableType)
+                                {
+                                    // type correct
+                                }
+                                VisitChildren(selectAllQuery);
+                            }
+
+                            else if (ExpressionPart is DequeueQueryNode dequeueQuery)
+                            {
+                                expressionType = _createdSymbolTabe.RetrieveSymbol(dequeueQuery.Variable);
+                                if (expressionType == variableType)
+                                {
+                                    // type correct
+                                }
+                                VisitChildren(dequeueQuery);
+                            }
+
+                            else if (ExpressionPart is PopQueryNode popQuery)
+                            {
+                                expressionType = _createdSymbolTabe.RetrieveSymbol(popQuery.Variable);
+                                if (expressionType == variableType)
+                                {
+                                    // type correct
+                                }
+                                VisitChildren(popQuery);
+                            }
+
+                            else if (ExpressionPart is ExtractMinQueryNode extractMinQuery)
+                            {
+                                expressionType = _createdSymbolTabe.RetrieveSymbol(extractMinQuery.Variable);
+                                if (expressionType == variableType)
+                                {
+                                    // type correct
+                                }
+                                VisitChildren(extractMinQuery);
+                            }
+
+                            else if (ExpressionPart is ExtractMaxQueryNode extraxtMaxQuery)
+                            {
+                                expressionType = _createdSymbolTabe.RetrieveSymbol(extraxtMaxQuery.Variable);
+                                if(expressionType == variableType)
+                                {
+                                    // type correct
+                                }
+                                VisitChildren(extraxtMaxQuery);
+                            }
+
+                        }
                     }
                 }
-                else
-                {
-                    //type 
-                }
-
             }
             VisitChildren(node);
         }
@@ -93,7 +178,6 @@ namespace Compiler.AST
                 }
                 else
                 {
-
                     _createdSymbolTabe.WrongTypeError(node.Variable, node.Parent.Name);
                 }
             }

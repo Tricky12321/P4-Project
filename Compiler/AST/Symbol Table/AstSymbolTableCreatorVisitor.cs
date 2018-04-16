@@ -214,7 +214,7 @@ namespace Compiler.AST.SymbolTable
                 VisitChildren(node);
             }
             if (node.InVariable != null) {
-				CheckDeclared(node.InVariable);
+				CheckDeclared(node.InVariable.Name);
             }
             if (node.WhereCondition != null) {
 				node.WhereCondition.Accept(this);
