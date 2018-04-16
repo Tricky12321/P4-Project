@@ -28,9 +28,8 @@ namespace Compiler.AST.SymbolTable
 		{
             string collection = IsCollection ? "COLLECTION" : "";
             string colName;
-            colName = collection + Name + "|";
-            colName = colName == "|" ? "" : colName;
-            return colName+Type.ToString()+"|D:"+Depth+"|R:"+Reachable.ToString();
+            colName = collection;
+            return colName+" "+Type.ToString()+"|Depth:"+Depth+"|Reach:"+Reachable.ToString();
 		}
 	}
 }

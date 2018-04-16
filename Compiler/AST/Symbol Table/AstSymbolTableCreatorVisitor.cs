@@ -15,6 +15,8 @@ namespace Compiler.AST.SymbolTable
 
         public bool CheckDeclared(string name)
         {
+            if (name != null) {
+                
             // Means it is a function call, or a Attribute call on a class
             if (name.Contains("."))
             {
@@ -41,7 +43,9 @@ namespace Compiler.AST.SymbolTable
                     return false;
                 }
                 return true;
+                }
             }
+            throw new Exception("Name is null in CheckDeclared!");
         }
 
         public bool CheckAlreadyDeclared(string name)
@@ -97,10 +101,24 @@ namespace Compiler.AST.SymbolTable
             SymbolTable.NotImplementedError(node);
         }
 
-        public void VisitChildrenNewScope(AbstractNode node, BlockType Type)
+        public void VisitChildrenNewScope(AbstractNode node, string Name)
         {
             if (node != null)
             {
+                SymbolTable.OpenScope(Name);
+                foreach (AbstractNode child in node.GetChildren())
+                {
+                    child.Accept(this);
+                }
+
+                SymbolTable.CloseScope();
+            }
+        }
+
+        public void VisitChildrenNewScope(AbstractNode node, BlockType Type)
+        {
+            if (node != null)
+            {   
                 SymbolTable.OpenScope(Type);
                 foreach (AbstractNode child in node.GetChildren())
                 {
@@ -119,6 +137,7 @@ namespace Compiler.AST.SymbolTable
 
         public override void Visit(FunctionNode node)
         {
+
             SymbolTable.SetCurrentNode(node);
             AllType type = Utilities.FindTypeFromString(node.ReturnType);
             string functionName = node.Name;
@@ -138,9 +157,14 @@ namespace Compiler.AST.SymbolTable
         public override void Visit(ParameterNode node)
         {
             SymbolTable.SetCurrentNode(node);
+
             if (CheckAlreadyDeclared(node.Name))
             {
                 SymbolTable.EnterSymbol(node.Name, node.Type_enum);
+                if (node.Parent != null && (node.Parent is FunctionNode)) {
+					SymbolTable.EnterFunctionParameter(node.Parent.Name, node.Name, node.Type_enum);
+                    
+                }
             }
         }
 
@@ -187,13 +211,11 @@ namespace Compiler.AST.SymbolTable
         {
             SymbolTable.SetCurrentNode(node);
             /* Missing the values of the edge*/
-            string edgeName = node.Name;
-            if (CheckAlreadyDeclared(edgeName))
+            if (CheckAlreadyDeclared(node.Name))
             {
-                SymbolTable.EnterSymbol(edgeName, AllType.EDGE);
+                SymbolTable.EnterSymbol(node.Name, AllType.EDGE);
                 CheckDeclared(node.VertexNameFrom);
                 CheckDeclared(node.VertexNameTo);
-                // TODO: ValueList i Graph skal laves om til at understøtte expressions
                 foreach (var attribute in node.ValueList)
                 {
                     SymbolTable.AttributeDefined(attribute.Key, AllType.EDGE);
@@ -231,21 +253,19 @@ namespace Compiler.AST.SymbolTable
         {
             SymbolTable.SetCurrentNode(node);
             string longAttributeName = node.ExtensionName;
-            AllType attributeType = Utilities.FindTypeFromString(node.ExtendWithType);
             // If there is a shortname AND a long name, create 2 entries in the class table
             if (node.ExtensionShortName != null && node.ExtensionShortName.Length > 0)
             {
                 string shortAttributeName = node.ExtensionShortName;
-                SymbolTable.ExtendClass(attributeType, longAttributeName, shortAttributeName, node.ClassToExtend_enum);
+                SymbolTable.ExtendClass(node.ExtendWithType_enum, longAttributeName, shortAttributeName, node.ClassToExtend_enum, node.IsCollection);
             }
             else
             {
                 // If only a long name is used, ignore the shortAttribute
-                SymbolTable.ExtendClass(attributeType, longAttributeName, node.ClassToExtend_enum);
+                SymbolTable.ExtendClass(node.ExtendWithType_enum, longAttributeName, node.ClassToExtend_enum, node.IsCollection);
             }
         }
 
-        #region CollOPSvisits
         public override void Visit(DequeueQueryNode node)
         {
             // TODO: Check if a its a variable that is being added or a constant
@@ -316,7 +336,6 @@ namespace Compiler.AST.SymbolTable
                 node.WhereCondition.Accept(this);
             }
         }
-        #endregion
 
         public override void Visit(PredicateNode node)
         {

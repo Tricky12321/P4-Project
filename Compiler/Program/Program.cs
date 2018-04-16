@@ -20,12 +20,16 @@ namespace Compiler
         }
 
         public static void Compile() {
+            Stopwatch TotalTimer = new Stopwatch();
+            TotalTimer.Start();
+            Console.WriteLine("Giraph Compiler 1.0.0");
             GiraphParser.StartContext CST = BuildCST("kode.giraph");
             AbstractNode AST = BuildAST(CST);
             SymTable SymbolTable = BuildSymbolTable(AST as StartNode);
             TypeCheck(SymbolTable, AST as StartNode);
             PrettyPrint(AST as StartNode);
-            Console.ReadKey();
+            TotalTimer.Stop();
+            Console.WriteLine($"Total compile timer: {TotalTimer.ElapsedMilliseconds}ms");
         }
 
         public static AbstractNode BuildAST(GiraphParser.StartContext start)
@@ -50,12 +54,16 @@ namespace Compiler
         }
 
         public static GiraphParser.StartContext BuildCST(string FilePath) {
+            Stopwatch CSTTimer = new Stopwatch();
+            CSTTimer.Start();
             string input = File.ReadAllText(FilePath);
             ICharStream stream = CharStreams.fromstring(input);
             ITokenSource lexer = new GiraphLexer(stream);
             ITokenStream tokens = new CommonTokenStream(lexer);
             GiraphParser parser = new GiraphParser(tokens);
             parser.BuildParseTree = true;
+            CSTTimer.Stop();
+            Console.WriteLine($"CST Builder took: {CSTTimer.ElapsedMilliseconds}ms");
             return parser.start();
         }
 

@@ -471,13 +471,13 @@ namespace Compiler.AST
             switch (nodeType)
             {
                 case "GiraphParser+FloatnumContext":
-                    return "DECIMAL";
+                    return "decimal";
                 case "GiraphParser+IntegerContext":
-                    return "INT";
+                    return "int";
                 case "GiraphParser+BoolContext":
-                    return "BOOL";
+                    return "bool";
                 case "GiraphParser+StringContext":
-                    return "STRING";
+                    return "string";
             }
             throw new WrongExpressionPartTypeFoundException("Spørg Mads");
         }
@@ -501,7 +501,8 @@ namespace Compiler.AST
             {
                 ENode.ExtensionShortName = context.variable(1).GetText();
             }
-            ENode.ExtendWithType = context.allTypeWithColl().GetText();
+            ENode.IsCollection = context.allTypeWithColl().COLLECTION() != null;
+            ENode.ExtendWithType = context.allTypeWithColl().allType().GetText();
             ENode.ClassToExtend = context.objects().GetText();
             if (context.constant() != null)
             {
@@ -861,6 +862,7 @@ namespace Compiler.AST
                         AddNode.Dcls.Add(Visit(Child));
                     }
                 }
+                var test = context.addToGraph().edgeDcls();
                 if (context.addToGraph().edgeDcls() != null)
                 {
                     foreach (var Child in context.addToGraph().edgeDcls().edgeDcl())
@@ -877,22 +879,22 @@ namespace Compiler.AST
             {
                 AddNode.IsColl = true;
                 // ITS ALL TYPE
-                if (context.addToColl().allType() != null)
+                if (context.addToColl().expression() != null)
                 {
                     AddNode.IsType = true;
-                    AddNode.TypeOrVariable = context.addToColl().allType().GetText();
+                    AddNode.TypeOrVariable = context.addToColl().expression().GetText();
                 }
                 // ITS A VARIABLE
-                else if (context.addToColl().variable() != null && context.addToColl().variable().Count() > 1)
+                else if (context.addToColl().variable() != null && context.addToColl().variable().ChildCount > 1)
                 {
                     AddNode.IsVariable = true;
-                    AddNode.TypeOrVariable = context.addToColl().variable(0).GetText();
+                    AddNode.TypeOrVariable = context.addToColl().variable().GetText();
                 }
                 // ITS A QUERY
-                else if (context.addToColl().returnQuery() != null)
+                else if (context.addToColl().expression() != null)
                 {
                     AddNode.IsQuery = true;
-                    AddNode.Query = Visit(context.addToColl().returnQuery());
+                    AddNode.Query = Visit(context.addToColl().expression());
 
                 }
                 else
@@ -902,11 +904,11 @@ namespace Compiler.AST
                 // Shared
                 if (AddNode.IsVariable)
                 {
-                    AddNode.ToVariable = context.addToColl().variable(1).GetText();
+                    AddNode.ToVariable = context.addToColl().variable().GetText();
                 }
                 else
                 {
-                    AddNode.ToVariable = context.addToColl().variable(0).GetText();
+                    AddNode.ToVariable = context.addToColl().variable().GetText();
                 }
                 if (context.addToColl().where() != null)
                 {
@@ -924,12 +926,13 @@ namespace Compiler.AST
         public override AbstractNode VisitEdgeDcl([NotNull] GiraphParser.EdgeDclContext context)
         {
             GraphDeclEdgeNode VarNode = new GraphDeclEdgeNode(context.Start.Line, context.Start.Column);
+            int i = 0;
             if (context.GetChild(0).GetText() != "(")
             {
-                VarNode.Name = context.variable(0).GetText();
+                VarNode.Name = context.variable(i++).GetText();
             }
-            VarNode.VertexNameFrom = context.variable(1).GetText();
-            VarNode.VertexNameFrom = context.variable(2).GetText();
+            VarNode.VertexNameFrom = context.variable(i++).GetText();
+            VarNode.VertexNameTo = context.variable(i++).GetText();
 
             // Visit all assignments and add them as children, if there are any
             if (context.assignment() != null)
@@ -945,7 +948,7 @@ namespace Compiler.AST
         public override AbstractNode VisitVertexDcl([NotNull] GiraphParser.VertexDclContext context)
         {
             VariableDclNode VarNode = new VariableDclNode(context.Start.Line, context.Start.Column);
-            VarNode.Type = "VERTEX";
+            VarNode.Type = "vertex";
 
             if (context.GetChild(0).GetText() != "(")
             {
