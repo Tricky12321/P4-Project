@@ -12,37 +12,40 @@ namespace Compiler.AST.SymbolTable
     internal class AstSymbolTableCreatorVisitor : AstVisitorBase
     {
         public SymTable SymbolTable = new SymTable();
+        private bool _initialBuildDone = false;
 
         public bool CheckDeclared(string name)
         {
-            if (name != null) {
-                
-            // Means it is a function call, or a Attribute call on a class
-            if (name.Contains("."))
+            if (name != null)
             {
-                if (name.Contains("(")) {
-					name = name.Substring(0, name.IndexOf('('));
-                }
-                List<string> Names = name.Split('.').ToList();
-                if (CheckDeclared(Names[0]))
+
+                // Means it is a function call, or a Attribute call on a class
+                if (name.Contains("."))
                 {
-                    AllType type = SymbolTable.GetVariableType(Names[0]);
-                    return SymbolTable.AttributeDefined(Names[1], type);
+                    if (name.Contains("("))
+                    {
+                        name = name.Substring(0, name.IndexOf('('));
+                    }
+                    List<string> Names = name.Split('.').ToList();
+                    if (CheckDeclared(Names[0]))
+                    {
+                        AllType type = SymbolTable.GetVariableType(Names[0]);
+                        return SymbolTable.AttributeDefined(Names[1], type);
+                    }
+                    else
+                    {
+                        SymbolTable.UndeclaredError(name);
+                        return false;
+                    }
                 }
                 else
                 {
-                    SymbolTable.UndeclaredError(name);
-                    return false;
-                }
-            }
-            else
-            {
-                if (!SymbolTable.DeclaredLocally(name))
-                {
-                    SymbolTable.UndeclaredError(name);
-                    return false;
-                }
-                return true;
+                    if (!SymbolTable.DeclaredLocally(name))
+                    {
+                        SymbolTable.UndeclaredError(name);
+                        return false;
+                    }
+                    return true;
                 }
             }
             throw new Exception("Name is null in CheckDeclared!");
@@ -50,7 +53,8 @@ namespace Compiler.AST.SymbolTable
 
         public bool CheckAlreadyDeclared(string name)
         {
-            if (name == null || name == "") {
+            if (name == null || name == "")
+            {
                 return true;
             }
             if (SymbolTable.DeclaredLocally(name))
@@ -67,6 +71,7 @@ namespace Compiler.AST.SymbolTable
         public void BuildSymbolTable(AbstractNode root)
         {
             VisitRoot(root);
+
         }
 
 
@@ -118,8 +123,22 @@ namespace Compiler.AST.SymbolTable
         public void VisitChildrenNewScope(AbstractNode node, BlockType Type)
         {
             if (node != null)
-            {   
+            {
                 SymbolTable.OpenScope(Type);
+                foreach (AbstractNode child in node.GetChildren())
+                {
+                    child.Accept(this);
+                }
+
+                SymbolTable.CloseScope();
+            }
+        }
+
+        public void VisitChildrenNewScope(AbstractNode node)
+        {
+            if (node != null)
+            {
+                SymbolTable.OpenScope(node.Name);
                 foreach (AbstractNode child in node.GetChildren())
                 {
                     child.Accept(this);
@@ -149,7 +168,10 @@ namespace Compiler.AST.SymbolTable
                 {
                     parameter.Accept(this);
                 }
-                VisitChildren(node);
+                if (_initialBuildDone)
+                {
+                    VisitChildren(node);
+                }
                 SymbolTable.CloseScope();
             }
         }
@@ -161,9 +183,10 @@ namespace Compiler.AST.SymbolTable
             if (CheckAlreadyDeclared(node.Name))
             {
                 SymbolTable.EnterSymbol(node.Name, node.Type_enum);
-                if (node.Parent != null && (node.Parent is FunctionNode)) {
-					SymbolTable.EnterFunctionParameter(node.Parent.Name, node.Name, node.Type_enum);
-                    
+                if (node.Parent != null && (node.Parent is FunctionNode))
+                {
+                    SymbolTable.EnterFunctionParameter(node.Parent.Name, node.Name, node.Type_enum);
+
                 }
             }
         }
@@ -171,7 +194,27 @@ namespace Compiler.AST.SymbolTable
         public override void Visit(StartNode node)
         {
             SymbolTable.SetCurrentNode(node);
-            VisitChildren(node);
+            List<AbstractNode> PredicateNodes;
+            List<AbstractNode> FunctionNodes;
+            // Visit all extend nodes as the first task
+            node.Children.Where(x => x is ExtendNode).ToList().ForEach(x => x.Accept(this));
+            // Index all function nodes
+            FunctionNodes = node.Children.Where(x => x is FunctionNode).ToList();
+            // Accept all the function nodes, so they can enter themselfes in the symboltable
+            // Also to enter all the parameters into the symbol table
+            FunctionNodes.ForEach(x => x.Accept(this));
+            // grab all predicate nodes, that are not in a function, and add them to a list
+            PredicateNodes = node.Children.Where(x => x is PredicateNode).ToList();
+            // Accept them all, but dont acces their body
+            PredicateNodes.ForEach(x => x.Accept(this));
+            // Now that everything is declared for both functions and predicates, Visit their body(children)
+            FunctionNodes.ForEach(x => VisitChildrenNewScope(x));
+            PredicateNodes.ForEach(x => VisitChildrenNewScope(x));
+
+            // Set initialBuildDone so predicates now will visit their children when visited inside functions
+            _initialBuildDone = true;
+
+            //VisitChildren(node);
         }
 
         public override void Visit(GraphNode node)
@@ -235,11 +278,13 @@ namespace Compiler.AST.SymbolTable
             {
                 VisitChildren(node);
             }
-            if (node.InVariable != null) {
-				CheckDeclared(node.InVariable.Name);
+            if (node.InVariable != null)
+            {
+                CheckDeclared(node.InVariable.Name);
             }
-            if (node.WhereCondition != null) {
-				node.WhereCondition.Accept(this);
+            if (node.WhereCondition != null)
+            {
+                node.WhereCondition.Accept(this);
             }
         }
 
@@ -285,8 +330,9 @@ namespace Compiler.AST.SymbolTable
         {
             SymbolTable.SetCurrentNode(node);
             CheckDeclared(node.Variable);
-            if (node.WhereCondition != null) {
-				node.WhereCondition.Accept(this);
+            if (node.WhereCondition != null)
+            {
+                node.WhereCondition.Accept(this);
             }
         }
 
@@ -347,7 +393,10 @@ namespace Compiler.AST.SymbolTable
             {
                 parameter.Accept(this);
             }
-            VisitChildren(node);
+            if (_initialBuildDone)
+            {
+                VisitChildren(node);
+            }
             SymbolTable.CloseScope();
         }
 
@@ -385,6 +434,7 @@ namespace Compiler.AST.SymbolTable
         public override void Visit(BoolComparisonNode node)
         {
             SymbolTable.SetCurrentNode(node);
+
             if (node.Left != null && node.Right != null)
             {
                 node.Left.Accept(this);
@@ -403,6 +453,24 @@ namespace Compiler.AST.SymbolTable
             {
                 Exp.Accept(this);
             }
+            HandleExpressionTypes(node);
+        }
+
+        public void HandleExpressionTypes(ExpressionNode node)
+        {
+            foreach (var item in node.ExpressionParts)
+            {
+                if (item is VariableNode)
+                {
+                    AllType Type = SymbolTable.GetVariableType(item.Name);
+                    node.ExpressionTypes.Add(Type);
+                }
+                else if (item is ConstantNode)
+                {
+                    node.ExpressionTypes.Add(((ConstantNode)item).Type_enum);
+                }
+            }
+            node.FindOverAllType();
         }
 
         public override void Visit(ReturnNode node)

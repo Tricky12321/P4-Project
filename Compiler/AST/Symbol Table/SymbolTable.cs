@@ -602,7 +602,13 @@ namespace Compiler.AST.SymbolTable
 
         public void WrongTypeError(string variable1, string variable2)
         {
-            Console.WriteLine($"Variable {variable1} and collection {variable2} are missmatch of types. Line number {GetLineNumber()}");
+            Console.WriteLine($"Variable {variable1} and {variable2} are missmatch of types. Line number {GetLineNumber()}");
+            Error();
+        }
+
+        public void WrongTypeConditionError()
+        {
+            Console.WriteLine($"There is a type mismatch in the condition on Line number {GetLineNumber()}");
             Error();
         }
 
@@ -610,6 +616,11 @@ namespace Compiler.AST.SymbolTable
         {
             Console.WriteLine($"Attribute name {variable1} is identical with {variable2} which is illegal! {GetLineNumber()}");
             Error();
+        }
+
+        public void BoolAdditionError(string variable1)
+        {
+            Console.WriteLine($"Cannot add Booleans {variable1}! {GetLineNumber()}");
         }
 
         public void ReservedKeyword(string name)
@@ -632,7 +643,11 @@ namespace Compiler.AST.SymbolTable
         public void UndefinedParameter(string ParameterName, string FunctionName) {
             Console.WriteLine($"There is no parameter defined with the name {ParameterName} in function {FunctionName} {GetLineNumber()}");
             Error();
+        }
 
+        public void TypeExpressionMismatch() {
+            Console.WriteLine($"There is a type mismatch in the expression on {GetLineNumber()}");
+            Error();
         }
     }
 }
