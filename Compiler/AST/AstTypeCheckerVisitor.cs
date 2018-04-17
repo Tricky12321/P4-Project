@@ -165,7 +165,7 @@ namespace Compiler.AST
                             else if (ExpressionPart is ExtractMaxQueryNode extraxtMaxQuery)
                             {
                                 expressionType = _createdSymbolTabe.RetrieveSymbol(extraxtMaxQuery.Variable);
-                                if(expressionType == variableType)
+                                if (expressionType == variableType)
                                 {
                                     // type correct
                                 }
@@ -430,11 +430,13 @@ namespace Compiler.AST
                     {
                         if (edgeOrVertexdcl is GraphDeclVertexNode)
                         {
-                            
+                            //Console.WriteLine("this is predef vertex" + _createdSymbolTabe.CurrentLine);
+                            //vertex is added to the graph
                         }
                         else if (edgeOrVertexdcl is GraphDeclEdgeNode)
                         {
-                            
+                            //Console.WriteLine("this is predef edge" + _createdSymbolTabe.CurrentLine);
+                            //edge is added to the graph
                         }
                         else
                         {
@@ -447,9 +449,10 @@ namespace Compiler.AST
                 {
                     foreach (AbstractNode vertexdcl in node.Dcls)
                     {
-                        if(vertexdcl is GraphDeclVertexNode)
+                        if (vertexdcl is GraphDeclVertexNode)
                         {
-
+                            //vertex is added to an extended vertex collection on graph.
+                            //Console.WriteLine("this is extend vertex" + _createdSymbolTabe.CurrentLine);
                         }
                         else
                         {
@@ -464,7 +467,8 @@ namespace Compiler.AST
                     {
                         if (edgedcl is GraphDeclEdgeNode)
                         {
-
+                            //Console.WriteLine("this is extend edge" + _createdSymbolTabe.CurrentLine);
+                            //edge is added to an extended edge collection on graph.
                         }
                         else
                         {
@@ -473,19 +477,8 @@ namespace Compiler.AST
                         }
                     }
                 }
-                
                 else
-                {//control statement for extended collections on graph
-
-                    if (isCollectionTargetColl)
-                    {
-
-                    }
-                    else
-                    {
-                        //not a collection - type error
-                    }
-
+                {
                     StringBuilder dclList = new StringBuilder();
                     dclList.Append($"declaration_set(");
                     foreach (AbstractNode v in node.Dcls)
@@ -495,20 +488,31 @@ namespace Compiler.AST
                     dclList.Remove(dclList.Length - 2, 2);
                     dclList.Append(")");
                     _createdSymbolTabe.WrongTypeError(dclList.ToString(), node.ToVariable);
-
                 }
             }
             //if the ToVariable is a collection:
-            else
+            else if(node.IsColl)
             {
-                if (_createdSymbolTabe.CheckIfDefined(node.ToVariable))
+                AllType? TypeOfTargetCollection = _createdSymbolTabe.RetrieveSymbol(node.ToVariable, out bool isCollectionTargetColl, false);
+                AllType? typeOfVariable = _createdSymbolTabe.RetrieveSymbol(node.TypeOrVariable);
+                if (isCollectionTargetColl)
                 {
-
+                    //ved ikke hvrdan man skal tjekke efter om det er en konstant
                 }
                 else
                 {
-                    _createdSymbolTabe.UndeclaredError(node.ToVariable);
+                    _createdSymbolTabe.WrongTypeError(node.TypeOrVariable, node.ToVariable);
                 }
+
+
+
+
+
+                Console.WriteLine("this is to a collection and not a graph." + _createdSymbolTabe.CurrentLine);
+            }
+            else
+            {
+                Console.WriteLine("er hverken collection eller graph? wtf went wrong. this is temp, dw.");
             }
 
         }
