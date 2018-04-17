@@ -509,14 +509,14 @@ namespace Compiler.AST
             else if(node.IsColl)
             {
                 AllType? TypeOfTargetCollection = _createdSymbolTabe.RetrieveSymbol(node.ToVariable, out bool isCollectionTargetColl, false);
-                AllType? typeOfVariable = _createdSymbolTabe.RetrieveSymbol(node.TypeOrVariable);
+                //AllType? typeOfVariable = _createdSymbolTabe.RetrieveSymbol(node.TypeOrVariable);
                 if (isCollectionTargetColl)
                 {
                     //ved ikke hvrdan man skal tjekke efter om det er en konstant
                 }
                 else
                 {
-                    _createdSymbolTabe.WrongTypeError(node.TypeOrVariable, node.ToVariable);
+                    //_createdSymbolTabe.WrongTypeError(node.TypeOrVariable, node.ToVariable);
                 }
 
 
