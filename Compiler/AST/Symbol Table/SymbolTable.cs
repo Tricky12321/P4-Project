@@ -649,5 +649,20 @@ namespace Compiler.AST.SymbolTable
             Console.WriteLine($"There is a type mismatch in the expression on {GetLineNumber()}");
             Error();
         }
+
+        public void MainHasParameters() {
+            Console.WriteLine($"The Main function has parameters, which is illigal! {GetLineNumber()}");
+            Error();
+        }
+
+        public void MainHasWrongReturnType() {
+            Console.WriteLine($"The Main function has a wrong return type! Only void is allowed! {GetLineNumber()}");
+            Error();
+        }
+
+        public void MainUndefined() {
+            Console.WriteLine($"There is no Main function declared, program wont work!");
+            Error();
+        }
     }
 }

@@ -5,6 +5,7 @@ namespace Giraph
 {
     class Program
     {
+        *****GLOBAL*****
         static void Main(string[] args)
         {
             *****MAINBODY*****

@@ -18,7 +18,6 @@ namespace Compiler
         static void Main(string[] args)
         {
             Compile();
-            WriteCodeToFiles();
             CompileGeneratedCode();
         }
 
@@ -43,6 +42,7 @@ namespace Compiler
             SymTable SymbolTable = BuildSymbolTable(AST as StartNode);
             TypeCheck(SymbolTable, AST as StartNode);
             //PrettyPrint(AST as StartNode);
+            WriteCodeToFiles(AST as StartNode);
             TotalTimer.Stop();
             Console.WriteLine($"Total compile timer: {TotalTimer.ElapsedMilliseconds}ms");
         }
@@ -89,6 +89,10 @@ namespace Compiler
             SymbolTable.BuildSymbolTable(node);
             SymbolTableTimer.Stop();
             Console.WriteLine("Building Symbol Table took: "+SymbolTableTimer.ElapsedMilliseconds + "ms");
+            if (!SymbolTable.MainDefined) {
+                SymbolTable.SymbolTable.MainUndefined();
+            }
+
             return SymbolTable.SymbolTable;
         }
 
@@ -117,16 +121,17 @@ namespace Compiler
         }
 
 
-        public static void WriteCodeToFiles() {
+        public static void WriteCodeToFiles(StartNode node) {
+            Stopwatch WriteTimer = new Stopwatch();
+            WriteTimer.Start();
             FunctionGeneration functionGeneration = new FunctionGeneration();
-            StringBuilder MainBody = new StringBuilder();
-            MainBody.AppendLine("Console.WriteLine(\"Giraph Compiler 1.0.0\");");
-            MainBody.AppendLine("Console.WriteLine(\"Dette er kode skrevet af C#\");");
-            MainBody.AppendLine("Console.WriteLine(\"Hello World\");");
-            MainBody.AppendLine("Console.WriteLine(\"tester\");");
-            functionGeneration.MainBody = MainBody;
-            functionGeneration.FillMainBody();
-            functionGeneration.FillFunctions();
+            CodeGenerator codeGenerator = new CodeGenerator();
+            codeGenerator.Visit(node);
+            functionGeneration.MainBody = codeGenerator.MainBody;
+            functionGeneration.Functions = codeGenerator.Functions;
+            functionGeneration.FillAll();
+            WriteTimer.Stop();
+            Console.WriteLine($"Writing Code timer: {WriteTimer.ElapsedMilliseconds}ms");
         }
 
 

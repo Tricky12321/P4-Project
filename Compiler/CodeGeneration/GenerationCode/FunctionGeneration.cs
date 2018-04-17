@@ -7,11 +7,12 @@ namespace Compiler.CodeGeneration.GenerationCode
 {
     public class FunctionGeneration
     {
-        public List<StringBuilder> Functions = new List<StringBuilder>();
+        public StringBuilder Functions;
         public StringBuilder MainBody;
         private string _programFile = "CodeGeneration/Program.cs";
         private string _mainBody = "*****MAINBODY*****";
         private string _functions = "*****FUNCTIONS*****";
+        private string _global = "*****GLOBAL*****";
         public FunctionGeneration()
         {
             
@@ -25,8 +26,19 @@ namespace Compiler.CodeGeneration.GenerationCode
 
         public void FillFunctions() {
             string text = File.ReadAllText(_programFile);
-            text = text.Replace(_functions, "");
+            text = text.Replace(_functions, Functions.ToString());
             File.WriteAllText(_programFile, text);
+        }
+
+        public void FillGlobals() {
+            string text = File.ReadAllText(_programFile);
+            text = text.Replace(_global, "");
+            File.WriteAllText(_programFile, text);
+        }
+        public void FillAll() {
+            FillMainBody();
+            FillFunctions();
+            FillGlobals();
         }
     }
 }
