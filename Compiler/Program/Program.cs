@@ -10,6 +10,7 @@ using Compiler.AST.SymbolTable;
 using Compiler.AST.Nodes;
 using System.Diagnostics;
 using System.Management;
+using Compiler.CodeGeneration.GenerationCode;
 namespace Compiler
 {
     class Program
@@ -17,6 +18,7 @@ namespace Compiler
         static void Main(string[] args)
         {
             Compile();
+            WriteCodeToFiles();
             CompileGeneratedCode();
         }
 
@@ -100,13 +102,8 @@ namespace Compiler
         }
 
         public static void CompileGeneratedCode() {
-            if (File.Exists("CodeGeneration/Program.exe")) {
-                File.Delete("CodeGeneration/Program.exe");
-            }
-
             if (GetOS() == OS.MacOS || GetOS() == OS.Linux) {
-				string strCmdText;
-                strCmdText = "CodeGeneration/Program.cs CodeGeneration/Classes/*";
+				string strCmdText = "CodeGeneration/Program.cs CodeGeneration/Classes/*";
 				Process.Start("mcs", strCmdText);
             } else if (GetOS() == OS.Windows) {
                 Process process = new Process();
@@ -117,6 +114,19 @@ namespace Compiler
                 process.StartInfo = startInfo;
                 process.Start();
             } 
+        }
+
+
+        public static void WriteCodeToFiles() {
+            FunctionGeneration functionGeneration = new FunctionGeneration();
+            StringBuilder MainBody = new StringBuilder();
+            MainBody.AppendLine("Console.WriteLine(\"Giraph Compiler 1.0.0\");");
+            MainBody.AppendLine("Console.WriteLine(\"Dette er kode skrevet af C#\");");
+            MainBody.AppendLine("Console.WriteLine(\"Hello World\");");
+            MainBody.AppendLine("Console.WriteLine(\"tester\");");
+            functionGeneration.MainBody = MainBody;
+            functionGeneration.FillMainBody();
+            functionGeneration.FillFunctions();
         }
 
 

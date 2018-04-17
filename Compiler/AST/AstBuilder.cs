@@ -887,15 +887,6 @@ namespace Compiler.AST
                     AddNode.IsType = true;
                     AddNode.TypeOrVariable = Visit(context.addToColl().expression());
                 }
-                /*
-                // ITS A VARIABLE
-                else if (context.addToColl().variable() != null && context.addToColl().variable().ChildCount > 1)
-                {
-                    AddNode.IsVariable = true;
-                    AddNode.TypeOrVariable = Visit(context.addToColl().variable());
-                }
-                */
-                // ITS A QUERY
                 else if (context.addToColl().expression() != null)
                 {
                     AddNode.IsQuery = true;
