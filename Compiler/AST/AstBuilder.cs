@@ -879,28 +879,17 @@ namespace Compiler.AST
             }
             // ITS A COLLECTION ADD
             else if (context.addToColl() != null)
-            {
+            {/*
+                EnqueueQueryNode EnqueueNode = new EnqueueQueryNode(context.Start.Line, context.Start.Column);
+                EnqueueNode.VariableToAdd = Visit(context.varOrConst());
+                EnqueueNode.VariableCollection = context.variable().GetText();
+                return EnqueueNode;*/
+
                 AddNode.IsColl = true;
-                // ITS ALL TYPE
+
                 if (context.addToColl().expression() != null)
                 {
-                    AddNode.IsType = true;
                     AddNode.TypeOrVariable = Visit(context.addToColl().expression());
-                }
-                /*
-                // ITS A VARIABLE
-                else if (context.addToColl().variable() != null && context.addToColl().variable().ChildCount > 1)
-                {
-                    AddNode.IsVariable = true;
-                    AddNode.TypeOrVariable = Visit(context.addToColl().variable());
-                }
-                */
-                // ITS A QUERY
-                else if (context.addToColl().expression() != null)
-                {
-                    AddNode.IsQuery = true;
-                    AddNode.Query = Visit(context.addToColl().expression());
-
                 }
                 else
                 {
