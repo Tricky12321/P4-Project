@@ -116,10 +116,6 @@
     <Compile Include="AST\Symbol Table\Scope.cs" />
     <Compile Include="AST\Symbol Table\BlockType.cs" />
     <Compile Include="AST\Symbol Table\FunctionParameterEntry.cs" />
-    <Compile Include="CodeGeneration\Classes\Graph.cs" />
-    <Compile Include="CodeGeneration\Classes\Vertex.cs" />
-    <Compile Include="CodeGeneration\Classes\Edge.cs" />
-    <Compile Include="CodeGeneration\Classes\Collection.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -129,6 +125,18 @@
     <None Include="Program\App.config" />
     <None Include="Program\packages.config" />
     <None Include="packages.config" />
+    <None Include="CodeGeneration\Classes\Collection.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="CodeGeneration\Classes\Edge.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="CodeGeneration\Classes\Graph.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="CodeGeneration\Classes\Vertex.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AST\Exceptions\VisitVarOrConstWrongTypeException.cs" />

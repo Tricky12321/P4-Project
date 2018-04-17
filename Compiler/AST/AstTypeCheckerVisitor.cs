@@ -77,8 +77,8 @@ namespace Compiler.AST
                 foreach (Tuple<VariableAttributeNode, string, ExpressionNode> Attributes in node.Attributes)
                 {
                     variableType = _createdSymbolTabe.RetrieveSymbol(Attributes.Item1.Name);
-                    
-                    if(Attributes is ExtendNode)
+
+                    if (Attributes is ExtendNode)
                     {
                         //item 3 is an expression node, item 3 of that includes the parts of it
                         foreach (var ExpressionPart in Attributes.Item3.ExpressionParts)
@@ -164,35 +164,36 @@ namespace Compiler.AST
                                     VisitChildren(extractMinQuery);
                                 }
 
-                            else if (ExpressionPart is ExtractMaxQueryNode extraxtMaxQuery)
-                            {
-                                expressionType = _createdSymbolTabe.RetrieveSymbol(extraxtMaxQuery.Variable);
-                                if (expressionType == variableType)
+                                else if (ExpressionPart is ExtractMaxQueryNode extraxtMaxQuery)
                                 {
                                     expressionType = _createdSymbolTabe.RetrieveSymbol(extraxtMaxQuery.Variable);
                                     if (expressionType == variableType)
                                     {
-                                        // type correct
+                                        expressionType = _createdSymbolTabe.RetrieveSymbol(extraxtMaxQuery.Variable);
+                                        if (expressionType == variableType)
+                                        {
+                                            // type correct
+                                        }
+                                        VisitChildren(extraxtMaxQuery);
                                     }
-                                    VisitChildren(extraxtMaxQuery);
-                                }
 
-                                
+
+                                }
+                            }
+                        }
+
+                        if (node.InVariable != null)
+                        {
+                            inVariableType = _createdSymbolTabe.RetrieveSymbol(node.InVariable.Name);
+                            if (inVariableType == variableType)
+                            {
+                                // type correct
                             }
                         }
                     }
-
-                    if (node.InVariable != null)
-                    {
-                        inVariableType = _createdSymbolTabe.RetrieveSymbol(node.InVariable.Name);
-                        if (inVariableType == variableType)
-                        {
-                            // type correct
-                        }
-                    }
                 }
+                VisitChildren(node);
             }
-            VisitChildren(node);
         }
 
         public override void Visit(ExtendNode node)
@@ -604,8 +605,8 @@ namespace Compiler.AST
 
         public override void Visit(DeclarationNode node)
         {
-	    _createdSymbolTabe.SetCurrentNode(node);
-            if( node.Assignment != null)
+            _createdSymbolTabe.SetCurrentNode(node);
+            if (node.Assignment != null)
             {
                 node.Assignment.Accept(this);
             }
@@ -648,14 +649,19 @@ namespace Compiler.AST
                     node.RightType = _createdSymbolTabe.RetrieveSymbol(node.Right.Children[0].Name) ?? default(AllType);
                 }
 
-                if (node.RightType != AllType.UNKNOWNTYPE && node.LeftType != AllType.UNKNOWNTYPE) {
-                    if (node.RightType != node.LeftType) {
-                        if (!((node.RightType == AllType.INT && node.LeftType == AllType.DECIMAL) || (node.RightType == AllType.DECIMAL && node.LeftType == AllType.INT))) {
+                if (node.RightType != AllType.UNKNOWNTYPE && node.LeftType != AllType.UNKNOWNTYPE)
+                {
+                    if (node.RightType != node.LeftType)
+                    {
+                        if (!((node.RightType == AllType.INT && node.LeftType == AllType.DECIMAL) || (node.RightType == AllType.DECIMAL && node.LeftType == AllType.INT)))
+                        {
                             _createdSymbolTabe.WrongTypeConditionError();
                         }
                     }
                 }
-            } else {
+            }
+            else
+            {
                 VisitChildren(node);
             }
         }
@@ -663,7 +669,8 @@ namespace Compiler.AST
         public override void Visit(ExpressionNode node)
         {
             _createdSymbolTabe.SetCurrentNode(node);
-            if (node.OverAllType == AllType.UNKNOWNTYPE) {
+            if (node.OverAllType == AllType.UNKNOWNTYPE)
+            {
                 _createdSymbolTabe.TypeExpressionMismatch();
             }
         }

@@ -5,6 +5,7 @@ namespace Compiler.CodeGeneration.Classes
     {
         public Edge()
         {
+            
         }
     }
 }
