@@ -69,6 +69,8 @@ namespace Compiler.AST
             AllType? expressionType;
             AllType? inVariableType;
 
+
+
             if (node.Attributes != null)
             {
                 //set query has attributes which is placed in a list
@@ -76,107 +78,122 @@ namespace Compiler.AST
                 {
                     variableType = _createdSymbolTabe.RetrieveSymbol(Attributes.Item1.Name);
 
-
-
-                    //item 3 is an expression node, item 3 of that includes the parts of it
-                    foreach (var ExpressionPart in Attributes.Item3.ExpressionParts)
+                    if (Attributes is ExtendNode)
                     {
-                        // bool should only be set to bool, and no addition of bools is allowed
-                        if (variableType == AllType.BOOL && Attributes.Item3.ExpressionParts.Count < 0)
+                        //item 3 is an expression node, item 3 of that includes the parts of it
+                        foreach (var ExpressionPart in Attributes.Item3.ExpressionParts)
                         {
-                            break;
+                            // bool should only be set to bool, and no addition of bools is allowed
+                            if (variableType == AllType.BOOL && Attributes.Item3.ExpressionParts.Count < 0)
+                            {
+                                break;
+                            }
+
+                            //no type check om operator item
+                            if (!(ExpressionPart is OperatorNode))
+                            {
+
+                                if (ExpressionPart is ConstantNode constant)
+                                {
+                                    if (constant.Type_enum == variableType)
+                                    {
+                                        // type correct
+                                    }
+                                }
+
+                                //can be variable og attribute, therefore using VariableAttributeNode
+                                else if (ExpressionPart is VariableAttributeNode expressionVariable)
+                                {
+                                    expressionType = _createdSymbolTabe.RetrieveSymbol(expressionVariable.Name);
+
+                                    if (expressionType == variableType)
+                                    {
+                                        // type correct
+                                    }
+                                }
+
+
+                                else if (ExpressionPart is SelectQueryNode selectQuery)
+                                {
+                                    expressionType = _createdSymbolTabe.RetrieveSymbol(selectQuery.Variable);
+
+                                    if (expressionType == variableType)
+                                    {
+                                        // type correct
+                                    }
+                                    VisitChildren(selectQuery);
+                                }
+
+                                else if (ExpressionPart is SelectAllQueryNode selectAllQuery)
+                                {
+                                    expressionType = _createdSymbolTabe.RetrieveSymbol(selectAllQuery.Variable);
+                                    if (expressionType == variableType)
+                                    {
+                                        // type correct
+                                    }
+                                    VisitChildren(selectAllQuery);
+                                }
+
+                                else if (ExpressionPart is DequeueQueryNode dequeueQuery)
+                                {
+                                    expressionType = _createdSymbolTabe.RetrieveSymbol(dequeueQuery.Variable);
+                                    if (expressionType == variableType)
+                                    {
+                                        // type correct
+                                    }
+                                    VisitChildren(dequeueQuery);
+                                }
+
+                                else if (ExpressionPart is PopQueryNode popQuery)
+                                {
+                                    expressionType = _createdSymbolTabe.RetrieveSymbol(popQuery.Variable);
+                                    if (expressionType == variableType)
+                                    {
+                                        // type correct
+                                    }
+                                    VisitChildren(popQuery);
+                                }
+
+                                else if (ExpressionPart is ExtractMinQueryNode extractMinQuery)
+                                {
+                                    expressionType = _createdSymbolTabe.RetrieveSymbol(extractMinQuery.Variable);
+                                    if (expressionType == variableType)
+                                    {
+                                        // type correct
+                                    }
+                                    VisitChildren(extractMinQuery);
+                                }
+
+                                else if (ExpressionPart is ExtractMaxQueryNode extraxtMaxQuery)
+                                {
+                                    expressionType = _createdSymbolTabe.RetrieveSymbol(extraxtMaxQuery.Variable);
+                                    if (expressionType == variableType)
+                                    {
+                                        expressionType = _createdSymbolTabe.RetrieveSymbol(extraxtMaxQuery.Variable);
+                                        if (expressionType == variableType)
+                                        {
+                                            // type correct
+                                        }
+                                        VisitChildren(extraxtMaxQuery);
+                                    }
+
+
+                                }
+                            }
                         }
 
-                        //no type check om operator item
-                        if (!(ExpressionPart is OperatorNode))
+                        if (node.InVariable != null)
                         {
-
-                            if (ExpressionPart is ConstantNode constant)
+                            inVariableType = _createdSymbolTabe.RetrieveSymbol(node.InVariable.Name);
+                            if (inVariableType == variableType)
                             {
-                                if (constant.Type_enum == variableType)
-                                {
-                                    // type correct
-                                }
+                                // type correct
                             }
-
-                            //can be variable og attribute, therefore using VariableAttributeNode
-                            else if (ExpressionPart is VariableAttributeNode expressionVariable)
-                            {
-                                expressionType = _createdSymbolTabe.RetrieveSymbol(expressionVariable.Name);
-
-                                if (expressionType == variableType)
-                                {
-                                    // type correct
-                                }
-                            }
-
-
-                            else if (ExpressionPart is SelectQueryNode selectQuery)
-                            {
-                                expressionType = _createdSymbolTabe.RetrieveSymbol(selectQuery.Variable);
-
-                                if (expressionType == variableType)
-                                {
-                                    // type correct
-                                }
-                                VisitChildren(selectQuery);
-                            }
-
-                            else if (ExpressionPart is SelectAllQueryNode selectAllQuery)
-                            {
-                                expressionType = _createdSymbolTabe.RetrieveSymbol(selectAllQuery.Variable);
-                                if (expressionType == variableType)
-                                {
-                                    // type correct
-                                }
-                                VisitChildren(selectAllQuery);
-                            }
-
-                            else if (ExpressionPart is DequeueQueryNode dequeueQuery)
-                            {
-                                expressionType = _createdSymbolTabe.RetrieveSymbol(dequeueQuery.Variable);
-                                if (expressionType == variableType)
-                                {
-                                    // type correct
-                                }
-                                VisitChildren(dequeueQuery);
-                            }
-
-                            else if (ExpressionPart is PopQueryNode popQuery)
-                            {
-                                expressionType = _createdSymbolTabe.RetrieveSymbol(popQuery.Variable);
-                                if (expressionType == variableType)
-                                {
-                                    // type correct
-                                }
-                                VisitChildren(popQuery);
-                            }
-
-                            else if (ExpressionPart is ExtractMinQueryNode extractMinQuery)
-                            {
-                                expressionType = _createdSymbolTabe.RetrieveSymbol(extractMinQuery.Variable);
-                                if (expressionType == variableType)
-                                {
-                                    // type correct
-                                }
-                                VisitChildren(extractMinQuery);
-                            }
-
-                            else if (ExpressionPart is ExtractMaxQueryNode extraxtMaxQuery)
-                            {
-                                expressionType = _createdSymbolTabe.RetrieveSymbol(extraxtMaxQuery.Variable);
-                                if (expressionType == variableType)
-                                {
-                                    // type correct
-                                }
-                                VisitChildren(extraxtMaxQuery);
-                            }
-
                         }
                     }
                 }
+                VisitChildren(node);
             }
-            VisitChildren(node);
         }
 
         public override void Visit(ExtendNode node)
@@ -256,7 +273,7 @@ namespace Compiler.AST
                 collectionNameType = _createdSymbolTabe.RetrieveSymbol(node.Variable, out bool isCollectionInQuery, false);
                 nameDeclaredForRetrieve = _createdSymbolTabe.RetrieveSymbol(node.Parent.Name, out bool isCollectionRetrieveVar, false);
 
-                bool isSameType = nameDeclaredForRetrieve.ToString() == collectionNameType.ToString() && nameDeclaredForRetrieve.ToString() == node.Type.ToUpper();
+                bool isSameType = nameDeclaredForRetrieve.ToString() == collectionNameType.ToString();
                 bool bothIsCollection = isCollectionInQuery && isCollectionRetrieveVar;
                 bool typeCorrect = isSameType && bothIsCollection;
 
@@ -283,7 +300,7 @@ namespace Compiler.AST
             {
                 AllType? collectionNameType = _createdSymbolTabe.RetrieveSymbol(node.Variable, out bool isCollectionInQuery, false);
                 AllType? nameDeclaredForRetrieve = _createdSymbolTabe.RetrieveSymbol(node.Parent.Name, out bool isCollectionRetriever, false);
-                bool isSameTypeAndCollectionCorrect = nameDeclaredForRetrieve.ToString() == collectionNameType.ToString() && nameDeclaredForRetrieve.ToString() == node.Type;
+                bool isSameTypeAndCollectionCorrect = nameDeclaredForRetrieve.ToString() == collectionNameType.ToString();
                 bool varNotCollAndFromIsColl = isCollectionInQuery && !isCollectionRetriever;
                 bool typeCorrect = isSameTypeAndCollectionCorrect && varNotCollAndFromIsColl;
 
@@ -430,12 +447,10 @@ namespace Compiler.AST
                     {
                         if (edgeOrVertexdcl is GraphDeclVertexNode)
                         {
-                            //Console.WriteLine("this is predef vertex" + _createdSymbolTabe.CurrentLine);
                             //vertex is added to the graph
                         }
                         else if (edgeOrVertexdcl is GraphDeclEdgeNode)
                         {
-                            //Console.WriteLine("this is predef edge" + _createdSymbolTabe.CurrentLine);
                             //edge is added to the graph
                         }
                         else
@@ -519,32 +534,61 @@ namespace Compiler.AST
 
         public override void Visit(WhereNode node)
         {
+            _createdSymbolTabe.SetCurrentNode(node);
             node.Accept(this);
         }
 
         public override void Visit(GraphDeclEdgeNode node)
         {
+            _createdSymbolTabe.SetCurrentNode(node);
             _createdSymbolTabe.NotImplementedError(node);
         }
 
         public override void Visit(GraphNode node)
         {
+            _createdSymbolTabe.SetCurrentNode(node);
             VisitChildren(node);
         }
 
         public override void Visit(FunctionNode node)
         {
+            _createdSymbolTabe.SetCurrentNode(node);
             VisitChildrenNewScope(node, node.Name);
         }
 
         public override void Visit(AbstractNode node)
         {
+            _createdSymbolTabe.SetCurrentNode(node);
             _createdSymbolTabe.NotImplementedError(node);
         }
 
         public override void Visit(IfElseIfElseNode node)
         {
-            _createdSymbolTabe.NotImplementedError(node);
+            _createdSymbolTabe.SetCurrentNode(node);
+            // If conditions
+            node.IfCondition.Accept(this);
+            // If codeblock
+            foreach (var item in node.IfCodeBlock.Children)
+            {
+                item.Accept(this);
+            }
+            // Elseif statements
+            foreach (var item in node.ElseIfList)
+            {
+                item.Item1.Accept(this);
+                foreach (var child in item.Item2.Children)
+                {
+                    child.Accept(this);
+                }
+            }
+            // Else statement
+            if (node.ElseCodeBlock != null)
+            {
+                foreach (var child in node.ElseCodeBlock.Children)
+                {
+                    child.Accept(this);
+                }
+            }
         }
 
         public override void Visit(GraphSetQuery node)
@@ -563,23 +607,79 @@ namespace Compiler.AST
 
         public override void Visit(DeclarationNode node)
         {
-            node.Assignment.Accept(this);
+            _createdSymbolTabe.SetCurrentNode(node);
+            if (node.Assignment != null)
+            {
+                node.Assignment.Accept(this);
+            }
             VisitChildren(node);
             _createdSymbolTabe.NotImplementedError(node);
         }
 
         public override void Visit(BoolComparisonNode node)
         {
-            _createdSymbolTabe.NotImplementedError(node);
+            _createdSymbolTabe.SetCurrentNode(node);
+            AllType type_check;
+            bool compare = false;
+            if (node.Left != null && node.Right != null)
+            {
+
+                // Check if the nodes are boolcomparisons
+                if (node.Left is BoolComparisonNode && node.Right is BoolComparisonNode)
+                {
+                    node.Left.Accept(this);
+                    node.Right.Accept(this);
+                    compare = true;
+                }
+
+                // Extract the type from Left and right sides of a bool comparison
+                if (node.Left.Children[0] is ExpressionNode)
+                {
+                    node.LeftType = ((ExpressionNode)node.Left.Children[0]).OverAllType ?? default(AllType);
+                }
+                else if (node.Left.Children[0] is PredicateNode)
+                {
+                    node.LeftType = _createdSymbolTabe.RetrieveSymbol(node.Left.Children[0].Name) ?? default(AllType);
+                }
+
+                if (node.Right.Children[0] is ExpressionNode)
+                {
+                    node.RightType = ((ExpressionNode)node.Right.Children[0]).OverAllType ?? default(AllType);
+                }
+                else if (node.Right.Children[0] is PredicateNode)
+                {
+                    node.RightType = _createdSymbolTabe.RetrieveSymbol(node.Right.Children[0].Name) ?? default(AllType);
+                }
+
+                if (node.RightType != AllType.UNKNOWNTYPE && node.LeftType != AllType.UNKNOWNTYPE)
+                {
+                    if (node.RightType != node.LeftType)
+                    {
+                        if (!((node.RightType == AllType.INT && node.LeftType == AllType.DECIMAL) || (node.RightType == AllType.DECIMAL && node.LeftType == AllType.INT)))
+                        {
+                            _createdSymbolTabe.WrongTypeConditionError();
+                        }
+                    }
+                }
+            }
+            else
+            {
+                VisitChildren(node);
+            }
         }
 
         public override void Visit(ExpressionNode node)
         {
-            _createdSymbolTabe.NotImplementedError(node);
+            _createdSymbolTabe.SetCurrentNode(node);
+            if (node.OverAllType == AllType.UNKNOWNTYPE)
+            {
+                _createdSymbolTabe.TypeExpressionMismatch();
+            }
         }
 
         public override void Visit(ReturnNode node)
         {
+            _createdSymbolTabe.SetCurrentNode(node);
             AllType? funcType = _createdSymbolTabe.RetrieveSymbol(node.Parent.Name, out bool isReturnTypeCollection, false);
             AllType? returnType = _createdSymbolTabe.RetrieveSymbol(node.LeftmostChild.Name, out bool isFunctionTypeCollection, false);
 
@@ -608,12 +708,15 @@ namespace Compiler.AST
 
         public override void Visit(ForLoopNode node)
         {
+
+            _createdSymbolTabe.SetCurrentNode(node);
             //fejl i parser, forloopnode gemmer ikke variablen som er udgangspunkt for loop, hvis den allerede er deklareret
             _createdSymbolTabe.NotImplementedError(node);
         }
 
         public override void Visit(ForeachLoopNode node)
         {
+            _createdSymbolTabe.SetCurrentNode(node);
             AllType? collectionType = _createdSymbolTabe.RetrieveSymbol(node.InVariableName, out bool isCollectionInForeach, false);
 
             if (node.VariableType_enum == collectionType)
@@ -629,37 +732,45 @@ namespace Compiler.AST
 
         public override void Visit(WhileLoopNode node)
         {
-            VisitChildren(node);
+            _createdSymbolTabe.SetCurrentNode(node);
+            node.BoolCompare.Accept(this);
+            VisitChildrenNewScope(node, BlockType.WhileLoop);
         }
 
         public override void Visit(VariableAttributeNode node)
         {
+            _createdSymbolTabe.SetCurrentNode(node);
             _createdSymbolTabe.NotImplementedError(node);
         }
 
         public override void Visit(VariableNode node)
         {
+            _createdSymbolTabe.SetCurrentNode(node);
             //måske ikke helt færdig, mangler expression bliver done 
             VisitChildren(node);
         }
 
         public override void Visit(CodeBlockNode node)
         {
+            _createdSymbolTabe.SetCurrentNode(node);
             VisitChildren(node);
         }
 
         public override void Visit(VariableDclNode node)
         {
+            _createdSymbolTabe.SetCurrentNode(node);
             _createdSymbolTabe.NotImplementedError(node);
         }
 
         public override void Visit(OperatorNode node)
         {
+            _createdSymbolTabe.SetCurrentNode(node);
             throw new NotImplementedException();
         }
 
         public override void Visit(ConstantNode node)
         {
+            _createdSymbolTabe.SetCurrentNode(node);
             throw new NotImplementedException();
         }
     }

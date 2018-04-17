@@ -606,6 +606,12 @@ namespace Compiler.AST.SymbolTable
             Error();
         }
 
+        public void WrongTypeConditionError()
+        {
+            Console.WriteLine($"There is a type mismatch in the condition on Line number {GetLineNumber()}");
+            Error();
+        }
+
         public void AttributeIdenticalError(string variable1, string variable2)
         {
             Console.WriteLine($"Attribute name {variable1} is identical with {variable2} which is illegal! {GetLineNumber()}");
@@ -632,7 +638,11 @@ namespace Compiler.AST.SymbolTable
         public void UndefinedParameter(string ParameterName, string FunctionName) {
             Console.WriteLine($"There is no parameter defined with the name {ParameterName} in function {FunctionName} {GetLineNumber()}");
             Error();
+        }
 
+        public void TypeExpressionMismatch() {
+            Console.WriteLine($"There is a type mismatch in the expression on {GetLineNumber()}");
+            Error();
         }
     }
 }

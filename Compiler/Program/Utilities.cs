@@ -10,6 +10,9 @@ namespace Compiler
     {
         public static AllType FindTypeFromString(string Type)
         {
+            if (Type != null) {
+				Type = Type.ToLower();
+            }
             switch (Type)
             {
                 case "void":

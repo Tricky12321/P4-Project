@@ -125,12 +125,31 @@
     <None Include="Program\App.config" />
     <None Include="Program\packages.config" />
     <None Include="packages.config" />
+    <None Include="CodeGeneration\Classes\Collection.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="CodeGeneration\Classes\Edge.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="CodeGeneration\Classes\Graph.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="CodeGeneration\Classes\Vertex.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="CodeGeneration\Program.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AST\Exceptions\VisitVarOrConstWrongTypeException.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup />
+  <ItemGroup>
+    <Folder Include="CodeGeneration\" />
+    <Folder Include="CodeGeneration\Classes\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

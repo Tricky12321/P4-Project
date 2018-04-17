@@ -193,6 +193,9 @@ namespace Compiler.AST
             {
                 BCompare.Left = Visit(context.left);
                 BCompare.Right = Visit(context.right);
+                BCompare.Left.Parent = BCompare;
+                BCompare.Right.Parent = BCompare;
+
                 if (context.BOOLOPERATOR() != null)
                 {
                     BCompare.ComparisonOperator = context.BOOLOPERATOR().GetText();
@@ -598,7 +601,7 @@ namespace Compiler.AST
         public override AbstractNode VisitSelect([NotNull] GiraphParser.SelectContext context)
         {
             SelectQueryNode SelectNode = new SelectQueryNode(context.Start.Line, context.Start.Column);
-            SelectNode.Type = context.allTypeWithColl().GetText();
+            //SelectNode.Type = context.allTypeWithColl().GetText();
             SelectNode.Variable = context.variableFunc().GetText();
             if (context.where() != null)
             {
@@ -610,7 +613,7 @@ namespace Compiler.AST
         public override AbstractNode VisitSelectAll([NotNull] GiraphParser.SelectAllContext context)
         {
             SelectAllQueryNode SelectNode = new SelectAllQueryNode(context.Start.Line, context.Start.Column);
-            SelectNode.Type = context.allTypeWithColl().GetText();
+            //SelectNode.Type = context.allTypeWithColl().GetText();
             SelectNode.Variable = context.variableFunc().GetText();
             if (context.where() != null)
             {
@@ -882,14 +885,16 @@ namespace Compiler.AST
                 if (context.addToColl().expression() != null)
                 {
                     AddNode.IsType = true;
-                    AddNode.TypeOrVariable = context.addToColl().expression().GetText();
+                    AddNode.TypeOrVariable = Visit(context.addToColl().expression());
                 }
+                /*
                 // ITS A VARIABLE
                 else if (context.addToColl().variable() != null && context.addToColl().variable().ChildCount > 1)
                 {
                     AddNode.IsVariable = true;
-                    AddNode.TypeOrVariable = context.addToColl().variable().GetText();
+                    AddNode.TypeOrVariable = Visit(context.addToColl().variable());
                 }
+                */
                 // ITS A QUERY
                 else if (context.addToColl().expression() != null)
                 {
