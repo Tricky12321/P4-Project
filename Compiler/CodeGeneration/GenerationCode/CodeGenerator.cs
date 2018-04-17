@@ -9,6 +9,30 @@ namespace Compiler.CodeGeneration.GenerationCode
 {
     public class CodeGenerator : AstVisitorBase
     {
+        public string ResolveTypeToCS(AllType type) {
+            switch (type)
+            {
+                case(AllType.VERTEX):
+                    return "Vertex";
+                case (AllType.EDGE):
+                    return "Edge";
+                case (AllType.GRAPH):
+                    return "Graph";
+                case (AllType.BOOL):
+                    return "bool";
+                case (AllType.STRING):
+                    return "string";
+                case (AllType.INT):
+                    return "int";
+                case (AllType.DECIMAL):
+                    return "decimal";
+                case (AllType.VOID):
+                    return "void";
+                default:
+                    return AllType.UNKNOWNTYPE.ToString();
+            }
+        }
+
 
         public override void Visit(DeclarationNode node)
         {
