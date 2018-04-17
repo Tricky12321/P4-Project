@@ -46,7 +46,7 @@ namespace Compiler.AST.Nodes
                     // There is a potential type mismatch
                     if (item != OverAllType) {
                         if (!((item == AllType.INT && OverAllType == AllType.DECIMAL) || (item == AllType.DECIMAL && OverAllType == AllType.INT))) {
-                            throw new Exception("Type mismatch in expression!");
+                            OverAllType = AllType.UNKNOWNTYPE;
                         } else {
                             OverAllType = AllType.DECIMAL;
                         }

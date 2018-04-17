@@ -13,7 +13,7 @@ namespace Compiler.AST.Nodes
         public string Suffix;
         public AllType LeftType;
         public AllType RightType;
-        public List<AllType> _typeList = new List<AllType>();
+        public List<AllType> TypeList = new List<AllType>();
         public bool InsideParentheses;
         public BoolComparisonNode(int LineNumber, int CharIndex) : base(LineNumber, CharIndex)
         {
@@ -26,12 +26,10 @@ namespace Compiler.AST.Nodes
         }
 
         public void AddType(AllType type) {
-            if (this.Parent is BoolComparisonNode) {
-                ((BoolComparisonNode)Parent).AddType(type);
-            } else {
-                _typeList.Add(type);
-            }
+             TypeList.Add(type);
         }
+
+
 
     }
 }

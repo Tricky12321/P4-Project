@@ -280,7 +280,7 @@ namespace Compiler.AST.SymbolTable
             }
             if (node.InVariable != null)
             {
-                CheckDeclared(node.InVariable);
+                CheckDeclared(node.InVariable.Name);
             }
             if (node.WhereCondition != null)
             {
@@ -434,6 +434,7 @@ namespace Compiler.AST.SymbolTable
         public override void Visit(BoolComparisonNode node)
         {
             SymbolTable.SetCurrentNode(node);
+
             if (node.Left != null && node.Right != null)
             {
                 node.Left.Accept(this);
@@ -448,12 +449,11 @@ namespace Compiler.AST.SymbolTable
         public override void Visit(ExpressionNode node)
         {
             SymbolTable.SetCurrentNode(node);
-            HandleExpressionTypes(node);
             foreach (var Exp in node.ExpressionParts)
             {
                 Exp.Accept(this);
             }
-
+            HandleExpressionTypes(node);
         }
 
         public void HandleExpressionTypes(ExpressionNode node)
