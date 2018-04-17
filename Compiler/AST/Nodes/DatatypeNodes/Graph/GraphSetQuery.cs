@@ -15,5 +15,15 @@ namespace Compiler.AST.Nodes.DatatypeNodes
         {
             astVisitor.Visit(this);
         }
+
+        public string ToExpressionString()
+        {
+            string returnString = string.Empty;
+            foreach (var expressionPart in Attributes.Item3.ExpressionParts)
+            {
+                returnString += (expressionPart as ConstantNode).Value;
+            }
+            return returnString;
+        }
     }
 }
