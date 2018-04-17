@@ -602,7 +602,7 @@ namespace Compiler.AST.SymbolTable
 
         public void WrongTypeError(string variable1, string variable2)
         {
-            Console.WriteLine($"Variable {variable1} and collection {variable2} are missmatch of types. Line number {GetLineNumber()}");
+            Console.WriteLine($"Variable {variable1} and {variable2} are missmatch of types. Line number {GetLineNumber()}");
             Error();
         }
 
@@ -610,6 +610,11 @@ namespace Compiler.AST.SymbolTable
         {
             Console.WriteLine($"Attribute name {variable1} is identical with {variable2} which is illegal! {GetLineNumber()}");
             Error();
+        }
+
+        public void BoolAdditionError(string variable1)
+        {
+            Console.WriteLine($"Cannot add Booleans {variable1}! {GetLineNumber()}");
         }
 
         public void ReservedKeyword(string name)
