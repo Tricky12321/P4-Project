@@ -291,7 +291,7 @@ namespace Compiler.AST
         public override void Visit(SelectAllQueryNode node)
         {
             ProgramCode.Append("SELECTALL ");
-            ProgramCode.Append(node.Type);
+            //ProgramCode.Append(node.Type);
             ProgramCode.Append("FROM");
             ProgramCode.Append(node.Variable);
             if (node.WhereCondition != null)
@@ -304,7 +304,7 @@ namespace Compiler.AST
         public override void Visit(SelectQueryNode node)
         {
             ProgramCode.Append("SELECT ");
-            ProgramCode.Append(node.Type);
+            //ProgramCode.Append(node.Type);
             ProgramCode.Append("FROM");
             ProgramCode.Append(node.Variable);
             if (node.WhereCondition != null)

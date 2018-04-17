@@ -9,7 +9,7 @@ using Compiler.AST;
 using Compiler.AST.SymbolTable;
 using Compiler.AST.Nodes;
 using System.Diagnostics;
-
+using System.Management;
 namespace Compiler
 {
     class Program
@@ -17,17 +17,30 @@ namespace Compiler
         static void Main(string[] args)
         {
             Compile();
+            CompileGeneratedCode();
+        }
+
+        private static OS GetOS() {
+            if (Utilities.IsWindows) {
+                return OS.Windows;
+            } else if (Utilities.IsMacOS) {
+                return OS.MacOS;
+            } else if (Utilities.IsLinux) {
+                return OS.Linux;
+            } else {
+                return OS.Unknown;
+            }
         }
 
         public static void Compile() {
             Stopwatch TotalTimer = new Stopwatch();
             TotalTimer.Start();
-            Console.WriteLine("Giraph Compiler 1.0.0");
+            Console.WriteLine("Giraph Compiler 5000");
             GiraphParser.StartContext CST = BuildCST("kode.giraph");
             AbstractNode AST = BuildAST(CST);
             SymTable SymbolTable = BuildSymbolTable(AST as StartNode);
             TypeCheck(SymbolTable, AST as StartNode);
-            PrettyPrint(AST as StartNode);
+            //PrettyPrint(AST as StartNode);
             TotalTimer.Stop();
             Console.WriteLine($"Total compile timer: {TotalTimer.ElapsedMilliseconds}ms");
         }
@@ -78,12 +91,34 @@ namespace Compiler
         }
 
         public static void TypeCheck(SymTable SymbolTable, StartNode node) {
-            Stopwatch SymbolTableTimer = new Stopwatch();
-            SymbolTableTimer.Start();
+            Stopwatch TypeCheckTimer = new Stopwatch();
+            TypeCheckTimer.Start();
             AstTypeCheckerVisitor TypeChecker = new AstTypeCheckerVisitor(SymbolTable);
             TypeChecker.VisitRoot(node);
-            SymbolTableTimer.Stop();
+            TypeCheckTimer.Stop();
+            Console.WriteLine("Type checking took: " + TypeCheckTimer.ElapsedMilliseconds + "ms");
         }
+
+        public static void CompileGeneratedCode() {
+            if (File.Exists("CodeGeneration/Program.exe")) {
+                File.Delete("CodeGeneration/Program.exe");
+            }
+
+            if (GetOS() == OS.MacOS || GetOS() == OS.Linux) {
+				string strCmdText;
+                strCmdText = "CodeGeneration/Program.cs CodeGeneration/Classes/*";
+				Process.Start("mcs", strCmdText);
+            } else if (GetOS() == OS.Windows) {
+                Process process = new Process();
+                ProcessStartInfo startInfo = new ProcessStartInfo();
+                startInfo.WindowStyle = ProcessWindowStyle.Hidden;
+                startInfo.FileName = "csc.exe";
+                startInfo.Arguments = "CodeGeneration/Program.cs CodeGeneration/Classes/*";
+                process.StartInfo = startInfo;
+                process.Start();
+            } 
+        }
+
 
     }
 }

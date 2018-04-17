@@ -11,8 +11,9 @@ namespace Compiler.AST.Nodes
         // If there is a ref, to the next node
         public string Prefix;
         public string Suffix;
-
-
+        public AllType LeftType;
+        public AllType RightType;
+        public List<AllType> TypeList = new List<AllType>();
         public bool InsideParentheses;
         public BoolComparisonNode(int LineNumber, int CharIndex) : base(LineNumber, CharIndex)
         {
@@ -23,5 +24,12 @@ namespace Compiler.AST.Nodes
         {
             astVisitor.Visit(this);
         }
+
+        public void AddType(AllType type) {
+             TypeList.Add(type);
+        }
+
+
+
     }
 }

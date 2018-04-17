@@ -279,7 +279,7 @@ namespace Compiler.AST
                 collectionNameType = _createdSymbolTabe.RetrieveSymbol(node.Variable, out bool isCollectionInQuery, false);
                 nameDeclaredForRetrieve = _createdSymbolTabe.RetrieveSymbol(node.Parent.Name, out bool isCollectionRetrieveVar, false);
 
-                bool isSameType = nameDeclaredForRetrieve.ToString() == collectionNameType.ToString() && nameDeclaredForRetrieve.ToString() == node.Type.ToUpper();
+                bool isSameType = nameDeclaredForRetrieve.ToString() == collectionNameType.ToString();
                 bool bothIsCollection = isCollectionInQuery && isCollectionRetrieveVar;
                 bool typeCorrect = isSameType && bothIsCollection;
 
@@ -306,7 +306,7 @@ namespace Compiler.AST
             {
                 AllType? collectionNameType = _createdSymbolTabe.RetrieveSymbol(node.Variable, out bool isCollectionInQuery, false);
                 AllType? nameDeclaredForRetrieve = _createdSymbolTabe.RetrieveSymbol(node.Parent.Name, out bool isCollectionRetriever, false);
-                bool isSameTypeAndCollectionCorrect = nameDeclaredForRetrieve.ToString() == collectionNameType.ToString() && nameDeclaredForRetrieve.ToString() == node.Type;
+                bool isSameTypeAndCollectionCorrect = nameDeclaredForRetrieve.ToString() == collectionNameType.ToString();
                 bool varNotCollAndFromIsColl = isCollectionInQuery && !isCollectionRetriever;
                 bool typeCorrect = isSameTypeAndCollectionCorrect && varNotCollAndFromIsColl;
 
@@ -453,11 +453,11 @@ namespace Compiler.AST
                     {
                         if (edgeOrVertexdcl is GraphDeclVertexNode)
                         {
-
+                            //vertex is added to the graph
                         }
                         else if (edgeOrVertexdcl is GraphDeclEdgeNode)
                         {
-
+                            //edge is added to the graph
                         }
                         else
                         {
@@ -472,7 +472,8 @@ namespace Compiler.AST
                     {
                         if (vertexdcl is GraphDeclVertexNode)
                         {
-
+                            //vertex is added to an extended vertex collection on graph.
+                            //Console.WriteLine("this is extend vertex" + _createdSymbolTabe.CurrentLine);
                         }
                         else
                         {
@@ -487,7 +488,8 @@ namespace Compiler.AST
                     {
                         if (edgedcl is GraphDeclEdgeNode)
                         {
-
+                            //Console.WriteLine("this is extend edge" + _createdSymbolTabe.CurrentLine);
+                            //edge is added to an extended edge collection on graph.
                         }
                         else
                         {
@@ -496,19 +498,8 @@ namespace Compiler.AST
                         }
                     }
                 }
-
                 else
-                {//control statement for extended collections on graph
-
-                    if (isCollectionTargetColl)
-                    {
-
-                    }
-                    else
-                    {
-                        //not a collection - type error
-                    }
-
+                {
                     StringBuilder dclList = new StringBuilder();
                     dclList.Append($"declaration_set(");
                     foreach (AbstractNode v in node.Dcls)
@@ -518,52 +509,92 @@ namespace Compiler.AST
                     dclList.Remove(dclList.Length - 2, 2);
                     dclList.Append(")");
                     _createdSymbolTabe.WrongTypeError(dclList.ToString(), node.ToVariable);
-
                 }
             }
             //if the ToVariable is a collection:
-            else
+            else if(node.IsColl)
             {
-                if (_createdSymbolTabe.CheckIfDefined(node.ToVariable))
+                AllType? TypeOfTargetCollection = _createdSymbolTabe.RetrieveSymbol(node.ToVariable, out bool isCollectionTargetColl, false);
+                //AllType? typeOfVariable = _createdSymbolTabe.RetrieveSymbol(node.TypeOrVariable);
+                if (isCollectionTargetColl)
                 {
-
+                    //ved ikke hvrdan man skal tjekke efter om det er en konstant
                 }
                 else
                 {
-                    _createdSymbolTabe.UndeclaredError(node.ToVariable);
+                    //_createdSymbolTabe.WrongTypeError(node.TypeOrVariable, node.ToVariable);
                 }
+
+
+
+
+
+                Console.WriteLine("this is to a collection and not a graph." + _createdSymbolTabe.CurrentLine);
+            }
+            else
+            {
+                Console.WriteLine("er hverken collection eller graph? wtf went wrong. this is temp, dw.");
             }
 
         }
 
         public override void Visit(WhereNode node)
         {
+            _createdSymbolTabe.SetCurrentNode(node);
             node.Accept(this);
         }
 
         public override void Visit(GraphDeclEdgeNode node)
         {
+            _createdSymbolTabe.SetCurrentNode(node);
             _createdSymbolTabe.NotImplementedError(node);
         }
 
         public override void Visit(GraphNode node)
         {
+            _createdSymbolTabe.SetCurrentNode(node);
             VisitChildren(node);
         }
 
         public override void Visit(FunctionNode node)
         {
+            _createdSymbolTabe.SetCurrentNode(node);
             VisitChildrenNewScope(node, node.Name);
         }
 
         public override void Visit(AbstractNode node)
         {
+            _createdSymbolTabe.SetCurrentNode(node);
             _createdSymbolTabe.NotImplementedError(node);
         }
 
         public override void Visit(IfElseIfElseNode node)
         {
-            _createdSymbolTabe.NotImplementedError(node);
+            _createdSymbolTabe.SetCurrentNode(node);
+            // If conditions
+            node.IfCondition.Accept(this);
+            // If codeblock
+            foreach (var item in node.IfCodeBlock.Children)
+            {
+                item.Accept(this);
+            }
+            // Elseif statements
+            foreach (var item in node.ElseIfList)
+            {
+                item.Item1.Accept(this);
+                foreach (var child in item.Item2.Children)
+                {
+                    child.Accept(this);
+                }
+            }
+            // Else statement
+            if (node.ElseCodeBlock != null)
+            {
+                foreach (var child in node.ElseCodeBlock.Children)
+                {
+                    child.Accept(this);
+                }
+            }
         }
 
         public override void Visit(GraphSetQuery node)
@@ -582,6 +613,7 @@ namespace Compiler.AST
 
         public override void Visit(DeclarationNode node)
         {
+            _createdSymbolTabe.SetCurrentNode(node);
             if (node.Assignment != null)
             {
                 node.Assignment.Accept(this);
@@ -592,16 +624,68 @@ namespace Compiler.AST
 
         public override void Visit(BoolComparisonNode node)
         {
-            _createdSymbolTabe.NotImplementedError(node);
+            _createdSymbolTabe.SetCurrentNode(node);
+            AllType type_check;
+            bool compare = false;
+            if (node.Left != null && node.Right != null)
+            {
+
+                // Check if the nodes are boolcomparisons
+                if (node.Left is BoolComparisonNode && node.Right is BoolComparisonNode)
+                {
+                    node.Left.Accept(this);
+                    node.Right.Accept(this);
+                    compare = true;
+                }
+
+                // Extract the type from Left and right sides of a bool comparison
+                if (node.Left.Children[0] is ExpressionNode)
+                {
+                    node.LeftType = ((ExpressionNode)node.Left.Children[0]).OverAllType ?? default(AllType);
+                }
+                else if (node.Left.Children[0] is PredicateNode)
+                {
+                    node.LeftType = _createdSymbolTabe.RetrieveSymbol(node.Left.Children[0].Name) ?? default(AllType);
+                }
+
+                if (node.Right.Children[0] is ExpressionNode)
+                {
+                    node.RightType = ((ExpressionNode)node.Right.Children[0]).OverAllType ?? default(AllType);
+                }
+                else if (node.Right.Children[0] is PredicateNode)
+                {
+                    node.RightType = _createdSymbolTabe.RetrieveSymbol(node.Right.Children[0].Name) ?? default(AllType);
+                }
+
+                if (node.RightType != AllType.UNKNOWNTYPE && node.LeftType != AllType.UNKNOWNTYPE)
+                {
+                    if (node.RightType != node.LeftType)
+                    {
+                        if (!((node.RightType == AllType.INT && node.LeftType == AllType.DECIMAL) || (node.RightType == AllType.DECIMAL && node.LeftType == AllType.INT)))
+                        {
+                            _createdSymbolTabe.WrongTypeConditionError();
+                        }
+                    }
+                }
+            }
+            else
+            {
+                VisitChildren(node);
+            }
         }
 
         public override void Visit(ExpressionNode node)
         {
-            _createdSymbolTabe.NotImplementedError(node);
+            _createdSymbolTabe.SetCurrentNode(node);
+            if (node.OverAllType == AllType.UNKNOWNTYPE)
+            {
+                _createdSymbolTabe.TypeExpressionMismatch();
+            }
         }
 
         public override void Visit(ReturnNode node)
         {
+            _createdSymbolTabe.SetCurrentNode(node);
             AllType? funcType = _createdSymbolTabe.RetrieveSymbol(node.Parent.Name, out bool isReturnTypeCollection, false);
             AllType? returnType = _createdSymbolTabe.RetrieveSymbol(node.LeftmostChild.Name, out bool isFunctionTypeCollection, false);
 
@@ -630,12 +714,15 @@ namespace Compiler.AST
 
         public override void Visit(ForLoopNode node)
         {
+
+            _createdSymbolTabe.SetCurrentNode(node);
             //fejl i parser, forloopnode gemmer ikke variablen som er udgangspunkt for loop, hvis den allerede er deklareret
             _createdSymbolTabe.NotImplementedError(node);
         }
 
         public override void Visit(ForeachLoopNode node)
         {
+            _createdSymbolTabe.SetCurrentNode(node);
             AllType? collectionType = _createdSymbolTabe.RetrieveSymbol(node.InVariableName, out bool isCollectionInForeach, false);
 
             if (node.VariableType_enum == collectionType)
@@ -651,37 +738,45 @@ namespace Compiler.AST
 
         public override void Visit(WhileLoopNode node)
         {
-            VisitChildren(node);
+            _createdSymbolTabe.SetCurrentNode(node);
+            node.BoolCompare.Accept(this);
+            VisitChildrenNewScope(node, BlockType.WhileLoop);
         }
 
         public override void Visit(VariableAttributeNode node)
         {
+            _createdSymbolTabe.SetCurrentNode(node);
             _createdSymbolTabe.NotImplementedError(node);
         }
 
         public override void Visit(VariableNode node)
         {
+            _createdSymbolTabe.SetCurrentNode(node);
             //måske ikke helt færdig, mangler expression bliver done 
             VisitChildren(node);
         }
 
         public override void Visit(CodeBlockNode node)
         {
+            _createdSymbolTabe.SetCurrentNode(node);
             VisitChildren(node);
         }
 
         public override void Visit(VariableDclNode node)
         {
+            _createdSymbolTabe.SetCurrentNode(node);
             _createdSymbolTabe.NotImplementedError(node);
         }
 
         public override void Visit(OperatorNode node)
         {
+            _createdSymbolTabe.SetCurrentNode(node);
             throw new NotImplementedException();
         }
 
         public override void Visit(ConstantNode node)
         {
+            _createdSymbolTabe.SetCurrentNode(node);
             throw new NotImplementedException();
         }
     }
