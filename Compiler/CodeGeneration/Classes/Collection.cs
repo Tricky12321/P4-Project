@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Linq.Expressions;
 using System.Collections.Generic;
-namespace Compiler.CodeGeneration.Classes
+namespace Giraph.Classes
 {
     public class Collection<T>
     {

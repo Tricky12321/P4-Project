@@ -1,5 +1,5 @@
 ﻿using System;
-namespace Compiler.CodeGeneration.Classes
+namespace Giraph.Classes
 {
     public class Graph
     {

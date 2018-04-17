@@ -18,7 +18,11 @@ namespace Compiler
         {
             Compile();
         }
+        /*
+        public static string GetOS() {
 
+        }
+        */
         public static void Compile() {
             Stopwatch TotalTimer = new Stopwatch();
             TotalTimer.Start();

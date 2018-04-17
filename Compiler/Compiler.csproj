@@ -137,6 +137,9 @@
     <None Include="CodeGeneration\Classes\Vertex.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="CodeGeneration\Program.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AST\Exceptions\VisitVarOrConstWrongTypeException.cs" />
