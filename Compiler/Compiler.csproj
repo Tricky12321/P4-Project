@@ -116,6 +116,7 @@
     <Compile Include="AST\Symbol Table\Scope.cs" />
     <Compile Include="AST\Symbol Table\BlockType.cs" />
     <Compile Include="AST\Symbol Table\FunctionParameterEntry.cs" />
+    <Compile Include="Program\OS_enum.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
