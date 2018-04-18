@@ -96,29 +96,29 @@ namespace Compiler.CodeGeneration.GenerationCode
 
         public override void Visit(GraphNode node)
         {
-            ProgramCode.Append($"\nGraph {node.Name} = new Graph();\n\n");
+            _currentStringBuilder.Append($"\nGraph {node.Name} = new Graph();\n\n");
 
             foreach (GraphDeclVertexNode vertex in node.Vertices)
             {
-                ProgramCode.Append($"Vertex {vertex.Name} = new Vertex();\n");
+                _currentStringBuilder.Append($"Vertex {vertex.Name} = new Vertex();\n");
                 foreach (KeyValuePair<string, string> value in vertex.ValueList)
                 {
-                    ProgramCode.Append($"{vertex.Name}.{value.Key} = {value.Value};\n");
+                    _currentStringBuilder.Append($"{vertex.Name}.{value.Key} = {value.Value};\n");
                 }
-                ProgramCode.Append($"{node.Name}.Vertices.Add({vertex.Name});\n\n");
+                _currentStringBuilder.Append($"{node.Name}.Vertices.Add({vertex.Name});\n\n");
             }
 
             foreach (GraphDeclEdgeNode edge in node.Edges)
             {
-                ProgramCode.Append($"Edge {edge.Name} = new Edge({edge.VertexNameFrom}, {edge.VertexNameTo});\n");
+                _currentStringBuilder.Append($"Edge {edge.Name} = new Edge({edge.VertexNameFrom}, {edge.VertexNameTo});\n");
                 foreach (KeyValuePair<string, string> value in edge.ValueList)
                 {
-                    ProgramCode.Append($"{edge.Name}.{value.Key} = {value.Value};\n");
+                    _currentStringBuilder.Append($"{edge.Name}.{value.Key} = {value.Value};\n");
                 }
-                ProgramCode.Append($"{node.Name}.Edges.Add({edge.Name});\n\n");
+                _currentStringBuilder.Append($"{node.Name}.Edges.Add({edge.Name});\n\n");
             }
 
-            ProgramCode.Append($"Graph.Directed = {node.Directed};\n\n");
+            _currentStringBuilder.Append($"Graph.Directed = {node.Directed};\n\n");
 
             /*  
             graph Graph1 
