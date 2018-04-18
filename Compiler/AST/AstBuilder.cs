@@ -136,6 +136,15 @@ namespace Compiler.AST
             {
                 GNode.AdoptChildren(Visit(Child));
             }
+
+            foreach (var Child in GNode.Children)
+            {
+                if ((Child as GraphSetQuery).Attributes.Item1.Name == "'Directed'")
+                {
+                    GNode.Directed = (Child as GraphSetQuery).ToExpressionString() == "true";
+                }
+            }
+
             return GNode;
         }
 
@@ -188,7 +197,7 @@ namespace Compiler.AST
                 BCompare.InsideParentheses = true;
                 BCompare.AdoptChildren(Visit(context.boolComparisons(0)));
             }
-            // Checks if there is a left and right statement, because this will indicate that the boolcomparison, has a left bool and right bool, compared by the operator.
+            // Checks if there is a left and right statement, because this will indicatef that the boolcomparison, has a left bool and right bool, compared by the operator.
             else if (context.right != null && context.left != null && context.boolComparisons() != null)
             {
                 BCompare.Left = Visit(context.left);
@@ -887,15 +896,6 @@ namespace Compiler.AST
                     AddNode.IsType = true;
                     AddNode.TypeOrVariable = Visit(context.addToColl().expression());
                 }
-                /*
-                // ITS A VARIABLE
-                else if (context.addToColl().variable() != null && context.addToColl().variable().ChildCount > 1)
-                {
-                    AddNode.IsVariable = true;
-                    AddNode.TypeOrVariable = Visit(context.addToColl().variable());
-                }
-                */
-                // ITS A QUERY
                 else if (context.addToColl().expression() != null)
                 {
                     AddNode.IsQuery = true;

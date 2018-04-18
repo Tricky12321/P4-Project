@@ -117,6 +117,20 @@
     <Compile Include="AST\Symbol Table\BlockType.cs" />
     <Compile Include="AST\Symbol Table\FunctionParameterEntry.cs" />
     <Compile Include="Program\OS_enum.cs" />
+    <Compile Include="CodeGeneration\Classes\Collection.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Include="CodeGeneration\Classes\Edge.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Include="CodeGeneration\Classes\Graph.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Include="CodeGeneration\Classes\Vertex.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Include="CodeGeneration\GenerationCode\FunctionGeneration.cs" />
+    <Compile Include="CodeGeneration\GenerationCode\CodeGenerator.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -126,18 +140,6 @@
     <None Include="Program\App.config" />
     <None Include="Program\packages.config" />
     <None Include="packages.config" />
-    <None Include="CodeGeneration\Classes\Collection.cs">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="CodeGeneration\Classes\Edge.cs">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="CodeGeneration\Classes\Graph.cs">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="CodeGeneration\Classes\Vertex.cs">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Include="CodeGeneration\Program.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -150,6 +152,7 @@
   <ItemGroup>
     <Folder Include="CodeGeneration\" />
     <Folder Include="CodeGeneration\Classes\" />
+    <Folder Include="CodeGeneration\GenerationCode\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

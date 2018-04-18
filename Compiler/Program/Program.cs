@@ -10,6 +10,7 @@ using Compiler.AST.SymbolTable;
 using Compiler.AST.Nodes;
 using System.Diagnostics;
 using System.Management;
+using Compiler.CodeGeneration.GenerationCode;
 namespace Compiler
 {
     class Program
@@ -41,8 +42,12 @@ namespace Compiler
             SymTable SymbolTable = BuildSymbolTable(AST as StartNode);
             TypeCheck(SymbolTable, AST as StartNode);
             //PrettyPrint(AST as StartNode);
+            WriteCodeToFiles(AST as StartNode);
             TotalTimer.Stop();
             Console.WriteLine($"Total compile timer: {TotalTimer.ElapsedMilliseconds}ms");
+            var test = new CodeGenerator();
+            test.VisitRoot(AST);
+
         }
 
         public static AbstractNode BuildAST(GiraphParser.StartContext start)
@@ -87,6 +92,10 @@ namespace Compiler
             SymbolTable.BuildSymbolTable(node);
             SymbolTableTimer.Stop();
             Console.WriteLine("Building Symbol Table took: "+SymbolTableTimer.ElapsedMilliseconds + "ms");
+            if (!SymbolTable.MainDefined) {
+                SymbolTable.SymbolTable.MainUndefined();
+            }
+
             return SymbolTable.SymbolTable;
         }
 
@@ -100,23 +109,32 @@ namespace Compiler
         }
 
         public static void CompileGeneratedCode() {
-            if (File.Exists("CodeGeneration/Program.exe")) {
-                File.Delete("CodeGeneration/Program.exe");
-            }
-
             if (GetOS() == OS.MacOS || GetOS() == OS.Linux) {
-				string strCmdText;
-                strCmdText = "CodeGeneration/Program.cs CodeGeneration/Classes/*";
+				string strCmdText = "CodeGeneration/Program.cs CodeGeneration/Classes/*";
 				Process.Start("mcs", strCmdText);
             } else if (GetOS() == OS.Windows) {
                 Process process = new Process();
                 ProcessStartInfo startInfo = new ProcessStartInfo();
                 startInfo.WindowStyle = ProcessWindowStyle.Hidden;
-                startInfo.FileName = "csc.exe";
+                startInfo.FileName = "C:\\Program Files (x86)\\Microsoft Visual Studio\\2017\\Community\\MSBuild\\15.0\\Bin\\Roslyn\\csc.exe";
                 startInfo.Arguments = "CodeGeneration/Program.cs CodeGeneration/Classes/*";
                 process.StartInfo = startInfo;
                 process.Start();
             } 
+        }
+
+
+        public static void WriteCodeToFiles(StartNode node) {
+            Stopwatch WriteTimer = new Stopwatch();
+            WriteTimer.Start();
+            FunctionGeneration functionGeneration = new FunctionGeneration();
+            CodeGenerator codeGenerator = new CodeGenerator(functionGeneration);
+            codeGenerator.Visit(node);
+            functionGeneration.MainBody = codeGenerator.MainBody;
+            functionGeneration.Functions = codeGenerator.Functions;
+            functionGeneration.FillAll();
+            WriteTimer.Stop();
+            Console.WriteLine($"Writing Code timer: {WriteTimer.ElapsedMilliseconds}ms");
         }
 
 

@@ -60,5 +60,6 @@ namespace Compiler.AST
         public abstract void Visit(AbstractNode node);
         public abstract void Visit(OperatorNode node);
         public abstract void Visit(ConstantNode node);
+        public abstract void Visit(PrintQueryNode node);
     }
 }
