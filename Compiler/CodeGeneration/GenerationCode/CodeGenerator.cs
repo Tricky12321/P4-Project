@@ -104,10 +104,21 @@ namespace Compiler.CodeGeneration.GenerationCode
         {
             _currentStringBuilder.Append($"\nGraph {node.Name} = new Graph();\n\n");
 
+            _currentStringBuilder.Append($"Vertex _newVertex;\n");
             foreach (GraphDeclVertexNode vertex in node.Vertices)
             {
-                string vertexName = vertex.Name == null ? "_new" : vertex.Name;
-                _currentStringBuilder.Append($"Vertex {vertexName} = new Vertex();\n");
+                string vertexName;
+                if(vertex.Name == null)
+                {
+                    vertexName = "_newVertex";
+                    _currentStringBuilder.Append($"{vertexName} = new Vertex();\n");
+                }
+                else
+                {
+                    vertexName = vertex.Name;
+                    _currentStringBuilder.Append($"Vertex {vertexName} = new Vertex();\n");
+                }
+
                 foreach (KeyValuePair<string, string> value in vertex.ValueList)
                 {
                     _currentStringBuilder.Append($"{vertexName}.{value.Key} = {value.Value};\n");
@@ -115,10 +126,21 @@ namespace Compiler.CodeGeneration.GenerationCode
                 _currentStringBuilder.Append($"{node.Name}.Vertices.Add({vertexName});\n\n");
             }
 
+            _currentStringBuilder.Append($"Edge _newEdge;\n");
             foreach (GraphDeclEdgeNode edge in node.Edges)
             {
-                string edgeName = edge.Name == null ? "_new" : edge.Name;
-                _currentStringBuilder.Append($"Edge {edgeName} = new Edge({edge.VertexNameFrom}, {edge.VertexNameTo});\n");
+                string edgeName;
+                if (edge.Name == null)
+                {
+                    edgeName = "_newEdge";
+                    _currentStringBuilder.Append($"{edgeName} = new Edge();\n");
+                }
+                else
+                {
+                    edgeName = edge.Name;
+                    _currentStringBuilder.Append($"Edge {edgeName} = new Egde();\n");
+                }
+
                 foreach (KeyValuePair<string, string> value in edge.ValueList)
                 {
                     _currentStringBuilder.Append($"{edgeName}.{value.Key} = {value.Value};\n");
