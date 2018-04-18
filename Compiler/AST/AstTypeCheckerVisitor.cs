@@ -65,10 +65,10 @@ namespace Compiler.AST
 
         public override void Visit(SetQueryNode node)
         {
+            _createdSymbolTabe.SetCurrentNode(node);
             AllType? variableType;
             AllType? expressionType;
             AllType? inVariableType;
-
 
 
             if (node.Attributes != null)
@@ -186,8 +186,6 @@ namespace Compiler.AST
 
                         }
                     }
-
-
                     if (node.InVariable != null)
                     {
                         inVariableType = _createdSymbolTabe.RetrieveSymbol(node.InVariable.Name);
@@ -512,7 +510,7 @@ namespace Compiler.AST
                 }
             }
             //if the ToVariable is a collection:
-            else if(node.IsColl)
+            else if (node.IsColl)
             {
                 AllType? TypeOfTargetCollection = _createdSymbolTabe.RetrieveSymbol(node.ToVariable, out bool isCollectionTargetColl, false);
                 //AllType? typeOfVariable = _createdSymbolTabe.RetrieveSymbol(node.TypeOrVariable);
@@ -714,7 +712,6 @@ namespace Compiler.AST
 
         public override void Visit(ForLoopNode node)
         {
-
             _createdSymbolTabe.SetCurrentNode(node);
             //fejl i parser, forloopnode gemmer ikke variablen som er udgangspunkt for loop, hvis den allerede er deklareret
             _createdSymbolTabe.NotImplementedError(node);
@@ -746,12 +743,21 @@ namespace Compiler.AST
         public override void Visit(VariableAttributeNode node)
         {
             _createdSymbolTabe.SetCurrentNode(node);
-            _createdSymbolTabe.NotImplementedError(node);
         }
 
         public override void Visit(VariableNode node)
         {
+            AllType? variableType;
+
+            if (node.Assignment != null)
+            {
+                AllType? variableExpressionType = _createdSymbolTabe.RetrieveSymbol(node.Assignment.Name);
+            }
+
             _createdSymbolTabe.SetCurrentNode(node);
+
+
+
             //måske ikke helt færdig, mangler expression bliver done 
             VisitChildren(node);
         }

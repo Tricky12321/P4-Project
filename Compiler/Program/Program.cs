@@ -17,7 +17,7 @@ namespace Compiler
         static void Main(string[] args)
         {
             Compile();
-            CompileGeneratedCode();
+            //CompileGeneratedCode();
         }
 
         private static OS GetOS() {
