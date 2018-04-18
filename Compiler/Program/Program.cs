@@ -113,7 +113,7 @@ namespace Compiler
                 Process process = new Process();
                 ProcessStartInfo startInfo = new ProcessStartInfo();
                 startInfo.WindowStyle = ProcessWindowStyle.Hidden;
-                startInfo.FileName = "csc.exe";
+                startInfo.FileName = "C:\\Program Files (x86)\\Microsoft Visual Studio\\2017\\Community\\MSBuild\\15.0\\Bin\\Roslyn\\csc.exe";
                 startInfo.Arguments = "CodeGeneration/Program.cs CodeGeneration/Classes/*";
                 process.StartInfo = startInfo;
                 process.Start();
