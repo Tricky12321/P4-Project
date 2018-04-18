@@ -156,12 +156,15 @@ namespace Compiler.AST.SymbolTable
 
         public override void Visit(FunctionNode node)
         {
-            if (node.Name == "Main") {
+            if (node.Name == "Main")
+            {
                 MainDefined = true;
-                if (node.Parameters.Count > 0) {
+                if (node.Parameters.Count > 0)
+                {
                     SymbolTable.MainHasParameters();
                 }
-                if (Utilities.FindTypeFromString(node.ReturnType) != AllType.VOID) {
+                if (Utilities.FindTypeFromString(node.ReturnType) != AllType.VOID)
+                {
                     SymbolTable.MainHasWrongReturnType();
                 }
             }
@@ -582,9 +585,15 @@ namespace Compiler.AST.SymbolTable
 
         public override void Visit(ConstantNode node)
         {
+            
             // Constants are note entered into the symbol table, so these can be ignored
             // SymbolTable.NotImplementedError(node);
         }
 
+        public override void Visit(PrintQueryNode node)
+        {
+            SymbolTable.SetCurrentNode(node);
+            VisitChildren(node);
+        }
     }
 }

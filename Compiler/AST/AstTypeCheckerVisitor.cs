@@ -217,21 +217,18 @@ namespace Compiler.AST
             _createdSymbolTabe.SetCurrentNode(node);
             if (node.Parent != null && node.Parent is ExpressionNode)
             {
-                AllType? collectionInQuery;
-                AllType? RetrieveVar;
-                collectionInQuery = _createdSymbolTabe.RetrieveSymbol(node.Variable, out bool isCollectionInQuery, false);
-                RetrieveVar = _createdSymbolTabe.RetrieveSymbol(node.Parent.Name, out bool isCollectionRetrieveVar, false);
-
-                bool isSameType = collectionInQuery == RetrieveVar;
-                bool varNotCollAndFromIsColl = isCollectionInQuery && !isCollectionRetrieveVar;
-                bool typeCorrect = isSameType && varNotCollAndFromIsColl;
-                if (typeCorrect)
+                AllType? collectionNameType = _createdSymbolTabe.RetrieveSymbol(node.Variable, out bool isCollectionInQuery, false);
+                bool FromIsColl = isCollectionInQuery;
+                if (FromIsColl)
                 {
-
+                    if (node.Parent is ExpressionNode expNode)
+                    {
+                        expNode.OverAllType = collectionNameType;
+                    }
                 }
                 else
                 {
-                    _createdSymbolTabe.WrongTypeError(node.Variable, node.Parent.Name);
+                    //correct error message pls
                 }
             }
 
@@ -246,19 +243,18 @@ namespace Compiler.AST
             _createdSymbolTabe.SetCurrentNode(node);
             if (node.Parent != null && node.Parent is ExpressionNode)
             {
-                AllType? collection = _createdSymbolTabe.RetrieveSymbol(node.Variable, out bool isCollectionInQuery, false);
-                AllType? RetrieveVar = _createdSymbolTabe.RetrieveSymbol(node.Parent.Name, out bool isCollectionRetriever, false);
-                bool isSameType = collection == RetrieveVar;
-                bool varNotCollAndFromIsColl = isCollectionInQuery && !isCollectionRetriever;
-                bool typeCorrect = isSameType && varNotCollAndFromIsColl;
-
-                if (typeCorrect)
+                AllType? collectionNameType = _createdSymbolTabe.RetrieveSymbol(node.Variable, out bool isCollectionInQuery, false);
+                bool FromIsColl = isCollectionInQuery;
+                if (FromIsColl)
                 {
-
+                    if (node.Parent is ExpressionNode expNode)
+                    {
+                        expNode.OverAllType = collectionNameType;
+                    }
                 }
                 else
                 {
-                    _createdSymbolTabe.WrongTypeError(node.Variable, node.Parent.Name);
+                    //TODO correct error pls
                 }
             }
 
@@ -285,11 +281,14 @@ namespace Compiler.AST
 
                 if (typeCorrect)
                 {
-
+                    if (node.Parent is ExpressionNode expNode)
+                    {
+                        expNode.OverAllType = collectionNameType;
+                    }
                 }
                 else
                 {
-                    _createdSymbolTabe.WrongTypeError(node.Variable, node.Parent.Name);
+                    //TODO correct error message pls
                 }
             }
 
@@ -302,27 +301,26 @@ namespace Compiler.AST
         public override void Visit(SelectQueryNode node)
         {
             _createdSymbolTabe.SetCurrentNode(node);
-            if (node.Parent != null && node.Parent is ExpressionNode)
+            if (node.Parent != null)
             {
                 AllType? collectionNameType = _createdSymbolTabe.RetrieveSymbol(node.Variable, out bool isCollectionInQuery, false);
-                AllType? nameDeclaredForRetrieve = _createdSymbolTabe.RetrieveSymbol(node.Parent.Name, out bool isCollectionRetriever, false);
-                bool isSameTypeAndCollectionCorrect = nameDeclaredForRetrieve.ToString() == collectionNameType.ToString();
-                bool varNotCollAndFromIsColl = isCollectionInQuery && !isCollectionRetriever;
-                bool typeCorrect = isSameTypeAndCollectionCorrect && varNotCollAndFromIsColl;
-
-                if (typeCorrect)
+                bool FromIsColl = isCollectionInQuery;
+                if (FromIsColl)
                 {
-
+                    if (node.Parent is ExpressionNode expNode)
+                    {
+                        expNode.OverAllType = collectionNameType;
+                    }
                 }
                 else
                 {
-                    _createdSymbolTabe.WrongTypeError(node.Variable, node.Parent.Name);
+                    //TODO correct error message pls
                 }
-            }
 
-            if (node.WhereCondition != null)
-            {
-                Visit(node.WhereCondition);
+                if (node.WhereCondition != null)
+                {
+                    Visit(node.WhereCondition);
+                }
             }
         }
 
@@ -364,20 +362,20 @@ namespace Compiler.AST
         public override void Visit(PopQueryNode node)
         {
             _createdSymbolTabe.SetCurrentNode(node);
-            if (node.Parent != null && node.Parent is ExpressionNode)
+            if (node.Parent != null)
             {
-                AllType? collection = _createdSymbolTabe.RetrieveSymbol(node.Variable, out bool isCollectionInQuery, false);
-                AllType? nameDeclaredForRetrieve = _createdSymbolTabe.RetrieveSymbol(node.Parent.Name, out bool isCollectionRetriever, false);
-                bool isSameType = collection == nameDeclaredForRetrieve;
-                bool varIsNotCollAndFromIsColl = isCollectionInQuery && !isCollectionRetriever;
-                bool typeCorrect = isSameType && varIsNotCollAndFromIsColl;
-                if (typeCorrect)
+                AllType? collectionNameType = _createdSymbolTabe.RetrieveSymbol(node.Variable, out bool isCollectionInQuery, false);
+                bool FromIsColl = isCollectionInQuery;
+                if (FromIsColl)
                 {
-
+                    if (node.Parent is ExpressionNode expNode)
+                    {
+                        expNode.OverAllType = collectionNameType;
+                    }
                 }
                 else
                 {
-                    _createdSymbolTabe.WrongTypeError(node.Variable, node.Parent.Name);
+                    //TODO find ordenlig error.
                 }
             }
         }
@@ -420,21 +418,18 @@ namespace Compiler.AST
         public override void Visit(DequeueQueryNode node)
         {
             _createdSymbolTabe.SetCurrentNode(node);
-            if (node.Parent != null && node.Parent is ExpressionNode)
+            AllType? collection = _createdSymbolTabe.RetrieveSymbol(node.Variable, out bool isCollectionInQuery, false);
+            bool FromIsColl = isCollectionInQuery;
+            if (FromIsColl)
             {
-                AllType? collection = _createdSymbolTabe.RetrieveSymbol(node.Variable, out bool isCollectionInQuery, false);
-                AllType? nameDeclaredForRetrieve = _createdSymbolTabe.RetrieveSymbol(node.Parent.Name, out bool isCollectionRetriever, false);
-                bool isSameType = collection == nameDeclaredForRetrieve;
-                bool varIsNotCollAndFromIsColl = isCollectionInQuery && !isCollectionRetriever;
-                bool typeCorrect = isSameType && varIsNotCollAndFromIsColl;
-                if (typeCorrect)
+                if (node.Parent is ExpressionNode expNode)
                 {
-
+                    expNode.OverAllType = collection;
                 }
-                else
-                {
-                    _createdSymbolTabe.WrongTypeError(node.Variable, node.Parent.Name);
-                }
+            }
+            else
+            {
+                _createdSymbolTabe.WrongTypeError(node.Variable, node.Parent.Name);
             }
         }
 
@@ -512,10 +507,21 @@ namespace Compiler.AST
                 }
             }
             //if the ToVariable is a collection:
-            else if(node.IsColl)
+            else if (node.IsColl)
             {
                 AllType? TypeOfTargetCollection = _createdSymbolTabe.RetrieveSymbol(node.ToVariable, out bool isCollectionTargetColl, false);
-                //AllType? typeOfVariable = _createdSymbolTabe.RetrieveSymbol(node.TypeOrVariable);
+                AllType? typeOfVar;
+                node.TypeOrVariable.Accept(this);
+
+                ExpressionNode expressionToAdd = (ExpressionNode)node.TypeOrVariable;
+                typeOfVar = expressionToAdd.OverAllType;
+
+                bool isConst = expressionToAdd.ExpressionParts[0] is ConstantNode ko;
+                bool isVar = expressionToAdd.ExpressionParts[0] is VariableNode;
+
+
+
+
                 if (isCollectionTargetColl)
                 {
                     //ved ikke hvrdan man skal tjekke efter om det er en konstant
@@ -677,6 +683,11 @@ namespace Compiler.AST
         public override void Visit(ExpressionNode node)
         {
             _createdSymbolTabe.SetCurrentNode(node);
+            foreach (AbstractNode item in node.ExpressionParts)
+            {
+                item.Parent = node;
+                item.Accept(this);
+            }
             if (node.OverAllType == AllType.UNKNOWNTYPE)
             {
                 _createdSymbolTabe.TypeExpressionMismatch();
@@ -778,6 +789,12 @@ namespace Compiler.AST
         {
             _createdSymbolTabe.SetCurrentNode(node);
             throw new NotImplementedException();
+        }
+
+        public override void Visit(PrintQueryNode node)
+        {
+            _createdSymbolTabe.SetCurrentNode(node);
+            _createdSymbolTabe.NotImplementedError(node);
         }
     }
 }
