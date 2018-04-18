@@ -1,15 +1,18 @@
-﻿using System;
+using System;
 using Giraph;
 using Giraph.Classes;
 namespace Giraph
 {
     class Program
     {
-        *****GLOBAL*****
+        
         static void Main(string[] args)
         {
-            *****MAINBODY*****
+            
         }
-        *****FUNCTIONS*****
+        public static void Test (string Test, int Test) 
+ {
+}
+
     }
 }

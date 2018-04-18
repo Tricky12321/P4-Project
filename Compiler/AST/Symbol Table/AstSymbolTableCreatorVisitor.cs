@@ -13,7 +13,7 @@ namespace Compiler.AST.SymbolTable
     {
         public SymTable SymbolTable = new SymTable();
         private bool _initialBuildDone = false;
-
+        public bool MainDefined = false;
         public bool CheckDeclared(string name)
         {
             if (name != null)
@@ -156,7 +156,15 @@ namespace Compiler.AST.SymbolTable
 
         public override void Visit(FunctionNode node)
         {
-
+            if (node.Name == "Main") {
+                MainDefined = true;
+                if (node.Parameters.Count > 0) {
+                    SymbolTable.MainHasParameters();
+                }
+                if (Utilities.FindTypeFromString(node.ReturnType) != AllType.VOID) {
+                    SymbolTable.MainHasWrongReturnType();
+                }
+            }
             SymbolTable.SetCurrentNode(node);
             AllType type = Utilities.FindTypeFromString(node.ReturnType);
             string functionName = node.Name;
