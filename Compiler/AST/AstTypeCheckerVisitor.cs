@@ -78,122 +78,128 @@ namespace Compiler.AST
                 {
                     variableType = _createdSymbolTabe.RetrieveSymbol(Attributes.Item1.Name);
 
-                    if (Attributes is ExtendNode)
+                    //item 3 is an expression node, item 3 of that includes the parts of it
+                    foreach (var ExpressionPart in Attributes.Item3.ExpressionParts)
                     {
-                        //item 3 is an expression node, item 3 of that includes the parts of it
-                        foreach (var ExpressionPart in Attributes.Item3.ExpressionParts)
+                        // bool should only be set to bool, and no addition of bools is allowed
+                        if (variableType == AllType.BOOL && (Attributes.Item3.ExpressionParts.Count > 1 || Attributes.Item3.ExpressionParts.Count == 0))
                         {
-                            // bool should only be set to bool, and no addition of bools is allowed
-                            if (variableType == AllType.BOOL && Attributes.Item3.ExpressionParts.Count < 0)
-                            {
-                                break;
-                            }
-
-                            //no type check om operator item
-                            if (!(ExpressionPart is OperatorNode))
-                            {
-
-                                if (ExpressionPart is ConstantNode constant)
-                                {
-                                    if (constant.Type_enum == variableType)
-                                    {
-                                        // type correct
-                                    }
-                                }
-
-                                //can be variable og attribute, therefore using VariableAttributeNode
-                                else if (ExpressionPart is VariableAttributeNode expressionVariable)
-                                {
-                                    expressionType = _createdSymbolTabe.RetrieveSymbol(expressionVariable.Name);
-
-                                    if (expressionType == variableType)
-                                    {
-                                        // type correct
-                                    }
-                                }
-
-
-                                else if (ExpressionPart is SelectQueryNode selectQuery)
-                                {
-                                    expressionType = _createdSymbolTabe.RetrieveSymbol(selectQuery.Variable);
-
-                                    if (expressionType == variableType)
-                                    {
-                                        // type correct
-                                    }
-                                    VisitChildren(selectQuery);
-                                }
-
-                                else if (ExpressionPart is SelectAllQueryNode selectAllQuery)
-                                {
-                                    expressionType = _createdSymbolTabe.RetrieveSymbol(selectAllQuery.Variable);
-                                    if (expressionType == variableType)
-                                    {
-                                        // type correct
-                                    }
-                                    VisitChildren(selectAllQuery);
-                                }
-
-                                else if (ExpressionPart is DequeueQueryNode dequeueQuery)
-                                {
-                                    expressionType = _createdSymbolTabe.RetrieveSymbol(dequeueQuery.Variable);
-                                    if (expressionType == variableType)
-                                    {
-                                        // type correct
-                                    }
-                                    VisitChildren(dequeueQuery);
-                                }
-
-                                else if (ExpressionPart is PopQueryNode popQuery)
-                                {
-                                    expressionType = _createdSymbolTabe.RetrieveSymbol(popQuery.Variable);
-                                    if (expressionType == variableType)
-                                    {
-                                        // type correct
-                                    }
-                                    VisitChildren(popQuery);
-                                }
-
-                                else if (ExpressionPart is ExtractMinQueryNode extractMinQuery)
-                                {
-                                    expressionType = _createdSymbolTabe.RetrieveSymbol(extractMinQuery.Variable);
-                                    if (expressionType == variableType)
-                                    {
-                                        // type correct
-                                    }
-                                    VisitChildren(extractMinQuery);
-                                }
-
-                                else if (ExpressionPart is ExtractMaxQueryNode extraxtMaxQuery)
-                                {
-                                    expressionType = _createdSymbolTabe.RetrieveSymbol(extraxtMaxQuery.Variable);
-                                    if (expressionType == variableType)
-                                    {
-                                        expressionType = _createdSymbolTabe.RetrieveSymbol(extraxtMaxQuery.Variable);
-                                        if (expressionType == variableType)
-                                        {
-                                            // type correct
-                                        }
-                                        VisitChildren(extraxtMaxQuery);
-                                    }
-
-
-                                }
-                            }
+                            _createdSymbolTabe.BoolAdditionError(Attributes.Item1.Name);
+                            //cant add bools
+                            break;
                         }
 
-                        if (node.InVariable != null)
+                        //no type check om operator item
+                        if (!(ExpressionPart is OperatorNode))
                         {
-                            inVariableType = _createdSymbolTabe.RetrieveSymbol(node.InVariable.Name);
-                            if (inVariableType == variableType)
+
+                            if (ExpressionPart is ConstantNode constant)
                             {
-                                // type correct
+                                if (!(constant.Type_enum == variableType))
+                                {
+                                    //Type error
+                                    _createdSymbolTabe.WrongTypeError(constant.Name, Attributes.Item1.Name);
+                                }
                             }
+
+                            //can be variable og attribute, therefore using VariableAttributeNode
+                            else if (ExpressionPart is VariableAttributeNode expressionVariable)
+                            {
+                                expressionType = _createdSymbolTabe.RetrieveSymbol(expressionVariable.Name);
+
+                                if (!(expressionType == variableType))
+                                {
+                                    _createdSymbolTabe.WrongTypeError(expressionVariable.Name, Attributes.Item1.Name);
+                                    // type error
+                                }
+                            }
+
+
+                            else if (ExpressionPart is SelectQueryNode selectQuery)
+                            {
+                                expressionType = _createdSymbolTabe.RetrieveSymbol(selectQuery.Variable);
+
+                                if (!(expressionType == variableType))
+                                {
+                                    // type error
+                                    _createdSymbolTabe.WrongTypeError(selectQuery.Name, Attributes.Item1.Name);
+                                }
+                                VisitChildren(selectQuery);
+                            }
+
+                            else if (ExpressionPart is SelectAllQueryNode selectAllQuery)
+                            {
+                                expressionType = _createdSymbolTabe.RetrieveSymbol(selectAllQuery.Variable);
+
+                                if (!(expressionType == variableType))
+                                {
+                                    // type error
+                                    _createdSymbolTabe.WrongTypeError(selectAllQuery.Name, Attributes.Item1.Name);
+                                }
+                                VisitChildren(selectAllQuery);
+                            }
+
+                            else if (ExpressionPart is DequeueQueryNode dequeueQuery)
+                            {
+                                expressionType = _createdSymbolTabe.RetrieveSymbol(dequeueQuery.Variable);
+                                if (!(expressionType == variableType))
+                                {
+                                    // type error
+                                    _createdSymbolTabe.WrongTypeError(dequeueQuery.Name, Attributes.Item1.Name);
+                                }
+                                VisitChildren(dequeueQuery);
+                            }
+
+                            else if (ExpressionPart is PopQueryNode popQuery)
+                            {
+                                expressionType = _createdSymbolTabe.RetrieveSymbol(popQuery.Variable);
+                                if (!(expressionType == variableType))
+                                {
+                                    // type error
+                                    _createdSymbolTabe.WrongTypeError(popQuery.Name, Attributes.Item1.Name);
+                                }
+                                VisitChildren(popQuery);
+                            }
+
+                            else if (ExpressionPart is ExtractMinQueryNode extractMinQuery)
+                            {
+                                expressionType = _createdSymbolTabe.RetrieveSymbol(extractMinQuery.Variable);
+                                if (expressionType == variableType)
+                                {
+                                    // type error
+                                    _createdSymbolTabe.WrongTypeError(extractMinQuery.Name, Attributes.Item1.Name);
+                                }
+                                VisitChildren(extractMinQuery);
+                            }
+
+                            else if (ExpressionPart is ExtractMaxQueryNode extraxtMaxQuery)
+                            {
+                                expressionType = _createdSymbolTabe.RetrieveSymbol(extraxtMaxQuery.Variable);
+                                if (!(expressionType == variableType))
+                                {
+                                    // type error
+                                    _createdSymbolTabe.WrongTypeError(extraxtMaxQuery.Name, Attributes.Item1.Name);
+                                }
+                                VisitChildren(extraxtMaxQuery);
+                            }
+
+
+                        }
+                    }
+
+
+                    if (node.InVariable != null)
+                    {
+                        inVariableType = _createdSymbolTabe.RetrieveSymbol(node.InVariable.Name);
+                        if (!(inVariableType == variableType))
+                        {
+                            // type error
+                            _createdSymbolTabe.WrongTypeError(node.InVariable.Name, Attributes.Item1.Name);
                         }
                     }
                 }
-                VisitChildren(node);
             }
+            VisitChildren(node);
         }
 
         public override void Visit(ExtendNode node)

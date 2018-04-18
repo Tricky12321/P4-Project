@@ -602,7 +602,7 @@ namespace Compiler.AST.SymbolTable
 
         public void WrongTypeError(string variable1, string variable2)
         {
-            Console.WriteLine($"Variable {variable1} and collection {variable2} are missmatch of types. Line number {GetLineNumber()}");
+            Console.WriteLine($"Variable {variable1} and {variable2} are missmatch of types. Line number {GetLineNumber()}");
             Error();
         }
 
@@ -616,6 +616,11 @@ namespace Compiler.AST.SymbolTable
         {
             Console.WriteLine($"Attribute name {variable1} is identical with {variable2} which is illegal! {GetLineNumber()}");
             Error();
+        }
+
+        public void BoolAdditionError(string variable1)
+        {
+            Console.WriteLine($"Cannot add Booleans {variable1}! {GetLineNumber()}");
         }
 
         public void ReservedKeyword(string name)
@@ -642,6 +647,21 @@ namespace Compiler.AST.SymbolTable
 
         public void TypeExpressionMismatch() {
             Console.WriteLine($"There is a type mismatch in the expression on {GetLineNumber()}");
+            Error();
+        }
+
+        public void MainHasParameters() {
+            Console.WriteLine($"The Main function has parameters, which is illigal! {GetLineNumber()}");
+            Error();
+        }
+
+        public void MainHasWrongReturnType() {
+            Console.WriteLine($"The Main function has a wrong return type! Only void is allowed! {GetLineNumber()}");
+            Error();
+        }
+
+        public void MainUndefined() {
+            Console.WriteLine($"There is no Main function declared, program wont work!");
             Error();
         }
     }
