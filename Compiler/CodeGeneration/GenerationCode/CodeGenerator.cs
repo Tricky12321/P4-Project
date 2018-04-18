@@ -4,11 +4,15 @@ using Compiler.AST.Nodes;
 using Compiler.AST.Nodes.DatatypeNodes;
 using Compiler.AST.Nodes.LoopNodes;
 using Compiler.AST.Nodes.QueryNodes;
+using System.Text;
+using System.Collections.Generic;
 
 namespace Compiler.CodeGeneration.GenerationCode
 {
     public class CodeGenerator : AstVisitorBase
     {
+        StringBuilder ProgramCode = new StringBuilder();
+
         public string ResolveTypeToCS(AllType type) {
             switch (type)
             {
@@ -32,7 +36,6 @@ namespace Compiler.CodeGeneration.GenerationCode
                     return AllType.UNKNOWNTYPE.ToString();
             }
         }
-
 
         public override void Visit(DeclarationNode node)
         {
@@ -61,7 +64,55 @@ namespace Compiler.CodeGeneration.GenerationCode
 
         public override void Visit(GraphNode node)
         {
-            throw new NotImplementedException();
+            ProgramCode.Append($"\nGraph {node.Name} = new Graph();\n\n");
+
+            foreach (GraphDeclVertexNode vertex in node.Vertices)
+            {
+                ProgramCode.Append($"Vertex {vertex.Name} = new Vertex();\n");
+                foreach (KeyValuePair<string, string> value in vertex.ValueList)
+                {
+                    ProgramCode.Append($"{vertex.Name}.{value.Key} = {value.Value};\n");
+                }
+                ProgramCode.Append($"{node.Name}.Vertices.Add({vertex.Name});\n\n");
+            }
+
+            foreach (GraphDeclEdgeNode edge in node.Edges)
+            {
+                ProgramCode.Append($"Edge {edge.Name} = new Edge({edge.VertexNameFrom}, {edge.VertexNameTo});\n");
+                foreach (KeyValuePair<string, string> value in edge.ValueList)
+                {
+                    ProgramCode.Append($"{edge.Name}.{value.Key} = {value.Value};\n");
+                }
+                ProgramCode.Append($"{node.Name}.Edges.Add({edge.Name});\n\n");
+            }
+
+            ProgramCode.Append($"Graph.Directed = {node.Directed};\n\n");
+
+            /*  
+            graph Graph1 
+                {
+		            vertex Ve(), Va();
+		            edge Eb(Ve, Va);
+		            set 'Directed' = true;
+                }
+
+            --------------------------------
+            ^ Should be like v in c#
+            --------------------------------
+
+            Graph Graph1 = new Graph();
+            
+            Vertex Ve = new Vertex();
+            Graph1.Vertices.Add(Ve);
+            
+            Vertex Va = new Vertex();
+            Graph1.Vertices.Add(Va);
+            
+            Edge Eb = new Edge(Ve, Va);
+            Graph1.Edges.Add(Eb);
+            
+            Graph1.Directed = true;
+            */
         }
 
         public override void Visit(VariableDclNode node)
