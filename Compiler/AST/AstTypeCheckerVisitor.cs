@@ -779,5 +779,11 @@ namespace Compiler.AST
             _createdSymbolTabe.SetCurrentNode(node);
             throw new NotImplementedException();
         }
+
+        public override void Visit(PrintQueryNode node)
+        {
+            _createdSymbolTabe.SetCurrentNode(node);
+            _createdSymbolTabe.NotImplementedError(node);
+        }
     }
 }

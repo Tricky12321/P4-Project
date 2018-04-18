@@ -125,7 +125,7 @@ namespace Compiler
             Stopwatch WriteTimer = new Stopwatch();
             WriteTimer.Start();
             FunctionGeneration functionGeneration = new FunctionGeneration();
-            CodeGenerator codeGenerator = new CodeGenerator();
+            CodeGenerator codeGenerator = new CodeGenerator(functionGeneration);
             codeGenerator.Visit(node);
             functionGeneration.MainBody = codeGenerator.MainBody;
             functionGeneration.Functions = codeGenerator.Functions;

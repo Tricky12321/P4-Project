@@ -651,7 +651,7 @@ namespace Compiler.AST.SymbolTable
         }
 
         public void MainHasParameters() {
-            Console.WriteLine($"The Main function has parameters, which is illigal! {GetLineNumber()}");
+            Console.WriteLine($"The Main function has parameters, which is illegal! {GetLineNumber()}");
             Error();
         }
 

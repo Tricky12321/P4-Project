@@ -9,10 +9,16 @@ namespace Compiler.CodeGeneration.GenerationCode
 {
     public class CodeGenerator : AstVisitorBase
     {
-        public StringBuilder MainBody = new StringBuilder();
+        public StringBuilder MainBody;
         private StringBuilder _currentStringBuilder;
         private StringBuilder Global = new StringBuilder();
-        public StringBuilder Functions = new StringBuilder();
+        public StringBuilder Functions;
+
+        public CodeGenerator(FunctionGeneration functionGeneration) {
+            MainBody = functionGeneration.MainBody;
+            Functions = functionGeneration.Functions;
+            _currentStringBuilder = Functions;
+        }
 
         public string ResolveTypeToCS(AllType type)
         {
@@ -55,24 +61,22 @@ namespace Compiler.CodeGeneration.GenerationCode
             else
             {
                 _currentStringBuilder = Functions;
-                StringBuilder FunctionHeader = new StringBuilder();
-                FunctionHeader.Append($"public static");
-                FunctionHeader.Append($" {ResolveTypeToCS(Utilities.FindTypeFromString(node.ReturnType))}");
-                FunctionHeader.Append($" {node.Name} (");
+                _currentStringBuilder.Append($"public static");
+                _currentStringBuilder.Append($" {ResolveTypeToCS(Utilities.FindTypeFromString(node.ReturnType))}");
+                _currentStringBuilder.Append($" {node.Name} (");
                 bool first = true;
                 foreach (var item in node.Parameters)
                 {
                     if (first) {
                         first = false;
-						FunctionHeader.Append($"{ResolveTypeToCS(item.Type_enum)} {item.Name}");
+                        _currentStringBuilder.Append($"{ResolveTypeToCS(item.Type_enum)} {item.Name}");
                     } else {
-                        FunctionHeader.Append($", {ResolveTypeToCS(item.Type_enum)} {item.Name}");
+                        _currentStringBuilder.Append($", {ResolveTypeToCS(item.Type_enum)} {item.Name}");
                     }
                 }
-                FunctionHeader.Append($") \n {{");
+                _currentStringBuilder.Append(") \n {");
                 VisitChildren(node);
-                FunctionHeader.Append($"\n}}");
-                _currentStringBuilder.AppendLine(FunctionHeader.ToString());
+                _currentStringBuilder.Append("\n}");
             }
 			_currentStringBuilder = Functions;
 
@@ -81,10 +85,12 @@ namespace Compiler.CodeGeneration.GenerationCode
 
         public override void Visit(ReturnNode node)
         {
+            
         }
 
         public override void Visit(ParameterNode node)
         {
+            
         }
 
         public override void Visit(StartNode node)
@@ -99,26 +105,41 @@ namespace Compiler.CodeGeneration.GenerationCode
 
         public override void Visit(VariableDclNode node)
         {
+            _currentStringBuilder.Append(ResolveTypeToCS(node.Type_enum)+" ");
+            _currentStringBuilder.Append(node.Name);
+            if (node.Children.Count > 0) {
+                _currentStringBuilder.Append(" = ");
+                foreach (var item in node.Children)
+                {
+                    item.Accept(this);
+                }
+                _currentStringBuilder.Append(";\n");
+            }
         }
 
         public override void Visit(GraphDeclVertexNode node)
         {
+            
         }
 
         public override void Visit(GraphDeclEdgeNode node)
         {
+            
         }
 
         public override void Visit(GraphSetQuery node)
         {
+            
         }
 
         public override void Visit(SetQueryNode node)
         {
+            
         }
 
         public override void Visit(WhereNode node)
         {
+            
         }
 
         public override void Visit(ExtendNode node)
@@ -128,18 +149,63 @@ namespace Compiler.CodeGeneration.GenerationCode
 
         public override void Visit(IfElseIfElseNode node)
         {
+            _currentStringBuilder.Append("if (");
+            node.IfCondition.Accept(this);
+            _currentStringBuilder.Append(") \n {");
+            node.IfCodeBlock.Accept(this);
+            _currentStringBuilder.Append("\n } ");
+            foreach (var item in node.ElseIfList)
+            {
+                _currentStringBuilder.Append("\n else if (");
+                item.Item1.Accept(this); // BoolComparison
+                _currentStringBuilder.Append(") \n {");
+                item.Item2.Accept(this); // Codeblock
+                _currentStringBuilder.Append("\n } "); 
+            }
+            if (node.ElseCodeBlock != null) {
+                _currentStringBuilder.Append("\n else \n {{");
+                node.ElseCodeBlock.Accept(this);
+                _currentStringBuilder.Append("\n } "); 
+            }
         }
 
         public override void Visit(BoolComparisonNode node)
         {
+            if (node.InsideParentheses)
+            {
+                _currentStringBuilder.Append("(");
+                node.Children[0].Accept(this);
+                _currentStringBuilder.Append(")");
+            }
+            else if (node.Prefix != null && node.Prefix != "")
+            {
+                _currentStringBuilder.Append(node.Prefix);
+                node.Children[0].Accept(this);
+            }
+            else if (node.Left != null && node.Right != null)
+            {
+                node.Left.Accept(this);
+                _currentStringBuilder.Append(node.ComparisonOperator);
+                node.Right.Accept(this);
+            } else {
+                node.Children[0].Accept(this);
+            }
         }
 
         public override void Visit(ExpressionNode node)
         {
+            foreach (var item in node.ExpressionParts)
+            {
+                item.Accept(this);
+            }
         }
 
         public override void Visit(CodeBlockNode node)
         {
+            foreach (var item in node.Children)
+            {
+                item.Accept(this);
+            }
         }
 
         public override void Visit(AddQueryNode node)
@@ -206,7 +272,7 @@ namespace Compiler.CodeGeneration.GenerationCode
 
         public override void Visit(VariableNode node)
         {
-             
+            _currentStringBuilder.Append(node.Name);
         }
 
         public override void Visit(AbstractNode node)
@@ -216,12 +282,36 @@ namespace Compiler.CodeGeneration.GenerationCode
 
         public override void Visit(OperatorNode node)
         {
-             
+            _currentStringBuilder.Append(node.Operator);
         }
 
         public override void Visit(ConstantNode node)
         {
-             
+            if (node.Type_enum == AllType.STRING) {
+				_currentStringBuilder.Append(node.Value);
+            } else if (node.Type_enum == AllType.DECIMAL) {
+                _currentStringBuilder.Append(node.Value);
+                _currentStringBuilder.Append("m");
+            } else if (node.Type_enum == AllType.BOOL ||  node.Type_enum == AllType.INT) {
+                _currentStringBuilder.Append(node.Value);
+            }
+        }
+
+        public override void Visit(PrintQueryNode node)
+        {
+            bool first = true;
+            _currentStringBuilder.Append("Console.WriteLine(");
+            foreach (var item in node.Children)
+            {
+                if (first) {
+                    item.Accept(this);
+                    first = false;
+                } else {
+					_currentStringBuilder.Append("+");
+                    item.Accept(this);
+                }
+            }
+            _currentStringBuilder.Append(");\n");
         }
     }
 }

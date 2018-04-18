@@ -409,5 +409,9 @@ namespace Compiler.AST
             throw new NotImplementedException();
         }
 
+        public override void Visit(PrintQueryNode node)
+        {
+            VisitChildren(node);
+        }
     }
 }
