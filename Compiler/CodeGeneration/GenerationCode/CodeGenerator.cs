@@ -104,13 +104,13 @@ namespace Compiler.CodeGeneration.GenerationCode
         {
             _currentStringBuilder.Append($"\nGraph {node.Name} = new Graph();\n\n");
 
-            _currentStringBuilder.Append($"Vertex _newVertex;\n");
+            _currentStringBuilder.Append($"Vertex _newVertex{node.Name};\n");
             foreach (GraphDeclVertexNode vertex in node.Vertices)
             {
                 string vertexName;
                 if(vertex.Name == null)
                 {
-                    vertexName = "_newVertex";
+                    vertexName = $"_newVertex{node.Name}";
                     _currentStringBuilder.Append($"{vertexName} = new Vertex();\n");
                 }
                 else
@@ -126,13 +126,13 @@ namespace Compiler.CodeGeneration.GenerationCode
                 _currentStringBuilder.Append($"{node.Name}.Vertices.Add({vertexName});\n\n");
             }
 
-            _currentStringBuilder.Append($"Edge _newEdge;\n");
+            _currentStringBuilder.Append($"Edge _newEdge{node.Name};\n");
             foreach (GraphDeclEdgeNode edge in node.Edges)
             {
                 string edgeName;
                 if (edge.Name == null)
                 {
-                    edgeName = "_newEdge";
+                    edgeName = $"_newEdge{node.Name}";
                     _currentStringBuilder.Append($"{edgeName} = new Edge();\n");
                 }
                 else
