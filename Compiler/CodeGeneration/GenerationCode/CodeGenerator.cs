@@ -98,26 +98,28 @@ namespace Compiler.CodeGeneration.GenerationCode
 
             foreach (GraphDeclVertexNode vertex in node.Vertices)
             {
-                _currentStringBuilder.Append($"Vertex {vertex.Name} = new Vertex();\n");
+                string vertexName = vertex.Name == null ? "_new" : vertex.Name;
+                _currentStringBuilder.Append($"Vertex {vertexName} = new Vertex();\n");
                 foreach (KeyValuePair<string, string> value in vertex.ValueList)
                 {
-                    _currentStringBuilder.Append($"{vertex.Name}.{value.Key} = {value.Value};\n");
+                    _currentStringBuilder.Append($"{vertexName}.{value.Key} = {value.Value};\n");
                 }
-                _currentStringBuilder.Append($"{node.Name}.Vertices.Add({vertex.Name});\n\n");
+                _currentStringBuilder.Append($"{node.Name}.Vertices.Add({vertexName});\n\n");
             }
 
             foreach (GraphDeclEdgeNode edge in node.Edges)
             {
-                _currentStringBuilder.Append($"Edge {edge.Name} = new Edge({edge.VertexNameFrom}, {edge.VertexNameTo});\n");
+                string edgeName = edge.Name == null ? "_new" : edge.Name;
+                _currentStringBuilder.Append($"Edge {edgeName} = new Edge({edge.VertexNameFrom}, {edge.VertexNameTo});\n");
                 foreach (KeyValuePair<string, string> value in edge.ValueList)
                 {
-                    _currentStringBuilder.Append($"{edge.Name}.{value.Key} = {value.Value};\n");
+                    _currentStringBuilder.Append($"{edgeName}.{value.Key} = {value.Value};\n");
                 }
-                _currentStringBuilder.Append($"{node.Name}.Edges.Add({edge.Name});\n\n");
+                _currentStringBuilder.Append($"{edgeName}.Edges.Add({edgeName});\n\n");
             }
 
             _currentStringBuilder.Append($"Graph.Directed = {node.Directed};\n\n");
-
+            Console.WriteLine(_currentStringBuilder);
             /*  
             graph Graph1 
                 {
