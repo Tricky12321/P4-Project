@@ -782,13 +782,13 @@ namespace Compiler.AST
         public override void Visit(OperatorNode node)
         {
             _createdSymbolTabe.SetCurrentNode(node);
-            throw new NotImplementedException();
+            _createdSymbolTabe.NotImplementedError(node);
         }
 
         public override void Visit(ConstantNode node)
         {
             _createdSymbolTabe.SetCurrentNode(node);
-            throw new NotImplementedException();
+            _createdSymbolTabe.NotImplementedError(node);
         }
 
         public override void Visit(PrintQueryNode node)

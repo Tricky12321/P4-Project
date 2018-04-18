@@ -85,7 +85,9 @@ namespace Compiler.CodeGeneration.GenerationCode
 
         public override void Visit(ReturnNode node)
         {
-            
+            _currentStringBuilder.Append("return ");
+            node.Children[0].Accept(this);
+            _currentStringBuilder.Append(";\n");
         }
 
         public override void Visit(ParameterNode node)
@@ -182,7 +184,7 @@ namespace Compiler.CodeGeneration.GenerationCode
 
         public override void Visit(SetQueryNode node)
         {
-            
+
         }
 
         public override void Visit(WhereNode node)
