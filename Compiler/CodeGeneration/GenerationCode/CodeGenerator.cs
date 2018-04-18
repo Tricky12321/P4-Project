@@ -77,8 +77,6 @@ namespace Compiler.CodeGeneration.GenerationCode
                 _currentStringBuilder.AppendLine(FunctionHeader.ToString());
             }
 			_currentStringBuilder = Functions;
-
-
         }
 
         public override void Visit(ReturnNode node)
