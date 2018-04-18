@@ -159,10 +159,10 @@ namespace Compiler.AST.SymbolTable
             if (node.Name == "Main") {
                 MainDefined = true;
                 if (node.Parameters.Count > 0) {
-                    
+                    SymbolTable.MainHasParameters();
                 }
                 if (Utilities.FindTypeFromString(node.ReturnType) != AllType.VOID) {
-                    
+                    SymbolTable.MainHasWrongReturnType();
                 }
             }
             SymbolTable.SetCurrentNode(node);

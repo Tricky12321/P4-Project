@@ -39,9 +39,6 @@ namespace Compiler.CodeGeneration.GenerationCode
             }
         }
 
-
-
-
         public override void Visit(DeclarationNode node)
         {
              
@@ -67,9 +64,9 @@ namespace Compiler.CodeGeneration.GenerationCode
                 {
                     if (first) {
                         first = false;
-						FunctionHeader.Append($"{ResolveTypeToCS(item.Type_enum)} {node.Name}");
+						FunctionHeader.Append($"{ResolveTypeToCS(item.Type_enum)} {item.Name}");
                     } else {
-                        FunctionHeader.Append($", {ResolveTypeToCS(item.Type_enum)} {node.Name}");
+                        FunctionHeader.Append($", {ResolveTypeToCS(item.Type_enum)} {item.Name}");
                     }
                 }
                 FunctionHeader.Append($") \n {{");
@@ -97,6 +94,7 @@ namespace Compiler.CodeGeneration.GenerationCode
 
         public override void Visit(GraphNode node)
         {
+
         }
 
         public override void Visit(VariableDclNode node)
@@ -125,6 +123,7 @@ namespace Compiler.CodeGeneration.GenerationCode
 
         public override void Visit(ExtendNode node)
         {
+            
         }
 
         public override void Visit(IfElseIfElseNode node)
