@@ -978,5 +978,13 @@ namespace Compiler.AST
         {
             return Visit(context.GetChild(0));
         }
-    }
+
+		public override AbstractNode VisitRunFunction([NotNull] GiraphParser.RunFunctionContext context)
+		{
+            RunQueryNode node = new RunQueryNode(context.Start.Line, context.Start.Column);
+            node.FunctionName = context.variable().GetText();
+
+			return base.VisitRunFunction(context);
+		}
+	}
 }

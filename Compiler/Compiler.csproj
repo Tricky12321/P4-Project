@@ -131,6 +131,7 @@
     </Compile>
     <Compile Include="CodeGeneration\GenerationCode\FunctionGeneration.cs" />
     <Compile Include="CodeGeneration\GenerationCode\CodeGenerator.cs" />
+    <Compile Include="AST\Nodes\QueryNodes\RunQueryNode.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
