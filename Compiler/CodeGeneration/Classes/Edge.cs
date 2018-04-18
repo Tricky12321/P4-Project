@@ -3,7 +3,7 @@ namespace Giraph.Classes
 {
     public class Edge
     {
-        public Edge()
+        public Edge(Vertex vertexFrom, Vertex vertexTo)
         {
             
         }

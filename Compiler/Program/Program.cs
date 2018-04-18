@@ -45,6 +45,9 @@ namespace Compiler
             WriteCodeToFiles(AST as StartNode);
             TotalTimer.Stop();
             Console.WriteLine($"Total compile timer: {TotalTimer.ElapsedMilliseconds}ms");
+            var test = new CodeGenerator();
+            test.VisitRoot(AST);
+
         }
 
         public static AbstractNode BuildAST(GiraphParser.StartContext start)
