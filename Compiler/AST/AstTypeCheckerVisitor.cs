@@ -696,9 +696,23 @@ namespace Compiler.AST
 
         public override void Visit(VariableNode node)
         {
+            AllType? variableType;
+
+            if (node.Assignment != null)
+            {
+                AllType? variableExpressionType = _createdSymbolTabe.RetrieveSymbol(node.Assignment.Name);
+            }
+
             _createdSymbolTabe.SetCurrentNode(node);
+<<<<<<< HEAD
+
+
+
+            //måske ikke helt færdig, mangler expression bliver done 
+=======
             ExpressionNode parentNode = (ExpressionNode)node.Parent;
             parentNode.OverAllType = _createdSymbolTabe.RetrieveSymbol(node.Name);
+>>>>>>> f77d651c13cead22df5b699cff113b2412592605
             VisitChildren(node);
         }
 
