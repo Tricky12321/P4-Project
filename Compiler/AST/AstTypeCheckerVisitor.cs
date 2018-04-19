@@ -575,10 +575,54 @@ namespace Compiler.AST
         public override void Visit(ExpressionNode node)
         {
             _createdSymbolTabe.SetCurrentNode(node);
+            AllType? previousType = null;
             foreach (AbstractNode item in node.ExpressionParts)
             {
-                item.Parent = node;
-                item.Accept(this);
+                if (!(item is OperatorNode))
+                {
+                    item.Parent = node;
+                    item.Accept(this);
+                    //TODO vi ved ikke hvordan vi skal sørge for decimal og int er godkendt sammen osv. 
+                    if (previousType == null)
+                    {
+                        previousType = node.OverAllType;
+                        Console.WriteLine("this is first assign");
+                    }
+                    else
+                    {
+                        if (previousType != node.OverAllType)
+                        {
+                            if((previousType == AllType.INT && node.OverAllType == AllType.DECIMAL) || (previousType == AllType.DECIMAL && node.OverAllType == AllType.INT))
+                            {
+                                node.OverAllType = AllType.DECIMAL;
+                                //do nothing
+                                Console.WriteLine("dette er decimal og int.");
+                            }
+                            else
+                            {
+                                Console.WriteLine("de har forskellige typer, dette må man ikke");
+                                //warning
+                            }
+                        }
+                        else
+                        {
+                            if(previousType == AllType.BOOL && node.OverAllType == AllType.BOOL)
+                            {
+                                Console.WriteLine("dette er bool og bool, fyfy");
+                                //warning
+                                //måske andre end bare bool?
+                            }
+                            else
+                            {
+                                Console.WriteLine("types er det samme. det bare fint");
+                                //do nothing
+                            }
+
+                        }
+                    }
+                }
+
+
             }
             if (node.OverAllType == AllType.UNKNOWNTYPE)
             {
@@ -652,18 +696,9 @@ namespace Compiler.AST
 
         public override void Visit(VariableNode node)
         {
-            AllType? variableType;
-
-            if (node.Assignment != null)
-            {
-                AllType? variableExpressionType = _createdSymbolTabe.RetrieveSymbol(node.Assignment.Name);
-            }
-
             _createdSymbolTabe.SetCurrentNode(node);
-
-
-
-            //måske ikke helt færdig, mangler expression bliver done 
+            ExpressionNode parentNode = (ExpressionNode)node.Parent;
+            parentNode.OverAllType = _createdSymbolTabe.RetrieveSymbol(node.Name);
             VisitChildren(node);
         }
 
@@ -688,7 +723,8 @@ namespace Compiler.AST
         public override void Visit(ConstantNode node)
         {
             _createdSymbolTabe.SetCurrentNode(node);
-            _createdSymbolTabe.NotImplementedError(node);
+            ExpressionNode parentNode = (ExpressionNode)node.Parent;
+            parentNode.OverAllType = node.Type_enum;
         }
 
         public override void Visit(PrintQueryNode node)
