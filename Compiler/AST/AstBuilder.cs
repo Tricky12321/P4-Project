@@ -978,5 +978,24 @@ namespace Compiler.AST
         {
             return Visit(context.GetChild(0));
         }
-    }
+
+		public override AbstractNode VisitRunFunction([NotNull] GiraphParser.RunFunctionContext context)
+		{
+            RunQueryNode node = new RunQueryNode(context.Start.Line, context.Start.Column);
+            node.FunctionName = context.variable().GetText();
+            foreach (var item in context.varOrConst())
+            {
+                if (item.variable() != null) {
+                    VariableNode varNode = new VariableNode(context.Start.Line, context.Start.Column);
+                    varNode.Name = item.variable().GetText();
+                    node.AdoptChildren(varNode);
+                } else {
+                    ConstantNode conNode = new ConstantNode(context.Start.Line, context.Start.Column);
+                    conNode.Value = item.constant().GetText();
+                    conNode.Type = ExpressionPartTypeFinder(item.constant().GetChild(0)).ToString();
+                }
+            }
+            return node;
+		}
+	}
 }

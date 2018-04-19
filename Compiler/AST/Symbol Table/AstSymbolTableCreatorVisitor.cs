@@ -595,5 +595,9 @@ namespace Compiler.AST.SymbolTable
             SymbolTable.SetCurrentNode(node);
             VisitChildren(node);
         }
+
+        public override void Visit(RunQueryNode node)
+        {
+        }
     }
 }
