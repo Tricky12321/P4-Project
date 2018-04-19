@@ -85,7 +85,9 @@ namespace Compiler.CodeGeneration.GenerationCode
 
         public override void Visit(ReturnNode node)
         {
-            
+            _currentStringBuilder.Append("return ");
+            node.Children[0].Accept(this);
+            _currentStringBuilder.Append(";\n");
         }
 
         public override void Visit(ParameterNode node)
@@ -102,28 +104,52 @@ namespace Compiler.CodeGeneration.GenerationCode
         {
             _currentStringBuilder.Append($"\nGraph {node.Name} = new Graph();\n\n");
 
+            _currentStringBuilder.Append($"Vertex _newVertex{node.Name};\n");
             foreach (GraphDeclVertexNode vertex in node.Vertices)
             {
-                _currentStringBuilder.Append($"Vertex {vertex.Name} = new Vertex();\n");
+                string vertexName;
+                if(vertex.Name == null)
+                {
+                    vertexName = $"_newVertex{node.Name}";
+                    _currentStringBuilder.Append($"{vertexName} = new Vertex();\n");
+                }
+                else
+                {
+                    vertexName = vertex.Name;
+                    _currentStringBuilder.Append($"Vertex {vertexName} = new Vertex();\n");
+                }
+
                 foreach (KeyValuePair<string, string> value in vertex.ValueList)
                 {
-                    _currentStringBuilder.Append($"{vertex.Name}.{value.Key} = {value.Value};\n");
+                    _currentStringBuilder.Append($"{vertexName}.{value.Key} = {value.Value};\n");
                 }
-                _currentStringBuilder.Append($"{node.Name}.Vertices.Add({vertex.Name});\n\n");
+                _currentStringBuilder.Append($"{node.Name}.Vertices.Add({vertexName});\n\n");
             }
 
+            _currentStringBuilder.Append($"Edge _newEdge{node.Name};\n");
             foreach (GraphDeclEdgeNode edge in node.Edges)
             {
-                _currentStringBuilder.Append($"Edge {edge.Name} = new Edge({edge.VertexNameFrom}, {edge.VertexNameTo});\n");
+                string edgeName;
+                if (edge.Name == null)
+                {
+                    edgeName = $"_newEdge{node.Name}";
+                    _currentStringBuilder.Append($"{edgeName} = new Edge();\n");
+                }
+                else
+                {
+                    edgeName = edge.Name;
+                    _currentStringBuilder.Append($"Edge {edgeName} = new Egde();\n");
+                }
+
                 foreach (KeyValuePair<string, string> value in edge.ValueList)
                 {
-                    _currentStringBuilder.Append($"{edge.Name}.{value.Key} = {value.Value};\n");
+                    _currentStringBuilder.Append($"{edgeName}.{value.Key} = {value.Value};\n");
                 }
-                _currentStringBuilder.Append($"{node.Name}.Edges.Add({edge.Name});\n\n");
+                _currentStringBuilder.Append($"{edgeName}.Edges.Add({edgeName});\n\n");
             }
 
             _currentStringBuilder.Append($"Graph.Directed = {node.Directed};\n\n");
-
+            Console.WriteLine(_currentStringBuilder);
             /*  
             graph Graph1 
                 {
@@ -182,7 +208,7 @@ namespace Compiler.CodeGeneration.GenerationCode
 
         public override void Visit(SetQueryNode node)
         {
-            
+
         }
 
         public override void Visit(WhereNode node)
