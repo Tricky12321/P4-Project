@@ -13,6 +13,9 @@ namespace Compiler.AST.Nodes
         public int ChildCount;
         public int CharIndex;
         public bool HasChildren => LeftmostChild != null;
+        public string Type;
+        public AllType Type_enum => Utilities.FindTypeFromString(Type);
+        
 
         public List<AbstractNode> Children
         {
