@@ -827,7 +827,7 @@ namespace Compiler.AST
         public override void Visit(OperatorNode node)
         {
             _createdSymbolTabe.SetCurrentNode(node);
-            throw new NotImplementedException();
+            _createdSymbolTabe.NotImplementedError(node);
         }
 
         public override void Visit(ConstantNode node)
@@ -835,6 +835,12 @@ namespace Compiler.AST
             _createdSymbolTabe.SetCurrentNode(node);
             ExpressionNode parentNode = (ExpressionNode)node.Parent;
             parentNode.OverAllType = node.Type_enum;
+        }
+
+        public override void Visit(PrintQueryNode node)
+        {
+            _createdSymbolTabe.SetCurrentNode(node);
+            _createdSymbolTabe.NotImplementedError(node);
         }
     }
 }

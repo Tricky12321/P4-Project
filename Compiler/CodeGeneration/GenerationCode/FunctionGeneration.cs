@@ -7,8 +7,8 @@ namespace Compiler.CodeGeneration.GenerationCode
 {
     public class FunctionGeneration
     {
-        public StringBuilder Functions;
-        public StringBuilder MainBody;
+        public StringBuilder Functions = new StringBuilder();
+        public StringBuilder MainBody = new StringBuilder();
         private string _programFile = "CodeGeneration/Program.cs";
         private string _mainBody = "*****MAINBODY*****";
         private string _functions = "*****FUNCTIONS*****";

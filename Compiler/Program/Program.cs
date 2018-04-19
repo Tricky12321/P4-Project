@@ -45,8 +45,6 @@ namespace Compiler
             WriteCodeToFiles(AST as StartNode);
             TotalTimer.Stop();
             Console.WriteLine($"Total compile timer: {TotalTimer.ElapsedMilliseconds}ms");
-            var test = new CodeGenerator();
-            test.VisitRoot(AST);
 
         }
 
@@ -128,7 +126,7 @@ namespace Compiler
             Stopwatch WriteTimer = new Stopwatch();
             WriteTimer.Start();
             FunctionGeneration functionGeneration = new FunctionGeneration();
-            CodeGenerator codeGenerator = new CodeGenerator();
+            CodeGenerator codeGenerator = new CodeGenerator(functionGeneration);
             codeGenerator.Visit(node);
             functionGeneration.MainBody = codeGenerator.MainBody;
             functionGeneration.Functions = codeGenerator.Functions;
