@@ -413,5 +413,10 @@ namespace Compiler.AST
         {
             VisitChildren(node);
         }
+
+        public override void Visit(RunQueryNode node)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

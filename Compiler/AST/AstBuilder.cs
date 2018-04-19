@@ -983,8 +983,19 @@ namespace Compiler.AST
 		{
             RunQueryNode node = new RunQueryNode(context.Start.Line, context.Start.Column);
             node.FunctionName = context.variable().GetText();
-
-			return base.VisitRunFunction(context);
+            foreach (var item in context.varOrConst())
+            {
+                if (item.variable() != null) {
+                    VariableNode varNode = new VariableNode(context.Start.Line, context.Start.Column);
+                    varNode.Name = item.variable().GetText();
+                    node.AdoptChildren(varNode);
+                } else {
+                    ConstantNode conNode = new ConstantNode(context.Start.Line, context.Start.Column);
+                    conNode.Value = item.constant().GetText();
+                    conNode.Type = ExpressionPartTypeFinder(item.constant().GetChild(0)).ToString();
+                }
+            }
+            return node;
 		}
 	}
 }

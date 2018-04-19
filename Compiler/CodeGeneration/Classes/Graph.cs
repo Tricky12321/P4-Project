@@ -7,6 +7,9 @@ namespace Giraph.Classes
         public Collection<Edge> Edges = new Collection<Edge>();
         public bool Directed;
 
+        //EXTENSIONS HERE
+        *****EXTEND*****
+        //EXTENSIONS ENDED
         public Graph()
         {
             

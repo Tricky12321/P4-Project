@@ -125,12 +125,10 @@ namespace Compiler
         public static void WriteCodeToFiles(StartNode node) {
             Stopwatch WriteTimer = new Stopwatch();
             WriteTimer.Start();
-            FunctionGeneration functionGeneration = new FunctionGeneration();
-            CodeGenerator codeGenerator = new CodeGenerator(functionGeneration);
+            CodeWriter codeWriter = new CodeWriter();
+            CodeGenerator codeGenerator = new CodeGenerator(codeWriter);
             codeGenerator.Visit(node);
-            functionGeneration.MainBody = codeGenerator.MainBody;
-            functionGeneration.Functions = codeGenerator.Functions;
-            functionGeneration.FillAll();
+            codeWriter.FillAll();
             WriteTimer.Stop();
             Console.WriteLine($"Writing Code timer: {WriteTimer.ElapsedMilliseconds}ms");
         }
