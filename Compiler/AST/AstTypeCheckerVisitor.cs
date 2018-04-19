@@ -68,21 +68,29 @@ namespace Compiler.AST
             _createdSymbolTabe.SetCurrentNode(node);
             AllType? variableType = null;
             AllType? inVariableType;
+            string variableName;
 
             if (node.Attributes != null)
             {
                 //set query has attributes which is placed in a list
                 foreach (Tuple<VariableAttributeNode, string, ExpressionNode> Attributes in node.Attributes)
                 {
-                    variableType = _createdSymbolTabe.RetrieveSymbol(Attributes.Item1.Name);
+                    variableName = Attributes.Item1.Name;
+                    variableType = _createdSymbolTabe.RetrieveSymbol(variableName);
 
                     if(Attributes.Item3 != null)
                     {
                         Attributes.Item3.Accept(this);
                     }
+
+                    if(Attributes.Item3.OverAllType != variableType)
+                    {
+                        //type error
+                        _createdSymbolTabe.WrongTypeError(variableName, Attributes.Item3.Name);
+                    }
                 }
             }
-            if (node.InVariable != null)
+            /*if (node.InVariable != null)
             {
                 inVariableType = _createdSymbolTabe.RetrieveSymbol(node.InVariable.Name);
                 if (!(inVariableType == variableType))
@@ -91,6 +99,7 @@ namespace Compiler.AST
                     _createdSymbolTabe.WrongTypeError(node.InVariable.Name, variableType.ToString());
                 }
             }
+            */
             VisitChildren(node);
         }
 
@@ -704,15 +713,8 @@ namespace Compiler.AST
             }
 
             _createdSymbolTabe.SetCurrentNode(node);
-<<<<<<< HEAD
-
-
-
-            //måske ikke helt færdig, mangler expression bliver done 
-=======
             ExpressionNode parentNode = (ExpressionNode)node.Parent;
             parentNode.OverAllType = _createdSymbolTabe.RetrieveSymbol(node.Name);
->>>>>>> f77d651c13cead22df5b699cff113b2412592605
             VisitChildren(node);
         }
 
@@ -725,7 +727,16 @@ namespace Compiler.AST
         public override void Visit(VariableDclNode node)
         {
             _createdSymbolTabe.SetCurrentNode(node);
-            _createdSymbolTabe.NotImplementedError(node);
+            AllType? variableType = _createdSymbolTabe.RetrieveSymbol(node.Name);
+
+            if(node.Children != null)
+            {
+                VisitChildren(node);
+                foreach(AbstractNode child in node.Children)
+                {
+
+                }
+            }
         }
 
         public override void Visit(OperatorNode node)
