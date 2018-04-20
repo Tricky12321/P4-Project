@@ -646,14 +646,14 @@ namespace Compiler.AST
         public override void Visit(ReturnNode node)
         {
             _createdSymbolTabe.SetCurrentNode(node);
-            AllType? funcType = _createdSymbolTabe.RetrieveSymbol(node.Parent.Name, out bool isReturnTypeCollection, false);
-            AllType? returnType = _createdSymbolTabe.RetrieveSymbol(node.LeftmostChild.Name, out bool isFunctionTypeCollection, false);
+            AllType? funcType = _createdSymbolTabe.RetrieveSymbol(node.Parent.Name, out bool ReturnTypeCollection, false);
+            AllType? returnType = _createdSymbolTabe.RetrieveSymbol(node.LeftmostChild.Name, out bool FunctionTypeCollection, false);
 
             if (funcType == AllType.VOID)
             {
                 //calling return on void function error 
             }
-            else if (isReturnTypeCollection == isFunctionTypeCollection)
+            if (ReturnTypeCollection == FunctionTypeCollection)
             {
                 if (funcType == returnType)
                 {
@@ -669,14 +669,14 @@ namespace Compiler.AST
                 //ERROR, one is collection, other isn't
             }
             VisitChildren(node);
-
         }
 
         public override void Visit(ForLoopNode node)
         {
             _createdSymbolTabe.SetCurrentNode(node);
             //fejl i parser, forloopnode gemmer ikke variablen som er udgangspunkt for loop, hvis den allerede er deklareret
-            _createdSymbolTabe.NotImplementedError(node);
+
+            VisitChildren(node);
         }
 
         public override void Visit(ForeachLoopNode node)
@@ -705,6 +705,7 @@ namespace Compiler.AST
         public override void Visit(VariableAttributeNode node)
         {
             _createdSymbolTabe.SetCurrentNode(node);
+            VisitChildren(node);
         }
 
         public override void Visit(VariableNode node)
@@ -738,7 +739,13 @@ namespace Compiler.AST
                 VisitChildren(node);
                 foreach(AbstractNode child in node.Children)
                 {
-
+                    if (child is ExpressionNode expNode)
+                    {
+                        if (expNode.OverAllType != variableType)
+                        {
+                            _createdSymbolTabe.WrongTypeError(child.Name, node.Name);
+                        }
+                    }
                 }
             }
         }
