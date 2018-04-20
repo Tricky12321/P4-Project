@@ -91,7 +91,7 @@ namespace Compiler.AST
                     {
                         foreach (var Attribute in NestedChild.assignment())
                         {
-                            VNode.ValueList.Add(Attribute.variable().GetText(), Attribute.expression().GetText());
+                            VNode.ValueList.Add(Attribute.variable().GetText(), Visit(Attribute.expression()));
                         }
                     }
                     GNode.Vertices.Add(VNode);
@@ -123,7 +123,7 @@ namespace Compiler.AST
                             // This is in order to ignore the attributes that are without 
                             if (Attribute.variable() != null)
                             {
-                                ENode.ValueList.Add(Attribute.variable().GetText(), Attribute.expression().GetText());
+                                ENode.ValueList.Add(Attribute.variable().GetText(), Visit(Attribute.expression()));
                             }
                         }
                     }
@@ -282,9 +282,10 @@ namespace Compiler.AST
         {
             SetQueryNode SetNode = new SetQueryNode(context.Start.Line, context.Start.Column);
             // If its Attributes being set
-            if (context.variable() != null) {
+            if (context.variable() != null)
+            {
                 SetNode.InVariable = Visit(context.variable());
-				//SetNode.InVariable.Name = context.variable().GetText();
+                //SetNode.InVariable.Name = context.variable().GetText();
                 SetNode.SetAttributes = true;
                 foreach (var ExpNode in context.setExpressionAtri())
                 {
@@ -294,8 +295,10 @@ namespace Compiler.AST
                     ExpressionNode expression = Visit(ExpNode.expression()) as ExpressionNode;
                     SetNode.Attributes.Add(Tuple.Create(attribute, ExpNode.compoundAssign().GetText(), expression));
                 }
-            } else {
-				// If its variables being set
+            }
+            else
+            {
+                // If its variables being set
                 SetNode.SetVariables = true;
                 foreach (var ExpNode in context.setExpressionVari())
                 {
@@ -324,7 +327,7 @@ namespace Compiler.AST
             return expressionPart;
         }
 
-        public override AbstractNode VisitExpressionExtension([NotNull] GiraphParser.ExpressionExtensionContext context)
+        public override AbstractNode VisitOperand([NotNull] GiraphParser.OperandContext context)
         {
             var switchString = context.GetChild(0).GetType().ToString();
             switch (switchString)
@@ -344,6 +347,9 @@ namespace Compiler.AST
                     AbstractNode varAttNode = Visit(context.GetChild(1));
                     varAttNode.Name = context.GetText();
                     return varAttNode;
+                case "GiraphParser+AttributeContext":
+                    AbstractNode attNode = Visit(context.GetChild(0));
+                    return attNode;
             }
             //Skal returnere en constnode eller en varnode;
             throw new VisitVarOrConstWrongTypeException("Fejl i Mads' Kode igen!!");
@@ -733,21 +739,24 @@ namespace Compiler.AST
         {
             ForLoopNode ForLoop = new ForLoopNode(context.Start.Line, context.Start.Column);
             var contextInside = context.forCondition().forConditionInside();
-			BoolComparisonNode boolComparison = new BoolComparisonNode(context.Start.Line, context.Start.Column);
+            BoolComparisonNode boolComparison = new BoolComparisonNode(context.Start.Line, context.Start.Column);
             boolComparison.ComparisonOperator = "<";
-            if (contextInside.forConditionStart().forConditionDcl() != null) {
-				ForLoop.VariableDeclaration = Visit(contextInside.forConditionStart().forConditionDcl());;
+            if (contextInside.forConditionStart().forConditionDcl() != null)
+            {
+                ForLoop.VariableDeclaration = Visit(contextInside.forConditionStart().forConditionDcl()); ;
                 VariableNode varNode = new VariableNode(context.Start.Line, context.Start.Column);
                 varNode.Name = (ForLoop.VariableDeclaration as VariableDclNode).Name;
                 varNode.Type = (ForLoop.VariableDeclaration as VariableDclNode).Type;
                 boolComparison.Left = varNode;
-				ForLoop.ToValueOperation = boolComparison;
-            } else if (contextInside.forConditionStart().expression() != null) {
-                
+                ForLoop.ToValueOperation = boolComparison;
+            }
+            else if (contextInside.forConditionStart().expression() != null)
+            {
+
                 ForLoop.ToValueOperation = Visit(contextInside.forConditionStart().expression());
             }
             boolComparison.Right = Visit(contextInside.expression(0));
-			ForLoop.Increment = Visit(contextInside.expression(1));
+            ForLoop.Increment = Visit(contextInside.expression(1));
 
 
             // Visit all the children of the Codeblock associated with the ForLoop
@@ -802,7 +811,10 @@ namespace Compiler.AST
             // Visit the children of the codeblock
             foreach (var Child in context.codeBlock().children)
             {
-                ForeachNode.AdoptChildren(Visit(Child.GetChild(0)));
+                if (Child.GetChild(0) != null)
+                {
+                    ForeachNode.AdoptChildren(Visit(Child.GetChild(0)));
+                }
             }
             return ForeachNode;
         }
@@ -838,20 +850,13 @@ namespace Compiler.AST
             {
                 AddNode.IsColl = true;
                 // ITS ALL TYPE
-                if (context.addToColl().expression() != null)
+                AddNode.TypeOrVariable.Add(Visit(context.addToColl().collExpression().expression()));
+                if (context.addToColl().collExpressionExt() != null)
                 {
-                    AddNode.IsType = true;
-                    AddNode.TypeOrVariable = Visit(context.addToColl().expression());
-                }
-                else if (context.addToColl().expression() != null)
-                {
-                    AddNode.IsQuery = true;
-                    AddNode.Query = Visit(context.addToColl().expression());
-
-                }
-                else
-                {
-                    throw new Exception("Whaaaaat!");
+                    foreach (var item in context.addToColl().collExpressionExt())
+                    {
+                        AddNode.TypeOrVariable.Add(Visit(item.collExpression().expression()));
+                    }
                 }
                 // Shared
                 if (AddNode.IsVariable)
@@ -926,17 +931,20 @@ namespace Compiler.AST
             return Visit(context.GetChild(0));
         }
 
-		public override AbstractNode VisitRunFunction([NotNull] GiraphParser.RunFunctionContext context)
-		{
+        public override AbstractNode VisitRunFunction([NotNull] GiraphParser.RunFunctionContext context)
+        {
             RunQueryNode node = new RunQueryNode(context.Start.Line, context.Start.Column);
             node.FunctionName = context.variable().GetText();
             foreach (var item in context.varOrConst())
             {
-                if (item.variable() != null) {
+                if (item.variable() != null)
+                {
                     VariableNode varNode = new VariableNode(context.Start.Line, context.Start.Column);
                     varNode.Name = item.variable().GetText();
                     node.AdoptChildren(varNode);
-                } else {
+                }
+                else
+                {
                     ConstantNode conNode = new ConstantNode(context.Start.Line, context.Start.Column);
                     conNode.Value = item.constant().GetText();
                     conNode.Type = ExpressionPartTypeFinder(item.constant().GetChild(0)).ToString();
@@ -944,9 +952,9 @@ namespace Compiler.AST
                 }
             }
             return node;
-		}
-		public override AbstractNode VisitForConditionDcl([NotNull] GiraphParser.ForConditionDclContext context)
-		{
+        }
+        public override AbstractNode VisitForConditionDcl([NotNull] GiraphParser.ForConditionDclContext context)
+        {
             VariableDclNode VariableNode = new VariableDclNode(context.Start.Line, context.Start.Column);
             VariableNode.Type = context.TYPE().GetText();
             VariableNode.Name = context.variable().GetText();
@@ -955,6 +963,6 @@ namespace Compiler.AST
                 VariableNode.AdoptChildren(Visit(context.expression()));
             }
             return VariableNode;
-		}
-	}
+        }
+    }
 }
