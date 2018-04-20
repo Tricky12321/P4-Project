@@ -95,7 +95,7 @@ namespace Compiler.AST
             Debug.Print("GraphDeclVertexNode");
             ProgramCode.Append($"{node.Name}(");
             int i = 0;
-            foreach (KeyValuePair<string, string> item in node.ValueList)
+            foreach (KeyValuePair<string, AbstractNode> item in node.ValueList)
             {
                 InsertComma(ref i);
                 ProgramCode.Append($"{item.Key} = {item.Value}");
@@ -114,7 +114,7 @@ namespace Compiler.AST
                 ProgramCode.Append(", ");
             }
 
-            foreach (KeyValuePair<string, string> item in node.ValueList)
+            foreach (KeyValuePair<string, AbstractNode> item in node.ValueList)
             {
                 InsertComma(ref i);
                 ProgramCode.Append($"{item.Key} = {item.Value}");

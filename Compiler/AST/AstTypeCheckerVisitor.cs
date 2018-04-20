@@ -511,16 +511,11 @@ namespace Compiler.AST
             {
                 AllType? TypeOfTargetCollection = _createdSymbolTabe.RetrieveSymbol(node.ToVariable, out bool isCollectionTargetColl, false);
                 AllType? typeOfVar;
-                node.TypeOrVariable.Accept(this);
+                foreach (var item in node.TypeOrVariable)
+                {
+					item.Accept(this);
 
-                ExpressionNode expressionToAdd = (ExpressionNode)node.TypeOrVariable;
-                typeOfVar = expressionToAdd.OverAllType;
-
-                bool isConst = expressionToAdd.ExpressionParts[0] is ConstantNode ko;
-                bool isVar = expressionToAdd.ExpressionParts[0] is VariableNode;
-
-
-
+                }
 
                 if (isCollectionTargetColl)
                 {

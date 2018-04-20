@@ -4,7 +4,7 @@ namespace Compiler.AST.Nodes
 {
     public class GraphDeclVertexNode : AbstractNode
     {
-        public Dictionary<string, string> ValueList = new Dictionary<string, string>();
+        public Dictionary<string, AbstractNode> ValueList = new Dictionary<string, AbstractNode>();
         public GraphDeclVertexNode(int LineNumber, int CharIndex) : base(LineNumber, CharIndex)
         {
             

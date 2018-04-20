@@ -11,6 +11,7 @@ using Compiler.AST.Nodes;
 using System.Diagnostics;
 using System.Management;
 using Compiler.CodeGeneration.GenerationCode;
+using Giraph.Classes;
 namespace Compiler
 {
     class Program
@@ -131,6 +132,10 @@ namespace Compiler
             codeWriter.FillAll();
             WriteTimer.Stop();
             Console.WriteLine($"Writing Code timer: {WriteTimer.ElapsedMilliseconds}ms");
+        }
+
+        public void TestGeneratedCode() {
+            
         }
 
 
