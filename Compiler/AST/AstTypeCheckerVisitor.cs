@@ -684,52 +684,56 @@ namespace Compiler.AST
         {
             _createdSymbolTabe.SetCurrentNode(node);
             AllType? previousType = null;
-            foreach (AbstractNode item in node.ExpressionParts)
+            if (node.ExpressionParts.Where(x => x.Type != null && x.Type_enum == AllType.STRING).Count() > 0)
             {
-                if (!(item is OperatorNode))
+                //ignore the rest of the type checking of expression. An expressionpart is string, therefore everything will turn to a string
+            }
+            else
+            {
+                foreach (AbstractNode item in node.ExpressionParts)
                 {
-                    item.Parent = node;
-                    item.Accept(this);
-                    //TODO vi ved ikke hvordan vi skal sørge for decimal og int er godkendt sammen osv. 
-                    if (previousType == null)
+                    if (!(item is OperatorNode))
                     {
-                        previousType = node.OverAllType;
-                        Console.WriteLine("this is first assign");
-                    }
-                    else
-                    {
-                        if (previousType != node.OverAllType)
+                        item.Parent = node;
+                        item.Accept(this);
+
+                        //TODO vi ved ikke hvordan vi skal sørge for decimal og int er godkendt sammen osv. 
+                        if (previousType == null)
                         {
-                            if((previousType == AllType.INT && node.OverAllType == AllType.DECIMAL) || (previousType == AllType.DECIMAL && node.OverAllType == AllType.INT))
-                            {
-                                node.OverAllType = AllType.DECIMAL;
-                                //do nothing
-                                Console.WriteLine("dette er decimal og int.");
-                            }
-                            else
-                            {
-                                Console.WriteLine("de har forskellige typer, dette må man ikke");
-                                //warning
-                            }
+                            previousType = node.OverAllType;
                         }
                         else
                         {
-                            if(previousType == AllType.BOOL && node.OverAllType == AllType.BOOL)
+                            if (previousType != node.OverAllType)
                             {
-                                Console.WriteLine("dette er bool og bool, fyfy");
-                                //warning
-                                //måske andre end bare bool?
+                                if ((previousType == AllType.INT && node.OverAllType == AllType.DECIMAL) || (previousType == AllType.DECIMAL && node.OverAllType == AllType.INT))
+                                {
+                                    node.OverAllType = AllType.DECIMAL;
+                                    //do nothing, but set overalltype to decimal.
+                                }
+                                else
+                                {
+                                    //error
+                                }
                             }
                             else
                             {
-                                Console.WriteLine("types er det samme. det bare fint");
-                                //do nothing
-                            }
+                                if (previousType == AllType.BOOL && node.OverAllType == AllType.BOOL)
+                                {
+                                    Console.WriteLine("dette er bool og bool, fyfy");
+                                    //warning
+                                    //måske andre end bare bool?
+                                }
+                                else
+                                {
+                                    Console.WriteLine("types er det samme. det bare fint");
+                                    //do nothing
+                                }
 
+                            }
                         }
                     }
                 }
-
 
             }
             if (node.OverAllType == AllType.UNKNOWNTYPE)
