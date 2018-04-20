@@ -123,6 +123,15 @@
     <Compile Include="CodeGeneration\GenerationCode\CodeWriter.cs" />
     <Compile Include="CodeGeneration\GenerationCode\CodeGenerator.cs" />
     <Compile Include="AST\Nodes\QueryNodes\RunQueryNode.cs" />
+    <Compile Include="CodeGeneration\Classes\Graph.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Include="CodeGeneration\Classes\Edge.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Include="CodeGeneration\Classes\Vertex.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -135,15 +144,7 @@
     <None Include="CodeGeneration\Program.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="CodeGeneration\Classes\Edge.cs">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="CodeGeneration\Classes\Graph.cs">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="CodeGeneration\Classes\Vertex.cs">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
+    <None Include="CodeGeneration\test.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AST\Exceptions\VisitVarOrConstWrongTypeException.cs" />

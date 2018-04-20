@@ -5,7 +5,7 @@ namespace Giraph.Classes
     {
 
         //EXTENSIONS HERE
-        *****EXTEND*****
+        //*****EXTEND*****
         //EXTENSIONS ENDED
         public Vertex()
         {

@@ -15,7 +15,7 @@ namespace Compiler.CodeGeneration.GenerationCode
         private StringBuilder _currentStringBuilder;
         private StringBuilder Global = new StringBuilder();
         public StringBuilder Functions;
-
+        private int _forLoopCounter = 0;
         public CodeGenerator(CodeWriter codeWriter)
         {
             MainBody = codeWriter.MainBody;
@@ -49,6 +49,14 @@ namespace Compiler.CodeGeneration.GenerationCode
                     return "void";
                 default:
                     return AllType.UNKNOWNTYPE.ToString();
+            }
+        }
+
+        public string ResolveBoolean(string Boolean) {
+            if (Boolean == "True") {
+                return "true";
+            } else {
+                return "false";
             }
         }
 
@@ -148,43 +156,17 @@ namespace Compiler.CodeGeneration.GenerationCode
                 else
                 {
                     edgeName = edge.Name;
-                    _currentStringBuilder.Append($"Edge {edgeName} = new Egde();\n");
+                    _currentStringBuilder.Append($"Edge {edgeName} = new Edge({edge.VertexNameFrom},{edge.VertexNameTo});\n");
                 }
 
                 foreach (KeyValuePair<string, string> value in edge.ValueList)
                 {
                     _currentStringBuilder.Append($"{edgeName}.{value.Key} = {value.Value};\n");
                 }
-                _currentStringBuilder.Append($"{edgeName}.Edges.Add({edgeName});\n\n");
+                _currentStringBuilder.Append($"{node.Name}.Edges.Add({edgeName});\n\n");
             }
 
             _currentStringBuilder.Append($"Graph.Directed = {node.Directed};\n\n");
-            Console.WriteLine(_currentStringBuilder);
-            /*  
-            graph Graph1 
-                {
-		            vertex Ve(), Va();
-		            edge Eb(Ve, Va);
-		            set 'Directed' = true;
-                }
-
-            --------------------------------
-            ^ Should be like v in c#
-            --------------------------------
-
-            Graph Graph1 = new Graph();
-            
-            Vertex Ve = new Vertex();
-            Graph1.Vertices.Add(Ve);
-            
-            Vertex Va = new Vertex();
-            Graph1.Vertices.Add(Va);
-            
-            Edge Eb = new Edge(Ve, Va);
-            Graph1.Edges.Add(Eb);
-            
-            Graph1.Directed = true;
-            */
         }
 
         public override void Visit(VariableDclNode node)
@@ -340,18 +322,22 @@ namespace Compiler.CodeGeneration.GenerationCode
 
         public override void Visit(ForLoopNode node)
         {
-            // TODO: Not done
-            /*
-            for (int i = 0; i < max; i++)
-            {
-
-            }
-            */
             _currentStringBuilder.Append("for (");
             if (node.VariableDeclaration != null)
             {
                 node.VariableDeclaration.Accept(this);
+                node.ToValueOperation.Accept(this);
+                _currentStringBuilder.Append($";{node.VariableDeclaration.Name} += ");
+                node.Increment.Accept(this);
+            } else {
+                _currentStringBuilder.Append($"int _i{_forLoopCounter} = 0; _i{_forLoopCounter} < ");
+				node.ToValueOperation.Accept(this);
+                _currentStringBuilder.Append($";_i{_forLoopCounter} = ");
+				node.ToValueOperation.Accept(this);
             }
+			_currentStringBuilder.Append($") \n {{");
+			VisitChildren(node);
+			_currentStringBuilder.Append($"\n}}");
         }
 
         public override void Visit(ForeachLoopNode node)
@@ -414,13 +400,28 @@ namespace Compiler.CodeGeneration.GenerationCode
             {
                 if (first)
                 {
-                    item.Accept(this);
+                    if (item is ExpressionNode) {
+                        _currentStringBuilder.Append("(");
+						item.Accept(this);
+                        _currentStringBuilder.Append(")");
+                    } else {
+                        item.Accept(this);
+                    }
                     first = false;
                 }
                 else
                 {
                     _currentStringBuilder.Append("+");
-                    item.Accept(this);
+                    if (item is ExpressionNode)
+                    {
+                        _currentStringBuilder.Append("(");
+                        item.Accept(this);
+                        _currentStringBuilder.Append(")");
+                    }
+                    else
+                    {
+                        item.Accept(this);
+                    }
                 }
             }
             _currentStringBuilder.Append(");\n");
@@ -428,7 +429,7 @@ namespace Compiler.CodeGeneration.GenerationCode
 
         public override void Visit(RunQueryNode node)
         {
-            _currentStringBuilder.Append(node.Name + "(");
+            _currentStringBuilder.Append(node.FunctionName + "(");
             bool first = true;
             foreach (var item in node.Children)
             {
@@ -443,31 +444,18 @@ namespace Compiler.CodeGeneration.GenerationCode
                     item.Accept(this);
                 }
             }
-            _currentStringBuilder.Append(")");
+            _currentStringBuilder.Append(");");
         }
 
         StringBuilder _graphExtensions;
         StringBuilder _edgeExtensions;
         StringBuilder _vertexExtensions;
-        /*
-        private string _test = "";
-        private string _testset
-        {
-			get
-			{
-                return _test;	
-			}
-            set
-            {
-                _test = value;
-            }
 
-        }
-        */
         public void ExtendClass(AllType Class, AllType ExtendType, string ExtendName, string ExtendNameShort, bool IsCollection = false)
         {
-            //TODO: Default values for extended variables needs to be set
+            // TODO: Default values for extended variables needs to be set
             StringBuilder _currentExtension;
+            // Find out what class to extend, as they have their own extension classes.
             switch (Class)
             {
                 case AllType.GRAPH:
@@ -485,25 +473,40 @@ namespace Compiler.CodeGeneration.GenerationCode
             // If its a collection
             if (IsCollection)
             {
-                _currentExtension.AppendLine($"public Collection<{ResolveTypeToCS(ExtendType)}> {ExtendName} = new Collection<{ResolveTypeToCS(ExtendType)}>;");
+                _currentExtension.AppendLine($"public Collection<{ResolveTypeToCS(ExtendType)}> {ExtendName} = new Collection<{ResolveTypeToCS(ExtendType)}>();");
+                if (ExtendNameShort != null && ExtendNameShort != "")
+                {
+                    _currentExtension.AppendLine($"public Collection<{ResolveTypeToCS(ExtendType)}> {ExtendNameShort} {{ ");
+                    _currentExtension.AppendLine("get");
+                    _currentExtension.AppendLine($"{{return {ExtendName};}}");
+                    _currentExtension.AppendLine("set");
+                    _currentExtension.AppendLine($"{{{ExtendName} = value;}}");
+                    _currentExtension.AppendLine("}");
+                }
             }
-            else if (ExtendType == AllType.GRAPH || ExtendType == AllType.VERTEX || ExtendType == AllType.EDGE)
+            else // if its everything else
             {
-                _currentExtension.AppendLine($"public {ResolveTypeToCS(ExtendType)} {ExtendName} = new {ResolveTypeToCS(ExtendType)};");
+                // Check if the extension is a class?
+                // TODO: consider if this is correct
+                if (ExtendType == AllType.GRAPH || ExtendType == AllType.VERTEX || ExtendType == AllType.EDGE)
+                {
+                    _currentExtension.AppendLine($"public {ResolveTypeToCS(ExtendType)} {ExtendName} = new {ResolveTypeToCS(ExtendType)};");
+                }
+                else
+                {
+                    _currentExtension.AppendLine($"public {ResolveTypeToCS(ExtendType)} {ExtendName};");
+                }
+                if (ExtendNameShort != null && ExtendNameShort != "")
+                {
+                    _currentExtension.AppendLine($"public {ResolveTypeToCS(ExtendType)} {ExtendNameShort} {{ ");
+                    _currentExtension.AppendLine("get");
+                    _currentExtension.AppendLine($"{{return {ExtendName};}}");
+                    _currentExtension.AppendLine("set");
+                    _currentExtension.AppendLine($"{{{ExtendName} = value;}}");
+                    _currentExtension.AppendLine("}");
+                }
             }
-            else
-            {
-                _currentExtension.AppendLine($"public {ResolveTypeToCS(ExtendType)} {ExtendName};");
-            }
-            if (ExtendNameShort != null && ExtendNameShort != "")
-            {
-                _currentExtension.AppendLine($"public {ResolveTypeToCS(ExtendType)} {ExtendNameShort} {{ ");
-                _currentExtension.AppendLine("get");
-                _currentExtension.AppendLine($"{{return {ExtendName};}}");
-				_currentExtension.AppendLine("set");
-                _currentExtension.AppendLine($"{{{ExtendName} = value;}}");
-                _currentExtension.AppendLine("}");
-            }
+
         }
     }
 }

@@ -21,7 +21,7 @@ namespace Compiler.CodeGeneration.GenerationCode
         private string _mainBody = "*****MAINBODY*****";
         private string _functions = "*****FUNCTIONS*****";
         private string _global = "*****GLOBAL*****";
-        private string _extend = "*****EXTEND*****";
+        private string _extend = "//*****EXTEND*****";
         public CodeWriter()
         {
             
