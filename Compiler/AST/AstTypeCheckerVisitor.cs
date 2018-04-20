@@ -78,12 +78,12 @@ namespace Compiler.AST
                     variableName = Attributes.Item1.Name;
                     variableType = _createdSymbolTabe.RetrieveSymbol(variableName);
 
-                    if(Attributes.Item3 != null)
+                    if (Attributes.Item3 != null)
                     {
                         Attributes.Item3.Accept(this);
                     }
 
-                    if(Attributes.Item3.OverAllType != variableType)
+                    if (Attributes.Item3.OverAllType != variableType)
                     {
                         //type error
                         _createdSymbolTabe.WrongTypeError(variableName, Attributes.Item3.Name);
@@ -545,32 +545,35 @@ namespace Compiler.AST
                     compare = true;
                 }
 
-                // Extract the type from Left and right sides of a bool comparison
-                if (node.Left.Children[0] is ExpressionNode)
+                if (node.HasChildren)
                 {
-                    node.LeftType = ((ExpressionNode)node.Left.Children[0]).OverAllType ?? default(AllType);
-                }
-                else if (node.Left.Children[0] is PredicateNode)
-                {
-                    node.LeftType = _createdSymbolTabe.RetrieveSymbol(node.Left.Children[0].Name) ?? default(AllType);
-                }
-
-                if (node.Right.Children[0] is ExpressionNode)
-                {
-                    node.RightType = ((ExpressionNode)node.Right.Children[0]).OverAllType ?? default(AllType);
-                }
-                else if (node.Right.Children[0] is PredicateNode)
-                {
-                    node.RightType = _createdSymbolTabe.RetrieveSymbol(node.Right.Children[0].Name) ?? default(AllType);
-                }
-
-                if (node.RightType != AllType.UNKNOWNTYPE && node.LeftType != AllType.UNKNOWNTYPE)
-                {
-                    if (node.RightType != node.LeftType)
+                    // Extract the type from Left and right sides of a bool comparison
+                    if (node.Left.Children[0] is ExpressionNode)
                     {
-                        if (!((node.RightType == AllType.INT && node.LeftType == AllType.DECIMAL) || (node.RightType == AllType.DECIMAL && node.LeftType == AllType.INT)))
+                        node.LeftType = ((ExpressionNode)node.Left.Children[0]).OverAllType ?? default(AllType);
+                    }
+                    else if (node.Left.Children[0] is PredicateNode)
+                    {
+                        node.LeftType = _createdSymbolTabe.RetrieveSymbol(node.Left.Children[0].Name) ?? default(AllType);
+                    }
+
+                    if (node.Right.Children[0] is ExpressionNode)
+                    {
+                        node.RightType = ((ExpressionNode)node.Right.Children[0]).OverAllType ?? default(AllType);
+                    }
+                    else if (node.Right.Children[0] is PredicateNode)
+                    {
+                        node.RightType = _createdSymbolTabe.RetrieveSymbol(node.Right.Children[0].Name) ?? default(AllType);
+                    }
+
+                    if (node.RightType != AllType.UNKNOWNTYPE && node.LeftType != AllType.UNKNOWNTYPE)
+                    {
+                        if (node.RightType != node.LeftType)
                         {
-                            _createdSymbolTabe.WrongTypeConditionError();
+                            if (!((node.RightType == AllType.INT && node.LeftType == AllType.DECIMAL) || (node.RightType == AllType.DECIMAL && node.LeftType == AllType.INT)))
+                            {
+                                _createdSymbolTabe.WrongTypeConditionError();
+                            }
                         }
                     }
                 }
@@ -587,6 +590,7 @@ namespace Compiler.AST
             AllType? previousType = null;
             if (node.ExpressionParts.Where(x => x.Type != null && x.Type_enum == AllType.STRING).Count() > 0)
             {
+                node.OverAllType = AllType.STRING;
                 //ignore the rest of the type checking of expression. An expressionpart is string, therefore everything will turn to a string
             }
             else
@@ -646,6 +650,7 @@ namespace Compiler.AST
         public override void Visit(ReturnNode node)
         {
             _createdSymbolTabe.SetCurrentNode(node);
+
             AllType? funcType = _createdSymbolTabe.RetrieveSymbol(node.Parent.Name, out bool ReturnTypeCollection, false);
             AllType? returnType = _createdSymbolTabe.RetrieveSymbol(node.LeftmostChild.Name, out bool FunctionTypeCollection, false);
 
@@ -674,9 +679,22 @@ namespace Compiler.AST
         public override void Visit(ForLoopNode node)
         {
             _createdSymbolTabe.SetCurrentNode(node);
-            //fejl i parser, forloopnode gemmer ikke variablen som er udgangspunkt for loop, hvis den allerede er deklareret
+            _createdSymbolTabe.OpenScope(BlockType.ForLoop);
+            node.Increment.Accept(this);
+            node.VariableDeclaration.Accept(this);
+            node.ToValueOperation.Accept(this);
+            AllType? varDclNodeType;
 
+            if (node.VariableDeclaration is VariableDclNode varDclNode && node.Increment is ExpressionNode incrementNode)
+            {
+                varDclNodeType = _createdSymbolTabe.RetrieveSymbol(varDclNode.Name);
+                if (!(varDclNodeType == AllType.INT && incrementNode.OverAllType == AllType.INT))
+                {
+                    _createdSymbolTabe.WrongTypeConditionError();
+                }
+            }
             VisitChildren(node);
+            _createdSymbolTabe.CloseScope();
         }
 
         public override void Visit(ForeachLoopNode node)
@@ -733,14 +751,16 @@ namespace Compiler.AST
         {
             _createdSymbolTabe.SetCurrentNode(node);
             AllType? variableType = _createdSymbolTabe.RetrieveSymbol(node.Name);
+            AllType? ok = node.Type_enum;
 
-            if(node.Children != null)
+            if (node.Children != null)
             {
                 VisitChildren(node);
-                foreach(AbstractNode child in node.Children)
+                foreach (AbstractNode child in node.Children)
                 {
                     if (child is ExpressionNode expNode)
                     {
+                        expNode.Accept(this);
                         if (expNode.OverAllType != variableType)
                         {
                             _createdSymbolTabe.WrongTypeError(child.Name, node.Name);
