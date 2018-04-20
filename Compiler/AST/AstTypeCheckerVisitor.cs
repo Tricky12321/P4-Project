@@ -433,6 +433,19 @@ namespace Compiler.AST
             }
         }
 
+        private string DeclarationSetPrint(AddQueryNode node)
+        {
+            StringBuilder dclList = new StringBuilder();
+            dclList.Append($"declaration_set(");
+            foreach (AbstractNode v in node.Dcls)
+            {
+                dclList.Append($"{v.Name}, ");
+            }
+            dclList.Remove(dclList.Length - 2, 2);
+            dclList.Append(")");
+            return dclList.ToString();
+        }
+
         public override void Visit(AddQueryNode node)
         {
             _createdSymbolTabe.SetCurrentNode(node);
@@ -443,103 +456,77 @@ namespace Compiler.AST
                 bool isGraphEdgeCollection = TypeOfTargetCollection == AllType.EDGE && isCollectionTargetColl;
                 bool isPreDefVerOrEdgeCollInGraph = TypeOfTargetCollection == AllType.GRAPH;
                 if (isPreDefVerOrEdgeCollInGraph)
-                {
+                {//if declarations are added to the graph.
                     foreach (AbstractNode edgeOrVertexdcl in node.Dcls)
                     {
-                        if (edgeOrVertexdcl is GraphDeclVertexNode)
+                        if (edgeOrVertexdcl is GraphDeclVertexNode || edgeOrVertexdcl is GraphDeclEdgeNode)
                         {
-                            //vertex is added to the graph
-                        }
-                        else if (edgeOrVertexdcl is GraphDeclEdgeNode)
-                        {
-                            //edge is added to the graph
+                            //vertex or edge is added to the graph
                         }
                         else
                         {
-                            //error raised, because af dcl is not of type edge.
+                            //error raised, because af dcl is not of type edge or vertex.
                             _createdSymbolTabe.WrongTypeError(edgeOrVertexdcl.Name, node.ToVariable);
                         }
                     }
                 }
-                else if (IsGraphVertexCollection)
-                {
-                    foreach (AbstractNode vertexdcl in node.Dcls)
+                else if (IsGraphVertexCollection || isGraphEdgeCollection)
+                {//if declarations is added to an extended collection on graph - NOT LEGAL
+                    foreach (AbstractNode vertexOrEdgedcl in node.Dcls)
                     {
-                        if (vertexdcl is GraphDeclVertexNode)
+                        if (vertexOrEdgedcl is GraphDeclVertexNode || vertexOrEdgedcl is GraphDeclEdgeNode)
                         {
-                            //vertex is added to an extended vertex collection on graph.
-                            //Console.WriteLine("this is extend vertex" + _createdSymbolTabe.CurrentLine);
-                        }
-                        else
-                        {
-                            //error raised, because af dcl is not of type vertex.
-                            _createdSymbolTabe.WrongTypeError(vertexdcl.Name, node.ToVariable);
-                        }
-                    }
-                }
-                else if (isGraphEdgeCollection)
-                {
-                    foreach (AbstractNode edgedcl in node.Dcls)
-                    {
-                        if (edgedcl is GraphDeclEdgeNode)
-                        {
-                            //Console.WriteLine("this is extend edge" + _createdSymbolTabe.CurrentLine);
-                            //edge is added to an extended edge collection on graph.
-                        }
-                        else
-                        {
-                            //error raised, because af dcl is not of type edge.
-                            _createdSymbolTabe.WrongTypeError(edgedcl.Name, node.ToVariable);
+                            _createdSymbolTabe.WrongTypeError(DeclarationSetPrint(node), node.ToVariable);
+                            break;
                         }
                     }
                 }
                 else
                 {
-                    StringBuilder dclList = new StringBuilder();
-                    dclList.Append($"declaration_set(");
-                    foreach (AbstractNode v in node.Dcls)
-                    {
-                        dclList.Append($"{v.Name}, ");
-                    }
-                    dclList.Remove(dclList.Length - 2, 2);
-                    dclList.Append(")");
-                    _createdSymbolTabe.WrongTypeError(dclList.ToString(), node.ToVariable);
+                    _createdSymbolTabe.WrongTypeError(DeclarationSetPrint(node), node.ToVariable);
                 }
             }
             //if the ToVariable is a collection:
             else if (node.IsColl)
             {
                 AllType? TypeOfTargetCollection = _createdSymbolTabe.RetrieveSymbol(node.ToVariable, out bool isCollectionTargetColl, false);
-                AllType? typeOfVar;
                 node.TypeOrVariable.Accept(this);
-
                 ExpressionNode expressionToAdd = (ExpressionNode)node.TypeOrVariable;
-                typeOfVar = expressionToAdd.OverAllType;
-
-                bool isConst = expressionToAdd.ExpressionParts[0] is ConstantNode ko;
-                bool isVar = expressionToAdd.ExpressionParts[0] is VariableNode;
-
-
-
+                AllType? typeOfVar = expressionToAdd.OverAllType;
+                bool targetIsGraph = TypeOfTargetCollection == AllType.GRAPH;
 
                 if (isCollectionTargetColl)
-                {
-                    //ved ikke hvrdan man skal tjekke efter om det er en konstant
+                {//non-declarations are added to an extended collection on graph, or simply a collection.
+                    if (TypeOfTargetCollection == typeOfVar)
+                    {
+                        //the expression type is correct corresponding to the type of the target collection.
+                    }
+                    else
+                    {//mismatch of types if the target collection is not of same type of the expression
+                        _createdSymbolTabe.WrongTypeError(node.TypeOrVariable.Name, node.ToVariable);
+                    }
+                }
+                else if (targetIsGraph)
+                {//if variables are added to the graph.
+                    bool varIsVertex = typeOfVar == AllType.VERTEX;
+                    bool varIsEdge = typeOfVar == AllType.EDGE;
+                    if (varIsEdge || varIsVertex)
+                    {
+                        //only edge and vertex variables can be added to a graph.
+                    }
+                    else
+                    {
+                        _createdSymbolTabe.WrongTypeError(node.TypeOrVariable.ToString(), node.ToVariable);
+                    }
                 }
                 else
                 {
-                    //_createdSymbolTabe.WrongTypeError(node.TypeOrVariable, node.ToVariable);
+                    _createdSymbolTabe.TargetIsNotCollError(node.ToVariable);
                 }
-
-
-
-
-
-                Console.WriteLine("this is to a collection and not a graph." + _createdSymbolTabe.CurrentLine);
             }
             else
             {
-                Console.WriteLine("er hverken collection eller graph? wtf went wrong. this is temp, dw.");
+                Console.WriteLine("Is neither collection or Graph. This should not be possible");
             }
 
         }
@@ -697,44 +684,47 @@ namespace Compiler.AST
                         item.Parent = node;
                         item.Accept(this);
 
-                        //TODO vi ved ikke hvordan vi skal sørge for decimal og int er godkendt sammen osv. 
                         if (previousType == null)
-                        {
+                        {//first call - setting previous type as the first type encountered
                             previousType = node.OverAllType;
                         }
                         else
                         {
                             if (previousType != node.OverAllType)
-                            {
+                            {//types are different from eachother
                                 if ((previousType == AllType.INT && node.OverAllType == AllType.DECIMAL) || (previousType == AllType.DECIMAL && node.OverAllType == AllType.INT))
-                                {
+                                {//types are accepted if one is int and one is decimal
                                     node.OverAllType = AllType.DECIMAL;
                                     //do nothing, but set overalltype to decimal.
                                 }
                                 else
-                                {
-                                    //error
+                                {//types are different from eachother, and do not allow operates between them
+                                    _createdSymbolTabe.TypeExpressionMismatch();
                                 }
                             }
                             else
-                            {
-                                if (previousType == AllType.BOOL && node.OverAllType == AllType.BOOL)
+                            {//times are of the same time
+                                //bools to control which types are not allowed to be operated upon, even if same time.
+                                bool bothIsBool = previousType == AllType.BOOL && node.OverAllType == AllType.BOOL;
+                                bool bothIsGraph = previousType == AllType.GRAPH && node.OverAllType == AllType.GRAPH;
+                                bool bothIsVertex = previousType == AllType.VERTEX && node.OverAllType == AllType.VERTEX;
+                                bool bothIsEdge = previousType == AllType.EDGE && node.OverAllType == AllType.EDGE;
+                                bool bothIsVoid = previousType == AllType.VOID && node.OverAllType == AllType.VOID;
+                                bool bothIsCollection = previousType == AllType.COLLECTION && node.OverAllType == AllType.COLLECTION;
+
+                                if (bothIsBool || bothIsGraph || bothIsVertex || bothIsEdge || bothIsVoid || bothIsCollection)
                                 {
-                                    Console.WriteLine("dette er bool og bool, fyfy");
-                                    //warning
-                                    //måske andre end bare bool?
+                                    _createdSymbolTabe.TypeExpressionMismatch();
                                 }
                                 else
                                 {
-                                    Console.WriteLine("types er det samme. det bare fint");
-                                    //do nothing
+                                    //do nothing, both is the same type and are allowed, so everything is fine.
                                 }
 
                             }
                         }
                     }
                 }
-
             }
             if (node.OverAllType == AllType.UNKNOWNTYPE)
             {

@@ -664,5 +664,11 @@ namespace Compiler.AST.SymbolTable
             Console.WriteLine($"There is no Main function declared, program wont work!");
             Error();
         }
+
+        public void TargetIsNotCollError(string name)
+        {
+            Console.WriteLine($"Target variable: {name} is not of type collection {GetLineNumber()}");
+            Error();
+        }
     }
 }
