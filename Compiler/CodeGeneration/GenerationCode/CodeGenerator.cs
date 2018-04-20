@@ -6,6 +6,7 @@ using Compiler.AST.Nodes.LoopNodes;
 using Compiler.AST.Nodes.QueryNodes;
 using System.Text;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Compiler.CodeGeneration.GenerationCode
 {
@@ -110,7 +111,6 @@ namespace Compiler.CodeGeneration.GenerationCode
 
         public override void Visit(FunctionNode node)
         {
-
             if (node.Name == "Main")
             {
                 _currentStringBuilder = MainBody;
@@ -281,7 +281,17 @@ namespace Compiler.CodeGeneration.GenerationCode
         public override void Visit(WhereNode node)
         {
 
+            //.Where(x => x.{)
+            throw new NotImplementedException();
         }
+
+        /*private string getWhereString(WhereNode node)
+        {
+            string stringPlaceholder = ".Where(";
+            //stringPlaceholder += node.
+
+            return stringPlaceholder;
+        }*/
 
         public override void Visit(ExtendNode node)
         {
@@ -436,12 +446,21 @@ namespace Compiler.CodeGeneration.GenerationCode
 
         public override void Visit(SelectAllQueryNode node)
         {
-
         }
 
         public override void Visit(SelectQueryNode node)
         {
 
+            _currentStringBuilder.Append($"{node.Variable}");
+            Visit(node.WhereCondition as WhereNode);
+            
+            /*
+            Main-> void() {
+                select from Graph1.Vertices where x == 100;
+            }
+
+            Graph1.Vertices.where(x => x.x == 100);
+            */
         }
 
         public override void Visit(ForLoopNode node)
