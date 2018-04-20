@@ -18,7 +18,7 @@ namespace Compiler
         static void Main(string[] args)
         {
             Compile();
-            CompileGeneratedCode();
+            //CompileGeneratedCode();
         }
 
         private static OS GetOS() {
@@ -41,7 +41,7 @@ namespace Compiler
             AbstractNode AST = BuildAST(CST);
             SymTable SymbolTable = BuildSymbolTable(AST as StartNode);
             TypeCheck(SymbolTable, AST as StartNode);
-            //PrettyPrint(AST as StartNode);
+            PrettyPrint(AST as StartNode);
             WriteCodeToFiles(AST as StartNode);
             TotalTimer.Stop();
             Console.WriteLine($"Total compile timer: {TotalTimer.ElapsedMilliseconds}ms");
