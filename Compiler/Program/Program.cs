@@ -39,8 +39,8 @@ namespace Compiler
             Console.WriteLine("Giraph Compiler 5000");
             GiraphParser.StartContext CST = BuildCST("kode.giraph");
             AbstractNode AST = BuildAST(CST);
-            SymTable SymbolTable = BuildSymbolTable(AST as StartNode);
-            TypeCheck(SymbolTable, AST as StartNode);
+            //SymTable SymbolTable = BuildSymbolTable(AST as StartNode);
+            //TypeCheck(SymbolTable, AST as StartNode);
             //PrettyPrint(AST as StartNode);
             WriteCodeToFiles(AST as StartNode);
             TotalTimer.Stop();
