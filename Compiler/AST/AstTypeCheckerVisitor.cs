@@ -267,30 +267,21 @@ namespace Compiler.AST
         public override void Visit(SelectAllQueryNode node)
         {
             _createdSymbolTabe.SetCurrentNode(node);
-            if (node.Parent != null && node.Parent is DeclarationNode)
+
+            AllType? collectionNameType = _createdSymbolTabe.RetrieveSymbol(node.Variable, out bool isCollectionInQuery, false);
+            bool fromIsColl = isCollectionInQuery;
+            if (fromIsColl)
             {
-                AllType? collectionNameType;
-                AllType? nameDeclaredForRetrieve;
-
-                collectionNameType = _createdSymbolTabe.RetrieveSymbol(node.Variable, out bool isCollectionInQuery, false);
-                nameDeclaredForRetrieve = _createdSymbolTabe.RetrieveSymbol(node.Parent.Name, out bool isCollectionRetrieveVar, false);
-
-                bool isSameType = nameDeclaredForRetrieve.ToString() == collectionNameType.ToString();
-                bool bothIsCollection = isCollectionInQuery && isCollectionRetrieveVar;
-                bool typeCorrect = isSameType && bothIsCollection;
-
-                if (typeCorrect)
+                if (node.Parent is DeclarationNode expNode)
                 {
-                    if (node.Parent is ExpressionNode expNode)
-                    {
-                        expNode.OverAllType = collectionNameType;
-                    }
-                }
-                else
-                {
-                    //TODO correct error message pls
+                    node.Type = collectionNameType.ToString();
                 }
             }
+            else
+            {
+                //TODO correct error message pls
+            }
+
 
             if (node.WhereCondition != null)
             {
@@ -426,10 +417,11 @@ namespace Compiler.AST
                 {
                     expNode.OverAllType = collection;
                 }
+                node.Type = collection.ToString();
             }
             else
             {
-                _createdSymbolTabe.WrongTypeError(node.Variable, node.Parent.Name);
+                _createdSymbolTabe.FromVarIsNotCollError(node.Variable);
             }
         }
 
@@ -609,10 +601,44 @@ namespace Compiler.AST
             _createdSymbolTabe.SetCurrentNode(node);
             if (node.Assignment != null)
             {
+                node.Assignment.Parent = node;
                 node.Assignment.Accept(this);
             }
             VisitChildren(node);
-            _createdSymbolTabe.NotImplementedError(node);
+            AllType? typeOfVariable = _createdSymbolTabe.RetrieveSymbol(node.Name, out bool isCollection, false);
+            if (node.Assignment is ExpressionNode exprNode)
+            {
+                if (typeOfVariable == exprNode.OverAllType)
+                {
+                    //the expression type and the variable is of same time.
+                }
+                else
+                {
+                    _createdSymbolTabe.TypeExpressionMismatch();
+                }
+            }
+            else if (node.Assignment is SelectAllQueryNode selAll)
+            {
+                if (typeOfVariable == selAll.Type_enum && isCollection)
+                {
+                    //type correct, variable is a coll, and collections have the same time. inner collection is checked in selectallNode.
+                }
+                else
+                {
+                    if (!isCollection)
+                    {
+                        _createdSymbolTabe.TargetIsNotCollError(node.Name);
+                    }
+                    else
+                    {
+                        Console.WriteLine("select all, but something went wrong.");
+                    }
+                }
+            }
+            else
+            {
+                Console.WriteLine("this is something else than expression or selectall, in declaration node." + _createdSymbolTabe.CurrentLine);
+            }
         }
 
         public override void Visit(BoolComparisonNode node)

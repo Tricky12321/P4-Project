@@ -670,5 +670,11 @@ namespace Compiler.AST.SymbolTable
             Console.WriteLine($"Target variable: {name} is not of type collection {GetLineNumber()}");
             Error();
         }
+
+        public void FromVarIsNotCollError(string name)
+        {
+            Console.WriteLine($"The variable retrieved from: {name} is not of type collection {GetLineNumber()}");
+            Error();
+        }
     }
 }
