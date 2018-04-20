@@ -3,9 +3,8 @@ namespace Giraph.Classes
 {
     public class Edge
     {
-
         //EXTENSIONS HERE
-        *****EXTEND*****
+        //*****EXTEND*****
         //EXTENSIONS ENDED
         public Edge(Vertex vertexFrom, Vertex vertexTo)
         {

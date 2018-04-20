@@ -8,7 +8,7 @@ namespace Giraph.Classes
         public bool Directed;
 
         //EXTENSIONS HERE
-        *****EXTEND*****
+        //*****EXTEND*****
         //EXTENSIONS ENDED
         public Graph()
         {

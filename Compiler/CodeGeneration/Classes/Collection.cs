@@ -4,38 +4,38 @@ using System.Linq.Expressions;
 using System.Collections.Generic;
 namespace Giraph.Classes
 {
-    public class Collection<T>
+    public class Collection<T> : List<T>
     {
-        private List<T> _storage = new List<T>();
 
-        public T Pop => _storage.Take(1).Last();
+        public T Pop => this.Take(1).Last();
 
-        public void Push(T Item) => _storage.Add(Item);
+        public void Push(T Item) => this.Add(Item);
 
-        public T ExtractMin => _storage.Take(1).Min();
+        public T ExtractMin => this.Take(1).Min();
 
-        public T ExtractMax() => _storage.Take(1).Max();
+        public T ExtractMax() => this.Take(1).Max();
 
-        public T Dequeue() => _storage.Take(1).Last();
+        public T Dequeue() => this.Take(1).Last();
 
-        public void Enqueue(T Item) => _storage.Insert(0, Item);
+        public void Enqueue(T Item) => this.Insert(0, Item);
 		
-        public T Peek() => _storage.Last();
+        public T Peek() => this.Last();
 
-        public T Select(Func<T, Boolean> p) => _storage.Where(p).Single();
+        public T Select(Func<T, Boolean> p) => this.Where(p).Single();
 
-        public List<T> SelectAll(Func<T, Boolean> p) => _storage.Where(p).ToList();
+        public List<T> SelectAll(Func<T, Boolean> p) => this.Where(p).ToList();
 
         public List<T> Remove(Func<T, Boolean> p)
         {
             // Select all the items
-            var output = _storage.Where(p).ToList();
+            var output = this.Where(p).ToList();
             // Now remove them form the list
             foreach (var item in output)
             {
-                _storage.Remove(item);
+                this.Remove(item);
             }
             return output;
         }
+
     }
 }
