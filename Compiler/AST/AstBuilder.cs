@@ -347,6 +347,9 @@ namespace Compiler.AST
                     AbstractNode varAttNode = Visit(context.GetChild(1));
                     varAttNode.Name = context.GetText();
                     return varAttNode;
+                case "GiraphParser+AttributeContext":
+                    AbstractNode attNode = Visit(context.GetChild(0));
+                    return attNode;
             }
             //Skal returnere en constnode eller en varnode;
             throw new VisitVarOrConstWrongTypeException("Fejl i Mads' Kode igen!!");
