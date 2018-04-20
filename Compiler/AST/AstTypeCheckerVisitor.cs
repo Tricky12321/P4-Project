@@ -168,11 +168,6 @@ namespace Compiler.AST
         public override void Visit(SelectAllQueryNode node)
         {
             _createdSymbolTabe.SetCurrentNode(node);
-            if (node.Parent != null && node.Parent is DeclarationNode)
-            {
-                AllType? collectionNameType;
-                AllType? nameDeclaredForRetrieve;
-
             AllType? collectionNameType = _createdSymbolTabe.RetrieveSymbol(node.Variable, out bool isCollectionInQuery, false);
             bool fromIsColl = isCollectionInQuery;
             if (fromIsColl)
