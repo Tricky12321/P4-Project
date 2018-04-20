@@ -733,66 +733,23 @@ namespace Compiler.AST
         {
             ForLoopNode ForLoop = new ForLoopNode(context.Start.Line, context.Start.Column);
             var contextInside = context.forCondition().forConditionInside();
-            
-            if (contextInside.inlineDcl() != null)
-            {
-                ForLoop.VariableDeclartionType = Utilities.FindTypeFromString(contextInside.inlineDcl().allType().GetText());
-                ForLoop.VariableDeclaration = Visit(contextInside.inlineDcl());
+			BoolComparisonNode boolComparison = new BoolComparisonNode(context.Start.Line, context.Start.Column);
+            boolComparison.ComparisonOperator = "<";
+            if (contextInside.forConditionStart().forConditionDcl() != null) {
+				ForLoop.VariableDeclaration = Visit(contextInside.forConditionStart().forConditionDcl());;
+                VariableNode varNode = new VariableNode(context.Start.Line, context.Start.Column);
+                varNode.Name = (ForLoop.VariableDeclaration as VariableDclNode).Name;
+                varNode.Type = (ForLoop.VariableDeclaration as VariableDclNode).Type;
+                boolComparison.Left = varNode;
+				ForLoop.ToValueOperation = boolComparison;
+            } else if (contextInside.forConditionStart().expression() != null) {
+                
+                ForLoop.ToValueOperation = Visit(contextInside.forConditionStart().expression());
             }
-            else if(contextInside.varOrConst() != null)
-            {
-                ForLoop.FromValue = contextInside.varOrConst().variable().GetText();
-            }
-            #region First VarOrConst | Operation 
-            //Check if the first is a VarOrConst, if it is, check if its a var or a const
-            if (contextInside.varOrConstOperation(0).varOrConst() != null)
-            {
-                //CHeck if its a var or const
-                // It was a variable
-                if (contextInside.varOrConstOperation(0).varOrConst().variable() != null && contextInside.varOrConstOperation(0).varOrConst().variable().ChildCount > 0)
-                {
-                    ForLoop.ToVariable = true;
-                    ForLoop.ToValue = contextInside.varOrConstOperation(0).varOrConst().variable().GetText();
-                }
-                // It was a const
-                else
-                {
-                    ForLoop.ToConst = true;
-                    ForLoop.ToValue = contextInside.varOrConstOperation(0).varOrConst().constant().GetText();
-                }
-            }
-            //Its not a var or const, which means its an operation
-            else
-            {
-                ForLoop.ToOperation = true;
-                ForLoop.ToValueOperation = Visit(contextInside.varOrConstOperation(0).operation());
-            }
-            #endregion
-            #region Second VarOrConst | Operation 
-            //Check if the first is a VarOrConst, if it is, check if its a var or a const
-            if (contextInside.varOrConstOperation(1).varOrConst() != null)
-            {
-                //CHeck if its a var or const
-                // It was a variable
-                if (contextInside.varOrConstOperation(1).varOrConst().variable() != null && contextInside.varOrConstOperation(1).varOrConst().variable().ChildCount > 0)
-                {
-                    ForLoop.IncrementVariable = true;
-                    ForLoop.IncrementValue = contextInside.varOrConstOperation(1).varOrConst().variable().GetText();
-                }
-                // It was a const
-                else
-                {
-                    ForLoop.IncrementConst = true;
-                    ForLoop.IncrementValue = contextInside.varOrConstOperation(1).varOrConst().constant().GetText();
-                }
-            }
-            //Its not a var or const, which means its an operation
-            else
-            {
-                ForLoop.IncrementOperation = true;
-                ForLoop.IncrementValueOperation = Visit(contextInside.varOrConstOperation(1).operation());
-            }
-            #endregion
+            boolComparison.Right = Visit(contextInside.expression(0));
+			ForLoop.Increment = Visit(contextInside.expression(1));
+
+
             // Visit all the children of the Codeblock associated with the ForLoop
             foreach (var Child in context.codeBlock().codeBlockContent())
             {
@@ -826,17 +783,7 @@ namespace Compiler.AST
             PrintQueryNode PNode = new PrintQueryNode(context.Start.Line, context.Start.Column);
             foreach (var child in context.printOptions().printOption())
             {
-                if (child.VARIABLENAME() != null && child.VARIABLENAME().GetText().Length > 0)
-                {
-                    foreach (var subChild in child.children)
-                    {
-                        PNode.AdoptChildren(Visit(subChild));
-                    }
-                }
-                else
-                {
-                    PNode.AdoptChildren(Visit(child.GetChild(0)));
-                }
+                PNode.AdoptChildren(Visit(child.GetChild(0)));
             }
             return PNode;
         }
@@ -993,9 +940,21 @@ namespace Compiler.AST
                     ConstantNode conNode = new ConstantNode(context.Start.Line, context.Start.Column);
                     conNode.Value = item.constant().GetText();
                     conNode.Type = ExpressionPartTypeFinder(item.constant().GetChild(0)).ToString();
+                    node.AdoptChildren(conNode);
                 }
             }
             return node;
+		}
+		public override AbstractNode VisitForConditionDcl([NotNull] GiraphParser.ForConditionDclContext context)
+		{
+            VariableDclNode VariableNode = new VariableDclNode(context.Start.Line, context.Start.Column);
+            VariableNode.Type = context.TYPE().GetText();
+            VariableNode.Name = context.variable().GetText();
+            if (context.EQUALS() != null)
+            {
+                VariableNode.AdoptChildren(Visit(context.expression()));
+            }
+            return VariableNode;
 		}
 	}
 }

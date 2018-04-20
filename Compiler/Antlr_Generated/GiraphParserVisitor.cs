@@ -404,6 +404,18 @@ public interface IGiraphParserVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <return>The visitor result.</return>
 	Result VisitForConditionInside([NotNull] GiraphParser.ForConditionInsideContext context);
 	/// <summary>
+	/// Visit a parse tree produced by <see cref="GiraphParser.forConditionStart"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitForConditionStart([NotNull] GiraphParser.ForConditionStartContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="GiraphParser.forConditionDcl"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitForConditionDcl([NotNull] GiraphParser.ForConditionDclContext context);
+	/// <summary>
 	/// Visit a parse tree produced by <see cref="GiraphParser.varOrConstOperation"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
