@@ -600,6 +600,16 @@ namespace Compiler.AST.SymbolTable
 
         public override void Visit(RunQueryNode node)
         {
+            var Type = SymbolTable.FunctionReturnType(node.FunctionName);
+            if (Type == null) {
+                SymbolTable.UndeclaredFunction(node.FunctionName);
+            }
+            VisitChildren(node);
+        }
+
+        public override void Visit(PredicateCall node)
+        {
+            
         }
     }
 }
