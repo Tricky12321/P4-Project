@@ -988,5 +988,17 @@ namespace Compiler.AST
             }
             return VariableNode;
         }
-    }
+
+		public override AbstractNode VisitPredicateCall([NotNull] GiraphParser.PredicateCallContext context)
+		{
+            PredicateCall predicateCall = new PredicateCall(context.Start.Line, context.Start.Column);
+            predicateCall.Name = context.variable().GetText();
+
+            foreach (var item in context.parameters().varOrConst()) {
+                predicateCall.AdoptChildren(Visit(item));
+            }
+
+            return predicateCall;
+		}
+	}
 }

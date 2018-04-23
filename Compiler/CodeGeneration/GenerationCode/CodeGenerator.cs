@@ -25,6 +25,7 @@ namespace Compiler.CodeGeneration.GenerationCode
                 return "_newVariable" + _newVariableCounter_private++;
             }
         }
+
         public CodeGenerator(CodeWriter codeWriter)
         {
             MainBody = codeWriter.MainBody;
@@ -415,6 +416,33 @@ namespace Compiler.CodeGeneration.GenerationCode
 
         public override void Visit(PredicateNode node)
         {
+            _currentStringBuilder.Append($"\nbool {node.Name} (");
+
+            bool first = true;
+            
+            foreach (var item in node.Parameters)
+            {
+                if (first) {
+                    item.Accept(this);
+                    first = false;
+                } else {
+					_currentStringBuilder.Append(",");
+                    item.Accept(this);
+                }
+            }
+
+            _currentStringBuilder.Append($") {{ \n return ");
+            VisitChildren(node);
+            _currentStringBuilder.Append($"; \n }}\n");
+
+
+            bool test() {
+                return first;
+            }
+
+            if (test()) {
+                
+            }
 
         }
 
@@ -650,6 +678,13 @@ namespace Compiler.CodeGeneration.GenerationCode
                 }
             }
 
+        }
+
+        public override void Visit(PredicateCall node)
+        {
+            _currentStringBuilder.Append($"{node.Name}(");
+            VisitChildren(node);
+            _currentStringBuilder.Append($")");
         }
     }
 }
