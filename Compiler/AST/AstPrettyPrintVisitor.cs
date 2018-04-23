@@ -418,5 +418,10 @@ namespace Compiler.AST
         {
             throw new NotImplementedException();
         }
+
+        public override void Visit(PredicateCall node)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

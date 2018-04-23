@@ -64,5 +64,25 @@ namespace Compiler
                 return (p == 2) || Environment.OSVersion.ToString().ToLower().Contains("windows");
             }
         }
+
+        public static OS GetOS()
+        {
+            if (Utilities.IsWindows)
+            {
+                return OS.Windows;
+            }
+            else if (Utilities.IsMacOS)
+            {
+                return OS.MacOS;
+            }
+            else if (Utilities.IsLinux)
+            {
+                return OS.Linux;
+            }
+            else
+            {
+                return OS.Unknown;
+            }
+        }
     }
 }

@@ -888,6 +888,13 @@ namespace Compiler.AST
         {
             _createdSymbolTabe.SetCurrentNode(node);
             _createdSymbolTabe.NotImplementedError(node);
+
+        }
+
+        public override void Visit(PredicateCall node)
+        {
+            _createdSymbolTabe.SetCurrentNode(node);
+            _createdSymbolTabe.NotImplementedError(node);
         }
     }
 }
