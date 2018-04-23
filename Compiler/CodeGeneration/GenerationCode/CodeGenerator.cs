@@ -19,6 +19,7 @@ namespace Compiler.CodeGeneration.GenerationCode
         private int _forLoopCounter = 0;
         private int _newVariableCounter_private = 0;
         private int _tabCount = 2;
+        private string _boolComparisonPrefix = "";
         private string _newVariabelCounter
         {
             get
@@ -65,35 +66,27 @@ namespace Compiler.CodeGeneration.GenerationCode
 
         public string ResolveBoolean(string Boolean)
         {
-            if (Boolean == "True")
-            {
-                return "true";
-            }
-            else
-            {
-                return "false";
-            }
+            return Boolean == "True" ? "true" : "false";
         }
 
         public string ResolveBoolean(bool Boolean)
         {
-            if (Boolean)
-            {
-                return "true";
-            }
-            else
-            {
-                return "false";
-            }
+            return Boolean ? "true" : "false";
         }
 
         public override void Visit(DeclarationNode node)
         {
             if (node.CollectionDcl)
             {
+                Indent();
                 _currentStringBuilder.Append($"Collection<{ResolveTypeToCS(node.Type_enum)}> ");
                 _currentStringBuilder.Append(node.Name);
-                _currentStringBuilder.Append($"= new Collection<{ResolveTypeToCS(node.Type_enum)}>()");
+                if (node.Assignment != null) {
+                    _currentStringBuilder.Append("= ");
+                    node.Assignment.Accept(this);
+                } else {
+					_currentStringBuilder.Append($"= new Collection<{ResolveTypeToCS(node.Type_enum)}>()");
+                }
             }
             else
             {
@@ -121,6 +114,7 @@ namespace Compiler.CodeGeneration.GenerationCode
             }
             else
             {
+                Indentc();
                 _currentStringBuilder = Functions;
                 _currentStringBuilder.Append($"public static");
                 if (node.IsCollection) {
@@ -292,8 +286,6 @@ namespace Compiler.CodeGeneration.GenerationCode
                     _currentStringBuilder.Append($"{InVaraible}.{VariableName} {AssignOperator} ");
                     expression.Accept(this);
                     _currentStringBuilder.Append($";\n");
-
-
                 }
             }
             else if (node.SetVariables)
@@ -310,9 +302,40 @@ namespace Compiler.CodeGeneration.GenerationCode
             }
         }
 
+        public override void Visit(SelectAllQueryNode node)
+        {
+            _currentStringBuilder.Append($"_fun{node.ID}();\nCollection<{ResolveTypeToCS(node.Type_enum)}> _fun{node.ID}(){{\n");
+            _currentStringBuilder.Append($"Collection<{ResolveTypeToCS(node.Type_enum)}> _col{node.ID} = new Collection<{ResolveTypeToCS(node.Type_enum)}>();\n");
+
+            _currentStringBuilder.Append($"foreach (var place in {node.Variable}){{\n");
+            _currentStringBuilder.Append("if (");
+            _boolComparisonPrefix = "place.";
+            node.WhereCondition.Children[0].Accept(this);
+            _boolComparisonPrefix = "";
+            _currentStringBuilder.Append("){\n");
+            _currentStringBuilder.Append($"_col{node.ID}.Add(place);\n}}\n}}\n");
+
+            _currentStringBuilder.Append($"return _col{node.ID};\n}}");
+        }
+
+        public override void Visit(SelectQueryNode node)
+        {
+            _currentStringBuilder.Append($"_fun{node.ID}();\n{ResolveTypeToCS(node.Type_enum)} _fun{node.ID}(){{\n");
+            _currentStringBuilder.Append($"{ResolveTypeToCS(node.Type_enum)} _val{node.ID};\n");
+
+            _currentStringBuilder.Append($"foreach (var place in {node.Variable}){{\n");
+            _currentStringBuilder.Append("if (");
+            _boolComparisonPrefix = "place.";
+            node.WhereCondition.Children[0].Accept(this);
+            _boolComparisonPrefix = "";
+            _currentStringBuilder.Append("){\n");
+            _currentStringBuilder.Append($"_val{node.ID} = place;\n break;\n}}\n}}\n");
+
+            _currentStringBuilder.Append($"return _val{node.ID};\n}}");
+        }
+
         public override void Visit(WhereNode node)
         {
-
             //.Where(x => x.{)
             throw new NotImplementedException();
         }
@@ -369,6 +392,8 @@ namespace Compiler.CodeGeneration.GenerationCode
             else if (node.Left != null && node.Right != null)
             {
                 node.Left.Accept(this);
+                node.ComparisonOperator = node.ComparisonOperator.Replace("&", "&&");
+                node.ComparisonOperator = node.ComparisonOperator.Replace("|","||");
                 _currentStringBuilder.Append(node.ComparisonOperator);
                 node.Right.Accept(this);
             }
@@ -432,8 +457,6 @@ namespace Compiler.CodeGeneration.GenerationCode
                     _currentStringBuilder.Append($");\n");
                 }
             }
-
-
         }
 
         public override void Visit(PredicateNode node)
@@ -503,25 +526,6 @@ namespace Compiler.CodeGeneration.GenerationCode
             _currentStringBuilder.Append($");\n");
         }
 
-        public override void Visit(SelectAllQueryNode node)
-        {
-        }
-
-        public override void Visit(SelectQueryNode node)
-        {
-
-            _currentStringBuilder.Append($"{node.Variable}");
-            Visit(node.WhereCondition as WhereNode);
-            
-            /*
-            Main-> void() {
-                select from Graph1.Vertices where x == 100;
-            }
-
-            Graph1.Vertices.where(x => x.x == 100);
-            */
-        }
-
         public override void Visit(ForLoopNode node)
         {
             _currentStringBuilder.Append("\nfor (");
@@ -571,6 +575,8 @@ namespace Compiler.CodeGeneration.GenerationCode
 
         public override void Visit(VariableNode node)
         {
+            _currentStringBuilder.Append($"{_boolComparisonPrefix}");
+
             _currentStringBuilder.Append(node.Name);
         }
 

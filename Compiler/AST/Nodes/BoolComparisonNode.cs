@@ -17,7 +17,7 @@ namespace Compiler.AST.Nodes
         public bool InsideParentheses;
         public BoolComparisonNode(int LineNumber, int CharIndex) : base(LineNumber, CharIndex)
         {
-            
+
         }
 
         public override void Accept(AstVisitorBase astVisitor)
@@ -25,11 +25,9 @@ namespace Compiler.AST.Nodes
             astVisitor.Visit(this);
         }
 
-        public void AddType(AllType type) {
-             TypeList.Add(type);
+        public void AddType(AllType type)
+        {
+            TypeList.Add(type);
         }
-
-
-
     }
 }

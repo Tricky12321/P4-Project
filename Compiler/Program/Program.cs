@@ -29,7 +29,7 @@ namespace Compiler
             GiraphParser.StartContext CST = BuildCST("kode.giraph");
             AbstractNode AST = BuildAST(CST);
             SymTable SymbolTable = BuildSymbolTable(AST as StartNode);
-            TypeCheck(SymbolTable, AST as StartNode);
+            //TypeCheck(SymbolTable, AST as StartNode);
             //PrettyPrint(AST as StartNode);
             WriteCodeToFiles(AST as StartNode);
             TotalTimer.Stop();
@@ -120,6 +120,11 @@ namespace Compiler
             codeWriter.FillAll();
             WriteTimer.Stop();
             Console.WriteLine($"Writing Code timer: {WriteTimer.ElapsedMilliseconds}ms");
+        }
+
+
+        public static void Test() {
+            
         }
     }
 }

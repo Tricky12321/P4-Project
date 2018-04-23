@@ -15,7 +15,13 @@ namespace Compiler.AST.Nodes
         public bool HasChildren => LeftmostChild != null;
         public string Type;
         public AllType Type_enum => Utilities.FindTypeFromString(Type);
-        
+        private static int statId = 0;
+        private int _id;
+
+        public int ID
+        {
+            get { return _id; }
+        }
 
         public List<AbstractNode> Children
         {
@@ -23,7 +29,8 @@ namespace Compiler.AST.Nodes
             {
                 AbstractNode Child = LeftmostChild;
                 List<AbstractNode> Children = new List<AbstractNode>();
-                while (Child != null) {
+                while (Child != null)
+                {
                     Children.Add(Child);
                     Child = Child.RightSibling;
                 }
@@ -35,6 +42,7 @@ namespace Compiler.AST.Nodes
         {
             this.LineNumber = LineNumber;
             this.CharIndex = CharIndex;
+            _id = statId++;
         }
 
         public abstract void Accept(AstVisitorBase astVisitor);
@@ -42,7 +50,7 @@ namespace Compiler.AST.Nodes
         public virtual IEnumerable<AbstractNode> GetChildren()
         {
             AbstractNode childNode = LeftmostChild;
-            while(childNode != null)
+            while (childNode != null)
             {
                 yield return childNode;
                 childNode = childNode.RightSibling;
@@ -55,7 +63,7 @@ namespace Compiler.AST.Nodes
             AbstractNode NextChild = LeftmostChild.RightSibling;
             while (NextChild != null)
             {
-				RightMostChild = NextChild;
+                RightMostChild = NextChild;
                 NextChild = NextChild.RightSibling;
             }
 

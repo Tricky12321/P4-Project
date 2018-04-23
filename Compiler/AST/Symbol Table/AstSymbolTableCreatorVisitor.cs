@@ -71,9 +71,7 @@ namespace Compiler.AST.SymbolTable
         public void BuildSymbolTable(AbstractNode root)
         {
             VisitRoot(root);
-
         }
-
 
         public bool IsClass(AllType Type)
         {
