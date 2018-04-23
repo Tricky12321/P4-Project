@@ -18,6 +18,7 @@ namespace Compiler.CodeGeneration.GenerationCode
         public StringBuilder Functions;
         private int _forLoopCounter = 0;
         private int _newVariableCounter_private = 0;
+        private int _tabCount = 2;
         private string _newVariabelCounter
         {
             get
@@ -115,13 +116,22 @@ namespace Compiler.CodeGeneration.GenerationCode
             if (node.Name == "Main")
             {
                 _currentStringBuilder = MainBody;
+                _tabCount++;
                 VisitChildren(node);
             }
             else
             {
                 _currentStringBuilder = Functions;
                 _currentStringBuilder.Append($"public static");
-                _currentStringBuilder.Append($" {ResolveTypeToCS(Utilities.FindTypeFromString(node.ReturnType))}");
+                if (node.IsCollection) {
+                    _currentStringBuilder.Append($" Collection<");
+					_currentStringBuilder.Append($"{ResolveTypeToCS(Utilities.FindTypeFromString(node.ReturnType))}");
+                    _currentStringBuilder.Append($">");
+                } else {
+                    _currentStringBuilder.Append($" {ResolveTypeToCS(Utilities.FindTypeFromString(node.ReturnType))}");
+
+                }
+
                 _currentStringBuilder.Append($" {node.Name} (");
                 bool first = true;
                 foreach (var item in node.Parameters)
@@ -137,15 +147,20 @@ namespace Compiler.CodeGeneration.GenerationCode
                         item.Accept(this);
                     }
                 }
-                _currentStringBuilder.Append(") \n {");
+                _currentStringBuilder.Append(") \n");
+                _tabCount++;
+                Indent();
+                _currentStringBuilder.Append(" {");
                 VisitChildren(node);
                 _currentStringBuilder.Append("\n}");
             }
+            _tabCount--;
             _currentStringBuilder = Functions;
         }
 
         public override void Visit(ReturnNode node)
         {
+            Indent();
             _currentStringBuilder.Append("return ");
             node.Children[0].Accept(this);
             _currentStringBuilder.Append(";\n");
@@ -164,8 +179,11 @@ namespace Compiler.CodeGeneration.GenerationCode
 
         public override void Visit(GraphNode node)
         {
-            _currentStringBuilder.Append($"\nGraph {node.Name} = new Graph();\n\n");
-
+            _currentStringBuilder.Append("\n");
+            Indent();
+            _currentStringBuilder.Append($"Graph {node.Name} = new Graph();\n\n");
+            _tabCount++;
+            Indent();
             _currentStringBuilder.Append($"Vertex _newVertex{node.Name};\n");
             foreach (GraphDeclVertexNode vertex in node.Vertices)
             {
@@ -173,23 +191,30 @@ namespace Compiler.CodeGeneration.GenerationCode
                 if (vertex.Name == null)
                 {
                     vertexName = $"_newVertex{node.Name}";
+                    Indent();
+
                     _currentStringBuilder.Append($"{vertexName} = new Vertex();\n");
                 }
                 else
                 {
                     vertexName = vertex.Name;
+                    Indent();
+
                     _currentStringBuilder.Append($"Vertex {vertexName} = new Vertex();\n");
                 }
 
                 foreach (KeyValuePair<string, AbstractNode> value in vertex.ValueList)
                 {
+                    Indent();
                     _currentStringBuilder.Append($"{vertexName}.{value.Key} = ");
                     value.Value.Accept(this);
                     _currentStringBuilder.Append($";\n");
 
                 }
+                Indent();
                 _currentStringBuilder.Append($"{node.Name}.Vertices.Push({vertexName});\n\n");
             }
+            Indent();
 
             _currentStringBuilder.Append($"Edge _newEdge{node.Name};\n");
             foreach (GraphDeclEdgeNode edge in node.Edges)
@@ -198,6 +223,8 @@ namespace Compiler.CodeGeneration.GenerationCode
                 if (edge.Name == null)
                 {
                     edgeName = $"_newEdge{node.Name}";
+                    Indent();
+
                     _currentStringBuilder.Append($"{edgeName} = new Edge();\n");
                 }
                 else
@@ -208,14 +235,18 @@ namespace Compiler.CodeGeneration.GenerationCode
 
                 foreach (KeyValuePair<string, AbstractNode> value in edge.ValueList)
                 {
+                    Indent();
+
                     _currentStringBuilder.Append($"{edgeName}.{value.Key} = ");
                     value.Value.Accept(this);
                     _currentStringBuilder.Append($";\n");
                 }
+                Indent();
+
                 _currentStringBuilder.Append($"{node.Name}.Edges.Push({edgeName});\n\n");
             }
-
             _currentStringBuilder.Append($"{node.Name}.Directed = {ResolveBoolean(node.Directed)};\n\n");
+			_tabCount++;
         }
 
         public override void Visit(VariableDclNode node)
@@ -667,8 +698,7 @@ namespace Compiler.CodeGeneration.GenerationCode
             }
             else // if its everything else
             {
-                // Check if the extension is a class?
-                // TODO: consider if this is correct
+                
                 if (ExtendType == AllType.GRAPH || ExtendType == AllType.VERTEX || ExtendType == AllType.EDGE)
                 {
                     _currentExtension.AppendLine($"\npublic {ResolveTypeToCS(ExtendType)} {ExtendName} = new {ResolveTypeToCS(ExtendType)};");
@@ -696,5 +726,13 @@ namespace Compiler.CodeGeneration.GenerationCode
             VisitChildren(node);
             _currentStringBuilder.Append($")");
         }
+
+        public void Indent() {
+            for (int i = 0; i < _tabCount; i++)
+            {
+                _currentStringBuilder.Append("\t");
+            }
+        }
+
     }
 }

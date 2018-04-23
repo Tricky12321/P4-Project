@@ -16,7 +16,7 @@ namespace Compiler
 {
     class Program
     {
-        static void Main(string[] args)
+        public static void Main(string[] args)
         {
             Compile();
         }
@@ -98,6 +98,8 @@ namespace Compiler
             if (Utilities.GetOS() == OS.MacOS || Utilities.GetOS() == OS.Linux) {
 				string strCmdText = "CodeGeneration/Program.cs CodeGeneration/Classes/*";
 				Process.Start("csc", strCmdText);
+                strCmdText = "Program.exe";
+                Process.Start("mono", strCmdText);
             } else if (Utilities.GetOS() == OS.Windows) {
                 Process process = new Process();
                 ProcessStartInfo startInfo = new ProcessStartInfo();
@@ -119,11 +121,5 @@ namespace Compiler
             WriteTimer.Stop();
             Console.WriteLine($"Writing Code timer: {WriteTimer.ElapsedMilliseconds}ms");
         }
-
-        public void TestGeneratedCode() {
-            
-        }
-
-
     }
 }
