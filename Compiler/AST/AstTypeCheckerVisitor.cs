@@ -46,6 +46,19 @@ namespace Compiler.AST
             }
         }
 
+        private string DeclarationSetPrint(AddQueryNode node)
+        {
+            StringBuilder dclList = new StringBuilder();
+            dclList.Append($"declaration_set(");
+            foreach (AbstractNode v in node.Dcls)
+            {
+                dclList.Append($"{v.Name}, ");
+            }
+            dclList.Remove(dclList.Length - 2, 2);
+            dclList.Append(")");
+            return dclList.ToString();
+        }
+
 
         //-----------------------------Visitor----------------------------------------------
         public override void Visit(ParameterNode node)
@@ -60,6 +73,7 @@ namespace Compiler.AST
 
         public override void Visit(GraphDeclVertexNode node)
         {
+            _createdSymbolTabe.SetCurrentNode(node);
             VisitChildren(node);
         }
 
@@ -105,11 +119,13 @@ namespace Compiler.AST
 
         public override void Visit(ExtendNode node)
         {
+            _createdSymbolTabe.SetCurrentNode(node);
             VisitChildren(node);
         }
 
         public override void Visit(PredicateNode node)
         {
+            _createdSymbolTabe.SetCurrentNode(node);
             VisitChildren(node);
         }
 
@@ -325,19 +341,6 @@ namespace Compiler.AST
             }
         }
 
-        private string DeclarationSetPrint(AddQueryNode node)
-        {
-            StringBuilder dclList = new StringBuilder();
-            dclList.Append($"declaration_set(");
-            foreach (AbstractNode v in node.Dcls)
-            {
-                dclList.Append($"{v.Name}, ");
-            }
-            dclList.Remove(dclList.Length - 2, 2);
-            dclList.Append(")");
-            return dclList.ToString();
-        }
-
         public override void Visit(AddQueryNode node)
         {
             _createdSymbolTabe.SetCurrentNode(node);
@@ -435,7 +438,10 @@ namespace Compiler.AST
         public override void Visit(WhereNode node)
         {
             _createdSymbolTabe.SetCurrentNode(node);
-            node.Accept(this);
+            foreach (var item in node.Children)
+            {
+                item.Accept(this);
+            }
         }
 
         public override void Visit(GraphDeclEdgeNode node)
@@ -492,7 +498,10 @@ namespace Compiler.AST
         }
 
         public override void Visit(GraphSetQuery node)
-        {/*
+        {
+            _createdSymbolTabe.SetCurrentNode(node);
+            _createdSymbolTabe.NotImplementedError(node);
+            /*
             AllType? targetType = node.Attributes.Item1.Type_enum;
             AllType? setType = AllType.BOOL; //TODO når expression node er færdig, kan vi finde ud af hvad settype er.
             if (targetType == setType)
