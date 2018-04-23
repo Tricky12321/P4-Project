@@ -184,7 +184,6 @@ namespace Compiler.AST
         public override void Visit(SelectAllQueryNode node)
         {
             _createdSymbolTabe.SetCurrentNode(node);
-
             AllType? collectionNameType = _createdSymbolTabe.RetrieveSymbol(node.Variable, out bool isCollectionInQuery, false);
             bool fromIsColl = isCollectionInQuery;
             if (fromIsColl)
@@ -386,39 +385,48 @@ namespace Compiler.AST
             else if (node.IsColl)
             {
                 AllType? TypeOfTargetCollection = _createdSymbolTabe.RetrieveSymbol(node.ToVariable, out bool isCollectionTargetColl, false);
-                node.TypeOrVariable.Accept(this);
-                ExpressionNode expressionToAdd = (ExpressionNode)node.TypeOrVariable;
-                AllType? typeOfVar = expressionToAdd.OverAllType;
-                bool targetIsGraph = TypeOfTargetCollection == AllType.GRAPH;
+                AllType? typeOfVar;
 
-                if (isCollectionTargetColl)
-                {//non-declarations are added to an extended collection on graph, or simply a collection.
-                    if (TypeOfTargetCollection == typeOfVar)
-                    {
-                        //the expression type is correct corresponding to the type of the target collection.
-                    }
-                    else
-                    {//mismatch of types if the target collection is not of same type of the expression
-                        _createdSymbolTabe.WrongTypeError(node.TypeOrVariable.Name, node.ToVariable);
-                    }
-                }
-                else if (targetIsGraph)
-                {//if variables are added to the graph.
-                    bool varIsVertex = typeOfVar == AllType.VERTEX;
-                    bool varIsEdge = typeOfVar == AllType.EDGE;
-                    if (varIsEdge || varIsVertex)
-                    {
-                        //only edge and vertex variables can be added to a graph.
-                    }
-                    else
-                    {
-                        _createdSymbolTabe.WrongTypeError(node.TypeOrVariable.ToString(), node.ToVariable);
-                    }
-                }
-                else
+                foreach (var item in node.TypeOrVariable)
                 {
-                    _createdSymbolTabe.TargetIsNotCollError(node.ToVariable);
+                    item.Accept(this);
+
+                    ExpressionNode expressionToAdd = (ExpressionNode)item;
+                    typeOfVar = expressionToAdd.OverAllType;
+                    bool targetIsGraph = TypeOfTargetCollection == AllType.GRAPH;
+
+                    if (isCollectionTargetColl)
+                    {//non-declarations are added to an extended collection on graph, or simply a collection.
+                        if (TypeOfTargetCollection == typeOfVar)
+                        {
+                            //the expression type is correct corresponding to the type of the target collection.
+                        }
+                        else
+                        {//mismatch of types if the target collection is not of same type of the expression
+                            _createdSymbolTabe.WrongTypeError(item.Name, node.ToVariable);
+                        }
+                    }
+                    else if (targetIsGraph)
+                    {//if variables are added to the graph.
+                        bool varIsVertex = typeOfVar == AllType.VERTEX;
+                        bool varIsEdge = typeOfVar == AllType.EDGE;
+                        if (varIsEdge || varIsVertex)
+                        {
+                            //only edge and vertex variables can be added to a graph.
+                        }
+                        else
+                        {
+                            _createdSymbolTabe.WrongTypeError(node.TypeOrVariable.ToString(), node.ToVariable);
+                        }
+                    }
+                    else
+                    {
+                        _createdSymbolTabe.TargetIsNotCollError(node.ToVariable);
+                    }
+
                 }
+
+
             }
             else
             {

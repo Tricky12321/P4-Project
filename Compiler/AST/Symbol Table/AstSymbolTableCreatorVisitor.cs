@@ -493,8 +493,8 @@ namespace Compiler.AST.SymbolTable
         public override void Visit(ForLoopNode node)
         {
             SymbolTable.SetCurrentNode(node);
-            SymbolTable.OpenScope(BlockType.ForLoop);
 
+			SymbolTable.OpenScope(BlockType.ForLoop);
             if (node.VariableDeclaration != null)
             {
                 node.VariableDeclaration.Accept(this);

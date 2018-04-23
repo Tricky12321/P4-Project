@@ -15,7 +15,7 @@ namespace Compiler.AST.Nodes.QueryNodes
         public bool IsVariable = false;
         public bool IsType = false;
         public bool IsQuery = false;
-        public AbstractNode TypeOrVariable;
+        public List<AbstractNode> TypeOrVariable = new List<AbstractNode>();
         public AbstractNode Query;
         // Shared
         public string ToVariable;

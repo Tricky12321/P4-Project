@@ -7,19 +7,19 @@ namespace Giraph.Classes
     public class Collection<T> : List<T>
     {
 
-        public T Pop => this.Take(1).Last();
+        public T Pop => this.RemoveLast();
 
-        public void Push(T Item) => this.Add(Item);
+        public void Push(T Item) => this.Insert(this.Count, Item);
 
-        public T ExtractMin => this.Take(1).Min();
+        public T ExtractMin => RemoveMin();
 
-        public T ExtractMax() => this.Take(1).Max();
+        public T ExtractMax() => RemoveMax();
 
-        public T Dequeue() => this.Take(1).Last();
+        public T Dequeue => this.RemoveLast();
 
-        public void Enqueue(T Item) => this.Insert(0, Item);
+        public void Enqueue(T Item) => this.Insert(0,Item);
 		
-        public T Peek() => this.Last();
+        public T Peek => this.First();
 
         public T Select(Func<T, Boolean> p) => this.Where(p).Single();
 
@@ -35,6 +35,30 @@ namespace Giraph.Classes
                 this.Remove(item);
             }
             return output;
+        }
+
+        private T RemoveLast() {
+            T LastElement = this.Last();
+            this.RemoveAt(this.Count-1);
+            return LastElement;
+        }
+
+        private T RemoveFirst() {
+            T FirstElement = this.First();
+            this.RemoveAt(0);
+            return FirstElement;
+        }
+
+        private T RemoveMin() {
+            T min = this.Min();
+            this.RemoveMin();
+            return min;
+        }
+
+        private T RemoveMax() {
+            T max = this.Max();
+            this.RemoveMax();
+            return max;
         }
 
     }

@@ -7,7 +7,7 @@ namespace Compiler.AST.Nodes
         public string VertexNameFrom;
         public string VertexNameTo;
 
-        public Dictionary<string, string> ValueList = new Dictionary<string, string>();
+        public Dictionary<string, AbstractNode> ValueList = new Dictionary<string, AbstractNode>();
 
         public GraphDeclEdgeNode(int LineNumber, int CharIndex) : base(LineNumber, CharIndex)
         {

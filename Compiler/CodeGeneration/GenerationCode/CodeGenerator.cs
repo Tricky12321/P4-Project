@@ -6,6 +6,7 @@ using Compiler.AST.Nodes.LoopNodes;
 using Compiler.AST.Nodes.QueryNodes;
 using System.Text;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Compiler.CodeGeneration.GenerationCode
 {
@@ -16,6 +17,14 @@ namespace Compiler.CodeGeneration.GenerationCode
         private StringBuilder Global = new StringBuilder();
         public StringBuilder Functions;
         private int _forLoopCounter = 0;
+        private int _newVariableCounter_private = 0;
+        private string _newVariabelCounter
+        {
+            get
+            {
+                return "_newVariable" + _newVariableCounter_private++;
+            }
+        }
         public CodeGenerator(CodeWriter codeWriter)
         {
             MainBody = codeWriter.MainBody;
@@ -52,22 +61,56 @@ namespace Compiler.CodeGeneration.GenerationCode
             }
         }
 
-        public string ResolveBoolean(string Boolean) {
-            if (Boolean == "True") {
+        public string ResolveBoolean(string Boolean)
+        {
+            if (Boolean == "True")
+            {
                 return "true";
-            } else {
+            }
+            else
+            {
+                return "false";
+            }
+        }
+
+        public string ResolveBoolean(bool Boolean)
+        {
+            if (Boolean)
+            {
+                return "true";
+            }
+            else
+            {
                 return "false";
             }
         }
 
         public override void Visit(DeclarationNode node)
         {
-
+            if (node.CollectionDcl)
+            {
+                _currentStringBuilder.Append($"Collection<{ResolveTypeToCS(node.Type_enum)}> ");
+                _currentStringBuilder.Append(node.Name);
+                _currentStringBuilder.Append($"= new Collection<{ResolveTypeToCS(node.Type_enum)}>()");
+            }
+            else
+            {
+                _currentStringBuilder.Append(ResolveTypeToCS(node.Type_enum) + " ");
+                _currentStringBuilder.Append(node.Name);
+                if (node.Children.Count > 0)
+                {
+                    _currentStringBuilder.Append(" = ");
+                    foreach (var item in node.Children)
+                    {
+                        item.Accept(this);
+                    }
+                }
+            }
+            _currentStringBuilder.Append(";\n");
         }
 
         public override void Visit(FunctionNode node)
         {
-
             if (node.Name == "Main")
             {
                 _currentStringBuilder = MainBody;
@@ -137,11 +180,14 @@ namespace Compiler.CodeGeneration.GenerationCode
                     _currentStringBuilder.Append($"Vertex {vertexName} = new Vertex();\n");
                 }
 
-                foreach (KeyValuePair<string, string> value in vertex.ValueList)
+                foreach (KeyValuePair<string, AbstractNode> value in vertex.ValueList)
                 {
-                    _currentStringBuilder.Append($"{vertexName}.{value.Key} = {value.Value};\n");
+                    _currentStringBuilder.Append($"{vertexName}.{value.Key} = ");
+                    value.Value.Accept(this);
+                    _currentStringBuilder.Append($";\n");
+
                 }
-                _currentStringBuilder.Append($"{node.Name}.Vertices.Add({vertexName});\n\n");
+                _currentStringBuilder.Append($"{node.Name}.Vertices.Push({vertexName});\n\n");
             }
 
             _currentStringBuilder.Append($"Edge _newEdge{node.Name};\n");
@@ -159,14 +205,16 @@ namespace Compiler.CodeGeneration.GenerationCode
                     _currentStringBuilder.Append($"Edge {edgeName} = new Edge({edge.VertexNameFrom},{edge.VertexNameTo});\n");
                 }
 
-                foreach (KeyValuePair<string, string> value in edge.ValueList)
+                foreach (KeyValuePair<string, AbstractNode> value in edge.ValueList)
                 {
-                    _currentStringBuilder.Append($"{edgeName}.{value.Key} = {value.Value};\n");
+                    _currentStringBuilder.Append($"{edgeName}.{value.Key} = ");
+                    value.Value.Accept(this);
+                    _currentStringBuilder.Append($";\n");
                 }
-                _currentStringBuilder.Append($"{node.Name}.Edges.Add({edgeName});\n\n");
+                _currentStringBuilder.Append($"{node.Name}.Edges.Push({edgeName});\n\n");
             }
 
-            _currentStringBuilder.Append($"Graph.Directed = {node.Directed};\n\n");
+            _currentStringBuilder.Append($"{node.Name}.Directed = {ResolveBoolean(node.Directed)};\n\n");
         }
 
         public override void Visit(VariableDclNode node)
@@ -180,34 +228,70 @@ namespace Compiler.CodeGeneration.GenerationCode
                 {
                     item.Accept(this);
                 }
-                _currentStringBuilder.Append(";\n");
             }
+            _currentStringBuilder.Append(";\n");
         }
 
         public override void Visit(GraphDeclVertexNode node)
         {
-
+            throw new Exception("This should be done in the GraphDeclNode");
         }
 
         public override void Visit(GraphDeclEdgeNode node)
         {
-
+            throw new Exception("This should be done in the GraphDeclNode");
         }
 
         public override void Visit(GraphSetQuery node)
         {
-
+            throw new Exception("This should be done in the GraphDeclNode");
         }
 
         public override void Visit(SetQueryNode node)
         {
+            if (node.SetAttributes)
+            {
+                foreach (var item in node.Attributes)
+                {
+                    string InVaraible = node.InVariable.Name;
+                    string VariableName = item.Item1.Name;
+                    string AssignOperator = item.Item2;
+                    ExpressionNode expression = item.Item3;
+                    _currentStringBuilder.Append($"{InVaraible}.{VariableName} {AssignOperator} ");
+                    expression.Accept(this);
+                    _currentStringBuilder.Append($";\n");
 
+
+                }
+            }
+            else if (node.SetVariables)
+            {
+                foreach (var item in node.Attributes)
+                {
+                    string VariableName = item.Item1.Name;
+                    string AssignOperator = item.Item2;
+                    ExpressionNode expression = item.Item3;
+                    _currentStringBuilder.Append($"{VariableName} {AssignOperator} ");
+                    expression.Accept(this);
+                    _currentStringBuilder.Append($";\n");
+                }
+            }
         }
 
         public override void Visit(WhereNode node)
         {
 
+            //.Where(x => x.{)
+            throw new NotImplementedException();
         }
+
+        /*private string getWhereString(WhereNode node)
+        {
+            string stringPlaceholder = ".Where(";
+            //stringPlaceholder += node.
+
+            return stringPlaceholder;
+        }*/
 
         public override void Visit(ExtendNode node)
         {
@@ -216,24 +300,24 @@ namespace Compiler.CodeGeneration.GenerationCode
 
         public override void Visit(IfElseIfElseNode node)
         {
-            _currentStringBuilder.Append("if (");
+            _currentStringBuilder.Append("\nif (");
             node.IfCondition.Accept(this);
             _currentStringBuilder.Append(") \n {");
             node.IfCodeBlock.Accept(this);
-            _currentStringBuilder.Append("\n } ");
+            _currentStringBuilder.Append("\n } \n");
             foreach (var item in node.ElseIfList)
             {
                 _currentStringBuilder.Append("\n else if (");
                 item.Item1.Accept(this); // BoolComparison
                 _currentStringBuilder.Append(") \n {");
                 item.Item2.Accept(this); // Codeblock
-                _currentStringBuilder.Append("\n } ");
+                _currentStringBuilder.Append("\n }\n ");
             }
             if (node.ElseCodeBlock != null)
             {
                 _currentStringBuilder.Append("\n else \n {");
                 node.ElseCodeBlock.Accept(this);
-                _currentStringBuilder.Append("\n } ");
+                _currentStringBuilder.Append("\n } \n");
             }
         }
 
@@ -280,68 +364,134 @@ namespace Compiler.CodeGeneration.GenerationCode
 
         public override void Visit(AddQueryNode node)
         {
+            if (node.IsGraph)
+            {
+                foreach (var item in node.Dcls)
+                {
+                    if (item is GraphDeclVertexNode || item is GraphDeclEdgeNode)
+                    {
+                        string _newVariable = _newVariabelCounter;
+                        string type = item is GraphDeclEdgeNode ? "Edge" : "Vertex";
+                        _currentStringBuilder.Append($"{type} {_newVariable} = new {type}();\n");
+
+                        foreach (var val in ((GraphDeclVertexNode)item).ValueList)
+                        {
+                            _currentStringBuilder.Append($"{_newVariable}.{val.Key} = ");
+                            val.Value.Accept(this);
+                            _currentStringBuilder.Append($";\n");
+                        }
+                        if (item is GraphDeclEdgeNode)
+                        {
+                            _currentStringBuilder.Append($"{node.ToVariable}.Edges.Push({_newVariable});\n");
+                        }
+                        else
+                        {
+                            _currentStringBuilder.Append($"{node.ToVariable}.Vertices.Push({_newVariable});\n");
+                        }
+                    }
+                }
+            }
+            else
+            {
+                foreach (var item in node.TypeOrVariable)
+                {
+                    _currentStringBuilder.Append($"{node.ToVariable}.Push(");
+                    item.Accept(this);
+                    _currentStringBuilder.Append($");\n");
+                }
+            }
+
+
         }
 
         public override void Visit(PredicateNode node)
         {
+
         }
 
         public override void Visit(DequeueQueryNode node)
         {
+            _currentStringBuilder.Append($"{node.Variable}.Dequeue;");
         }
 
         public override void Visit(EnqueueQueryNode node)
         {
+            _currentStringBuilder.Append($"{node.VariableCollection}.Enqueue(");
+            node.VariableToAdd.Accept(this);
+            _currentStringBuilder.Append($");\n");
         }
 
         public override void Visit(ExtractMaxQueryNode node)
         {
+
         }
 
         public override void Visit(ExtractMinQueryNode node)
         {
+
         }
 
         public override void Visit(PopQueryNode node)
         {
+            _currentStringBuilder.Append($"{node.Variable}.Pop;\n");
+
         }
 
         public override void Visit(PushQueryNode node)
         {
+            _currentStringBuilder.Append($"{node.VariableCollection}.Push(");
+            node.VariableToAdd.Accept(this);
+            _currentStringBuilder.Append($");\n");
         }
 
         public override void Visit(SelectAllQueryNode node)
         {
-
         }
 
         public override void Visit(SelectQueryNode node)
         {
 
+            _currentStringBuilder.Append($"{node.Variable}");
+            Visit(node.WhereCondition as WhereNode);
+            
+            /*
+            Main-> void() {
+                select from Graph1.Vertices where x == 100;
+            }
+
+            Graph1.Vertices.where(x => x.x == 100);
+            */
         }
 
         public override void Visit(ForLoopNode node)
         {
-            _currentStringBuilder.Append("for (");
+            _currentStringBuilder.Append("\nfor (");
             if (node.VariableDeclaration != null)
             {
                 node.VariableDeclaration.Accept(this);
                 node.ToValueOperation.Accept(this);
                 _currentStringBuilder.Append($";{node.VariableDeclaration.Name} += ");
                 node.Increment.Accept(this);
-            } else {
-                _currentStringBuilder.Append($"int _i{_forLoopCounter} = 0; _i{_forLoopCounter} < ");
-				node.ToValueOperation.Accept(this);
-                _currentStringBuilder.Append($";_i{_forLoopCounter} = ");
-				node.ToValueOperation.Accept(this);
             }
-			_currentStringBuilder.Append($") \n {{");
-			VisitChildren(node);
-			_currentStringBuilder.Append($"\n}}");
+            else
+            {
+                _currentStringBuilder.Append($"int _i{_forLoopCounter} = 0; _i{_forLoopCounter} < ");
+                node.ToValueOperation.Accept(this);
+                _currentStringBuilder.Append($";_i{_forLoopCounter} = ");
+                node.ToValueOperation.Accept(this);
+            }
+            _currentStringBuilder.Append($") \n {{");
+            VisitChildren(node);
+            _currentStringBuilder.Append($"\n}}");
         }
 
         public override void Visit(ForeachLoopNode node)
         {
+            _currentStringBuilder.Append($"foreach (");
+            _currentStringBuilder.Append($"{ResolveTypeToCS(node.VariableType_enum)} {node.VariableName} in {node.InVariableName}");
+            _currentStringBuilder.Append($") \n {{");
+            VisitChildren(node);
+            _currentStringBuilder.Append($"\n }}\n");
 
         }
 
@@ -395,16 +545,19 @@ namespace Compiler.CodeGeneration.GenerationCode
         public override void Visit(PrintQueryNode node)
         {
             bool first = true;
-            _currentStringBuilder.Append("Console.WriteLine(");
+            _currentStringBuilder.Append("\nConsole.WriteLine(");
             foreach (var item in node.Children)
             {
                 if (first)
                 {
-                    if (item is ExpressionNode) {
+                    if (item is ExpressionNode)
+                    {
                         _currentStringBuilder.Append("(");
-						item.Accept(this);
+                        item.Accept(this);
                         _currentStringBuilder.Append(")");
-                    } else {
+                    }
+                    else
+                    {
                         item.Accept(this);
                     }
                     first = false;
@@ -429,7 +582,7 @@ namespace Compiler.CodeGeneration.GenerationCode
 
         public override void Visit(RunQueryNode node)
         {
-            _currentStringBuilder.Append(node.FunctionName + "(");
+            _currentStringBuilder.Append("\n" + node.FunctionName + "(");
             bool first = true;
             foreach (var item in node.Children)
             {
@@ -444,7 +597,7 @@ namespace Compiler.CodeGeneration.GenerationCode
                     item.Accept(this);
                 }
             }
-            _currentStringBuilder.Append(");");
+            _currentStringBuilder.Append(");\n");
         }
 
         StringBuilder _graphExtensions;
@@ -473,10 +626,10 @@ namespace Compiler.CodeGeneration.GenerationCode
             // If its a collection
             if (IsCollection)
             {
-                _currentExtension.AppendLine($"public Collection<{ResolveTypeToCS(ExtendType)}> {ExtendName} = new Collection<{ResolveTypeToCS(ExtendType)}>();");
+                _currentExtension.AppendLine($"\npublic Collection<{ResolveTypeToCS(ExtendType)}> {ExtendName} = new Collection<{ResolveTypeToCS(ExtendType)}>();");
                 if (ExtendNameShort != null && ExtendNameShort != "")
                 {
-                    _currentExtension.AppendLine($"public Collection<{ResolveTypeToCS(ExtendType)}> {ExtendNameShort} {{ ");
+                    _currentExtension.AppendLine($"\npublic Collection<{ResolveTypeToCS(ExtendType)}> {ExtendNameShort} {{ ");
                     _currentExtension.AppendLine("get");
                     _currentExtension.AppendLine($"{{return {ExtendName};}}");
                     _currentExtension.AppendLine("set");
@@ -490,20 +643,20 @@ namespace Compiler.CodeGeneration.GenerationCode
                 // TODO: consider if this is correct
                 if (ExtendType == AllType.GRAPH || ExtendType == AllType.VERTEX || ExtendType == AllType.EDGE)
                 {
-                    _currentExtension.AppendLine($"public {ResolveTypeToCS(ExtendType)} {ExtendName} = new {ResolveTypeToCS(ExtendType)};");
+                    _currentExtension.AppendLine($"\npublic {ResolveTypeToCS(ExtendType)} {ExtendName} = new {ResolveTypeToCS(ExtendType)};");
                 }
                 else
                 {
-                    _currentExtension.AppendLine($"public {ResolveTypeToCS(ExtendType)} {ExtendName};");
+                    _currentExtension.AppendLine($"\npublic {ResolveTypeToCS(ExtendType)} {ExtendName};");
                 }
                 if (ExtendNameShort != null && ExtendNameShort != "")
                 {
-                    _currentExtension.AppendLine($"public {ResolveTypeToCS(ExtendType)} {ExtendNameShort} {{ ");
+                    _currentExtension.AppendLine($"\npublic {ResolveTypeToCS(ExtendType)} {ExtendNameShort} {{ ");
                     _currentExtension.AppendLine("get");
                     _currentExtension.AppendLine($"{{return {ExtendName};}}");
                     _currentExtension.AppendLine("set");
                     _currentExtension.AppendLine($"{{{ExtendName} = value;}}");
-                    _currentExtension.AppendLine("}");
+                    _currentExtension.AppendLine("}\n");
                 }
             }
 

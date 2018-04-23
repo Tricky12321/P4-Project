@@ -11,6 +11,7 @@ using Compiler.AST.Nodes;
 using System.Diagnostics;
 using System.Management;
 using Compiler.CodeGeneration.GenerationCode;
+using Giraph.Classes;
 namespace Compiler
 {
     class Program
@@ -41,7 +42,7 @@ namespace Compiler
             AbstractNode AST = BuildAST(CST);
             SymTable SymbolTable = BuildSymbolTable(AST as StartNode);
             TypeCheck(SymbolTable, AST as StartNode);
-            PrettyPrint(AST as StartNode);
+            //PrettyPrint(AST as StartNode);
             WriteCodeToFiles(AST as StartNode);
             TotalTimer.Stop();
             Console.WriteLine($"Total compile timer: {TotalTimer.ElapsedMilliseconds}ms");
@@ -131,6 +132,10 @@ namespace Compiler
             codeWriter.FillAll();
             WriteTimer.Stop();
             Console.WriteLine($"Writing Code timer: {WriteTimer.ElapsedMilliseconds}ms");
+        }
+
+        public void TestGeneratedCode() {
+            
         }
 
 
