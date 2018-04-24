@@ -147,6 +147,7 @@ namespace Compiler.AST
                     {
                         expNode.OverAllType = collectionNameType;
                     }
+                    node.Type = collectionNameType.ToString();
                 }
                 else
                 {
@@ -173,6 +174,7 @@ namespace Compiler.AST
                     {
                         expNode.OverAllType = collectionNameType;
                     }
+                    node.Type = collectionNameType.ToString();
                 }
                 else
                 {
@@ -222,8 +224,8 @@ namespace Compiler.AST
                     if (node.Parent is ExpressionNode expNode)
                     {
                         expNode.OverAllType = collectionNameType;
-                        node.Type = collectionNameType.ToString();
                     }
+                    node.Type = collectionNameType.ToString();
                 }
                 else
                 {
@@ -242,7 +244,7 @@ namespace Compiler.AST
             _createdSymbolTabe.SetCurrentNode(node);
             AllType? varToAdd;
             AllType? collectionToAddTo = _createdSymbolTabe.RetrieveSymbol(node.VariableCollection, out bool isCollectionInQuery, false);
-
+            node.Type = collectionToAddTo.ToString();
             if (node.VariableToAdd is ConstantNode constant)
             {
                 varToAdd = constant.Type_enum;
@@ -251,6 +253,10 @@ namespace Compiler.AST
                 if (typeCorrect)
                 {
                     //constant is fine, collection is fine
+                }
+                else
+                {
+                    _createdSymbolTabe.WrongTypeError(node.variableName, node.VariableCollection);
                 }
                 Visit(node.VariableToAdd);
             }
