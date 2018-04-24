@@ -98,7 +98,11 @@ namespace Compiler.CodeGeneration.GenerationCode
             {
                 _currentStringBuilder.Append(ResolveTypeToCS(node.Type_enum) + " ");
                 _currentStringBuilder.Append(node.Name);
-                if (node.Children.Count > 0)
+                if (node.Assignment != null) {
+                    _currentStringBuilder.Append(" = ");
+                    node.Assignment.Accept(this);
+                }
+                else if (node.Children.Count > 0)
                 {
                     _currentStringBuilder.Append(" = ");
                     foreach (var item in node.Children)
