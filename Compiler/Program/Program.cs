@@ -31,7 +31,7 @@ namespace Compiler
             SymTable SymbolTable = BuildSymbolTable(AST as StartNode);
             //TypeCheck(SymbolTable, AST as StartNode);
             //PrettyPrint(AST as StartNode);
-            WriteCodeToFiles(AST as StartNode);
+            WriteCodeToFiles(AST as StartNode, SymbolTable);
             TotalTimer.Stop();
             Console.WriteLine($"Total compile timer: {TotalTimer.ElapsedMilliseconds}ms");
         }
@@ -111,11 +111,11 @@ namespace Compiler
             } 
         }
 
-        public static void WriteCodeToFiles(StartNode node) {
+        public static void WriteCodeToFiles(StartNode node, SymTable symbolTable) {
             Stopwatch WriteTimer = new Stopwatch();
             WriteTimer.Start();
             CodeWriter codeWriter = new CodeWriter();
-            CodeGenerator codeGenerator = new CodeGenerator(codeWriter);
+            CodeGenerator codeGenerator = new CodeGenerator(codeWriter, symbolTable);
             codeGenerator.Visit(node);
             codeWriter.FillAll();
             WriteTimer.Stop();
