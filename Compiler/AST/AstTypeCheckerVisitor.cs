@@ -615,7 +615,7 @@ namespace Compiler.AST
             }
             else
             {
-                Console.WriteLine("this is something else than expression or selectall, in declaration node." + _createdSymbolTabe.CurrentLine);
+                //The declaration assignment is just null, and therefore the collection is not set to something
             }
         }
 
