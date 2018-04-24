@@ -343,8 +343,7 @@ namespace Compiler.CodeGeneration.GenerationCode
             _currentStringBuilder.Append($"_fun{node.ID}();\n{ResolveTypeToCS(node.Type_enum)} _fun{node.ID}(){{\n");
             if(node.Type == "void")
             {
-                
-                throw new NotImplementedException();
+                throw new NotImplementedException("Typen skal gerne sættes i typechecker.");
             }
             _currentStringBuilder.Append($"{ResolveTypeToCS(node.Type_enum)} _val{node.ID};\n");
 
@@ -363,6 +362,16 @@ namespace Compiler.CodeGeneration.GenerationCode
                 _currentStringBuilder.Append("}\n");
             }
             _currentStringBuilder.Append($"return _val{node.ID};\n}}");
+        }
+
+        public override void Visit(ExtractMaxQueryNode node)
+        {
+
+        }
+
+        public override void Visit(ExtractMinQueryNode node)
+        {
+
         }
 
         public override void Visit(WhereNode node)
@@ -553,16 +562,6 @@ namespace Compiler.CodeGeneration.GenerationCode
             _currentStringBuilder.Append($"{node.VariableCollection}.Enqueue(");
             node.VariableToAdd.Accept(this);
             _currentStringBuilder.Append($");\n");
-        }
-
-        public override void Visit(ExtractMaxQueryNode node)
-        {
-
-        }
-
-        public override void Visit(ExtractMinQueryNode node)
-        {
-
         }
 
         public override void Visit(PopQueryNode node)
