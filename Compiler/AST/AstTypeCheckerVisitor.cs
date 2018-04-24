@@ -174,6 +174,7 @@ namespace Compiler.AST
             {
                 if (node.Parent is DeclarationNode expNode)
                 {
+                    expNode.isCollection = true;
                     node.Type = collectionNameType.ToString();
                 }
             }
@@ -181,8 +182,6 @@ namespace Compiler.AST
             {
                 //TODO correct error message pls
             }
-
-
             if (node.WhereCondition != null)
             {
                 Visit(node.WhereCondition);
@@ -674,21 +673,27 @@ namespace Compiler.AST
         public override void Visit(ReturnNode node)
         {
             _createdSymbolTabe.SetCurrentNode(node);
+            AllType? funcType = _createdSymbolTabe.RetrieveSymbol(node.FuncName, out bool ReturnTypeCollection, false);
+            AllType? returnType = null;
+            DeclarationNode dclNode = null;
 
-            AllType? funcType = _createdSymbolTabe.RetrieveSymbol(node.Parent.Name, out bool ReturnTypeCollection, false);
-            AllType? returnType = _createdSymbolTabe.RetrieveSymbol(node.LeftmostChild.Name, out bool FunctionTypeCollection, false);
+            if (node.LeftmostChild is DeclarationNode dcl && dcl.isCollection)
+            {
+                dclNode = dcl;
+                returnType = AllType.COLLECTION;
+            }
 
-            if (funcType == AllType.VOID)
+            else if (node.LeftmostChild is ExpressionNode expNode)
+            {
+                returnType = expNode.OverAllType;
+            }
+            else if (funcType == AllType.VOID)
             {
                 //calling return on void function error 
             }
-            if (ReturnTypeCollection == FunctionTypeCollection)
+            else if (dclNode.isCollection && ReturnTypeCollection)
             {
-                if (funcType == returnType)
-                {
-
-                }
-                else
+                if (!(funcType == returnType))
                 {
                     //ERROR, conflicting function and return type
                 }
@@ -697,6 +702,7 @@ namespace Compiler.AST
             {
                 //ERROR, one is collection, other isn't
             }
+
             VisitChildren(node);
         }
 

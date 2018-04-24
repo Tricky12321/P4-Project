@@ -15,6 +15,7 @@ namespace Compiler.AST
 {
     internal class AstBuilder : GiraphParserBaseVisitor<AbstractNode>
     {
+        private string _funcName;
         public AbstractNode root;
         public override AbstractNode VisitStart([NotNull] GiraphParser.StartContext context)
         {
@@ -32,7 +33,8 @@ namespace Compiler.AST
         {
             FunctionNode FNode = new FunctionNode(context.Start.Line, context.Start.Column);
             // Extract the Name of the function, and the return type
-            FNode.Name = context.variable().GetText(); // Name
+            _funcName = context.variable().GetText(); // Name
+            FNode.Name = _funcName;
             FNode.ReturnType = context.allTypeWithColl().GetText(); // Return Type
             // Extract the parameters from the function
             if (context.formalParams() != null)
@@ -731,6 +733,7 @@ namespace Compiler.AST
         public override AbstractNode VisitReturnBlock([NotNull] GiraphParser.ReturnBlockContext context)
         {
             ReturnNode RNode = new ReturnNode(context.Start.Line, context.Start.Column);
+            RNode.FuncName = _funcName;
             RNode.AdoptChildren(Visit(context.GetChild(1)));
             return RNode;
         }

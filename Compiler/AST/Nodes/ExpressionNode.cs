@@ -17,6 +17,8 @@ namespace Compiler.AST.Nodes
 
         public AllType? OverAllType;
 
+        public bool IsCollection;
+
         public override void Accept(AstVisitorBase astVisitor)
         {
             astVisitor.Visit(this);
