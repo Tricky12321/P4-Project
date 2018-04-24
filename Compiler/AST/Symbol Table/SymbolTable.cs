@@ -24,6 +24,7 @@ namespace Compiler.AST.SymbolTable
             "add","collection","run","with","extend","predicate","pop","push","peek","enqueue",
             "dequeue","extractmin","extractmax","print","inf","true","false","isin"
         };
+
         private uint _globalDepth
         {
             get
