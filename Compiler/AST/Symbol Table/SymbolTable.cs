@@ -337,7 +337,7 @@ namespace Compiler.AST.SymbolTable
         /// <param name="Name">Name.</param>
         /// <param name="IsCollection">If set to <c>true</c> is collection.</param>
         /// <param name="ShowErrors">If set to <c>true</c> show errors.</param>
-        public AllType? RetrieveSymbol(string Name, out bool IsCollection, bool ShowErrors = true)
+        public AllType? RetrieveSymbol(string Name, out bool IsCollection, bool ShowErrors = true )
         {
             // Check if its a dot function
             if (Name.Contains('.'))
@@ -397,6 +397,19 @@ namespace Compiler.AST.SymbolTable
                 }
             }
         }
+
+        public bool IsFunctionDeclared(string FunctionName) {
+            return _symTable.ContainsKey(FunctionName);
+        }
+
+        public AllType? FunctionReturnType(string FunctionName) {
+            if (_symTable.ContainsKey(FunctionName)) {
+				return _symTable[FunctionName].Type;
+            } else {
+                return null;
+            }
+        }
+
         /// <summary>
         /// Returns if the type given is a class.
         /// </summary>
@@ -674,6 +687,11 @@ namespace Compiler.AST.SymbolTable
         public void FromVarIsNotCollError(string name)
         {
             Console.WriteLine($"The variable retrieved from: {name} is not of type collection {GetLineNumber()}");
+            Error();
+        }
+
+        public void UndeclaredFunction(string FunctionName) {
+            Console.WriteLine($"The function {FunctionName} is undeclared, and can therefore not be used {GetLineNumber()}");
             Error();
         }
     }

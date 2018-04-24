@@ -33,9 +33,10 @@ namespace Compiler.AST
         {
             FunctionNode FNode = new FunctionNode(context.Start.Line, context.Start.Column);
             // Extract the Name of the function, and the return type
-            _funcName = context.variable().GetText(); // Name
             FNode.Name = _funcName;
-            FNode.ReturnType = context.allTypeWithColl().GetText(); // Return Type
+            FNode.Name = context.variable().GetText(); // Name
+            FNode.ReturnType = context.allTypeWithColl().allType().GetText(); // Return Type
+            FNode.IsCollection = context.allTypeWithColl().COLLECTION() != null;
             // Extract the parameters from the function
             if (context.formalParams() != null)
             {
@@ -618,7 +619,7 @@ namespace Compiler.AST
         public override AbstractNode VisitSelect([NotNull] GiraphParser.SelectContext context)
         {
             SelectQueryNode SelectNode = new SelectQueryNode(context.Start.Line, context.Start.Column);
-            //SelectNode.Type = context.allTypeWithColl().GetText();
+            SelectNode.Type = getContextType(context.variableFunc());
             SelectNode.Variable = context.variableFunc().GetText();
             if (context.where() != null)
             {
@@ -630,13 +631,37 @@ namespace Compiler.AST
         public override AbstractNode VisitSelectAll([NotNull] GiraphParser.SelectAllContext context)
         {
             SelectAllQueryNode SelectNode = new SelectAllQueryNode(context.Start.Line, context.Start.Column);
-            //SelectNode.Type = context.allTypeWithColl().GetText();
+            SelectNode.Type = getContextType(context.variableFunc());
             SelectNode.Variable = context.variableFunc().GetText();
             if (context.where() != null)
             {
                 SelectNode.WhereCondition = Visit(context.where());
             }
             return SelectNode;
+        }
+
+        private string getContextType(IParseTree context)
+        {
+            string switchString = context.GetType().ToString();
+            switch (switchString)
+            {
+                case "GiraphParser+VariableFuncContext":
+                    switch (context.GetChild(0).GetChild(context.GetChild(0).ChildCount - 1).GetText())
+                    {
+                        case "Vertices":
+                            return "vertex";
+                        case "Edges":
+                            return "edge";
+                    }
+                    throw new WrongExpressionPartTypeFoundException("Spørg Mads");
+                case "GiraphParser+IntegerContext":
+                    return "int";
+                case "GiraphParser+BoolContext":
+                    return "bool";
+                case "GiraphParser+StringContext":
+                    return "string";
+            }
+            throw new WrongExpressionPartTypeFoundException("Spørg Mads");
         }
 
         public override AbstractNode VisitEnqueueOP([NotNull] GiraphParser.EnqueueOPContext context)
@@ -967,5 +992,17 @@ namespace Compiler.AST
             }
             return VariableNode;
         }
-    }
+
+		public override AbstractNode VisitPredicateCall([NotNull] GiraphParser.PredicateCallContext context)
+		{
+            PredicateCall predicateCall = new PredicateCall(context.Start.Line, context.Start.Column);
+            predicateCall.Name = context.variable().GetText();
+
+            foreach (var item in context.parameters().varOrConst()) {
+                predicateCall.AdoptChildren(Visit(item));
+            }
+
+            return predicateCall;
+		}
+	}
 }

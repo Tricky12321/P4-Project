@@ -5,6 +5,7 @@ namespace Compiler.AST.Nodes
     public class FunctionNode : AbstractNode
     {
         public string ReturnType;
+        public bool IsCollection;
         public List<ParameterNode> Parameters = new List<ParameterNode>();
         public FunctionNode(int LineNumber, int CharIndex) : base(LineNumber,CharIndex)
         {

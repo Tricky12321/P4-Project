@@ -16,23 +16,11 @@ namespace Compiler
 {
     class Program
     {
-        static void Main(string[] args)
+        public static void Main(string[] args)
         {
             Compile();
-            //CompileGeneratedCode();
         }
 
-        private static OS GetOS() {
-            if (Utilities.IsWindows) {
-                return OS.Windows;
-            } else if (Utilities.IsMacOS) {
-                return OS.MacOS;
-            } else if (Utilities.IsLinux) {
-                return OS.Linux;
-            } else {
-                return OS.Unknown;
-            }
-        }
 
         public static void Compile() {
             Stopwatch TotalTimer = new Stopwatch();
@@ -41,12 +29,11 @@ namespace Compiler
             GiraphParser.StartContext CST = BuildCST("kode.giraph");
             AbstractNode AST = BuildAST(CST);
             SymTable SymbolTable = BuildSymbolTable(AST as StartNode);
-            TypeCheck(SymbolTable, AST as StartNode);
+            //TypeCheck(SymbolTable, AST as StartNode);
             //PrettyPrint(AST as StartNode);
             WriteCodeToFiles(AST as StartNode);
             TotalTimer.Stop();
             Console.WriteLine($"Total compile timer: {TotalTimer.ElapsedMilliseconds}ms");
-
         }
 
         public static AbstractNode BuildAST(GiraphParser.StartContext start)
@@ -60,7 +47,7 @@ namespace Compiler
         }
 
         public static void PrettyPrint(StartNode start)
-        {   
+        {           
             Stopwatch PPTimer = new Stopwatch();
             AstPrettyPrintVisitor PPVisitor = new AstPrettyPrintVisitor();
             PPTimer.Start();
@@ -108,10 +95,12 @@ namespace Compiler
         }
 
         public static void CompileGeneratedCode() {
-            if (GetOS() == OS.MacOS || GetOS() == OS.Linux) {
+            if (Utilities.GetOS() == OS.MacOS || Utilities.GetOS() == OS.Linux) {
 				string strCmdText = "CodeGeneration/Program.cs CodeGeneration/Classes/*";
-				Process.Start("mcs", strCmdText);
-            } else if (GetOS() == OS.Windows) {
+				Process.Start("csc", strCmdText);
+                strCmdText = "Program.exe";
+                Process.Start("mono", strCmdText);
+            } else if (Utilities.GetOS() == OS.Windows) {
                 Process process = new Process();
                 ProcessStartInfo startInfo = new ProcessStartInfo();
                 startInfo.WindowStyle = ProcessWindowStyle.Hidden;
@@ -121,7 +110,6 @@ namespace Compiler
                 process.Start();
             } 
         }
-
 
         public static void WriteCodeToFiles(StartNode node) {
             Stopwatch WriteTimer = new Stopwatch();
@@ -134,10 +122,9 @@ namespace Compiler
             Console.WriteLine($"Writing Code timer: {WriteTimer.ElapsedMilliseconds}ms");
         }
 
-        public void TestGeneratedCode() {
+
+        public static void Test() {
             
         }
-
-
     }
 }

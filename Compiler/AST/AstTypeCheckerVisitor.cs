@@ -46,6 +46,30 @@ namespace Compiler.AST
             }
         }
 
+        private string DeclarationSetPrint(AddQueryNode node)
+        {
+            StringBuilder dclList = new StringBuilder();
+            dclList.Append($"declaration_set(");
+            foreach (AbstractNode v in node.Dcls)
+            {
+                dclList.Append($"{v.Name}, ");
+            }
+            dclList.Remove(dclList.Length - 2, 2);
+            dclList.Append(")");
+            return dclList.ToString();
+        }
+
+        public override void VisitChildren(AbstractNode node)
+        {
+            foreach (AbstractNode child in node.GetChildren())
+            {
+                if (child != null)
+                {
+                    child.Accept(this);
+                }
+            }
+        }
+
 
         //-----------------------------Visitor----------------------------------------------
         public override void Visit(ParameterNode node)
@@ -54,11 +78,6 @@ namespace Compiler.AST
         }
 
         public override void Visit(StartNode node)
-        {
-            VisitChildren(node);
-        }
-
-        public override void Visit(GraphDeclVertexNode node)
         {
             VisitChildren(node);
         }
@@ -105,11 +124,13 @@ namespace Compiler.AST
 
         public override void Visit(ExtendNode node)
         {
+            _createdSymbolTabe.SetCurrentNode(node);
             VisitChildren(node);
         }
 
         public override void Visit(PredicateNode node)
         {
+            _createdSymbolTabe.SetCurrentNode(node);
             VisitChildren(node);
         }
 
@@ -324,19 +345,6 @@ namespace Compiler.AST
             }
         }
 
-        private string DeclarationSetPrint(AddQueryNode node)
-        {
-            StringBuilder dclList = new StringBuilder();
-            dclList.Append($"declaration_set(");
-            foreach (AbstractNode v in node.Dcls)
-            {
-                dclList.Append($"{v.Name}, ");
-            }
-            dclList.Remove(dclList.Length - 2, 2);
-            dclList.Append(")");
-            return dclList.ToString();
-        }
-
         public override void Visit(AddQueryNode node)
         {
             _createdSymbolTabe.SetCurrentNode(node);
@@ -434,19 +442,69 @@ namespace Compiler.AST
         public override void Visit(WhereNode node)
         {
             _createdSymbolTabe.SetCurrentNode(node);
-            node.Accept(this);
+            VisitChildren(node);
+        }
+
+        public override void Visit(GraphDeclVertexNode node)
+        {
+            _createdSymbolTabe.SetCurrentNode(node);
+            foreach (KeyValuePair<string, AbstractNode> item in node.ValueList)
+            {
+                item.Value.Parent = node;
+                item.Value.Accept(this);
+                AllType? typeOfKey = _createdSymbolTabe.GetAttributeType(item.Key, AllType.VERTEX);
+                if(typeOfKey == node.Type_enum)
+                {
+
+                }
+                else
+                {
+                    _createdSymbolTabe.TypeExpressionMismatch();
+                }
+            }
         }
 
         public override void Visit(GraphDeclEdgeNode node)
         {
             _createdSymbolTabe.SetCurrentNode(node);
-            _createdSymbolTabe.NotImplementedError(node);
+            AllType? vertexFromType = _createdSymbolTabe.RetrieveSymbol(node.VertexNameFrom, false);
+            AllType? vertexToType = _createdSymbolTabe.RetrieveSymbol(node.VertexNameTo, false);
+            if(vertexFromType == AllType.VERTEX && vertexToType == AllType.VERTEX)
+            {
+                //both from and to targets are of type vertex, which they MUST be.
+            }
+            else
+            {
+                _createdSymbolTabe.TypeExpressionMismatch();
+            }
+            foreach (KeyValuePair<string, AbstractNode> item in node.ValueList)
+            {
+                item.Value.Parent = node;
+                item.Value.Accept(this);
+                AllType? typeOfKey = _createdSymbolTabe.GetAttributeType(item.Key, AllType.EDGE);
+                if (typeOfKey == node.Type_enum)
+                {
+
+                }
+                else
+                {
+                    _createdSymbolTabe.TypeExpressionMismatch();
+                }
+            }
         }
 
         public override void Visit(GraphNode node)
         {
             _createdSymbolTabe.SetCurrentNode(node);
             VisitChildren(node);
+            foreach (AbstractNode item in node.Edges)
+            {
+                item.Accept(this);
+            }
+            foreach (AbstractNode item in node.Vertices)
+            {
+                item.Accept(this);
+            }
         }
 
         public override void Visit(FunctionNode node)
@@ -491,17 +549,21 @@ namespace Compiler.AST
         }
 
         public override void Visit(GraphSetQuery node)
-        {/*
-            AllType? targetType = node.Attributes.Item1.Type_enum;
-            AllType? setType = AllType.BOOL; //TODO når expression node er færdig, kan vi finde ud af hvad settype er.
-            if (targetType == setType)
-            {
+        {
+            _createdSymbolTabe.SetCurrentNode(node);
+            string targetName = node.Attributes.Item1.Name.Trim('\'');
+            AllType? targetType = _createdSymbolTabe.GetAttributeType(targetName, AllType.GRAPH);
+            node.Attributes.Item3.Accept(this);
+            AllType? assignedType = node.Attributes.Item3.OverAllType;
 
+            if (targetType == assignedType)
+            {
+                //both the attribute type and the assigned value are of the same type.
             }
             else
             {
                 _createdSymbolTabe.WrongTypeError(node.Attributes.Item1.Name, node.Attributes.Item3.Name);
-            }*/
+            }
         }
 
         public override void Visit(DeclarationNode node)
@@ -625,6 +687,15 @@ namespace Compiler.AST
                         if (previousType == null)
                         {//first call - setting previous type as the first type encountered
                             previousType = node.OverAllType;
+                            if(node.Parent is GraphDeclVertexNode vDcl)
+                            {
+                                vDcl.Type = node.OverAllType.ToString();
+                                
+                            }
+                            else if(node.Parent is GraphDeclEdgeNode eDcl)
+                            {
+
+                            }
                         }
                         else
                         {
@@ -821,6 +892,15 @@ namespace Compiler.AST
 
         public override void Visit(RunQueryNode node)
         {
+            _createdSymbolTabe.SetCurrentNode(node);
+            _createdSymbolTabe.NotImplementedError(node);
+
+        }
+
+        public override void Visit(PredicateCall node)
+        {
+            _createdSymbolTabe.SetCurrentNode(node);
+            _createdSymbolTabe.NotImplementedError(node);
         }
     }
 }

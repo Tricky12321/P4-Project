@@ -132,6 +132,7 @@
     <Compile Include="CodeGeneration\Classes\Vertex.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
+    <Compile Include="AST\Nodes\PredicateCall.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
