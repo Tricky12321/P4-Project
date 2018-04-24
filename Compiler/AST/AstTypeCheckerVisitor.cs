@@ -222,6 +222,7 @@ namespace Compiler.AST
                     if (node.Parent is ExpressionNode expNode)
                     {
                         expNode.OverAllType = collectionNameType;
+                        node.Type = collectionNameType.ToString();
                     }
                 }
                 else
@@ -454,7 +455,7 @@ namespace Compiler.AST
                 item.Value.Parent = node;
                 item.Value.Accept(this);
                 AllType? typeOfKey = _createdSymbolTabe.GetAttributeType(item.Key, AllType.VERTEX);
-                if(typeOfKey == node.Type_enum)
+                if (typeOfKey == node.Type_enum)
                 {
 
                 }
@@ -470,7 +471,7 @@ namespace Compiler.AST
             _createdSymbolTabe.SetCurrentNode(node);
             AllType? vertexFromType = _createdSymbolTabe.RetrieveSymbol(node.VertexNameFrom, false);
             AllType? vertexToType = _createdSymbolTabe.RetrieveSymbol(node.VertexNameTo, false);
-            if(vertexFromType == AllType.VERTEX && vertexToType == AllType.VERTEX)
+            if (vertexFromType == AllType.VERTEX && vertexToType == AllType.VERTEX)
             {
                 //both from and to targets are of type vertex, which they MUST be.
             }
@@ -688,12 +689,12 @@ namespace Compiler.AST
                         if (previousType == null)
                         {//first call - setting previous type as the first type encountered
                             previousType = node.OverAllType;
-                            if(node.Parent is GraphDeclVertexNode vDcl)
+                            if (node.Parent is GraphDeclVertexNode vDcl)
                             {
                                 vDcl.Type = node.OverAllType.ToString();
-                                
+
                             }
-                            else if(node.Parent is GraphDeclEdgeNode eDcl)
+                            else if (node.Parent is GraphDeclEdgeNode eDcl)
                             {
 
                             }
@@ -881,7 +882,30 @@ namespace Compiler.AST
         public override void Visit(PrintQueryNode node)
         {
             _createdSymbolTabe.SetCurrentNode(node);
-            _createdSymbolTabe.NotImplementedError(node);
+            foreach (ExpressionNode exp in node.Children)
+            {
+                exp.Accept(this);
+                bool NonPrintableTypes = exp.OverAllType == AllType.GRAPH || exp.OverAllType == AllType.VERTEX || exp.OverAllType == AllType.EDGE ||
+                                         exp.OverAllType == AllType.UNKNOWNTYPE || exp.OverAllType == AllType.VOID || exp.OverAllType == AllType.COLLECTION;
+                if (NonPrintableTypes)
+                {
+                    _createdSymbolTabe.NonPrintableError();
+                }
+                else
+                {
+                    foreach (AbstractNode item in exp.ExpressionParts)
+                    {
+                        if (!(item is ConstantNode))
+                        {
+                            AllType? NonUsedVariable = _createdSymbolTabe.RetrieveSymbol(item.Name, out bool isCollection, false);
+                            if (isCollection)
+                            {
+                                _createdSymbolTabe.NonPrintableError();
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         public override void Visit(RunQueryNode node)

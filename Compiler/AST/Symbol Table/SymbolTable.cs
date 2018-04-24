@@ -694,5 +694,11 @@ namespace Compiler.AST.SymbolTable
             Console.WriteLine($"The function {FunctionName} is undeclared, and can therefore not be used {GetLineNumber()}");
             Error();
         }
+
+        public void NonPrintableError()
+        {
+            Console.WriteLine($"one or more provided variables or constants is not legal to print. {GetLineNumber()}");
+            Error();
+        }
     }
 }
