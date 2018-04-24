@@ -114,7 +114,7 @@ namespace Compiler.CodeGeneration.GenerationCode
             }
             else
             {
-                Indentc();
+                Indent();
                 _currentStringBuilder = Functions;
                 _currentStringBuilder.Append($"public static");
                 if (node.IsCollection) {
@@ -146,6 +146,7 @@ namespace Compiler.CodeGeneration.GenerationCode
                 Indent();
                 _currentStringBuilder.Append(" {");
                 VisitChildren(node);
+                Indent();
                 _currentStringBuilder.Append("\n}");
             }
             _tabCount--;
@@ -176,7 +177,6 @@ namespace Compiler.CodeGeneration.GenerationCode
             _currentStringBuilder.Append("\n");
             Indent();
             _currentStringBuilder.Append($"Graph {node.Name} = new Graph();\n\n");
-            _tabCount++;
             Indent();
             _currentStringBuilder.Append($"Vertex _newVertex{node.Name};\n");
             foreach (GraphDeclVertexNode vertex in node.Vertices)
@@ -209,13 +209,13 @@ namespace Compiler.CodeGeneration.GenerationCode
                 _currentStringBuilder.Append($"{node.Name}.Vertices.Push({vertexName});\n\n");
             }
             Indent();
-
             _currentStringBuilder.Append($"Edge _newEdge{node.Name};\n");
             foreach (GraphDeclEdgeNode edge in node.Edges)
             {
                 string edgeName;
                 if (edge.Name == null)
                 {
+                    Indent();
                     edgeName = $"_newEdge{node.Name}";
                     Indent();
 
@@ -224,6 +224,7 @@ namespace Compiler.CodeGeneration.GenerationCode
                 else
                 {
                     edgeName = edge.Name;
+                    Indent();
                     _currentStringBuilder.Append($"Edge {edgeName} = new Edge({edge.VertexNameFrom},{edge.VertexNameTo});\n");
                 }
 
@@ -239,12 +240,13 @@ namespace Compiler.CodeGeneration.GenerationCode
 
                 _currentStringBuilder.Append($"{node.Name}.Edges.Push({edgeName});\n\n");
             }
+            Indent();
             _currentStringBuilder.Append($"{node.Name}.Directed = {ResolveBoolean(node.Directed)};\n\n");
-			_tabCount++;
         }
 
         public override void Visit(VariableDclNode node)
         {
+            Indent();
             _currentStringBuilder.Append(ResolveTypeToCS(node.Type_enum) + " ");
             _currentStringBuilder.Append(node.Name);
             if (node.Children.Count > 0)
@@ -336,17 +338,8 @@ namespace Compiler.CodeGeneration.GenerationCode
 
         public override void Visit(WhereNode node)
         {
-            //.Where(x => x.{)
             throw new NotImplementedException();
         }
-
-        /*private string getWhereString(WhereNode node)
-        {
-            string stringPlaceholder = ".Where(";
-            //stringPlaceholder += node.
-
-            return stringPlaceholder;
-        }*/
 
         public override void Visit(ExtendNode node)
         {
@@ -355,24 +348,48 @@ namespace Compiler.CodeGeneration.GenerationCode
 
         public override void Visit(IfElseIfElseNode node)
         {
-            _currentStringBuilder.Append("\nif (");
+            _currentStringBuilder.Append("\n");
+            Indent();
+            _currentStringBuilder.Append("if (");
             node.IfCondition.Accept(this);
-            _currentStringBuilder.Append(") \n {");
+            _currentStringBuilder.Append(") \n");
+            Indent();
+            _currentStringBuilder.Append("{");
+            _tabCount++;
             node.IfCodeBlock.Accept(this);
-            _currentStringBuilder.Append("\n } \n");
+            _tabCount--;
+            _currentStringBuilder.Append("\n");
+            Indent();
+            _currentStringBuilder.Append("} \n");
             foreach (var item in node.ElseIfList)
             {
-                _currentStringBuilder.Append("\n else if (");
+                _currentStringBuilder.Append("\n");
+                Indent();
+                _currentStringBuilder.Append("else if (");
                 item.Item1.Accept(this); // BoolComparison
-                _currentStringBuilder.Append(") \n {");
+                _currentStringBuilder.Append(") \n");
+                Indent();
+                _currentStringBuilder.Append("{");
+                _tabCount++;
                 item.Item2.Accept(this); // Codeblock
-                _currentStringBuilder.Append("\n }\n ");
+                _tabCount--;
+                _currentStringBuilder.Append("\n ");
+                Indent();
+                _currentStringBuilder.Append("}\n ");
             }
             if (node.ElseCodeBlock != null)
             {
-                _currentStringBuilder.Append("\n else \n {");
+                _currentStringBuilder.Append("\n");
+                Indent();
+                _currentStringBuilder.Append("else");
+                Indent();
+                _currentStringBuilder.Append("{");
+                _tabCount++;
                 node.ElseCodeBlock.Accept(this);
-                _currentStringBuilder.Append("\n } \n");
+                _tabCount--;
+                _currentStringBuilder.Append("\n");
+                Indent();
+                _currentStringBuilder.Append("} \n");
             }
         }
 
@@ -429,6 +446,7 @@ namespace Compiler.CodeGeneration.GenerationCode
                     {
                         string _newVariable = _newVariabelCounter;
                         string type = item is GraphDeclEdgeNode ? "Edge" : "Vertex";
+                        Indent();
                         _currentStringBuilder.Append($"{type} {_newVariable} = new {type}();\n");
 
                         foreach (var val in ((GraphDeclVertexNode)item).ValueList)
@@ -439,10 +457,12 @@ namespace Compiler.CodeGeneration.GenerationCode
                         }
                         if (item is GraphDeclEdgeNode)
                         {
+                            Indent();
                             _currentStringBuilder.Append($"{node.ToVariable}.Edges.Push({_newVariable});\n");
                         }
                         else
                         {
+                            Indent();
                             _currentStringBuilder.Append($"{node.ToVariable}.Vertices.Push({_newVariable});\n");
                         }
                     }
@@ -452,6 +472,7 @@ namespace Compiler.CodeGeneration.GenerationCode
             {
                 foreach (var item in node.TypeOrVariable)
                 {
+                    Indent();
                     _currentStringBuilder.Append($"{node.ToVariable}.Push(");
                     item.Accept(this);
                     _currentStringBuilder.Append($");\n");
@@ -461,10 +482,11 @@ namespace Compiler.CodeGeneration.GenerationCode
 
         public override void Visit(PredicateNode node)
         {
-            _currentStringBuilder.Append($"\nbool {node.Name} (");
+            _currentStringBuilder.Append($"\n");
+			Indent();
+            _currentStringBuilder.Append($"bool {node.Name} (");
 
             bool first = true;
-            
             foreach (var item in node.Parameters)
             {
                 if (first) {
@@ -476,18 +498,15 @@ namespace Compiler.CodeGeneration.GenerationCode
                 }
             }
 
-            _currentStringBuilder.Append($") {{ \n return ");
+            _currentStringBuilder.Append($") {{ \n ");
+			_tabCount++;
+            Indent();
+            _currentStringBuilder.Append($"return ");
             VisitChildren(node);
-            _currentStringBuilder.Append($"; \n }}\n");
-
-
-            bool test() {
-                return first;
-            }
-
-            if (test()) {
-                
-            }
+            _currentStringBuilder.Append($"; \n");
+            _tabCount--;
+            Indent();
+            _currentStringBuilder.Append($"}}\n");
 
         }
 
@@ -498,6 +517,7 @@ namespace Compiler.CodeGeneration.GenerationCode
 
         public override void Visit(EnqueueQueryNode node)
         {
+            Indent();
             _currentStringBuilder.Append($"{node.VariableCollection}.Enqueue(");
             node.VariableToAdd.Accept(this);
             _currentStringBuilder.Append($");\n");
@@ -521,6 +541,7 @@ namespace Compiler.CodeGeneration.GenerationCode
 
         public override void Visit(PushQueryNode node)
         {
+            Indent();
             _currentStringBuilder.Append($"{node.VariableCollection}.Push(");
             node.VariableToAdd.Accept(this);
             _currentStringBuilder.Append($");\n");
@@ -528,6 +549,7 @@ namespace Compiler.CodeGeneration.GenerationCode
 
         public override void Visit(ForLoopNode node)
         {
+            Indent();
             _currentStringBuilder.Append("\nfor (");
             if (node.VariableDeclaration != null)
             {
@@ -544,27 +566,43 @@ namespace Compiler.CodeGeneration.GenerationCode
                 node.ToValueOperation.Accept(this);
             }
             _currentStringBuilder.Append($") \n {{");
+            _tabCount++;
             VisitChildren(node);
+            _tabCount--;
+            Indent();
             _currentStringBuilder.Append($"\n}}");
         }
 
         public override void Visit(ForeachLoopNode node)
         {
+            Indent();
             _currentStringBuilder.Append($"foreach (");
             _currentStringBuilder.Append($"{ResolveTypeToCS(node.VariableType_enum)} {node.VariableName} in {node.InVariableName}");
-            _currentStringBuilder.Append($") \n {{");
+            _currentStringBuilder.Append($") \n");
+            Indent();
+            _currentStringBuilder.Append($"{{");
+            _tabCount++;
             VisitChildren(node);
-            _currentStringBuilder.Append($"\n }}\n");
+            Indent();
+            _currentStringBuilder.Append($"\n");
+            _tabCount--;
+            Indent();
+            _currentStringBuilder.Append($"}}\n");
 
         }
 
         public override void Visit(WhileLoopNode node)
         {
+            Indent();
             _currentStringBuilder.Append("while (");
             node.BoolCompare.Accept(this);
-            _currentStringBuilder.Append(") \n {");
+            _currentStringBuilder.Append(")");
+            Indent();
+            _currentStringBuilder.Append("{");
             VisitChildren(node);
-            _currentStringBuilder.Append("\n}");
+            _currentStringBuilder.Append("\n");
+            Indent();
+            _currentStringBuilder.Append("}");
 
         }
 
@@ -610,7 +648,9 @@ namespace Compiler.CodeGeneration.GenerationCode
         public override void Visit(PrintQueryNode node)
         {
             bool first = true;
-            _currentStringBuilder.Append("\nConsole.WriteLine(");
+            _currentStringBuilder.Append("\n");
+			Indent();
+            _currentStringBuilder.Append("Console.WriteLine(");
             foreach (var item in node.Children)
             {
                 if (first)
@@ -733,7 +773,8 @@ namespace Compiler.CodeGeneration.GenerationCode
             _currentStringBuilder.Append($")");
         }
 
-        public void Indent() {
+        public void Indent()
+        {
             for (int i = 0; i < _tabCount; i++)
             {
                 _currentStringBuilder.Append("\t");
