@@ -346,12 +346,10 @@ namespace Compiler.AST
 
         public override void Visit(AddQueryNode node)
         {
-            throw new NotImplementedException();
         }
 
         public override void Visit(AbstractNode node)
         {
-            throw new NotImplementedException();
         }
 
         public override void Visit(ReturnNode node)
@@ -369,22 +367,18 @@ namespace Compiler.AST
 
         public override void Visit(VariableNode node)
         {
-            throw new NotImplementedException();
         }
 
         public override void Visit(VariableAttributeNode node)
         {
-            throw new NotImplementedException();
         }
 
         public override void Visit(ForLoopNode node)
         {
-            throw new NotImplementedException();
         }
 
         public override void Visit(ForeachLoopNode node)
         {
-            throw new NotImplementedException();
         }
 
         public override void Visit(VariableDclNode node)
@@ -401,12 +395,10 @@ namespace Compiler.AST
 
         public override void Visit(OperatorNode node)
         {
-            throw new NotImplementedException();
         }
 
         public override void Visit(ConstantNode node)
         {
-            throw new NotImplementedException();
         }
 
         public override void Visit(PrintQueryNode node)
@@ -416,12 +408,10 @@ namespace Compiler.AST
 
         public override void Visit(RunQueryNode node)
         {
-            throw new NotImplementedException();
         }
 
         public override void Visit(PredicateCall node)
         {
-            throw new NotImplementedException();
         }
     }
 }

@@ -18,6 +18,8 @@ namespace Compiler.CodeGeneration.GenerationCode
         public StringBuilder Functions;
         private int _forLoopCounter = 0;
         private int _newVariableCounter_private = 0;
+        private int _tabCount = 2;
+        private string _boolComparisonPrefix = "";
         private string _newVariabelCounter
         {
             get
@@ -64,35 +66,27 @@ namespace Compiler.CodeGeneration.GenerationCode
 
         public string ResolveBoolean(string Boolean)
         {
-            if (Boolean == "True")
-            {
-                return "true";
-            }
-            else
-            {
-                return "false";
-            }
+            return Boolean == "True" ? "true" : "false";
         }
 
         public string ResolveBoolean(bool Boolean)
         {
-            if (Boolean)
-            {
-                return "true";
-            }
-            else
-            {
-                return "false";
-            }
+            return Boolean ? "true" : "false";
         }
 
         public override void Visit(DeclarationNode node)
         {
             if (node.CollectionDcl)
             {
+                Indent();
                 _currentStringBuilder.Append($"Collection<{ResolveTypeToCS(node.Type_enum)}> ");
                 _currentStringBuilder.Append(node.Name);
-                _currentStringBuilder.Append($"= new Collection<{ResolveTypeToCS(node.Type_enum)}>()");
+                if (node.Assignment != null) {
+                    _currentStringBuilder.Append("= ");
+                    node.Assignment.Accept(this);
+                } else {
+					_currentStringBuilder.Append($"= new Collection<{ResolveTypeToCS(node.Type_enum)}>()");
+                }
             }
             else
             {
@@ -115,13 +109,23 @@ namespace Compiler.CodeGeneration.GenerationCode
             if (node.Name == "Main")
             {
                 _currentStringBuilder = MainBody;
+                _tabCount++;
                 VisitChildren(node);
             }
             else
             {
+                Indentc();
                 _currentStringBuilder = Functions;
                 _currentStringBuilder.Append($"public static");
-                _currentStringBuilder.Append($" {ResolveTypeToCS(Utilities.FindTypeFromString(node.ReturnType))}");
+                if (node.IsCollection) {
+                    _currentStringBuilder.Append($" Collection<");
+					_currentStringBuilder.Append($"{ResolveTypeToCS(Utilities.FindTypeFromString(node.ReturnType))}");
+                    _currentStringBuilder.Append($">");
+                } else {
+                    _currentStringBuilder.Append($" {ResolveTypeToCS(Utilities.FindTypeFromString(node.ReturnType))}");
+
+                }
+
                 _currentStringBuilder.Append($" {node.Name} (");
                 bool first = true;
                 foreach (var item in node.Parameters)
@@ -137,15 +141,20 @@ namespace Compiler.CodeGeneration.GenerationCode
                         item.Accept(this);
                     }
                 }
-                _currentStringBuilder.Append(") \n {");
+                _currentStringBuilder.Append(") \n");
+                _tabCount++;
+                Indent();
+                _currentStringBuilder.Append(" {");
                 VisitChildren(node);
                 _currentStringBuilder.Append("\n}");
             }
+            _tabCount--;
             _currentStringBuilder = Functions;
         }
 
         public override void Visit(ReturnNode node)
         {
+            Indent();
             _currentStringBuilder.Append("return ");
             node.Children[0].Accept(this);
             _currentStringBuilder.Append(";\n");
@@ -164,8 +173,11 @@ namespace Compiler.CodeGeneration.GenerationCode
 
         public override void Visit(GraphNode node)
         {
-            _currentStringBuilder.Append($"\nGraph {node.Name} = new Graph();\n\n");
-
+            _currentStringBuilder.Append("\n");
+            Indent();
+            _currentStringBuilder.Append($"Graph {node.Name} = new Graph();\n\n");
+            _tabCount++;
+            Indent();
             _currentStringBuilder.Append($"Vertex _newVertex{node.Name};\n");
             foreach (GraphDeclVertexNode vertex in node.Vertices)
             {
@@ -173,23 +185,30 @@ namespace Compiler.CodeGeneration.GenerationCode
                 if (vertex.Name == null)
                 {
                     vertexName = $"_newVertex{node.Name}";
+                    Indent();
+
                     _currentStringBuilder.Append($"{vertexName} = new Vertex();\n");
                 }
                 else
                 {
                     vertexName = vertex.Name;
+                    Indent();
+
                     _currentStringBuilder.Append($"Vertex {vertexName} = new Vertex();\n");
                 }
 
                 foreach (KeyValuePair<string, AbstractNode> value in vertex.ValueList)
                 {
+                    Indent();
                     _currentStringBuilder.Append($"{vertexName}.{value.Key} = ");
                     value.Value.Accept(this);
                     _currentStringBuilder.Append($";\n");
 
                 }
+                Indent();
                 _currentStringBuilder.Append($"{node.Name}.Vertices.Push({vertexName});\n\n");
             }
+            Indent();
 
             _currentStringBuilder.Append($"Edge _newEdge{node.Name};\n");
             foreach (GraphDeclEdgeNode edge in node.Edges)
@@ -198,6 +217,8 @@ namespace Compiler.CodeGeneration.GenerationCode
                 if (edge.Name == null)
                 {
                     edgeName = $"_newEdge{node.Name}";
+                    Indent();
+
                     _currentStringBuilder.Append($"{edgeName} = new Edge();\n");
                 }
                 else
@@ -208,14 +229,18 @@ namespace Compiler.CodeGeneration.GenerationCode
 
                 foreach (KeyValuePair<string, AbstractNode> value in edge.ValueList)
                 {
+                    Indent();
+
                     _currentStringBuilder.Append($"{edgeName}.{value.Key} = ");
                     value.Value.Accept(this);
                     _currentStringBuilder.Append($";\n");
                 }
+                Indent();
+
                 _currentStringBuilder.Append($"{node.Name}.Edges.Push({edgeName});\n\n");
             }
-
             _currentStringBuilder.Append($"{node.Name}.Directed = {ResolveBoolean(node.Directed)};\n\n");
+			_tabCount++;
         }
 
         public override void Visit(VariableDclNode node)
@@ -261,8 +286,6 @@ namespace Compiler.CodeGeneration.GenerationCode
                     _currentStringBuilder.Append($"{InVaraible}.{VariableName} {AssignOperator} ");
                     expression.Accept(this);
                     _currentStringBuilder.Append($";\n");
-
-
                 }
             }
             else if (node.SetVariables)
@@ -279,9 +302,40 @@ namespace Compiler.CodeGeneration.GenerationCode
             }
         }
 
+        public override void Visit(SelectAllQueryNode node)
+        {
+            _currentStringBuilder.Append($"_fun{node.ID}();\nCollection<{ResolveTypeToCS(node.Type_enum)}> _fun{node.ID}(){{\n");
+            _currentStringBuilder.Append($"Collection<{ResolveTypeToCS(node.Type_enum)}> _col{node.ID} = new Collection<{ResolveTypeToCS(node.Type_enum)}>();\n");
+
+            _currentStringBuilder.Append($"foreach (var place in {node.Variable}){{\n");
+            _currentStringBuilder.Append("if (");
+            _boolComparisonPrefix = "place.";
+            node.WhereCondition.Children[0].Accept(this);
+            _boolComparisonPrefix = "";
+            _currentStringBuilder.Append("){\n");
+            _currentStringBuilder.Append($"_col{node.ID}.Add(place);\n}}\n}}\n");
+
+            _currentStringBuilder.Append($"return _col{node.ID};\n}}");
+        }
+
+        public override void Visit(SelectQueryNode node)
+        {
+            _currentStringBuilder.Append($"_fun{node.ID}();\n{ResolveTypeToCS(node.Type_enum)} _fun{node.ID}(){{\n");
+            _currentStringBuilder.Append($"{ResolveTypeToCS(node.Type_enum)} _val{node.ID};\n");
+
+            _currentStringBuilder.Append($"foreach (var place in {node.Variable}){{\n");
+            _currentStringBuilder.Append("if (");
+            _boolComparisonPrefix = "place.";
+            node.WhereCondition.Children[0].Accept(this);
+            _boolComparisonPrefix = "";
+            _currentStringBuilder.Append("){\n");
+            _currentStringBuilder.Append($"_val{node.ID} = place;\n break;\n}}\n}}\n");
+
+            _currentStringBuilder.Append($"return _val{node.ID};\n}}");
+        }
+
         public override void Visit(WhereNode node)
         {
-
             //.Where(x => x.{)
             throw new NotImplementedException();
         }
@@ -338,6 +392,8 @@ namespace Compiler.CodeGeneration.GenerationCode
             else if (node.Left != null && node.Right != null)
             {
                 node.Left.Accept(this);
+                node.ComparisonOperator = node.ComparisonOperator.Replace("&", "&&");
+                node.ComparisonOperator = node.ComparisonOperator.Replace("|","||");
                 _currentStringBuilder.Append(node.ComparisonOperator);
                 node.Right.Accept(this);
             }
@@ -401,8 +457,6 @@ namespace Compiler.CodeGeneration.GenerationCode
                     _currentStringBuilder.Append($");\n");
                 }
             }
-
-
         }
 
         public override void Visit(PredicateNode node)
@@ -472,25 +526,6 @@ namespace Compiler.CodeGeneration.GenerationCode
             _currentStringBuilder.Append($");\n");
         }
 
-        public override void Visit(SelectAllQueryNode node)
-        {
-        }
-
-        public override void Visit(SelectQueryNode node)
-        {
-
-            _currentStringBuilder.Append($"{node.Variable}");
-            Visit(node.WhereCondition as WhereNode);
-            
-            /*
-            Main-> void() {
-                select from Graph1.Vertices where x == 100;
-            }
-
-            Graph1.Vertices.where(x => x.x == 100);
-            */
-        }
-
         public override void Visit(ForLoopNode node)
         {
             _currentStringBuilder.Append("\nfor (");
@@ -540,6 +575,8 @@ namespace Compiler.CodeGeneration.GenerationCode
 
         public override void Visit(VariableNode node)
         {
+            _currentStringBuilder.Append($"{_boolComparisonPrefix}");
+
             _currentStringBuilder.Append(node.Name);
         }
 
@@ -667,8 +704,7 @@ namespace Compiler.CodeGeneration.GenerationCode
             }
             else // if its everything else
             {
-                // Check if the extension is a class?
-                // TODO: consider if this is correct
+                
                 if (ExtendType == AllType.GRAPH || ExtendType == AllType.VERTEX || ExtendType == AllType.EDGE)
                 {
                     _currentExtension.AppendLine($"\npublic {ResolveTypeToCS(ExtendType)} {ExtendName} = new {ResolveTypeToCS(ExtendType)};");
@@ -696,5 +732,13 @@ namespace Compiler.CodeGeneration.GenerationCode
             VisitChildren(node);
             _currentStringBuilder.Append($")");
         }
+
+        public void Indent() {
+            for (int i = 0; i < _tabCount; i++)
+            {
+                _currentStringBuilder.Append("\t");
+            }
+        }
+
     }
 }

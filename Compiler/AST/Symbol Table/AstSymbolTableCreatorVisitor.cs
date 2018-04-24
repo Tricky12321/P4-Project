@@ -71,9 +71,7 @@ namespace Compiler.AST.SymbolTable
         public void BuildSymbolTable(AbstractNode root)
         {
             VisitRoot(root);
-
         }
-
 
         public bool IsClass(AllType Type)
         {
@@ -326,12 +324,13 @@ namespace Compiler.AST.SymbolTable
         {
             // TODO: Check if a its a variable that is being added or a constant
             SymbolTable.SetCurrentNode(node);
-            CheckDeclared(node.Variable);
+            if (node.Variable != null) {
+				CheckDeclared(node.Variable);
+            }
         }
 
         public override void Visit(EnqueueQueryNode node)
         {
-            // TODO: Check if a its a variable that is being added or a constant
             SymbolTable.SetCurrentNode(node);
             CheckDeclared(node.VariableCollection);
 
@@ -404,6 +403,7 @@ namespace Compiler.AST.SymbolTable
             {
                 parameter.Accept(this);
             }
+
             if (_initialBuildDone)
             {
                 VisitChildren(node);
