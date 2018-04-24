@@ -147,6 +147,7 @@ namespace Compiler.AST
                     {
                         expNode.OverAllType = collectionNameType;
                     }
+                    node.Type = collectionNameType.ToString();
                 }
                 else
                 {
@@ -173,6 +174,7 @@ namespace Compiler.AST
                     {
                         expNode.OverAllType = collectionNameType;
                     }
+                    node.Type = collectionNameType.ToString();
                 }
                 else
                 {
@@ -222,8 +224,8 @@ namespace Compiler.AST
                     if (node.Parent is ExpressionNode expNode)
                     {
                         expNode.OverAllType = collectionNameType;
-                        node.Type = collectionNameType.ToString();
                     }
+                    node.Type = collectionNameType.ToString();
                 }
                 else
                 {
@@ -242,7 +244,7 @@ namespace Compiler.AST
             _createdSymbolTabe.SetCurrentNode(node);
             AllType? varToAdd;
             AllType? collectionToAddTo = _createdSymbolTabe.RetrieveSymbol(node.VariableCollection, out bool isCollectionInQuery, false);
-
+            node.Type = collectionToAddTo.ToString();
             if (node.VariableToAdd is ConstantNode constant)
             {
                 varToAdd = constant.Type_enum;
@@ -251,6 +253,10 @@ namespace Compiler.AST
                 if (typeCorrect)
                 {
                     //constant is fine, collection is fine
+                }
+                else
+                {
+                    _createdSymbolTabe.WrongTypeError(node.variableName, node.VariableCollection);
                 }
                 Visit(node.VariableToAdd);
             }
@@ -285,6 +291,7 @@ namespace Compiler.AST
                     {
                         expNode.OverAllType = collectionNameType;
                     }
+                    node.Type = collectionNameType.ToString();
                 }
                 else
                 {
@@ -298,7 +305,7 @@ namespace Compiler.AST
             _createdSymbolTabe.SetCurrentNode(node);
             AllType? varToAdd;
             AllType? collectionToAddTo = _createdSymbolTabe.RetrieveSymbol(node.VariableCollection, out bool isCollectionInQuery, false);
-
+            node.Type = collectionToAddTo.ToString();
             if (node.VariableToAdd is ConstantNode constant)
             {
                 varToAdd = constant.Type_enum;
@@ -353,6 +360,7 @@ namespace Compiler.AST
             if (node.IsGraph)
             {//control statement for input to graphs
                 AllType? TypeOfTargetCollection = _createdSymbolTabe.RetrieveSymbol(node.ToVariable, out bool isCollectionTargetColl, false);
+                node.Type = TypeOfTargetCollection.ToString();
                 bool IsGraphVertexCollection = TypeOfTargetCollection == AllType.VERTEX && isCollectionTargetColl;
                 bool isGraphEdgeCollection = TypeOfTargetCollection == AllType.EDGE && isCollectionTargetColl;
                 bool isPreDefVerOrEdgeCollInGraph = TypeOfTargetCollection == AllType.GRAPH;
@@ -391,6 +399,7 @@ namespace Compiler.AST
             else if (node.IsColl)
             {
                 AllType? TypeOfTargetCollection = _createdSymbolTabe.RetrieveSymbol(node.ToVariable, out bool isCollectionTargetColl, false);
+                node.Type = TypeOfTargetCollection.ToString();
                 AllType? typeOfVar;
 
                 foreach (var item in node.TypeOrVariable)
@@ -609,7 +618,7 @@ namespace Compiler.AST
             }
             else
             {
-                Console.WriteLine("this is something else than expression or selectall, in declaration node." + _createdSymbolTabe.CurrentLine);
+                //The declaration assignment is just null, and therefore the collection is not set to something
             }
         }
 
