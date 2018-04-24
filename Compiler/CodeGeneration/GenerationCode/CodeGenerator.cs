@@ -13,7 +13,6 @@ namespace Compiler.CodeGeneration.GenerationCode
 {
     public class CodeGenerator : AstVisitorBase
     {
-        private SymTable symbolTable;
         public StringBuilder MainBody;
         private StringBuilder _currentStringBuilder;
         private StringBuilder Global = new StringBuilder();
@@ -30,9 +29,8 @@ namespace Compiler.CodeGeneration.GenerationCode
             }
         }
 
-        public CodeGenerator(CodeWriter codeWriter, SymTable symbolTable)
+        public CodeGenerator(CodeWriter codeWriter)
         {
-            this.symbolTable = symbolTable;
             MainBody = codeWriter.MainBody;
             Functions = codeWriter.Functions;
             _currentStringBuilder = Functions;
@@ -331,8 +329,6 @@ namespace Compiler.CodeGeneration.GenerationCode
                 _currentStringBuilder.Append("}\n");
             }
             _currentStringBuilder.Append($"return _col{node.ID};\n}}");
-            Console.WriteLine(_currentStringBuilder);
-
         }
 
         public override void Visit(SelectQueryNode node)
@@ -340,7 +336,7 @@ namespace Compiler.CodeGeneration.GenerationCode
             _currentStringBuilder.Append($"_fun{node.ID}();\n{ResolveTypeToCS(node.Type_enum)} _fun{node.ID}(){{\n");
             if(node.Type == "void")
             {
-
+                
                 throw new NotImplementedException();
             }
             _currentStringBuilder.Append($"{ResolveTypeToCS(node.Type_enum)} _val{node.ID};\n");
@@ -360,7 +356,6 @@ namespace Compiler.CodeGeneration.GenerationCode
                 _currentStringBuilder.Append("}\n");
             }
             _currentStringBuilder.Append($"return _val{node.ID};\n}}");
-            Console.WriteLine(_currentStringBuilder);
         }
 
         public override void Visit(WhereNode node)
