@@ -21,11 +21,19 @@ namespace Compiler
             Compile();
         }
 
+        private static void PrintCompilerMessage(string text, ConsoleColor color = ConsoleColor.Red)
+        {
+            Console.ForegroundColor = color;
+            Console.WriteLine(text);
+            Console.ResetColor(); ;
+        }
 
         public static void Compile() {
             Stopwatch TotalTimer = new Stopwatch();
             TotalTimer.Start();
-            Console.WriteLine("Giraph Compiler 5000");
+
+            Console.ForegroundColor = ConsoleColor.Red;
+            PrintCompilerMessage("Giraph Compiler 1.0.1", ConsoleColor.Red);
             GiraphParser.StartContext CST = BuildCST("kode.giraph");
             AbstractNode AST = BuildAST(CST);
             SymTable SymbolTable = BuildSymbolTable(AST as StartNode);
@@ -33,7 +41,7 @@ namespace Compiler
             //PrettyPrint(AST as StartNode);
             WriteCodeToFiles(AST as StartNode);
             TotalTimer.Stop();
-            Console.WriteLine($"Total compile timer: {TotalTimer.ElapsedMilliseconds}ms");
+            PrintCompilerMessage($"Total compile timer: {TotalTimer.ElapsedMilliseconds}ms");
         }
 
         public static AbstractNode BuildAST(GiraphParser.StartContext start)
@@ -42,7 +50,7 @@ namespace Compiler
             AstBuildTimer.Start();
             AbstractNode ast = new AstBuilder().VisitStart(start);
             AstBuildTimer.Stop();
-            Console.WriteLine("AstBuilder took: " + AstBuildTimer.ElapsedMilliseconds + "ms");
+            PrintCompilerMessage("AstBuilder took: " + AstBuildTimer.ElapsedMilliseconds + "ms");
             return ast;
         }
 
@@ -53,8 +61,8 @@ namespace Compiler
             PPTimer.Start();
             PPVisitor.VisitRoot(start);
             PPTimer.Stop();
-            Console.WriteLine($"Pretty Printer took: {PPTimer.ElapsedMilliseconds}ms");
-            Console.WriteLine(PPVisitor.ProgramCode);
+            PrintCompilerMessage($"Pretty Printer took: {PPTimer.ElapsedMilliseconds}ms");
+            PrintCompilerMessage(PPVisitor.ProgramCode.ToString(), ConsoleColor.Green);
         }
 
         public static GiraphParser.StartContext BuildCST(string FilePath) {
@@ -67,7 +75,7 @@ namespace Compiler
             GiraphParser parser = new GiraphParser(tokens);
             parser.BuildParseTree = true;
             CSTTimer.Stop();
-            Console.WriteLine($"CST Builder took: {CSTTimer.ElapsedMilliseconds}ms");
+            PrintCompilerMessage($"CST Builder took: {CSTTimer.ElapsedMilliseconds}ms");
             return parser.start();
         }
 
@@ -77,7 +85,7 @@ namespace Compiler
             AstSymbolTableCreatorVisitor SymbolTable = new AstSymbolTableCreatorVisitor();
             SymbolTable.BuildSymbolTable(node);
             SymbolTableTimer.Stop();
-            Console.WriteLine("Building Symbol Table took: "+SymbolTableTimer.ElapsedMilliseconds + "ms");
+            PrintCompilerMessage("Building Symbol Table took: "+SymbolTableTimer.ElapsedMilliseconds + "ms");
             if (!SymbolTable.MainDefined) {
                 SymbolTable.SymbolTable.MainUndefined();
             }
@@ -91,7 +99,7 @@ namespace Compiler
             AstTypeCheckerVisitor TypeChecker = new AstTypeCheckerVisitor(SymbolTable);
             TypeChecker.VisitRoot(node);
             TypeCheckTimer.Stop();
-            Console.WriteLine("Type checking took: " + TypeCheckTimer.ElapsedMilliseconds + "ms");
+            PrintCompilerMessage("Type checking took: " + TypeCheckTimer.ElapsedMilliseconds + "ms");
         }
 
         public static void CompileGeneratedCode() {
@@ -119,11 +127,7 @@ namespace Compiler
             codeGenerator.Visit(node);
             codeWriter.FillAll();
             WriteTimer.Stop();
-            Console.WriteLine($"Writing Code timer: {WriteTimer.ElapsedMilliseconds}ms");
-        }
-
-        public static void Test() {
-            
+            PrintCompilerMessage($"Writing Code timer: {WriteTimer.ElapsedMilliseconds}ms");
         }
     }
 }

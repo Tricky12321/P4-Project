@@ -6,7 +6,6 @@ namespace Giraph.Classes
 {
     public class Collection<T> : List<T>
     {
-
         public T Pop => this.RemoveLast();
 
         public void Push(T Item) => this.Insert(this.Count, Item);
