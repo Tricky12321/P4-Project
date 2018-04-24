@@ -655,13 +655,6 @@ namespace Compiler.AST
                         default:
                             return "void";
                     }
-                    throw new WrongExpressionPartTypeFoundException("Spørg Mads");
-                case "GiraphParser+IntegerContext":
-                    return "int";
-                case "GiraphParser+BoolContext":
-                    return "bool";
-                case "GiraphParser+StringContext":
-                    return "string";
             }
             throw new WrongExpressionPartTypeFoundException("Spørg Mads");
         }

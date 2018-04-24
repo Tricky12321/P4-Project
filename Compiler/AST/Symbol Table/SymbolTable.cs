@@ -701,6 +701,12 @@ namespace Compiler.AST.SymbolTable
             Error();
         }
 
+        public void NonPrintableError()
+        {
+            Console.WriteLine($"one or more provided variables or constants is not legal to print. {GetLineNumber()}");
+            Error();
+        }
+
         public void FunctionIsVoidError(string FunctionName)
         {
             Console.WriteLine($"Trying to return to void function: {FunctionName}, at {GetLineNumber()}");

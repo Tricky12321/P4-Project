@@ -14,7 +14,7 @@ using Compiler.CodeGeneration.GenerationCode;
 using Giraph.Classes;
 namespace Compiler
 {
-    class Program
+    public static class Program
     {
         public static void Main(string[] args)
         {
@@ -121,7 +121,6 @@ namespace Compiler
             WriteTimer.Stop();
             Console.WriteLine($"Writing Code timer: {WriteTimer.ElapsedMilliseconds}ms");
         }
-
 
         public static void Test() {
             
