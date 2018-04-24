@@ -193,10 +193,14 @@ namespace Compiler.AST
             bool fromIsColl = isCollectionInQuery;
             if (fromIsColl)
             {
-                if (node.Parent is DeclarationNode expNode)
+                if (node.Parent is DeclarationNode dclNode)
                 {
-                    expNode.isCollection = true;
                     node.Type = collectionNameType.ToString();
+                }
+                else if (node.Parent is ExpressionNode expNode)
+                {
+                    node.Type = collectionNameType.ToString();
+                    expNode.QueryName = node.Variable;
                 }
             }
             else
@@ -743,38 +747,35 @@ namespace Compiler.AST
 
         public override void Visit(ReturnNode node)
         {
+            VisitChildren(node);
             _createdSymbolTabe.SetCurrentNode(node);
-            AllType? funcType = _createdSymbolTabe.RetrieveSymbol(node.FuncName, out bool ReturnTypeCollection, false);
+            AllType? funcType = _createdSymbolTabe.RetrieveSymbol(node.FuncName, out bool FuncTypeCollection, false);
             AllType? returnType = null;
-            DeclarationNode dclNode = null;
+            bool ReturnTypeCollection = false;
 
-            if (node.LeftmostChild is DeclarationNode dcl && dcl.isCollection)
+            if(node.LeftmostChild is ExpressionNode expNode && expNode.ExpressionParts != null)
             {
-                dclNode = dcl;
-                returnType = AllType.COLLECTION;
-            }
-
-            else if (node.LeftmostChild is ExpressionNode expNode)
-            {
+                _createdSymbolTabe.RetrieveSymbol(expNode.QueryName, out bool returnTypeCollection, false);
+                ReturnTypeCollection = returnTypeCollection;
                 returnType = expNode.OverAllType;
             }
             else if (funcType == AllType.VOID)
             {
-                //calling return on void function error 
+                _createdSymbolTabe.FunctionIsVoidError(node.FuncName);
             }
-            else if (dclNode.isCollection && ReturnTypeCollection)
+            else if (ReturnTypeCollection && FuncTypeCollection)
             {
                 if (!(funcType == returnType))
                 {
                     //ERROR, conflicting function and return type
+                    _createdSymbolTabe.WrongTypeError(node.FuncName, node.Name);
                 }
             }
             else
             {
                 //ERROR, one is collection, other isn't
+                _createdSymbolTabe.WrongTypeErrorCollection(node.FuncName, node.Name);
             }
-
-            VisitChildren(node);
         }
 
         public override void Visit(ForLoopNode node)

@@ -619,6 +619,12 @@ namespace Compiler.AST.SymbolTable
             Error();
         }
 
+        public void WrongTypeErrorCollection(string variable1, string variable2)
+        {
+            Console.WriteLine($"Variable {variable1} and {variable2} are missmatch of collection. Line number {GetLineNumber()}");
+            Error();
+        }
+
         public void WrongTypeConditionError()
         {
             Console.WriteLine($"There is a type mismatch in the condition on Line number {GetLineNumber()}");
@@ -692,6 +698,12 @@ namespace Compiler.AST.SymbolTable
 
         public void UndeclaredFunction(string FunctionName) {
             Console.WriteLine($"The function {FunctionName} is undeclared, and can therefore not be used {GetLineNumber()}");
+            Error();
+        }
+
+        public void FunctionIsVoidError(string FunctionName)
+        {
+            Console.WriteLine($"Trying to return to void function: {FunctionName}, at {GetLineNumber()}");
             Error();
         }
     }

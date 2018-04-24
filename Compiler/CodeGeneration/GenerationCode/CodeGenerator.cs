@@ -114,7 +114,7 @@ namespace Compiler.CodeGeneration.GenerationCode
             }
             else
             {
-                Indentc();
+                Indent();
                 _currentStringBuilder = Functions;
                 _currentStringBuilder.Append($"public static");
                 if (node.IsCollection) {

@@ -33,8 +33,8 @@ namespace Compiler.AST
         {
             FunctionNode FNode = new FunctionNode(context.Start.Line, context.Start.Column);
             // Extract the Name of the function, and the return type
-            FNode.Name = _funcName;
             FNode.Name = context.variable().GetText(); // Name
+            _funcName = FNode.Name;
             FNode.ReturnType = context.allTypeWithColl().allType().GetText(); // Return Type
             FNode.IsCollection = context.allTypeWithColl().COLLECTION() != null;
             // Extract the parameters from the function
@@ -652,6 +652,8 @@ namespace Compiler.AST
                             return "vertex";
                         case "Edges":
                             return "edge";
+                        default:
+                            return "void";
                     }
                     throw new WrongExpressionPartTypeFoundException("Spørg Mads");
                 case "GiraphParser+IntegerContext":

@@ -19,6 +19,8 @@ namespace Compiler.AST.Nodes
 
         public bool IsCollection;
 
+        public string QueryName;
+
         public override void Accept(AstVisitorBase astVisitor)
         {
             astVisitor.Visit(this);
