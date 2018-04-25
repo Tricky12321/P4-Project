@@ -111,7 +111,11 @@ namespace Compiler.CodeGeneration.GenerationCode
                     }
                 }
             }
-            _currentStringBuilder.Append(";\n");
+
+            if (node.Assignment == null)
+            {
+                _currentStringBuilder.Append(";\n");
+            }
         }
 
         public override void Visit(FunctionNode node)
@@ -271,7 +275,6 @@ namespace Compiler.CodeGeneration.GenerationCode
                     item.Accept(this);
                 }
             }
-            _currentStringBuilder.Append(";\n");
         }
 
         public override void Visit(GraphDeclVertexNode node)
@@ -343,7 +346,7 @@ namespace Compiler.CodeGeneration.GenerationCode
             {
                 _currentStringBuilder.Append("}\n");
             }
-            _currentStringBuilder.Append($"return _col{node.ID};\n}}");
+            _currentStringBuilder.Append($"return _col{node.ID};\n}}\n");
         }
 
         public override void Visit(SelectQueryNode node)
@@ -369,41 +372,38 @@ namespace Compiler.CodeGeneration.GenerationCode
             {
                 _currentStringBuilder.Append("}\n");
             }
-            _currentStringBuilder.Append($"return _val{node.ID};\n}}");
+            _currentStringBuilder.Append($"return _val{node.ID};\n}}\n");
         }
 
         public override void Visit(ExtractMaxQueryNode node)
         {
             _currentStringBuilder.Append(GetExtractString(node, true));
-
-            Console.WriteLine(_currentStringBuilder);
         }
 
         public override void Visit(ExtractMinQueryNode node)
         {
             _currentStringBuilder.Append(GetExtractString(node, false));
-
-            Console.WriteLine(_currentStringBuilder);
         }
 
         private StringBuilder GetExtractString(AbstractExtractNode node, bool maxIfTrue)
         {
             StringBuilder extractString = new StringBuilder();
-            
+
             string placeFuncString = maxIfTrue ? "_funExtMax" : "_funExtMin";
             string placeValString = $"_val{node.ID}";
-            string placeAttriString = node.Attribute == null ? "" : $".{node.Attribute.Replace("'","")}";
+            string placeAttriString = node.Attribute == null ? "" : $".{node.Attribute.Replace("'", "")}";
             string boolOpString = maxIfTrue ? ">" : "<";
 
             extractString.Append($"{placeFuncString}{node.ID}{functionID}();\n{ResolveTypeToCS(node.Type_enum)} {placeFuncString}{node.ID}{functionID++}(){{\n");
-            extractString.Append($"{ResolveTypeToCS(node.Type_enum)} {placeValString};\ndouble placeDouble = 0;\n");
+
+            extractString.Append($"{ResolveTypeToCS(node.Type_enum)} {placeValString} = default({ResolveTypeToCS(node.Type_enum)});\ndouble placeDouble = 0;\n");
 
             extractString.Append($"foreach (var item in {node.Variable}){{\n");
 
             extractString.Append($"if(item{placeAttriString} {boolOpString} placeDouble){{\n");
             extractString.Append($"{placeValString} = item;\nplaceDouble = item{placeAttriString};\n}}\n}}\n");
 
-            extractString.Append($"return {placeValString};\n}}\n");
+            extractString.Append($"return {placeValString};\n}}\n\n");
 
             return extractString;
         }
