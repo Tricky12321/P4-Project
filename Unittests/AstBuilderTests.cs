@@ -4,7 +4,6 @@ using Compiler.AST;
 using Compiler.CodeGeneration;
 using Compiler.AST.Nodes;
 using Compiler.AST.SymbolTable;
-using System.Diagnostics;
 using Compiler;
 using System.Collections.Generic;
 using System.Linq;
@@ -76,12 +75,62 @@ namespace Unittests
         }
 
 
-        [TestCase("Main", AllType.VOID)]
-        [TestCase("Test", AllType.VOID)]
-        [TestCase("TestFunc", AllType.BOOL)]
-        [TestCase("TestFuncTest",AllType.GRAPH)]
-        public void CheckFunctionExist(string FunctionName, AllType ExpectedType) {
-            
+        [TestCase("Main")]
+        [TestCase("Test")]
+        [TestCase("TestFunc")]
+        [TestCase("TestFuncTest")]
+        public void CheckFunctionExist(string FunctionName) {
+            var Counter = AST.Children.Where(x => x is FunctionNode).ToList()
+                             .Where(x => (x as FunctionNode).Name == FunctionName)
+                             .Count();
+            if (Counter == 1) {
+                Assert.Pass();
+            } else {
+				Assert.Fail();
+            }
+        }
+
+        [TestCase("d", AllType.DECIMAL, "Main", ExpectedResult = true)]
+        [TestCase("i", AllType.INT, "Main", ExpectedResult = true)]
+        [TestCase("vertexColl", AllType.VERTEX, "Main", ExpectedResult = true)]
+
+
+        [TestCase("asdf", AllType.VERTEX, "something something", ExpectedResult = false)]
+        [TestCase("anton", AllType.INT, "ogjfpbjwfpjwf", ExpectedResult = false)]
+        [TestCase("123123", AllType.DECIMAL, "asdf", ExpectedResult = false)]
+        [TestCase("pkasnd", AllType.GRAPH, "asdf", ExpectedResult = false)]
+        [TestCase("something something",AllType.BOOL, "dont know", ExpectedResult = false)]
+        public bool CheckDeclarationNode(string VariableName, AllType ExpectedType, string Function) {
+            var Start = AST.Children.Where(x => (x is FunctionNode) && (x as FunctionNode).Name == Function);
+            if (Start.Count() == 0) {
+                return false;
+            }
+            var Next = Start.First().Children.Where(x => ((x is VariableDclNode) || (x is DeclarationNode)) && x.Name == VariableName);
+            if (Next.Count() == 0) {
+                return false;
+            }
+            if (Next.First().Type_enum == ExpectedType) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+        [TestCase("g1", "Main", ExpectedResult = true)]
+        [TestCase("g2", "Main", ExpectedResult = true)]
+        [TestCase("g23", "Main", ExpectedResult = false)]
+        public bool CheckGraphDclNode(string VariableName, string Function)
+        {
+            var Start = AST.Children.Where(x => (x is FunctionNode) && (x as FunctionNode).Name == Function).First();
+            var Next = Start.Children.Where(x => (x is GraphNode) && x.Name == VariableName).Count();
+            if (Next == 1)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
     }

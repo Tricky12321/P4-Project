@@ -346,7 +346,10 @@ namespace Compiler.CodeGeneration.GenerationCode
             {
                 _currentStringBuilder.Append("}\n");
             }
-            _currentStringBuilder.Append($"return _col{node.ID};\n}}\n");
+
+            _currentStringBuilder.Append($"if (_col{ node.ID}.Count == 0){{\n");
+            _currentStringBuilder.Append($"return null;\n}} else {{\n");
+            _currentStringBuilder.Append($"return _col{node.ID};}}\n}}\n");
         }
 
         public override void Visit(SelectQueryNode node)
@@ -356,7 +359,7 @@ namespace Compiler.CodeGeneration.GenerationCode
             {
                 throw new NotImplementedException("Typen skal gerne sættes i typechecker.");
             }
-            _currentStringBuilder.Append($"{ResolveTypeToCS(node.Type_enum)} _val{node.ID};\n");
+            _currentStringBuilder.Append($"{ResolveTypeToCS(node.Type_enum)} _val{node.ID} = null;\n");
 
             _currentStringBuilder.Append($"foreach (var place in {node.Variable}){{\n");
             if (node.WhereCondition != null)
@@ -372,7 +375,7 @@ namespace Compiler.CodeGeneration.GenerationCode
             {
                 _currentStringBuilder.Append("}\n");
             }
-            _currentStringBuilder.Append($"return _val{node.ID};\n}}\n");
+            _currentStringBuilder.Append($"return _val{node.ID};\n}}\n\n");
         }
 
         public override void Visit(ExtractMaxQueryNode node)
@@ -396,12 +399,16 @@ namespace Compiler.CodeGeneration.GenerationCode
 
             extractString.Append($"{placeFuncString}{node.ID}{functionID}();\n{ResolveTypeToCS(node.Type_enum)} {placeFuncString}{node.ID}{functionID++}(){{\n");
 
-            extractString.Append($"{ResolveTypeToCS(node.Type_enum)} {placeValString} = default({ResolveTypeToCS(node.Type_enum)});\ndouble placeDouble = 0;\n");
+            extractString.Append($"{ResolveTypeToCS(node.Type_enum)} {placeValString} = {node.Variable}.First();\ndouble placeDouble = {node.Variable}.First(){placeAttriString};\n");
 
             extractString.Append($"foreach (var item in {node.Variable}){{\n");
 
             extractString.Append($"if(item{placeAttriString} {boolOpString} placeDouble){{\n");
             extractString.Append($"{placeValString} = item;\nplaceDouble = item{placeAttriString};\n}}\n}}\n");
+
+
+
+            extractString.Append($"{node.Variable}.Remove({placeValString});\n");
 
             extractString.Append($"return {placeValString};\n}}\n\n");
 
@@ -673,12 +680,12 @@ namespace Compiler.CodeGeneration.GenerationCode
 
         public override void Visit(VariableAttributeNode node)
         {
-
+            _currentStringBuilder.Append($"{_boolComparisonPrefix}");
+            _currentStringBuilder.Append($"{node.Name.Trim('\'')}");
         }
 
         public override void Visit(VariableNode node)
         {
-            _currentStringBuilder.Append($"{_boolComparisonPrefix}");
 
             _currentStringBuilder.Append(node.Name);
         }
