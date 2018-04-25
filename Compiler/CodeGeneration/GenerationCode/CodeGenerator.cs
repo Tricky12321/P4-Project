@@ -673,12 +673,12 @@ namespace Compiler.CodeGeneration.GenerationCode
 
         public override void Visit(VariableAttributeNode node)
         {
-            _currentStringBuilder.Append($"{node.Name.Replace("'", "")}");
+            _currentStringBuilder.Append($"{_boolComparisonPrefix}");
+            _currentStringBuilder.Append($"{node.Name.Trim('\'')}");
         }
 
         public override void Visit(VariableNode node)
         {
-            _currentStringBuilder.Append($"{_boolComparisonPrefix}");
 
             _currentStringBuilder.Append(node.Name);
         }
