@@ -104,7 +104,11 @@ namespace Compiler.AST
                             if (_createdSymbolTabe.IsExtended(variableName, extentiontype ?? default(AllType)))
                             {
                                 AllType? attributeType = _createdSymbolTabe.GetAttributeType(variableName, extentiontype ?? default(AllType));
-                                
+
+                                if(!(attributeType == extentiontype)){
+                                    //type wrong
+                                    _createdSymbolTabe.WrongTypeError(Attributes.Item1.Name, Attributes.Item1.ClassVariableName);
+                                }
                             }
                         }
                     }
@@ -949,7 +953,7 @@ namespace Compiler.AST
         public override void Visit(RunQueryNode node)
         {
             _createdSymbolTabe.SetCurrentNode(node);
-            _createdSymbolTabe.NotImplementedError(node);
+            
 
         }
 
