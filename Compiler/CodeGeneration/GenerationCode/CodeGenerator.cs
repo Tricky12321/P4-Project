@@ -97,7 +97,8 @@ namespace Compiler.CodeGeneration.GenerationCode
             {
                 _currentStringBuilder.Append(ResolveTypeToCS(node.Type_enum) + " ");
                 _currentStringBuilder.Append(node.Name);
-                if (node.Assignment != null) {
+                if (node.Assignment != null)
+                {
                     _currentStringBuilder.Append(" = ");
                     node.Assignment.Accept(this);
                 }
@@ -110,7 +111,11 @@ namespace Compiler.CodeGeneration.GenerationCode
                     }
                 }
             }
-            _currentStringBuilder.Append(";\n");
+
+            if (node.Assignment == null)
+            {
+                _currentStringBuilder.Append(";\n");
+            }
         }
 
         public override void Visit(FunctionNode node)
@@ -270,7 +275,6 @@ namespace Compiler.CodeGeneration.GenerationCode
                     item.Accept(this);
                 }
             }
-            _currentStringBuilder.Append(";\n");
         }
 
         public override void Visit(GraphDeclVertexNode node)
@@ -342,13 +346,13 @@ namespace Compiler.CodeGeneration.GenerationCode
             {
                 _currentStringBuilder.Append("}\n");
             }
-            _currentStringBuilder.Append($"return _col{node.ID};\n}}");
+            _currentStringBuilder.Append($"return _col{node.ID};\n}}\n");
         }
 
         public override void Visit(SelectQueryNode node)
         {
             _currentStringBuilder.Append($"_funSelectQuery{node.ID}{functionID}();\n{ResolveTypeToCS(node.Type_enum)} _funSelectQuery{node.ID}{functionID++}(){{\n");
-            if(node.Type == "void")
+            if (node.Type == "void")
             {
                 throw new NotImplementedException("Typen skal gerne sættes i typechecker.");
             }
@@ -368,23 +372,40 @@ namespace Compiler.CodeGeneration.GenerationCode
             {
                 _currentStringBuilder.Append("}\n");
             }
-            _currentStringBuilder.Append($"return _val{node.ID};\n}}");
+            _currentStringBuilder.Append($"return _val{node.ID};\n}}\n\n");
         }
 
         public override void Visit(ExtractMaxQueryNode node)
         {
-            _currentStringBuilder.Append($"_funExtMax{node.ID}{functionID}();\n{ResolveTypeToCS(node.Type_enum)} _funExtMax{node.ID}{functionID++}(){{\n");
-            _currentStringBuilder.Append($"{ResolveTypeToCS(node.Type_enum)} _val{node.ID};\n");
-
-
-            Console.WriteLine(_currentStringBuilder);
+            _currentStringBuilder.Append(GetExtractString(node, true));
         }
 
         public override void Visit(ExtractMinQueryNode node)
         {
-            _currentStringBuilder.Append($"_funExtMin{node.ID}{functionID}();\n{ResolveTypeToCS(node.Type_enum)} _funExtMin{node.ID}{functionID++}(){{\n");
-            _currentStringBuilder.Append($"{ResolveTypeToCS(node.Type_enum)} _val{node.ID};\n");
+            _currentStringBuilder.Append(GetExtractString(node, false));
+        }
 
+        private StringBuilder GetExtractString(AbstractExtractNode node, bool maxIfTrue)
+        {
+            StringBuilder extractString = new StringBuilder();
+
+            string placeFuncString = maxIfTrue ? "_funExtMax" : "_funExtMin";
+            string placeValString = $"_val{node.ID}";
+            string placeAttriString = node.Attribute == null ? "" : $".{node.Attribute.Replace("'", "")}";
+            string boolOpString = maxIfTrue ? ">" : "<";
+
+            extractString.Append($"{placeFuncString}{node.ID}{functionID}();\n{ResolveTypeToCS(node.Type_enum)} {placeFuncString}{node.ID}{functionID++}(){{\n");
+
+            extractString.Append($"{ResolveTypeToCS(node.Type_enum)} {placeValString} = default({ResolveTypeToCS(node.Type_enum)});\ndouble placeDouble = 0;\n");
+
+            extractString.Append($"foreach (var item in {node.Variable}){{\n");
+
+            extractString.Append($"if(item{placeAttriString} {boolOpString} placeDouble){{\n");
+            extractString.Append($"{placeValString} = item;\nplaceDouble = item{placeAttriString};\n}}\n}}\n");
+
+            extractString.Append($"return {placeValString};\n}}\n\n");
+
+            return extractString;
         }
 
         public override void Visit(WhereNode node)
@@ -534,7 +555,7 @@ namespace Compiler.CodeGeneration.GenerationCode
         public override void Visit(PredicateNode node)
         {
             _currentStringBuilder.Append($"\n");
-			Indent();
+            Indent();
             _currentStringBuilder.Append($"bool {node.Name} (");
 
             bool first = true;
@@ -553,7 +574,7 @@ namespace Compiler.CodeGeneration.GenerationCode
             }
 
             _currentStringBuilder.Append($") {{ \n ");
-			_tabCount++;
+            _tabCount++;
             Indent();
             _currentStringBuilder.Append($"return ");
             VisitChildren(node);
@@ -652,7 +673,7 @@ namespace Compiler.CodeGeneration.GenerationCode
 
         public override void Visit(VariableAttributeNode node)
         {
-
+            _currentStringBuilder.Append($"{node.Name.Replace("'", "")}");
         }
 
         public override void Visit(VariableNode node)
@@ -693,7 +714,7 @@ namespace Compiler.CodeGeneration.GenerationCode
         {
             bool first = true;
             _currentStringBuilder.Append("\n");
-			Indent();
+            Indent();
             _currentStringBuilder.Append("Console.WriteLine(");
             foreach (var item in node.Children)
             {

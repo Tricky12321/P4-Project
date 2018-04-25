@@ -624,9 +624,39 @@ namespace Compiler.AST.SymbolTable
             Error();
         }
 
+        public void AttributeIllegal()
+        {
+            Console.WriteLine("Type of attribute must be of type Integer or Decimal " + GetLineNumber());
+            Error();
+        }
+
+        public void AttributeNotExtendedOnClass(string attriName, AllType? TypeOfClass)
+        {
+            Console.WriteLine($"Given attribute: {attriName} is not extended on Class: {TypeOfClass.ToString()}" + GetLineNumber());
+            Error();
+        }
+
+        public void NoAttriProvidedCollNeedsToBeIntOrDecimalError()
+        {
+            Console.WriteLine($"If no attribute is provided for assortment, the specified collection must be of type Decimal or Integer " + GetLineNumber());
+            Error();
+        }
+
+        public void ExtractCollNotIntOrDeciError()
+        {
+            Console.WriteLine("If a attribute is provided for assortment, the specified collection must not be of type Decimal or Integer " + GetLineNumber());
+            Error();
+        }
+
         public void WrongTypeError(string variable1, string variable2)
         {
             Console.WriteLine($"Variable {variable1} and {variable2} are missmatch of types. Line number {GetLineNumber()}");
+            Error();
+        }
+
+        public void WrongTypeErrorCollection(string variable1, string variable2)
+        {
+            Console.WriteLine($"Variable {variable1} and {variable2} are missmatch of collection. Line number {GetLineNumber()}");
             Error();
         }
 
@@ -709,6 +739,12 @@ namespace Compiler.AST.SymbolTable
         public void NonPrintableError()
         {
             Console.WriteLine($"one or more provided variables or constants is not legal to print. {GetLineNumber()}");
+            Error();
+        }
+
+        public void FunctionIsVoidError(string FunctionName)
+        {
+            Console.WriteLine($"Trying to return to void function: {FunctionName}, at {GetLineNumber()}");
             Error();
         }
     }

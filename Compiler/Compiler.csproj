@@ -68,6 +68,7 @@
     <Compile Include="AST\Nodes\DatatypeNodes\VariableAttributeNode.cs" />
     <Compile Include="AST\Nodes\DatatypeNodes\VariableDclNode.cs" />
     <Compile Include="AST\Nodes\OperatorNode.cs" />
+    <Compile Include="AST\Nodes\QueryNodes\AbstractExtractNode.cs" />
     <Compile Include="AST\Symbol Table\AstSymbolTableCreatorVisitor.cs" />
     <Compile Include="AST\Symbol Table\SymbolTableEntry.cs" />
     <Compile Include="Program\Utilities.cs" />
@@ -156,11 +157,7 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup />
-  <ItemGroup>
-    <Folder Include="CodeGeneration\" />
-    <Folder Include="CodeGeneration\Classes\" />
-    <Folder Include="CodeGeneration\GenerationCode\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

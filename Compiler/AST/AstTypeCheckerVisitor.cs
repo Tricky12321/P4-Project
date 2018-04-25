@@ -95,7 +95,27 @@ namespace Compiler.AST
                 foreach (Tuple<VariableAttributeNode, string, ExpressionNode> Attributes in node.Attributes)
                 {
                     variableName = Attributes.Item1.Name;
-                    variableType = _createdSymbolTabe.RetrieveSymbol(variableName);
+                    if (Attributes.Item1 is AttributeNode attNode)
+                    {
+                        //skal finde ud af hvad der er extended.
+                        AllType? extentiontype = _createdSymbolTabe.RetrieveSymbol(Attributes.Item1.ClassVariableName);
+                        if (extentiontype != null)
+                        {
+                            if (_createdSymbolTabe.IsExtended(variableName, extentiontype ?? default(AllType)))
+                            {
+                                AllType? attributeType = _createdSymbolTabe.GetAttributeType(variableName, extentiontype ?? default(AllType));
+
+                                if(!(attributeType == extentiontype)){
+                                    //type wrong
+                                    _createdSymbolTabe.WrongTypeError(Attributes.Item1.Name, Attributes.Item1.ClassVariableName);
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        variableType = _createdSymbolTabe.RetrieveSymbol(variableName);
+                    }
 
                     if (Attributes.Item3 != null)
                     {
@@ -104,21 +124,22 @@ namespace Compiler.AST
 
                     if (Attributes.Item3.OverAllType != variableType)
                     {
-                        //type error
+                        //type between varible and overalltyper
                         _createdSymbolTabe.WrongTypeError(variableName, Attributes.Item3.Name);
                     }
+
+                    if (node.InVariable != null)
+                    {
+                        inVariableType = _createdSymbolTabe.RetrieveSymbol(node.InVariable.Name);
+                        if (inVariableType != variableType)
+                        {
+                            //error  with invariable
+                        }
+                    }
                 }
+
+
             }
-            /*if (node.InVariable != null)
-            {
-                inVariableType = _createdSymbolTabe.RetrieveSymbol(node.InVariable.Name);
-                if (!(inVariableType == variableType))
-                {
-                    // type error
-                    _createdSymbolTabe.WrongTypeError(node.InVariable.Name, variableType.ToString());
-                }
-            }
-            */
             VisitChildren(node);
         }
 
@@ -137,22 +158,72 @@ namespace Compiler.AST
         public override void Visit(ExtractMaxQueryNode node)
         {
             _createdSymbolTabe.SetCurrentNode(node);
-            if (node.Parent != null && node.Parent is ExpressionNode)
+
+            AllType? collectionNameType = _createdSymbolTabe.RetrieveSymbol(node.Variable, out bool isCollectionInQuery, false);
+            AllType? typeAttribute = AllType.UNKNOWNTYPE;
+            if (isCollectionInQuery)
             {
-                AllType? collectionNameType = _createdSymbolTabe.RetrieveSymbol(node.Variable, out bool isCollectionInQuery, false);
-                bool FromIsColl = isCollectionInQuery;
-                if (FromIsColl)
+                if (node.Attribute != null)
                 {
-                    if (node.Parent is ExpressionNode expNode)
+                    if (collectionNameType != null && collectionNameType != AllType.INT && collectionNameType != AllType.DECIMAL)
                     {
-                        expNode.OverAllType = collectionNameType;
+                        if (_createdSymbolTabe.IsExtended(node.Attribute, collectionNameType ?? default(AllType)))
+                        {
+                            typeAttribute = _createdSymbolTabe.GetAttributeType(node.Attribute, collectionNameType ?? default(AllType));
+                            if (typeAttribute == AllType.DECIMAL || typeAttribute == AllType.INT)
+                            {
+                                //variable is a collection, which are different from decimal and int collections, 
+                                //an attribute is specified, and are of type int or decimal, which ir MUST be!
+                                node.Type = collectionNameType.ToString();
+                            }
+                            else
+                            {
+                                //attribute is other than int or decimal, which it may not be.
+                                _createdSymbolTabe.AttributeIllegal();
+                            }
+                        }
+                        else
+                        {
+                            //the class is not extended with given attribute
+                            _createdSymbolTabe.AttributeNotExtendedOnClass(node.Attribute, collectionNameType);
+                        }
                     }
-                    node.Type = collectionNameType.ToString();
+                    else
+                    {
+                        //the collection type is either int, decimal or null. which are not legal.
+                        _createdSymbolTabe.ExtractCollNotIntOrDeciError();
+                        //SKAL FINDE UD AF OM DEN ERROR I SYMTABLE ER KORREKT AT BRUGE ET ELLER ANDET STED HER
+                    }
                 }
                 else
                 {
-                    //correct error message pls
+                    if (collectionNameType == AllType.DECIMAL || collectionNameType == AllType.INT)
+                    {
+                        //the attribute is proveded, there the collection must be of type decimal or interger.
+                        //Because it will sort on the values of the items in the decimal or integer collections,
+                        //and not on some attribute extended on the classes.
+                        node.Type = collectionNameType.ToString();
+                    }
+                    else
+                    {
+                        _createdSymbolTabe.NoAttriProvidedCollNeedsToBeIntOrDecimalError();
+                    }
+                    //attribute not specified - coll needs to be int or deci
                 }
+            }
+            else
+            {
+                //the from variable needs to be a collection. You cannot retrieve something from a variable - only retrieve from a collections.
+                _createdSymbolTabe.FromVarIsNotCollError(node.Variable);
+            }
+
+            if (isCollectionInQuery)
+            {
+                if (node.Parent is ExpressionNode expNode)
+                {
+                    expNode.OverAllType = collectionNameType;
+                }
+                node.Type = collectionNameType.ToString();
             }
 
             if (node.WhereCondition != null)
@@ -164,22 +235,72 @@ namespace Compiler.AST
         public override void Visit(ExtractMinQueryNode node)
         {
             _createdSymbolTabe.SetCurrentNode(node);
-            if (node.Parent != null && node.Parent is ExpressionNode)
+
+            AllType? collectionNameType = _createdSymbolTabe.RetrieveSymbol(node.Variable, out bool isCollectionInQuery, false);
+            AllType? typeAttribute = AllType.UNKNOWNTYPE;
+            if (isCollectionInQuery)
             {
-                AllType? collectionNameType = _createdSymbolTabe.RetrieveSymbol(node.Variable, out bool isCollectionInQuery, false);
-                bool FromIsColl = isCollectionInQuery;
-                if (FromIsColl)
+                if (node.Attribute != null)
                 {
-                    if (node.Parent is ExpressionNode expNode)
+                    if (collectionNameType != null && collectionNameType != AllType.INT && collectionNameType != AllType.DECIMAL)
                     {
-                        expNode.OverAllType = collectionNameType;
+                        if (_createdSymbolTabe.IsExtended(node.Attribute, collectionNameType ?? default(AllType)))
+                        {
+                            typeAttribute = _createdSymbolTabe.GetAttributeType(node.Attribute, collectionNameType ?? default(AllType));
+                            if (typeAttribute == AllType.DECIMAL || typeAttribute == AllType.INT)
+                            {
+                                //variable is a collection, which are different from decimal and int collections, 
+                                //an attribute is specified, and are of type int or decimal, which ir MUST be!
+                                node.Type = collectionNameType.ToString();
+                            }
+                            else
+                            {
+                                //attribute is other than int or decimal, which it may not be.
+                                _createdSymbolTabe.AttributeIllegal();
+                            }
+                        }
+                        else
+                        {
+                            //the class is not extended with given attribute
+                            _createdSymbolTabe.AttributeNotExtendedOnClass(node.Attribute, collectionNameType);
+                        }
                     }
-                    node.Type = collectionNameType.ToString();
+                    else
+                    {
+                        //the collection type is either int, decimal or null. which are not legal.
+                        _createdSymbolTabe.ExtractCollNotIntOrDeciError();
+                        //SKAL FINDE UD AF OM DEN ERROR I SYMTABLE ER KORREKT AT BRUGE ET ELLER ANDET STED HER
+                    }
                 }
                 else
                 {
-                    //TODO correct error pls
+                    if (collectionNameType == AllType.DECIMAL || collectionNameType == AllType.INT)
+                    {
+                        //the attribute is proveded, there the collection must be of type decimal or interger.
+                        //Because it will sort on the values of the items in the decimal or integer collections,
+                        //and not on some attribute extended on the classes.
+                        node.Type = collectionNameType.ToString();
+                    }
+                    else
+                    {
+                        _createdSymbolTabe.NoAttriProvidedCollNeedsToBeIntOrDecimalError();
+                    }
+                    //attribute not specified - coll needs to be int or deci
                 }
+            }
+            else
+            {
+                //the from variable needs to be a collection. You cannot retrieve something from a variable - only retrieve from a collections.
+                _createdSymbolTabe.FromVarIsNotCollError(node.Variable);
+            }
+
+            if (isCollectionInQuery)
+            {
+                if (node.Parent is ExpressionNode expNode)
+                {
+                    expNode.OverAllType = collectionNameType;
+                }
+                node.Type = collectionNameType.ToString();
             }
 
             if (node.WhereCondition != null)
@@ -195,17 +316,21 @@ namespace Compiler.AST
             bool fromIsColl = isCollectionInQuery;
             if (fromIsColl)
             {
-                if (node.Parent is DeclarationNode expNode)
+                if (node.Parent is DeclarationNode dclNode)
                 {
                     node.Type = collectionNameType.ToString();
+                }
+                else if (node.Parent is ExpressionNode expNode)
+                {
+                    node.Type = collectionNameType.ToString();
+                    expNode.QueryName = node.Variable;
+                    expNode.OverAllType = collectionNameType;
                 }
             }
             else
             {
                 //TODO correct error message pls
             }
-
-
             if (node.WhereCondition != null)
             {
                 Visit(node.WhereCondition);
@@ -562,7 +687,7 @@ namespace Compiler.AST
         public override void Visit(GraphSetQuery node)
         {
             _createdSymbolTabe.SetCurrentNode(node);
-            string targetName = node.Attributes.Item1.Name.Trim('\'');
+            string targetName = node.Attributes.Item1.Name;
             AllType? targetType = _createdSymbolTabe.GetAttributeType(targetName, AllType.GRAPH);
             node.Attributes.Item3.Accept(this);
             AllType? assignedType = node.Attributes.Item3.OverAllType;
@@ -754,31 +879,39 @@ namespace Compiler.AST
 
         public override void Visit(ReturnNode node)
         {
+            VisitChildren(node);
             _createdSymbolTabe.SetCurrentNode(node);
+            AllType? funcType = _createdSymbolTabe.RetrieveSymbol(node.FuncName, out bool FuncTypeCollection, false);
+            AllType? returnType = null;
+            bool ReturnTypeCollection = false;
 
-            AllType? funcType = _createdSymbolTabe.RetrieveSymbol(node.Parent.Name, out bool ReturnTypeCollection, false);
-            AllType? returnType = _createdSymbolTabe.RetrieveSymbol(node.LeftmostChild.Name, out bool FunctionTypeCollection, false);
-
+            if (node.LeftmostChild is ExpressionNode expNode && expNode.ExpressionParts != null)
+            {
+                if (expNode.QueryName != null)
+                {
+                    _createdSymbolTabe.RetrieveSymbol(expNode.QueryName, out bool returnTypeCollection, false);
+                    ReturnTypeCollection = returnTypeCollection;
+                }
+                returnType = expNode.OverAllType;
+            }
             if (funcType == AllType.VOID)
             {
-                //calling return on void function error 
+                _createdSymbolTabe.FunctionIsVoidError(node.FuncName);
             }
-            if (ReturnTypeCollection == FunctionTypeCollection)
+            if (ReturnTypeCollection == FuncTypeCollection)
+            // går ikke derind, function bool er false, wait for fix
             {
-                if (funcType == returnType)
-                {
-
-                }
-                else
+                if (!(funcType == returnType))
                 {
                     //ERROR, conflicting function and return type
+                    _createdSymbolTabe.WrongTypeError(node.FuncName, node.Name);
                 }
             }
             else
             {
                 //ERROR, one is collection, other isn't
+                _createdSymbolTabe.WrongTypeErrorCollection(node.FuncName, node.Name);
             }
-            VisitChildren(node);
         }
 
         public override void Visit(ForLoopNode node)
@@ -878,7 +1011,7 @@ namespace Compiler.AST
         public override void Visit(OperatorNode node)
         {
             _createdSymbolTabe.SetCurrentNode(node);
-            _createdSymbolTabe.NotImplementedError(node);
+            VisitChildren(node);
         }
 
         public override void Visit(ConstantNode node)
@@ -920,7 +1053,7 @@ namespace Compiler.AST
         public override void Visit(RunQueryNode node)
         {
             _createdSymbolTabe.SetCurrentNode(node);
-            _createdSymbolTabe.NotImplementedError(node);
+            
 
         }
 
