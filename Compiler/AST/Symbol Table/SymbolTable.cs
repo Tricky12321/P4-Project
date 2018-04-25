@@ -632,7 +632,7 @@ namespace Compiler.AST.SymbolTable
 
         public void AttributeNotExtendedOnClass(string attriName, AllType? TypeOfClass)
         {
-            Console.WriteLine($"Given attribute: {attriName} is not extended on Class: {TypeOfClass.ToString()}" + GetLineNumber());
+            Console.WriteLine($"Given attribute: {attriName} is not extended on Class: {TypeOfClass.ToString()} " + GetLineNumber());
             Error();
         }
 
