@@ -613,6 +613,18 @@ namespace Compiler.AST.SymbolTable
             Error();
         }
 
+        public void AttributeIllegal()
+        {
+            Console.WriteLine("Type of attribute must be of type Integer or Decimal" + GetLineNumber());
+            Error();
+        }
+
+        public void ExtractCollNotIntOrDeciError()
+        {
+            Console.WriteLine("If a attribute is provided for assortment, the specified collection must not be Decimal or Integer " + GetLineNumber());
+            Error();
+        }
+
         public void WrongTypeError(string variable1, string variable2)
         {
             Console.WriteLine($"Variable {variable1} and {variable2} are missmatch of types. Line number {GetLineNumber()}");

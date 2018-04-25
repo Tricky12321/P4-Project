@@ -140,8 +140,35 @@ namespace Compiler.AST
             if (node.Parent != null && node.Parent is ExpressionNode)
             {
                 AllType? collectionNameType = _createdSymbolTabe.RetrieveSymbol(node.Variable, out bool isCollectionInQuery, false);
+                string attriName;
+                AllType? attributeType = AllType.UNKNOWNTYPE;
+                bool attriIsIntOrDeci = false;
+                if (isCollectionInQuery)
+                {
+                    if (node.Attribute != null)
+                    {
+                        attriName = node.Attribute.Trim('\'');
+                        if (collectionNameType != AllType.INT && collectionNameType != AllType.DECIMAL)
+                        {
+                            _createdSymbolTabe.ExtractCollNotIntOrDeciError();
+                        }
+                        else
+                        {
+                            attributeType = _createdSymbolTabe.GetAttributeType(attriName, collectionNameType ?? default(AllType));
+                        }
+                        if (!attriIsIntOrDeci)
+                        {
+
+                        }
+                    }
+                    else
+                    {
+                        //attriIsIntOrDeci = attributeType == AllType.DECIMAL || attributeType == AllType.INT;
+                    }
+                }
+                bool collIsIntOrDeci = isCollectionInQuery && (collectionNameType == AllType.DECIMAL || collectionNameType == AllType.INT);
                 bool FromIsColl = isCollectionInQuery;
-                if (FromIsColl)
+                if (collIsIntOrDeci || (FromIsColl && attriIsIntOrDeci))
                 {
                     if (node.Parent is ExpressionNode expNode)
                     {
@@ -167,8 +194,19 @@ namespace Compiler.AST
             if (node.Parent != null && node.Parent is ExpressionNode)
             {
                 AllType? collectionNameType = _createdSymbolTabe.RetrieveSymbol(node.Variable, out bool isCollectionInQuery, false);
+                string attriName;
+                AllType? attributeType = AllType.UNKNOWNTYPE;
+                bool attriIsIntOrDeci = false;
+                if (node.Attribute != null)
+                {
+                    attriName = node.Attribute.Trim('\'');
+                    attributeType = _createdSymbolTabe.GetAttributeType(attriName, collectionNameType ?? default(AllType));
+                    attriIsIntOrDeci = attributeType == AllType.DECIMAL || attributeType == AllType.INT;
+
+                }
+                bool collIsIntOrDeci = isCollectionInQuery && (collectionNameType == AllType.DECIMAL || collectionNameType == AllType.INT);
                 bool FromIsColl = isCollectionInQuery;
-                if (FromIsColl)
+                if (collIsIntOrDeci || (FromIsColl && attriIsIntOrDeci))
                 {
                     if (node.Parent is ExpressionNode expNode)
                     {
@@ -878,7 +916,7 @@ namespace Compiler.AST
         public override void Visit(OperatorNode node)
         {
             _createdSymbolTabe.SetCurrentNode(node);
-            _createdSymbolTabe.NotImplementedError(node);
+            VisitChildren(node);
         }
 
         public override void Visit(ConstantNode node)
@@ -920,6 +958,9 @@ namespace Compiler.AST
         public override void Visit(RunQueryNode node)
         {
             _createdSymbolTabe.SetCurrentNode(node);
+
+
+
             _createdSymbolTabe.NotImplementedError(node);
 
         }
