@@ -139,44 +139,64 @@ namespace Compiler.AST
             _createdSymbolTabe.SetCurrentNode(node);
 
             AllType? collectionNameType = _createdSymbolTabe.RetrieveSymbol(node.Variable, out bool isCollectionInQuery, false);
-            string attriName;
-            AllType? attributeType = AllType.UNKNOWNTYPE;
-            bool attriIsIntOrDeci = false;
+            AllType? typeAttribute = AllType.UNKNOWNTYPE;
             if (isCollectionInQuery)
             {
                 if (node.Attribute != null)
                 {
-                    attriName = node.Attribute.Trim('\'');
                     if (collectionNameType != null && collectionNameType != AllType.INT && collectionNameType != AllType.DECIMAL)
                     {
-
-                        if (_createdSymbolTabe.IsExtended(attriName, collectionNameType ?? default(AllType)))
+                        if (_createdSymbolTabe.IsExtended(node.Attribute, collectionNameType ?? default(AllType)))
                         {
-                            attributeType = _createdSymbolTabe.GetAttributeType(attriName, collectionNameType ?? default(AllType));
+                            typeAttribute = _createdSymbolTabe.GetAttributeType(node.Attribute, collectionNameType ?? default(AllType));
+                            if (typeAttribute == AllType.DECIMAL || typeAttribute == AllType.INT)
+                            {
+                                //variable is a collection, which are different from decimal and int collections, 
+                                //an attribute is specified, and are of type int or decimal, which ir MUST be!
+                                node.Type = collectionNameType.ToString();
+                            }
+                            else
+                            {
+                                //attribute is other than int or decimal, which it may not be.
+                                _createdSymbolTabe.AttributeIllegal();
+                            }
                         }
                         else
                         {
                             //the class is not extended with given attribute
+                            _createdSymbolTabe.AttributeNotExtendedOnClass(node.Attribute, collectionNameType);
                         }
-
                     }
                     else
                     {
+                        //the collection type is either int, decimal or null. which are not legal.
                         _createdSymbolTabe.ExtractCollNotIntOrDeciError();
-                    }
-                    if (!attriIsIntOrDeci)
-                    {
-
+                        //SKAL FINDE UD AF OM DEN ERROR I SYMTABLE ER KORREKT AT BRUGE ET ELLER ANDET STED HER
                     }
                 }
                 else
                 {
-                    //attriIsIntOrDeci = attributeType == AllType.DECIMAL || attributeType == AllType.INT;
+                    if (collectionNameType == AllType.DECIMAL || collectionNameType == AllType.INT)
+                    {
+                        //the attribute is proveded, there the collection must be of type decimal or interger.
+                        //Because it will sort on the values of the items in the decimal or integer collections,
+                        //and not on some attribute extended on the classes.
+                        node.Type = collectionNameType.ToString();
+                    }
+                    else
+                    {
+                        _createdSymbolTabe.NoAttriProvidedCollNeedsToBeIntOrDecimalError();
+                    }
+                    //attribute not specified - coll needs to be int or deci
                 }
             }
-            bool collIsIntOrDeci = isCollectionInQuery && (collectionNameType == AllType.DECIMAL || collectionNameType == AllType.INT);
-            bool FromIsColl = isCollectionInQuery;
-            if (collIsIntOrDeci || (FromIsColl && attriIsIntOrDeci))
+            else
+            {
+                //the from variable needs to be a collection. You cannot retrieve something from a variable - only retrieve from a collections.
+                _createdSymbolTabe.FromVarIsNotCollError(node.Variable);
+            }
+
+            if (isCollectionInQuery)
             {
                 if (node.Parent is ExpressionNode expNode)
                 {
@@ -184,11 +204,6 @@ namespace Compiler.AST
                 }
                 node.Type = collectionNameType.ToString();
             }
-            else
-            {
-                //correct error message pls
-            }
-
 
             if (node.WhereCondition != null)
             {
@@ -199,33 +214,72 @@ namespace Compiler.AST
         public override void Visit(ExtractMinQueryNode node)
         {
             _createdSymbolTabe.SetCurrentNode(node);
-            if (node.Parent != null && node.Parent is ExpressionNode)
+
+            AllType? collectionNameType = _createdSymbolTabe.RetrieveSymbol(node.Variable, out bool isCollectionInQuery, false);
+            AllType? typeAttribute = AllType.UNKNOWNTYPE;
+            if (isCollectionInQuery)
             {
-                AllType? collectionNameType = _createdSymbolTabe.RetrieveSymbol(node.Variable, out bool isCollectionInQuery, false);
-                string attriName;
-                AllType? attributeType = AllType.UNKNOWNTYPE;
-                bool attriIsIntOrDeci = false;
                 if (node.Attribute != null)
                 {
-                    attriName = node.Attribute.Trim('\'');
-                    attributeType = _createdSymbolTabe.GetAttributeType(attriName, collectionNameType ?? default(AllType));
-                    attriIsIntOrDeci = attributeType == AllType.DECIMAL || attributeType == AllType.INT;
-
-                }
-                bool collIsIntOrDeci = isCollectionInQuery && (collectionNameType == AllType.DECIMAL || collectionNameType == AllType.INT);
-                bool FromIsColl = isCollectionInQuery;
-                if (collIsIntOrDeci || (FromIsColl && attriIsIntOrDeci))
-                {
-                    if (node.Parent is ExpressionNode expNode)
+                    if (collectionNameType != null && collectionNameType != AllType.INT && collectionNameType != AllType.DECIMAL)
                     {
-                        expNode.OverAllType = collectionNameType;
+                        if (_createdSymbolTabe.IsExtended(node.Attribute, collectionNameType ?? default(AllType)))
+                        {
+                            typeAttribute = _createdSymbolTabe.GetAttributeType(node.Attribute, collectionNameType ?? default(AllType));
+                            if (typeAttribute == AllType.DECIMAL || typeAttribute == AllType.INT)
+                            {
+                                //variable is a collection, which are different from decimal and int collections, 
+                                //an attribute is specified, and are of type int or decimal, which ir MUST be!
+                                node.Type = collectionNameType.ToString();
+                            }
+                            else
+                            {
+                                //attribute is other than int or decimal, which it may not be.
+                                _createdSymbolTabe.AttributeIllegal();
+                            }
+                        }
+                        else
+                        {
+                            //the class is not extended with given attribute
+                            _createdSymbolTabe.AttributeNotExtendedOnClass(node.Attribute, collectionNameType);
+                        }
                     }
-                    node.Type = collectionNameType.ToString();
+                    else
+                    {
+                        //the collection type is either int, decimal or null. which are not legal.
+                        _createdSymbolTabe.ExtractCollNotIntOrDeciError();
+                        //SKAL FINDE UD AF OM DEN ERROR I SYMTABLE ER KORREKT AT BRUGE ET ELLER ANDET STED HER
+                    }
                 }
                 else
                 {
-                    //TODO correct error pls
+                    if (collectionNameType == AllType.DECIMAL || collectionNameType == AllType.INT)
+                    {
+                        //the attribute is proveded, there the collection must be of type decimal or interger.
+                        //Because it will sort on the values of the items in the decimal or integer collections,
+                        //and not on some attribute extended on the classes.
+                        node.Type = collectionNameType.ToString();
+                    }
+                    else
+                    {
+                        _createdSymbolTabe.NoAttriProvidedCollNeedsToBeIntOrDecimalError();
+                    }
+                    //attribute not specified - coll needs to be int or deci
                 }
+            }
+            else
+            {
+                //the from variable needs to be a collection. You cannot retrieve something from a variable - only retrieve from a collections.
+                _createdSymbolTabe.FromVarIsNotCollError(node.Variable);
+            }
+
+            if (isCollectionInQuery)
+            {
+                if (node.Parent is ExpressionNode expNode)
+                {
+                    expNode.OverAllType = collectionNameType;
+                }
+                node.Type = collectionNameType.ToString();
             }
 
             if (node.WhereCondition != null)
@@ -608,7 +662,7 @@ namespace Compiler.AST
         public override void Visit(GraphSetQuery node)
         {
             _createdSymbolTabe.SetCurrentNode(node);
-            string targetName = node.Attributes.Item1.Name.Trim('\'');
+            string targetName = node.Attributes.Item1.Name;
             AllType? targetType = _createdSymbolTabe.GetAttributeType(targetName, AllType.GRAPH);
             node.Attributes.Item3.Accept(this);
             AllType? assignedType = node.Attributes.Item3.OverAllType;

@@ -626,13 +626,25 @@ namespace Compiler.AST.SymbolTable
 
         public void AttributeIllegal()
         {
-            Console.WriteLine("Type of attribute must be of type Integer or Decimal" + GetLineNumber());
+            Console.WriteLine("Type of attribute must be of type Integer or Decimal " + GetLineNumber());
+            Error();
+        }
+
+        public void AttributeNotExtendedOnClass(string attriName, AllType? TypeOfClass)
+        {
+            Console.WriteLine($"Given attribute: {attriName} is not extended on Class: {TypeOfClass.ToString()}" + GetLineNumber());
+            Error();
+        }
+
+        public void NoAttriProvidedCollNeedsToBeIntOrDecimalError()
+        {
+            Console.WriteLine($"If no attribute is provided for assortment, the specified collection must be of type Decimal or Integer " + GetLineNumber());
             Error();
         }
 
         public void ExtractCollNotIntOrDeciError()
         {
-            Console.WriteLine("If a attribute is provided for assortment, the specified collection must not be Decimal or Integer " + GetLineNumber());
+            Console.WriteLine("If a attribute is provided for assortment, the specified collection must not be of type Decimal or Integer " + GetLineNumber());
             Error();
         }
 
