@@ -244,6 +244,7 @@ namespace Compiler.AST.SymbolTable
         }
 
         public bool IsExtended(string Name, AllType Class) {
+            Name = Name.Trim('\'');
             if (IsClass(Class) && _classesTable[Class].ContainsKey(Name)) {
                 return true;
             }
