@@ -372,7 +372,7 @@ namespace Compiler.CodeGeneration.GenerationCode
             {
                 _currentStringBuilder.Append("}\n");
             }
-            _currentStringBuilder.Append($"return _val{node.ID};\n}}\n");
+            _currentStringBuilder.Append($"return _val{node.ID};\n}}\n\n");
         }
 
         public override void Visit(ExtractMaxQueryNode node)
@@ -673,12 +673,12 @@ namespace Compiler.CodeGeneration.GenerationCode
 
         public override void Visit(VariableAttributeNode node)
         {
-
+            _currentStringBuilder.Append($"{_boolComparisonPrefix}");
+            _currentStringBuilder.Append($"{node.Name.Trim('\'')}");
         }
 
         public override void Visit(VariableNode node)
         {
-            _currentStringBuilder.Append($"{_boolComparisonPrefix}");
 
             _currentStringBuilder.Append(node.Name);
         }

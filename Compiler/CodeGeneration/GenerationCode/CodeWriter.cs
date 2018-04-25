@@ -23,8 +23,6 @@ namespace Compiler.CodeGeneration.GenerationCode
         private string _global = "*****GLOBAL*****";
         private string _extend = "//*****EXTEND*****";
 
-        public CodeWriter() { }
-
         public void FillMainBody()
         {
             string text = File.ReadAllText(_programFile);
