@@ -39,17 +39,50 @@ namespace Unittests
             }
         }
 
-        [TestCase("v")]
-        public void CheckExtendNotes(string extensionName) {
+        [TestCase("v", AllType.EDGE)]
+        [TestCase("v", AllType.VERTEX)]
+        [TestCase("d", AllType.EDGE)]
+        [TestCase("gr1", AllType.EDGE)]
+        [TestCase("vertEdge", AllType.EDGE)]
+        [TestCase("vertVertex", AllType.VERTEX)]
+        [TestCase("length",AllType.EDGE)]
+        public void CheckExtendNotes(string extensionName, AllType Class) {
             var ExtendNodes = AST.Children.Where(x => x is ExtendNode).ToList();
-            Console.WriteLine(ExtendNodes.Where(x => (x as ExtendNode).ExtensionName == extensionName).Count());
-            if (ExtendNodes.Where(x => (x as ExtendNode).ExtensionName == extensionName).Count() == 1) {
+            var extraction = ExtendNodes.Where(x => (x as ExtendNode).ExtensionName == extensionName
+                                  && (x as ExtendNode).ClassToExtend_enum == Class);
+            if (extraction.Count() == 1) {
                 Assert.Pass();
             } else {
                 Assert.Fail();
             }
         }
 
+        [TestCase("val", "v", AllType.GRAPH)]
+        [TestCase("valInt","vi",AllType.GRAPH)]
+        public void CheckExtendNotesShortNameIncluded(string LongName, string ShortName,AllType Class)
+        {
+            var ExtendNodes = AST.Children.Where(x => x is ExtendNode).ToList();
+            var extraction = ExtendNodes.Where(x => (x as ExtendNode).ExtensionName == LongName
+                                               && (x as ExtendNode).ExtensionShortName == ShortName
+                                  && (x as ExtendNode).ClassToExtend_enum == Class);
+            if (extraction.Count() == 1)
+            {
+                Assert.Pass();
+            }
+            else
+            {
+                Assert.Fail();
+            }
+        }
+
+
+        [TestCase("Main", AllType.VOID)]
+        [TestCase("Test", AllType.VOID)]
+        [TestCase("TestFunc", AllType.BOOL)]
+        [TestCase("TestFuncTest",AllType.GRAPH)]
+        public void CheckFunctionExist(string FunctionName, AllType ExpectedType) {
+            
+        }
 
     }
 }
