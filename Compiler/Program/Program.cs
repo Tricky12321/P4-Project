@@ -79,6 +79,21 @@ namespace Compiler
             return parser.start();
         }
 
+        public static GiraphParser.StartContext BuildCSTText(string Text)
+        {
+            Stopwatch CSTTimer = new Stopwatch();
+            CSTTimer.Start();
+            string input = File.ReadAllText(Text);
+            ICharStream stream = CharStreams.fromstring(input);
+            ITokenSource lexer = new GiraphLexer(stream);
+            ITokenStream tokens = new CommonTokenStream(lexer);
+            GiraphParser parser = new GiraphParser(tokens);
+            parser.BuildParseTree = true;
+            CSTTimer.Stop();
+            PrintCompilerMessage($"CST Builder took: {CSTTimer.ElapsedMilliseconds}ms");
+            return parser.start();
+        }
+
         public static SymTable BuildSymbolTable(StartNode node) {
             Stopwatch SymbolTableTimer = new Stopwatch();
             SymbolTableTimer.Start();

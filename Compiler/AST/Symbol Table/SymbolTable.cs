@@ -241,6 +241,13 @@ namespace Compiler.AST.SymbolTable
             return GetAttributeType(name, type, out IsCollection);
         }
 
+        public bool IsExtended(string Name, AllType Class) {
+            if (IsClass(Class) && _classesTable[Class].ContainsKey(Name)) {
+                return true;
+            }
+            return false;
+        }
+
         /// <summary>
         /// Returns if a AttributeDefined in the symbol table
         /// </summary>
