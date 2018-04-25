@@ -190,6 +190,7 @@ namespace Compiler.AST
                     }
                     else
                     {
+                        Console.WriteLine("hvorfor bliver denne kaldt 2 gange?");
                         //the collection type is either int, decimal or null. which are not legal.
                         _createdSymbolTabe.ExtractCollNotIntOrDeciError();
                         //SKAL FINDE UD AF OM DEN ERROR I SYMTABLE ER KORREKT AT BRUGE ET ELLER ANDET STED HER
@@ -228,7 +229,7 @@ namespace Compiler.AST
 
             if (node.WhereCondition != null)
             {
-                Visit(node.WhereCondition);
+                node.WhereCondition.Accept(this);
             }
         }
 
@@ -305,7 +306,7 @@ namespace Compiler.AST
 
             if (node.WhereCondition != null)
             {
-                Visit(node.WhereCondition);
+                node.WhereCondition.Accept(this);
             }
         }
 
@@ -333,7 +334,7 @@ namespace Compiler.AST
             }
             if (node.WhereCondition != null)
             {
-                Visit(node.WhereCondition);
+                node.WhereCondition.Accept(this);
             }
         }
 
@@ -359,7 +360,7 @@ namespace Compiler.AST
 
                 if (node.WhereCondition != null)
                 {
-                    Visit(node.WhereCondition);
+                    node.WhereCondition.Accept(this);
                 }
             }
         }
@@ -383,7 +384,7 @@ namespace Compiler.AST
                 {
                     _createdSymbolTabe.WrongTypeError(node.variableName, node.VariableCollection);
                 }
-                Visit(node.VariableToAdd);
+                node.VariableToAdd.Accept(this);
             }
             else
             {
@@ -399,7 +400,7 @@ namespace Compiler.AST
                 {
                     _createdSymbolTabe.WrongTypeError(node.variableName, node.VariableCollection);
                 }
-                Visit(node.VariableToAdd);
+                node.VariableToAdd.Accept(this);
             }
         }
 
@@ -440,7 +441,7 @@ namespace Compiler.AST
                 {
                     //constant is fine, collection is fine
                 }
-                Visit(node.VariableToAdd);
+                node.VariableToAdd.Accept(this);
             }
             else
             {
@@ -456,7 +457,7 @@ namespace Compiler.AST
                 {
                     _createdSymbolTabe.WrongTypeError(node.variableName, node.VariableCollection);
                 }
-                Visit(node.VariableToAdd);
+                node.VariableToAdd.Accept(this);
             }
         }
 
@@ -993,7 +994,7 @@ namespace Compiler.AST
 
             if (node.Children != null)
             {
-                VisitChildren(node);
+                //VisitChildren(node);
                 foreach (AbstractNode child in node.Children)
                 {
                     if (child is ExpressionNode expNode)
