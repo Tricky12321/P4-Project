@@ -24,6 +24,11 @@ namespace Giraph.Classes
 
         public List<T> SelectAll(Func<T, Boolean> p) => this.Where(p).ToList();
 
+        public T First()
+        {
+            return this.First();
+        }
+
         public List<T> Remove(Func<T, Boolean> p)
         {
             // Select all the items
