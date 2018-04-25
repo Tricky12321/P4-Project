@@ -95,7 +95,27 @@ namespace Compiler.AST
                 foreach (Tuple<VariableAttributeNode, string, ExpressionNode> Attributes in node.Attributes)
                 {
                     variableName = Attributes.Item1.Name;
-                    variableType = _createdSymbolTabe.RetrieveSymbol(variableName);
+                    if (Attributes.Item1 is AttributeNode attNode)
+                    {
+                        //skal finde ud af hvad der er extended.
+                        AllType? extentiontype = _createdSymbolTabe.RetrieveSymbol(Attributes.Item1.ClassVariableName);
+                        if (extentiontype != null)
+                        {
+                            if (_createdSymbolTabe.IsExtended(variableName, extentiontype ?? default(AllType)))
+                            {
+                                AllType? attributeType = _createdSymbolTabe.GetAttributeType(variableName, extentiontype ?? default(AllType));
+
+                                if(!(attributeType == extentiontype)){
+                                    //type wrong
+                                    _createdSymbolTabe.WrongTypeError(Attributes.Item1.Name, Attributes.Item1.ClassVariableName);
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        variableType = _createdSymbolTabe.RetrieveSymbol(variableName);
+                    }
 
                     if (Attributes.Item3 != null)
                     {
@@ -104,21 +124,22 @@ namespace Compiler.AST
 
                     if (Attributes.Item3.OverAllType != variableType)
                     {
-                        //type error
+                        //type between varible and overalltyper
                         _createdSymbolTabe.WrongTypeError(variableName, Attributes.Item3.Name);
                     }
+
+                    if (node.InVariable != null)
+                    {
+                        inVariableType = _createdSymbolTabe.RetrieveSymbol(node.InVariable.Name);
+                        if (inVariableType != variableType)
+                        {
+                            //error  with invariable
+                        }
+                    }
                 }
+
+
             }
-            /*if (node.InVariable != null)
-            {
-                inVariableType = _createdSymbolTabe.RetrieveSymbol(node.InVariable.Name);
-                if (!(inVariableType == variableType))
-                {
-                    // type error
-                    _createdSymbolTabe.WrongTypeError(node.InVariable.Name, variableType.ToString());
-                }
-            }
-            */
             VisitChildren(node);
         }
 
@@ -295,17 +316,21 @@ namespace Compiler.AST
             bool fromIsColl = isCollectionInQuery;
             if (fromIsColl)
             {
-                if (node.Parent is DeclarationNode expNode)
+                if (node.Parent is DeclarationNode dclNode)
                 {
                     node.Type = collectionNameType.ToString();
+                }
+                else if (node.Parent is ExpressionNode expNode)
+                {
+                    node.Type = collectionNameType.ToString();
+                    expNode.QueryName = node.Variable;
+                    expNode.OverAllType = collectionNameType;
                 }
             }
             else
             {
                 //TODO correct error message pls
             }
-
-
             if (node.WhereCondition != null)
             {
                 Visit(node.WhereCondition);
@@ -854,31 +879,39 @@ namespace Compiler.AST
 
         public override void Visit(ReturnNode node)
         {
+            VisitChildren(node);
             _createdSymbolTabe.SetCurrentNode(node);
+            AllType? funcType = _createdSymbolTabe.RetrieveSymbol(node.FuncName, out bool FuncTypeCollection, false);
+            AllType? returnType = null;
+            bool ReturnTypeCollection = false;
 
-            AllType? funcType = _createdSymbolTabe.RetrieveSymbol(node.Parent.Name, out bool ReturnTypeCollection, false);
-            AllType? returnType = _createdSymbolTabe.RetrieveSymbol(node.LeftmostChild.Name, out bool FunctionTypeCollection, false);
-
+            if (node.LeftmostChild is ExpressionNode expNode && expNode.ExpressionParts != null)
+            {
+                if (expNode.QueryName != null)
+                {
+                    _createdSymbolTabe.RetrieveSymbol(expNode.QueryName, out bool returnTypeCollection, false);
+                    ReturnTypeCollection = returnTypeCollection;
+                }
+                returnType = expNode.OverAllType;
+            }
             if (funcType == AllType.VOID)
             {
-                //calling return on void function error 
+                _createdSymbolTabe.FunctionIsVoidError(node.FuncName);
             }
-            if (ReturnTypeCollection == FunctionTypeCollection)
+            if (ReturnTypeCollection == FuncTypeCollection)
+            // går ikke derind, function bool er false, wait for fix
             {
-                if (funcType == returnType)
-                {
-
-                }
-                else
+                if (!(funcType == returnType))
                 {
                     //ERROR, conflicting function and return type
+                    _createdSymbolTabe.WrongTypeError(node.FuncName, node.Name);
                 }
             }
             else
             {
                 //ERROR, one is collection, other isn't
+                _createdSymbolTabe.WrongTypeErrorCollection(node.FuncName, node.Name);
             }
-            VisitChildren(node);
         }
 
         public override void Visit(ForLoopNode node)
@@ -1020,10 +1053,7 @@ namespace Compiler.AST
         public override void Visit(RunQueryNode node)
         {
             _createdSymbolTabe.SetCurrentNode(node);
-
-
-
-            _createdSymbolTabe.NotImplementedError(node);
+            
 
         }
 

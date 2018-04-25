@@ -654,6 +654,12 @@ namespace Compiler.AST.SymbolTable
             Error();
         }
 
+        public void WrongTypeErrorCollection(string variable1, string variable2)
+        {
+            Console.WriteLine($"Variable {variable1} and {variable2} are missmatch of collection. Line number {GetLineNumber()}");
+            Error();
+        }
+
         public void WrongTypeConditionError()
         {
             Console.WriteLine($"There is a type mismatch in the condition on Line number {GetLineNumber()}");
@@ -733,6 +739,12 @@ namespace Compiler.AST.SymbolTable
         public void NonPrintableError()
         {
             Console.WriteLine($"one or more provided variables or constants is not legal to print. {GetLineNumber()}");
+            Error();
+        }
+
+        public void FunctionIsVoidError(string FunctionName)
+        {
+            Console.WriteLine($"Trying to return to void function: {FunctionName}, at {GetLineNumber()}");
             Error();
         }
     }
