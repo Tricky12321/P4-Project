@@ -585,6 +585,16 @@ namespace Compiler.AST.SymbolTable
             }
         }
 
+        public List<FunctionParameterEntry> GetParameterTypes(string FunctionName) {
+            var Output = new List<FunctionParameterEntry>();
+            if (_functionTable.ContainsKey(FunctionName))
+            {
+                foreach (var parameter in _functionTable[FunctionName]) {
+                    Output.Add(parameter.Value);
+                }
+            }
+            return Output;
+        }
 
         // -------------------------------------------------------
         // ERRORS:
