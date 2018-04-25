@@ -32,10 +32,8 @@ namespace Compiler
                     return AllType.EDGE;
                 case "vertex":
                     return AllType.VERTEX;
-                case "collection":
-                    return AllType.COLLECTION;
             }
-            throw new Exception("Unknown type");
+            return AllType.UNKNOWNTYPE;
         }
 
         public static bool IsLinux

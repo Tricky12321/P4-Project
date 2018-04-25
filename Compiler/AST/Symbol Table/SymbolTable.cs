@@ -24,6 +24,7 @@ namespace Compiler.AST.SymbolTable
             "add","collection","run","with","extend","predicate","pop","push","peek","enqueue",
             "dequeue","extractmin","extractmax","print","inf","true","false","isin"
         };
+
         private uint _globalDepth
         {
             get
@@ -238,6 +239,13 @@ namespace Compiler.AST.SymbolTable
         {
             bool IsCollection;
             return GetAttributeType(name, type, out IsCollection);
+        }
+
+        public bool IsExtended(string Name, AllType Class) {
+            if (IsClass(Class) && _classesTable[Class].ContainsKey(Name)) {
+                return true;
+            }
+            return false;
         }
 
         /// <summary>

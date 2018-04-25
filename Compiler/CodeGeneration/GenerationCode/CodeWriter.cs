@@ -22,30 +22,32 @@ namespace Compiler.CodeGeneration.GenerationCode
         private string _functions = "*****FUNCTIONS*****";
         private string _global = "*****GLOBAL*****";
         private string _extend = "//*****EXTEND*****";
-        public CodeWriter()
-        {
-            
-        }
 
-        public void FillMainBody() {
+        public CodeWriter() { }
+
+        public void FillMainBody()
+        {
             string text = File.ReadAllText(_programFile);
             text = text.Replace(_mainBody, MainBody.ToString());
             File.WriteAllText(_programFile, text);
         }
 
-        public void FillFunctions() {
+        public void FillFunctions()
+        {
             string text = File.ReadAllText(_programFile);
             text = text.Replace(_functions, Functions.ToString());
             File.WriteAllText(_programFile, text);
         }
 
-        public void FillGlobals() {
+        public void FillGlobals()
+        {
             string text = File.ReadAllText(_programFile);
             text = text.Replace(_global, "");
             File.WriteAllText(_programFile, text);
         }
 
-        public void FillExtends() {
+        public void FillExtends()
+        {
             // Graph Extensions
             string text = File.ReadAllText(_graphClassFile);
             text = text.Replace(_extend, GraphExtends.ToString());
@@ -60,7 +62,8 @@ namespace Compiler.CodeGeneration.GenerationCode
             File.WriteAllText(_vertexClassFile, text);
         }
 
-        public void FillAll() {
+        public void FillAll()
+        {
             FillMainBody();
             FillFunctions();
             FillGlobals();
