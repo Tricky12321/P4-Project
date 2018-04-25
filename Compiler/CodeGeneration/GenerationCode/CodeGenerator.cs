@@ -13,6 +13,7 @@ namespace Compiler.CodeGeneration.GenerationCode
 {
     public class CodeGenerator : AstVisitorBase
     {
+        private static int functionID = 0;
         public StringBuilder MainBody;
         private StringBuilder _currentStringBuilder;
         private StringBuilder Global = new StringBuilder();
@@ -318,8 +319,14 @@ namespace Compiler.CodeGeneration.GenerationCode
 
         public override void Visit(SelectAllQueryNode node)
         {
-            _currentStringBuilder.Append($"_fun{node.ID}();\nCollection<{ResolveTypeToCS(node.Type_enum)}> _fun{node.ID}(){{\n");
+            _currentStringBuilder.Append($"_funSelectAllQuery{node.ID}{functionID}();\nCollection<{ResolveTypeToCS(node.Type_enum)}> _funSelectAllQuery{node.ID}{functionID++}(){{\n");
             _currentStringBuilder.Append($"Collection<{ResolveTypeToCS(node.Type_enum)}> _col{node.ID} = new Collection<{ResolveTypeToCS(node.Type_enum)}>();\n");
+
+            if (node.Type == "void")
+            {
+                throw new NotImplementedException("Typen skal gerne sættes i typechecker.");
+            }
+            _currentStringBuilder.Append($"{ResolveTypeToCS(node.Type_enum)} _val{node.ID};\n");
 
             _currentStringBuilder.Append($"foreach (var place in {node.Variable}){{\n");
             if (node.WhereCondition != null)
@@ -340,11 +347,10 @@ namespace Compiler.CodeGeneration.GenerationCode
 
         public override void Visit(SelectQueryNode node)
         {
-            _currentStringBuilder.Append($"_fun{node.ID}();\n{ResolveTypeToCS(node.Type_enum)} _fun{node.ID}(){{\n");
+            _currentStringBuilder.Append($"_funSelectQuery{node.ID}{functionID}();\n{ResolveTypeToCS(node.Type_enum)} _funSelectQuery{node.ID}{functionID++}(){{\n");
             if(node.Type == "void")
             {
-                
-                throw new NotImplementedException();
+                throw new NotImplementedException("Typen skal gerne sættes i typechecker.");
             }
             _currentStringBuilder.Append($"{ResolveTypeToCS(node.Type_enum)} _val{node.ID};\n");
 
@@ -363,6 +369,22 @@ namespace Compiler.CodeGeneration.GenerationCode
                 _currentStringBuilder.Append("}\n");
             }
             _currentStringBuilder.Append($"return _val{node.ID};\n}}");
+        }
+
+        public override void Visit(ExtractMaxQueryNode node)
+        {
+            _currentStringBuilder.Append($"_funExtMax{node.ID}{functionID}();\n{ResolveTypeToCS(node.Type_enum)} _funExtMax{node.ID}{functionID++}(){{\n");
+            _currentStringBuilder.Append($"{ResolveTypeToCS(node.Type_enum)} _val{node.ID};\n");
+
+
+            Console.WriteLine(_currentStringBuilder);
+        }
+
+        public override void Visit(ExtractMinQueryNode node)
+        {
+            _currentStringBuilder.Append($"_funExtMin{node.ID}{functionID}();\n{ResolveTypeToCS(node.Type_enum)} _funExtMin{node.ID}{functionID++}(){{\n");
+            _currentStringBuilder.Append($"{ResolveTypeToCS(node.Type_enum)} _val{node.ID};\n");
+
         }
 
         public override void Visit(WhereNode node)
@@ -553,16 +575,6 @@ namespace Compiler.CodeGeneration.GenerationCode
             _currentStringBuilder.Append($"{node.VariableCollection}.Enqueue(");
             node.VariableToAdd.Accept(this);
             _currentStringBuilder.Append($");\n");
-        }
-
-        public override void Visit(ExtractMaxQueryNode node)
-        {
-
-        }
-
-        public override void Visit(ExtractMinQueryNode node)
-        {
-
         }
 
         public override void Visit(PopQueryNode node)
