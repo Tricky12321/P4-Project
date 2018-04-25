@@ -173,6 +173,7 @@ namespace Compiler.AST.SymbolTable
             {
                 SymbolTable.EnterSymbol(functionName, type);
                 SymbolTable.OpenScope(node.Name);
+
                 foreach (ParameterNode parameter in node.Parameters)
                 {
                     parameter.Accept(this);
