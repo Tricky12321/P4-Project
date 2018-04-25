@@ -95,12 +95,18 @@ namespace Compiler.AST
                 foreach (Tuple<VariableAttributeNode, string, ExpressionNode> Attributes in node.Attributes)
                 {
                     variableName = Attributes.Item1.Name;
-                    if(Attributes.Item1 is AttributeNode attNode)
+                    if (Attributes.Item1 is AttributeNode attNode)
                     {
                         //skal finde ud af hvad der er extended.
-                        AllType? type = _createdSymbolTabe.RetrieveSymbol(Attributes.Item1.ClassVariableName);
-
-                        _createdSymbolTabe.GetAttributeType(variableName, type);
+                        AllType? extentiontype = _createdSymbolTabe.RetrieveSymbol(Attributes.Item1.ClassVariableName);
+                        if (extentiontype != null)
+                        {
+                            if (_createdSymbolTabe.IsExtended(variableName, extentiontype ?? default(AllType)))
+                            {
+                                AllType? attributeType = _createdSymbolTabe.GetAttributeType(variableName, extentiontype ?? default(AllType));
+                                
+                            }
+                        }
                     }
                     else
                     {
@@ -121,7 +127,7 @@ namespace Compiler.AST
                     if (node.InVariable != null)
                     {
                         inVariableType = _createdSymbolTabe.RetrieveSymbol(node.InVariable.Name);
-                        if(inVariableType != variableType)
+                        if (inVariableType != variableType)
                         {
                             //error  with invariable
                         }
@@ -775,9 +781,9 @@ namespace Compiler.AST
             AllType? returnType = null;
             bool ReturnTypeCollection = false;
 
-            if(node.LeftmostChild is ExpressionNode expNode && expNode.ExpressionParts != null)
+            if (node.LeftmostChild is ExpressionNode expNode && expNode.ExpressionParts != null)
             {
-                if(expNode.QueryName != null)
+                if (expNode.QueryName != null)
                 {
                     _createdSymbolTabe.RetrieveSymbol(expNode.QueryName, out bool returnTypeCollection, false);
                     ReturnTypeCollection = returnTypeCollection;
