@@ -137,50 +137,58 @@ namespace Compiler.AST
         public override void Visit(ExtractMaxQueryNode node)
         {
             _createdSymbolTabe.SetCurrentNode(node);
-            if (node.Parent != null && node.Parent is ExpressionNode)
+
+            AllType? collectionNameType = _createdSymbolTabe.RetrieveSymbol(node.Variable, out bool isCollectionInQuery, false);
+            string attriName;
+            AllType? attributeType = AllType.UNKNOWNTYPE;
+            bool attriIsIntOrDeci = false;
+            if (isCollectionInQuery)
             {
-                AllType? collectionNameType = _createdSymbolTabe.RetrieveSymbol(node.Variable, out bool isCollectionInQuery, false);
-                string attriName;
-                AllType? attributeType = AllType.UNKNOWNTYPE;
-                bool attriIsIntOrDeci = false;
-                if (isCollectionInQuery)
+                if (node.Attribute != null)
                 {
-                    if (node.Attribute != null)
+                    attriName = node.Attribute.Trim('\'');
+                    if (collectionNameType != null && collectionNameType != AllType.INT && collectionNameType != AllType.DECIMAL)
                     {
-                        attriName = node.Attribute.Trim('\'');
-                        if (collectionNameType != AllType.INT && collectionNameType != AllType.DECIMAL)
-                        {
-                            _createdSymbolTabe.ExtractCollNotIntOrDeciError();
-                        }
-                        else
+
+                        if (_createdSymbolTabe.IsExtended(attriName, collectionNameType ?? default(AllType)))
                         {
                             attributeType = _createdSymbolTabe.GetAttributeType(attriName, collectionNameType ?? default(AllType));
                         }
-                        if (!attriIsIntOrDeci)
+                        else
                         {
-
+                            //the class is not extended with given attribute
                         }
+
                     }
                     else
                     {
-                        //attriIsIntOrDeci = attributeType == AllType.DECIMAL || attributeType == AllType.INT;
+                        _createdSymbolTabe.ExtractCollNotIntOrDeciError();
                     }
-                }
-                bool collIsIntOrDeci = isCollectionInQuery && (collectionNameType == AllType.DECIMAL || collectionNameType == AllType.INT);
-                bool FromIsColl = isCollectionInQuery;
-                if (collIsIntOrDeci || (FromIsColl && attriIsIntOrDeci))
-                {
-                    if (node.Parent is ExpressionNode expNode)
+                    if (!attriIsIntOrDeci)
                     {
-                        expNode.OverAllType = collectionNameType;
+
                     }
-                    node.Type = collectionNameType.ToString();
                 }
                 else
                 {
-                    //correct error message pls
+                    //attriIsIntOrDeci = attributeType == AllType.DECIMAL || attributeType == AllType.INT;
                 }
             }
+            bool collIsIntOrDeci = isCollectionInQuery && (collectionNameType == AllType.DECIMAL || collectionNameType == AllType.INT);
+            bool FromIsColl = isCollectionInQuery;
+            if (collIsIntOrDeci || (FromIsColl && attriIsIntOrDeci))
+            {
+                if (node.Parent is ExpressionNode expNode)
+                {
+                    expNode.OverAllType = collectionNameType;
+                }
+                node.Type = collectionNameType.ToString();
+            }
+            else
+            {
+                //correct error message pls
+            }
+
 
             if (node.WhereCondition != null)
             {
