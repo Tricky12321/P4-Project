@@ -95,7 +95,17 @@ namespace Compiler.AST
                 foreach (Tuple<VariableAttributeNode, string, ExpressionNode> Attributes in node.Attributes)
                 {
                     variableName = Attributes.Item1.Name;
-                    variableType = _createdSymbolTabe.RetrieveSymbol(variableName);
+                    if(Attributes.Item1 is AttributeNode attNode)
+                    {
+                        //skal finde ud af hvad der er extended.
+                        AllType? type = _createdSymbolTabe.RetrieveSymbol(Attributes.Item1.ClassVariableName);
+
+                        _createdSymbolTabe.GetAttributeType(variableName, type);
+                    }
+                    else
+                    {
+                        variableType = _createdSymbolTabe.RetrieveSymbol(variableName);
+                    }
 
                     if (Attributes.Item3 != null)
                     {
@@ -104,21 +114,22 @@ namespace Compiler.AST
 
                     if (Attributes.Item3.OverAllType != variableType)
                     {
-                        //type error
+                        //type between varible and overalltyper
                         _createdSymbolTabe.WrongTypeError(variableName, Attributes.Item3.Name);
                     }
+
+                    if (node.InVariable != null)
+                    {
+                        inVariableType = _createdSymbolTabe.RetrieveSymbol(node.InVariable.Name);
+                        if(inVariableType != variableType)
+                        {
+                            //error  with invariable
+                        }
+                    }
                 }
+
+
             }
-            /*if (node.InVariable != null)
-            {
-                inVariableType = _createdSymbolTabe.RetrieveSymbol(node.InVariable.Name);
-                if (!(inVariableType == variableType))
-                {
-                    // type error
-                    _createdSymbolTabe.WrongTypeError(node.InVariable.Name, variableType.ToString());
-                }
-            }
-            */
             VisitChildren(node);
         }
 
@@ -203,6 +214,7 @@ namespace Compiler.AST
                 {
                     node.Type = collectionNameType.ToString();
                     expNode.QueryName = node.Variable;
+                    expNode.OverAllType = collectionNameType;
                 }
             }
             else
@@ -765,15 +777,19 @@ namespace Compiler.AST
 
             if(node.LeftmostChild is ExpressionNode expNode && expNode.ExpressionParts != null)
             {
-                _createdSymbolTabe.RetrieveSymbol(expNode.QueryName, out bool returnTypeCollection, false);
-                ReturnTypeCollection = returnTypeCollection;
+                if(expNode.QueryName != null)
+                {
+                    _createdSymbolTabe.RetrieveSymbol(expNode.QueryName, out bool returnTypeCollection, false);
+                    ReturnTypeCollection = returnTypeCollection;
+                }
                 returnType = expNode.OverAllType;
             }
-            else if (funcType == AllType.VOID)
+            if (funcType == AllType.VOID)
             {
                 _createdSymbolTabe.FunctionIsVoidError(node.FuncName);
             }
-            else if (ReturnTypeCollection && FuncTypeCollection)
+            if (ReturnTypeCollection == FuncTypeCollection)
+            // går ikke derind, function bool er false, wait for fix
             {
                 if (!(funcType == returnType))
                 {

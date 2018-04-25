@@ -16,6 +16,7 @@ namespace Compiler.AST
     internal class AstBuilder : GiraphParserBaseVisitor<AbstractNode>
     {
         private string _funcName;
+
         public AbstractNode root;
         public override AbstractNode VisitStart([NotNull] GiraphParser.StartContext context)
         {
