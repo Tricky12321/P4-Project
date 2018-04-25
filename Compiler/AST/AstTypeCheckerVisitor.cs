@@ -219,12 +219,14 @@ namespace Compiler.AST
                 if (node.Parent is DeclarationNode dclNode)
                 {
                     node.Type = collectionNameType.ToString();
+                    node.Name = dclNode.Name;
                 }
                 else if (node.Parent is ExpressionNode expNode)
                 {
                     node.Type = collectionNameType.ToString();
                     expNode.QueryName = node.Variable;
                     expNode.OverAllType = collectionNameType;
+                    expNode.Name = node.Variable;
                 }
             }
             else
@@ -249,6 +251,7 @@ namespace Compiler.AST
                     if (node.Parent is ExpressionNode expNode)
                     {
                         expNode.OverAllType = collectionNameType;
+                        expNode.Name = node.Variable;
                     }
                     node.Type = collectionNameType.ToString();
                 }
@@ -315,6 +318,7 @@ namespace Compiler.AST
                     if (node.Parent is ExpressionNode expNode)
                     {
                         expNode.OverAllType = collectionNameType;
+                        expNode.Name = node.Variable;
                     }
                     node.Type = collectionNameType.ToString();
                 }
@@ -370,6 +374,7 @@ namespace Compiler.AST
                 if (node.Parent is ExpressionNode expNode)
                 {
                     expNode.OverAllType = collection;
+                    expNode.Name = node.Variable;
                 }
                 node.Type = collection.ToString();
             }
@@ -954,6 +959,20 @@ namespace Compiler.AST
         {
             _createdSymbolTabe.SetCurrentNode(node);
             
+            if(node.Children != null)
+            {
+                foreach (AbstractNode child in node.Children)
+                {
+                    if(child is VariableNode varNode)
+                    {
+
+                    }
+                    else if (child is ConstantNode constNode)
+                    {
+
+                    }
+                }
+            }
 
         }
 
