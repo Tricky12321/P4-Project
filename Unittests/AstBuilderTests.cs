@@ -4,7 +4,6 @@ using Compiler.AST;
 using Compiler.CodeGeneration;
 using Compiler.AST.Nodes;
 using Compiler.AST.SymbolTable;
-using System.Diagnostics;
 using Compiler;
 using System.Collections.Generic;
 using System.Linq;
@@ -76,11 +75,32 @@ namespace Unittests
         }
 
 
-        [TestCase("Main", AllType.VOID)]
-        [TestCase("Test", AllType.VOID)]
-        [TestCase("TestFunc", AllType.BOOL)]
-        [TestCase("TestFuncTest",AllType.GRAPH)]
-        public void CheckFunctionExist(string FunctionName, AllType ExpectedType) {
+        [TestCase("Main")]
+        [TestCase("Test")]
+        [TestCase("TestFunc")]
+        [TestCase("TestFuncTest")]
+        public void CheckFunctionExist(string FunctionName) {
+            var Counter = AST.Children.Where(x => x is FunctionNode).ToList()
+                             .Where(x => (x as FunctionNode).Name == FunctionName)
+                             .Count();
+            if (Counter == 1) {
+                Assert.Pass();
+            } else {
+				Assert.Fail();
+            }
+        }
+
+        [TestCase("d", AllType.DECIMAL, "Main")]
+        [TestCase("i", AllType.INT, "Main")]
+        [TestCase("vertexColl",AllType.VERTEX, "Main")]
+        public void CheckDeclarationNode(string VariableName, AllType ExpectedType, string Function) {
+            var Start = AST.Children.Where(x => (x is FunctionNode) && (x as FunctionNode).Name == Function).First();
+            var Next = Start.Children.Where(x => ((x is VariableDclNode) || (x is DeclarationNode)) && x.Name == VariableName).First();
+            if (Next.Type_enum == ExpectedType) {
+                Assert.Pass();
+            } else {
+                Assert.Fail();
+            }
             
         }
 
