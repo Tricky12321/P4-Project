@@ -223,6 +223,7 @@ namespace Compiler.AST.SymbolTable
         /// <param name="type">Type.</param>
         public AllType? GetAttributeType(string name, AllType type, out bool IsCollection)
         {
+            name = name.Trim('\'');
             List<string> names = new List<string>();
             names.Add(name);
             AllType? output = RetrieveTypeFromClasses(names, type, out IsCollection, false);
@@ -237,11 +238,13 @@ namespace Compiler.AST.SymbolTable
         /// <param name="type">Type.</param>
         public AllType? GetAttributeType(string name, AllType type)
         {
+            name = name.Trim('\'');
             bool IsCollection;
             return GetAttributeType(name, type, out IsCollection);
         }
 
         public bool IsExtended(string Name, AllType Class) {
+            Name = Name.Trim('\'');
             if (IsClass(Class) && _classesTable[Class].ContainsKey(Name)) {
                 return true;
             }
