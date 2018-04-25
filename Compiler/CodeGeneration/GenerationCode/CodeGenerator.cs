@@ -372,7 +372,7 @@ namespace Compiler.CodeGeneration.GenerationCode
             {
                 _currentStringBuilder.Append("}\n");
             }
-            _currentStringBuilder.Append($"return _val{node.ID};\n}}\n");
+            _currentStringBuilder.Append($"return _val{node.ID};\n}}\n\n");
         }
 
         public override void Visit(ExtractMaxQueryNode node)
@@ -673,7 +673,7 @@ namespace Compiler.CodeGeneration.GenerationCode
 
         public override void Visit(VariableAttributeNode node)
         {
-
+            _currentStringBuilder.Append($"{node.Name.Replace("'", "")}");
         }
 
         public override void Visit(VariableNode node)
