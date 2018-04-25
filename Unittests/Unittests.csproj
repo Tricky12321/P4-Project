@@ -31,7 +31,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AstNodesTests.cs" />
+    <Compile Include="AstBuilderTests.cs" />
     <Compile Include="SymbolTableTests.cs" />
     <Compile Include="TypeCheckerTests.cs" />
     <Compile Include="CodeGenerationTests.cs" />
@@ -39,7 +39,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-    <None Include="kode.giraph" />
+    <None Include="kode.giraph">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="kode_ast.giraph">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Compiler\Compiler.csproj">
