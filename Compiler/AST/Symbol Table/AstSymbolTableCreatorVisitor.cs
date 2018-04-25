@@ -90,8 +90,8 @@ namespace Compiler.AST.SymbolTable
         //All the visit stuff-----------------------------------------
         public override void Visit(VariableDclNode node)
         {
-            var name = node.Name;
             SymbolTable.SetCurrentNode(node);
+            var name = node.Name;
             if (CheckAlreadyDeclared(node.Name))
             {
                 SymbolTable.EnterSymbol(node.Name, node.Type_enum);
