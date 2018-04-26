@@ -15,6 +15,8 @@ namespace Compiler.AST.SymbolTable
         private uint _ifStatementCounter = 0;
         private uint _elseIfStatementCounter = 0;
         private uint _elseStatementCounter = 0;
+        private uint _whereStatementCounter = 0;
+        private uint _predicateStatementCounter = 0;
 
         private BlockType _loopType;
         public uint depth;
@@ -93,6 +95,9 @@ namespace Compiler.AST.SymbolTable
                 case BlockType.ElseStatement:
                     prefix = "[ELSE]";
                     break;
+                case BlockType.WhereStatement:
+                    prefix = "[WHERE]";
+                    break;
             }
             // Add the prefix, to the prefix list, this is to better identify scopes later, and makes it easier to debug
             _prefixes.Add(prefix+GetCounter(type));
@@ -124,6 +129,8 @@ namespace Compiler.AST.SymbolTable
                     return _elseIfStatementCounter++;
                 case BlockType.ElseStatement:
                     return _elseStatementCounter++;
+                case BlockType.WhereStatement:
+                    return _whereStatementCounter++;
             }
             return 0;
         }

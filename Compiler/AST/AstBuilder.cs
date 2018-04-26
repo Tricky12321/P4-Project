@@ -43,7 +43,7 @@ namespace Compiler.AST
             {
                 foreach (var Parameter in context.formalParams().formalParam())
                 {
-                    var Type = Parameter.allType().GetText();  // Parameter Type
+                    var Type = Parameter.allTypeWithColl().GetText();  // Parameter Type
                     var Name = Parameter.variable().GetText(); // Parameter Name
 
                     FNode.AddParameter(Type, Name, context.Start.Line, context.Start.Column);
@@ -236,7 +236,7 @@ namespace Compiler.AST
         public override AbstractNode VisitExpression([NotNull] GiraphParser.ExpressionContext context)
         {
             ExpressionNode ExpNode = new ExpressionNode(context.Start.Line, context.Start.Column);
-            ExpNode.ExpressionParts = (EvaluateExpression(context));
+            ExpNode.ExpressionParts = EvaluateExpression(context);
             //ExpNode.AdoptChildren(Visit(context.GetChild(0)));
 
             return ExpNode;
@@ -607,7 +607,7 @@ namespace Compiler.AST
                 foreach (var Param in context.formalParams().formalParam())
                 {
                     string ParameterName = Param.variable().GetText();
-                    string ParameterType = Param.allType().GetText();
+                    string ParameterType = Param.allTypeWithColl().GetText();
                     // Add them to the paramter list
                     PNode.AddParameter(ParameterType, ParameterName, context.Start.Line, context.Start.Column);
                 }
@@ -663,7 +663,7 @@ namespace Compiler.AST
         public override AbstractNode VisitEnqueueOP([NotNull] GiraphParser.EnqueueOPContext context)
         {
             EnqueueQueryNode EnqueueNode = new EnqueueQueryNode(context.Start.Line, context.Start.Column);
-            EnqueueNode.VariableToAdd = Visit(context.varOrConst());
+            EnqueueNode.VariableToAdd = Visit(context.expression());
             EnqueueNode.VariableCollection = context.variable().GetText();
             return EnqueueNode;
         }
@@ -685,7 +685,7 @@ namespace Compiler.AST
         public override AbstractNode VisitPushOP([NotNull] GiraphParser.PushOPContext context)
         {
             PushQueryNode PushNode = new PushQueryNode(context.Start.Line, context.Start.Column);
-            PushNode.VariableToAdd = Visit(context.varOrConst());
+            PushNode.VariableToAdd = Visit(context.expression());
             PushNode.VariableCollection = context.variable().GetText();
             return PushNode;
         }
@@ -776,12 +776,26 @@ namespace Compiler.AST
             }
             else if (contextInside.forConditionStart().expression() != null)
             {
-
-                ForLoop.ToValueOperation = Visit(contextInside.forConditionStart().expression());
+                ForLoop.VariableDeclaration = Visit(contextInside.forConditionStart().expression());
+                ForLoop.ToValueOperation = Visit(contextInside.expression(0));
             }
-            boolComparison.Right = Visit(contextInside.expression(0));
-            ForLoop.Increment = Visit(contextInside.expression(1));
 
+            boolComparison.Right = Visit(contextInside.expression(0));
+            if (contextInside.expression(1) != null)
+            {
+                ForLoop.Increment = Visit(contextInside.expression(1));
+            }
+            else
+            {
+                ExpressionNode expNode = new ExpressionNode(context.Start.Line, context.Start.Column);
+                ConstantNode conNode = new ConstantNode(context.Start.Line, context.Start.Column);
+                conNode.Type = "INT";
+                conNode.Value = "1";
+                expNode.ExpressionParts.Add(conNode);
+
+                ForLoop.Increment = expNode;
+                //ForLoop.Increment
+            }
 
             // Visit all the children of the Codeblock associated with the ForLoop
             foreach (var Child in context.codeBlock().codeBlockContent())
@@ -989,16 +1003,17 @@ namespace Compiler.AST
             return VariableNode;
         }
 
-		public override AbstractNode VisitPredicateCall([NotNull] GiraphParser.PredicateCallContext context)
-		{
+        public override AbstractNode VisitPredicateCall([NotNull] GiraphParser.PredicateCallContext context)
+        {
             PredicateCall predicateCall = new PredicateCall(context.Start.Line, context.Start.Column);
             predicateCall.Name = context.variable().GetText();
 
-            foreach (var item in context.parameters().varOrConst()) {
+            foreach (var item in context.parameters().varOrConst())
+            {
                 predicateCall.AdoptChildren(Visit(item));
             }
 
             return predicateCall;
-		}
-	}
+        }
+    }
 }

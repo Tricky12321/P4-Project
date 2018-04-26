@@ -105,7 +105,8 @@ namespace Compiler.AST
                             {
                                 AllType? attributeType = _createdSymbolTabe.GetAttributeType(variableName, extentiontype ?? default(AllType));
 
-                                if(!(attributeType == extentiontype)){
+                                if (!(attributeType == extentiontype))
+                                {
                                     //type wrong
                                     _createdSymbolTabe.WrongTypeError(Attributes.Item1.Name, Attributes.Item1.ClassVariableName);
                                 }
@@ -324,12 +325,14 @@ namespace Compiler.AST
                 if (node.Parent is DeclarationNode dclNode)
                 {
                     node.Type = collectionNameType.ToString();
+                    node.Name = dclNode.Name;
                 }
                 else if (node.Parent is ExpressionNode expNode)
                 {
                     node.Type = collectionNameType.ToString();
                     expNode.QueryName = node.Variable;
                     expNode.OverAllType = collectionNameType;
+                    expNode.Name = node.Variable;
                 }
             }
             else
@@ -354,6 +357,7 @@ namespace Compiler.AST
                     if (node.Parent is ExpressionNode expNode)
                     {
                         expNode.OverAllType = collectionNameType;
+                        expNode.Name = node.Variable;
                     }
                     node.Type = collectionNameType.ToString();
                 }
@@ -420,6 +424,7 @@ namespace Compiler.AST
                     if (node.Parent is ExpressionNode expNode)
                     {
                         expNode.OverAllType = collectionNameType;
+                        expNode.Name = node.Variable;
                     }
                     node.Type = collectionNameType.ToString();
                 }
@@ -475,6 +480,7 @@ namespace Compiler.AST
                 if (node.Parent is ExpressionNode expNode)
                 {
                     expNode.OverAllType = collection;
+                    expNode.Name = node.Variable;
                 }
                 node.Type = collection.ToString();
             }
@@ -927,7 +933,11 @@ namespace Compiler.AST
         {
             _createdSymbolTabe.SetCurrentNode(node);
             _createdSymbolTabe.OpenScope(BlockType.ForLoop);
-            node.Increment.Accept(this);
+
+            if (node.Increment != null)
+            {
+                node.Increment.Accept(this);
+            }
             node.VariableDeclaration.Accept(this);
             node.ToValueOperation.Accept(this);
             AllType? varDclNodeType;
@@ -940,6 +950,7 @@ namespace Compiler.AST
                     _createdSymbolTabe.WrongTypeConditionError();
                 }
             }
+
             VisitChildren(node);
             _createdSymbolTabe.CloseScope();
         }
@@ -1060,7 +1071,37 @@ namespace Compiler.AST
         public override void Visit(RunQueryNode node)
         {
             _createdSymbolTabe.SetCurrentNode(node);
-            
+            List<FunctionParameterEntry> test = _createdSymbolTabe.GetParameterTypes(node.FunctionName);
+            test.OrderBy(x => x.ID);
+            int i = 0;
+            AllType placeholderType = 0;
+            AllType? varType = null;
+
+            if (node.Children != null)
+            {
+                foreach (AbstractNode child in node.Children)
+                {
+                    if (child is VariableNode varNode)
+                    {
+                        varType = _createdSymbolTabe.RetrieveSymbol(child.Name);
+                        placeholderType = varType ?? default(AllType);
+                        if (placeholderType != test[i].Type)
+                        {
+                            //type error
+                            _createdSymbolTabe.RunFunctionError(child.Name, test[i].Name);
+                        }
+                    }
+
+                    else if (child is ConstantNode constNode)
+                    {
+                        if (child.Type_enum != test[i].Type)
+                        {
+                            _createdSymbolTabe.RunFunctionError(child.Name, test[i].Name);
+                            //type error
+                        }
+                    }
+                }
+            }
 
         }
 

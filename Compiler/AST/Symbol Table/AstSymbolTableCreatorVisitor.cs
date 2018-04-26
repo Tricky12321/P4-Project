@@ -301,7 +301,10 @@ namespace Compiler.AST.SymbolTable
         public override void Visit(WhereNode node)
         {
             SymbolTable.SetCurrentNode(node);
+            SymbolTable.OpenScope(BlockType.WhereStatement);
+            SymbolTable.AddClassVariablesToScope(node.AttributeClass);
             VisitChildren(node);
+            SymbolTable.CloseScope();
         }
 
         public override void Visit(ExtendNode node)
@@ -390,6 +393,7 @@ namespace Compiler.AST.SymbolTable
             CheckDeclared(node.Variable);
             if (node.WhereCondition != null)
             {
+                (node.WhereCondition as WhereNode).AttributeClass = SymbolTable.RetrieveSymbol(node.Variable) ?? default(AllType);
                 node.WhereCondition.Accept(this);
             }
         }
@@ -440,6 +444,9 @@ namespace Compiler.AST.SymbolTable
             if (CheckAlreadyDeclared(node.Name))
             {
                 SymbolTable.EnterSymbol(node.Name, node.Type_enum, node.CollectionDcl);
+            }
+            if (node.Assignment != null) {
+                node.Assignment.Accept(this);
             }
         }
 
@@ -501,7 +508,10 @@ namespace Compiler.AST.SymbolTable
                 node.VariableDeclaration.Accept(this);
             }
             node.ToValueOperation.Accept(this);
-            node.Increment.Accept(this);
+
+            if(node.Increment != null){
+                node.Increment.Accept(this);
+            }
             VisitChildren(node);
             SymbolTable.CloseScope();
         }
