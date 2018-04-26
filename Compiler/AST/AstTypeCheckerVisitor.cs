@@ -152,8 +152,12 @@ namespace Compiler.AST
         public override void Visit(PredicateNode node)
         {
             _createdSymbolTabe.SetCurrentNode(node);
-            _createdSymbolTabe.NotImplementedError(node);
+            _createdSymbolTabe.OpenScope(node.Name);
+            List<FunctionParameterEntry> test = _createdSymbolTabe.GetParameterTypes(node.Name);
+
             VisitChildren(node);
+
+            _createdSymbolTabe.CloseScope();
         }
 
         public override void Visit(ExtractMaxQueryNode node)
@@ -355,7 +359,7 @@ namespace Compiler.AST
                 }
                 else
                 {
-                    //TODO correct error message pls
+                    _createdSymbolTabe.FromVarIsNotCollError(node.Variable);
                 }
 
                 if (node.WhereCondition != null)
@@ -994,11 +998,9 @@ namespace Compiler.AST
         {
             _createdSymbolTabe.SetCurrentNode(node);
             AllType? variableType = _createdSymbolTabe.RetrieveSymbol(node.Name);
-            AllType? ok = node.Type_enum;
 
             if (node.Children != null)
             {
-                //VisitChildren(node);
                 foreach (AbstractNode child in node.Children)
                 {
                     if (child is ExpressionNode expNode)
@@ -1065,6 +1067,7 @@ namespace Compiler.AST
         public override void Visit(PredicateCall node)
         {
             _createdSymbolTabe.SetCurrentNode(node);
+            List<FunctionParameterEntry> test = _createdSymbolTabe.GetParameterTypes(node.Name);
 
 
             _createdSymbolTabe.NotImplementedError(node);
