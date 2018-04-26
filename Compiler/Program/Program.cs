@@ -30,7 +30,7 @@ namespace Compiler
             GiraphParser.StartContext CST = BuildCST("kode.giraph");
             AbstractNode AST = BuildAST(CST);
             SymTable SymbolTable = BuildSymbolTable(AST as StartNode);
-            if (Utilities.GetOS() != OS.MacOS) {
+            if (Utilities.GetOS() != OS.MacOS || true) {
 				TypeCheck(SymbolTable, AST as StartNode);
             }
             //PrettyPrint(AST as StartNode);

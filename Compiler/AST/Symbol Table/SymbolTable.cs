@@ -369,43 +369,60 @@ namespace Compiler.AST.SymbolTable
                 // Check if there is any results to get
                 else
                 {
-                    var test = GetName(names[0]);
-                    var SymbolTableIEnum = _symTable[test];
-                    // Check how many names are left to handle
-                    if (names.Count > 1)
+                    var Names = Name.Split('.').ToList();
+                    if (Names.Count() > 1)
                     {
-                        // Remove the first element from the list, since it is now handled 
-                        names.RemoveAt(0);
-                        return RetrieveTypeFromClasses(names, SymbolTableIEnum.Type, out IsCollection, ShowErrors);
+                        var ClassName = Names[0];
+                        Names.RemoveAt(0);
+                        var test = GetName(ClassName);
+                        var type = RetrieveSymbol(ClassName) ?? default(AllType);
+
+                        var output = RetrieveTypeFromClasses(Names, type, out IsCollection);
+                        return output;
                     }
-                    else
-                    {
-                        // There was no more names to handle, so the type is returned
-                        IsCollection = SymbolTableIEnum.IsCollection;
-                        return SymbolTableIEnum.Type;
-                    }
+
+                    IsCollection = false;
+                    return null;
                 }
             }
             else
             {
                 Name = GetName(Name);
-                // Return the type of the variable
-                if (_symTable.ContainsKey(Name))
+                bool match = _symTable.ContainsKey(Name);
+                while (!match)
                 {
-                    var SymTab = _symTable[Name];
-                    IsCollection = SymTab.IsCollection;
-                    return SymTab.Type;
-                }
-                else
-                {
-                    // Write that there was an error, 
-                    if (ShowErrors)
+                    var names = Name.Split('.').ToList();
+                    names.RemoveAt(names.Count - 2);
+                    Name = "";
+                    bool first = true;
+                    foreach (var item in names)
                     {
-                        Console.WriteLine(Name + " is undeclared in this scope! On line:" + GetLineNumber());
+                        if (first)
+                        {
+                            Name += item;
+                            first = false;
+                        }
+                        else
+                        {
+                            Name += "." + item;
+                        }
                     }
-                    IsCollection = false;
-                    return null;
+                    if (_symTable.ContainsKey(Name))
+                    {
+                        match = true;
+                        IsCollection = _symTable[Name].IsCollection;
+                        var type = _symTable[Name].Type;
+                        return type;
+                    }
                 }
+                if (match)
+                {
+                    IsCollection = _symTable[Name].IsCollection;
+                    var type = _symTable[Name].Type;
+                    return type;
+                }
+                IsCollection = false;
+                return null;
             }
         }
 
@@ -783,21 +800,24 @@ namespace Compiler.AST.SymbolTable
             Error();
         }
 
-        public void AddClassVariablesToScope(AllType type)
-        {
-            if (IsClass(type) )
-            {
-                foreach (var item in _classesTable[type])
-                {
-                    EnterSymbol("'"+item.Key+"'", item.Value.Type, item.Value.Collection);
-                }
-            }
-        }
-
         public void RunFunctionError(string actualParameter, string formalParameter)
         {
             Console.WriteLine($"Actual parameter: {actualParameter} and formal parameter: {formalParameter} are a type missmatch");
             Error();
         }
+
+        public void AddClassVariablesToScope(AllType type)
+        {
+            if (IsClass(type))
+            {
+                foreach (var item in _classesTable[type])
+                {
+                    // Enters all attributes 
+                    EnterSymbol("'" + item.Key + "'", item.Value.Type, item.Value.Collection);
+                }
+            }
+        }
+
+
     }
 }
