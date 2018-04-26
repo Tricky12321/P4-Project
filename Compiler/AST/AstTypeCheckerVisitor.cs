@@ -653,7 +653,7 @@ namespace Compiler.AST
         public override void Visit(FunctionNode node)
         {
             _createdSymbolTabe.SetCurrentNode(node);
-            foreach(AbstractNode item in node.Parameters)
+            foreach (AbstractNode item in node.Parameters)
             {
                 item.Accept(this);
             }
@@ -844,41 +844,39 @@ namespace Compiler.AST
 
                             }
                         }
-                        else
-                        {
-                            if (previousType != node.OverAllType)
-                            {//types are different from eachother
-                                if ((previousType == AllType.INT && node.OverAllType == AllType.DECIMAL) || (previousType == AllType.DECIMAL && node.OverAllType == AllType.INT))
-                                {//types are accepted if one is int and one is decimal
-                                    node.OverAllType = AllType.DECIMAL;
-                                    //do nothing, but set overalltype to decimal.
-                                }
-                                else
-                                {//types are different from eachother, and do not allow operates between them
-                                    _createdSymbolTabe.TypeExpressionMismatch();
-                                }
+                        if (previousType != node.OverAllType)
+                        {//types are different from eachother
+                            if ((previousType == AllType.INT && node.OverAllType == AllType.DECIMAL) || (previousType == AllType.DECIMAL && node.OverAllType == AllType.INT))
+                            {//types are accepted if one is int and one is decimal
+                                node.OverAllType = AllType.DECIMAL;
+                                //do nothing, but set overalltype to decimal.
                             }
                             else
-                            {//times are of the same time
-                                //bools to control which types are not allowed to be operated upon, even if same time.
-                                bool bothIsBool = previousType == AllType.BOOL && node.OverAllType == AllType.BOOL;
-                                bool bothIsGraph = previousType == AllType.GRAPH && node.OverAllType == AllType.GRAPH;
-                                bool bothIsVertex = previousType == AllType.VERTEX && node.OverAllType == AllType.VERTEX;
-                                bool bothIsEdge = previousType == AllType.EDGE && node.OverAllType == AllType.EDGE;
-                                bool bothIsVoid = previousType == AllType.VOID && node.OverAllType == AllType.VOID;
-                                bool bothIsCollection = previousType == AllType.COLLECTION && node.OverAllType == AllType.COLLECTION;
-
-                                if (bothIsBool || bothIsGraph || bothIsVertex || bothIsEdge || bothIsVoid || bothIsCollection)
-                                {
-                                    _createdSymbolTabe.TypeExpressionMismatch();
-                                }
-                                else
-                                {
-                                    //do nothing, both is the same type and are allowed, so everything is fine.
-                                }
-
+                            {//types are different from eachother, and do not allow operates between them
+                                _createdSymbolTabe.TypeExpressionMismatch();
                             }
                         }
+                        else
+                        {//times are of the same time
+                         //bools to control which types are not allowed to be operated upon, even if same time.
+                            bool bothIsBool = previousType == AllType.BOOL && node.OverAllType == AllType.BOOL;
+                            bool bothIsGraph = previousType == AllType.GRAPH && node.OverAllType == AllType.GRAPH;
+                            bool bothIsVertex = previousType == AllType.VERTEX && node.OverAllType == AllType.VERTEX;
+                            bool bothIsEdge = previousType == AllType.EDGE && node.OverAllType == AllType.EDGE;
+                            bool bothIsVoid = previousType == AllType.VOID && node.OverAllType == AllType.VOID;
+                            bool bothIsCollection = previousType == AllType.COLLECTION && node.OverAllType == AllType.COLLECTION;
+
+                            if (bothIsBool || bothIsGraph || bothIsVertex || bothIsEdge || bothIsVoid || bothIsCollection)
+                            {
+                                _createdSymbolTabe.TypeExpressionMismatch();
+                            }
+                            else
+                            {
+                                //do nothing, both is the same type and are allowed, so everything is fine.
+                            }
+
+                        }
+
                     }
                 }
             }
@@ -938,23 +936,29 @@ namespace Compiler.AST
                 node.ToValueOperation.Accept(this);
             }
 
-            if (node.VariableDeclaration is VariableDclNode varDclNode && node.Increment is ExpressionNode incrementNode)
+            if (node.Increment is ExpressionNode incrementNode)
             {
-                varDclNodeType = _createdSymbolTabe.RetrieveSymbol(varDclNode.Name);
-                if (!(varDclNodeType == AllType.INT && incrementNode.OverAllType == AllType.INT))
+                if (node.VariableDeclaration is VariableDclNode varDclNode)
                 {
-                    _createdSymbolTabe.WrongTypeConditionError();
+                    varDclNodeType = _createdSymbolTabe.RetrieveSymbol(varDclNode.Name);
+                    if (varDclNodeType != AllType.INT && incrementNode.OverAllType != AllType.INT)
+                    {
+                        _createdSymbolTabe.WrongTypeConditionError();
+                    }
+                }
+
+                if (node.VariableDeclaration is ExpressionNode expNode)
+                {
+                    if (expNode.OverAllType != AllType.INT && incrementNode.OverAllType != AllType.INT)
+                    {
+                        _createdSymbolTabe.WrongTypeConditionError();
+                    }
                 }
             }
-            if (node.VariableDeclaration is ConstantNode constantNode)
-            {
-
-            }
-
-
             VisitChildren(node);
             _createdSymbolTabe.CloseScope();
         }
+
 
         public override void Visit(ForeachLoopNode node)
         {
@@ -987,14 +991,13 @@ namespace Compiler.AST
 
         public override void Visit(VariableNode node)
         {
-            AllType? variableType;
+            _createdSymbolTabe.SetCurrentNode(node);
 
             if (node.Assignment != null)
             {
                 AllType? variableExpressionType = _createdSymbolTabe.RetrieveSymbol(node.Assignment.Name);
             }
 
-            _createdSymbolTabe.SetCurrentNode(node);
             ExpressionNode parentNode = (ExpressionNode)node.Parent;
             parentNode.OverAllType = _createdSymbolTabe.RetrieveSymbol(node.Name);
             VisitChildren(node);
