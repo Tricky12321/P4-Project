@@ -17,12 +17,11 @@ namespace Compiler.AST.SymbolTable
 
         private uint _globalDepthTrue = 0;
         private List<string> _reservedKeywords = new List<string> {
-            "VertexFrom","VertexTo","IsEmpty","Adjacent",
-            "IsAdjacent","EdgeBetween","EdgesBetween","IsEmpty","Directed","Vertices","Edges","vertex",
-            "edge","graph","int","decimal","double","string","void","bool","if","elseif","else","to",
-            "in","for","foreach","return","while","do","set","select","selectall","from","where",
+            "VertexFrom","VertexTo", "Directed","Vertices","Edges","vertex",
+            "edge","graph","int","decimal","string","void","bool","if","elseif","else","to",
+            "in","for","foreach","return","while","set","select","selectall","from","where",
             "add","collection","run","with","extend","predicate","pop","push","peek","enqueue",
-            "dequeue","extractmin","extractmax","print","inf","true","false","isin"
+            "dequeue","extractmin","extractmax","print","inf","true","false"
         };
 
         private uint _globalDepth
