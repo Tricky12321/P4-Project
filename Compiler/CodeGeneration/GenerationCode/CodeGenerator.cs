@@ -275,6 +275,8 @@ namespace Compiler.CodeGeneration.GenerationCode
                     item.Accept(this);
                 }
             }
+
+            _currentStringBuilder.Append(";\n");
         }
 
         public override void Visit(GraphDeclVertexNode node)
@@ -330,7 +332,7 @@ namespace Compiler.CodeGeneration.GenerationCode
             {
                 throw new NotImplementedException("Typen skal gerne sættes i typechecker.");
             }
-            _currentStringBuilder.Append($"{ResolveTypeToCS(node.Type_enum)} _val{node.ID};\n");
+            //_currentStringBuilder.Append($"{ResolveTypeToCS(node.Type_enum)} _val{node.ID};\n");
 
             _currentStringBuilder.Append($"foreach (var place in {node.Variable}){{\n");
             if (node.WhereCondition != null)

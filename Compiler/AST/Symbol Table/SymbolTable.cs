@@ -43,7 +43,6 @@ namespace Compiler.AST.SymbolTable
                     _globalDepthTrue = value;
                 }
             }
-
         }
         private AbstractNode _currentNode;
         public bool errorOccured = false;
@@ -783,6 +782,17 @@ namespace Compiler.AST.SymbolTable
         {
             Console.WriteLine($"Trying to return to void function: {FunctionName}, at {GetLineNumber()}");
             Error();
+        }
+
+        public void AddClassVariablesToScope(AllType type)
+        {
+            if (IsClass(type) )
+            {
+                foreach (var item in _classesTable[type])
+                {
+                    EnterSymbol(item.Key, item.Value.Type, item.Value.Collection);
+                }
+            }
         }
 
         public void RunFunctionError(string actualParameter, string formalParameter)

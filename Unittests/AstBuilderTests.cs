@@ -74,7 +74,6 @@ namespace Unittests
             }
         }
 
-
         [TestCase("Main")]
         [TestCase("Test")]
         [TestCase("TestFunc")]
@@ -93,7 +92,6 @@ namespace Unittests
         [TestCase("d", AllType.DECIMAL, "Main", ExpectedResult = true)]
         [TestCase("i", AllType.INT, "Main", ExpectedResult = true)]
         [TestCase("vertexColl", AllType.VERTEX, "Main", ExpectedResult = true)]
-
 
         [TestCase("asdf", AllType.VERTEX, "something something", ExpectedResult = false)]
         [TestCase("anton", AllType.INT, "ogjfpbjwfpjwf", ExpectedResult = false)]

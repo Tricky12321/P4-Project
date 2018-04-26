@@ -5392,8 +5392,8 @@ public partial class GiraphParser : Parser {
 
 	public partial class EnqueueOPContext : ParserRuleContext {
 		public ITerminalNode ENQUEUE() { return GetToken(GiraphParser.ENQUEUE, 0); }
-		public VarOrConstContext varOrConst() {
-			return GetRuleContext<VarOrConstContext>(0);
+		public ExpressionContext expression() {
+			return GetRuleContext<ExpressionContext>(0);
 		}
 		public ITerminalNode TO() { return GetToken(GiraphParser.TO, 0); }
 		public VariableContext variable() {
@@ -5420,7 +5420,7 @@ public partial class GiraphParser : Parser {
 			EnterOuterAlt(_localctx, 1);
 			{
 			State = 848; Match(ENQUEUE);
-			State = 849; varOrConst();
+			State = 849; expression();
 			State = 850; Match(TO);
 			State = 851; variable();
 			{
@@ -5523,8 +5523,8 @@ public partial class GiraphParser : Parser {
 
 	public partial class PushOPContext : ParserRuleContext {
 		public ITerminalNode PUSH() { return GetToken(GiraphParser.PUSH, 0); }
-		public VarOrConstContext varOrConst() {
-			return GetRuleContext<VarOrConstContext>(0);
+		public ExpressionContext expression() {
+			return GetRuleContext<ExpressionContext>(0);
 		}
 		public ITerminalNode TO() { return GetToken(GiraphParser.TO, 0); }
 		public VariableContext variable() {
@@ -5551,7 +5551,7 @@ public partial class GiraphParser : Parser {
 			EnterOuterAlt(_localctx, 1);
 			{
 			State = 862; Match(PUSH);
-			State = 863; varOrConst();
+			State = 863; expression();
 			State = 864; Match(TO);
 			State = 865; variable();
 			{
@@ -6798,16 +6798,16 @@ public partial class GiraphParser : Parser {
 		'\x3', '\x2', '\x2', '\x2', '\x350', '\x34D', '\x3', '\x2', '\x2', '\x2', 
 		'\x350', '\x34E', '\x3', '\x2', '\x2', '\x2', '\x350', '\x34F', '\x3', 
 		'\x2', '\x2', '\x2', '\x351', '\xA5', '\x3', '\x2', '\x2', '\x2', '\x352', 
-		'\x353', '\a', '\x38', '\x2', '\x2', '\x353', '\x354', '\x5', '<', '\x1F', 
-		'\x2', '\x354', '\x355', '\a', '\"', '\x2', '\x2', '\x355', '\x356', '\x5', 
-		'@', '!', '\x2', '\x356', '\x357', '\a', '\x12', '\x2', '\x2', '\x357', 
-		'\xA7', '\x3', '\x2', '\x2', '\x2', '\x358', '\x359', '\a', '\x39', '\x2', 
-		'\x2', '\x359', '\x35A', '\a', ',', '\x2', '\x2', '\x35A', '\x35B', '\x5', 
-		'@', '!', '\x2', '\x35B', '\xA9', '\x3', '\x2', '\x2', '\x2', '\x35C', 
+		'\x353', '\a', '\x38', '\x2', '\x2', '\x353', '\x354', '\x5', '\x1C', 
+		'\xF', '\x2', '\x354', '\x355', '\a', '\"', '\x2', '\x2', '\x355', '\x356', 
+		'\x5', '@', '!', '\x2', '\x356', '\x357', '\a', '\x12', '\x2', '\x2', 
+		'\x357', '\xA7', '\x3', '\x2', '\x2', '\x2', '\x358', '\x359', '\a', '\x39', 
+		'\x2', '\x2', '\x359', '\x35A', '\a', ',', '\x2', '\x2', '\x35A', '\x35B', 
+		'\x5', '@', '!', '\x2', '\x35B', '\xA9', '\x3', '\x2', '\x2', '\x2', '\x35C', 
 		'\x35D', '\a', '\x35', '\x2', '\x2', '\x35D', '\x35E', '\a', ',', '\x2', 
 		'\x2', '\x35E', '\x35F', '\x5', '@', '!', '\x2', '\x35F', '\xAB', '\x3', 
 		'\x2', '\x2', '\x2', '\x360', '\x361', '\a', '\x36', '\x2', '\x2', '\x361', 
-		'\x362', '\x5', '<', '\x1F', '\x2', '\x362', '\x363', '\a', '\"', '\x2', 
+		'\x362', '\x5', '\x1C', '\xF', '\x2', '\x362', '\x363', '\a', '\"', '\x2', 
 		'\x2', '\x363', '\x364', '\x5', '@', '!', '\x2', '\x364', '\x365', '\a', 
 		'\x12', '\x2', '\x2', '\x365', '\xAD', '\x3', '\x2', '\x2', '\x2', '\x366', 
 		'\x368', '\a', ';', '\x2', '\x2', '\x367', '\x369', '\x5', '\x9E', 'P', 

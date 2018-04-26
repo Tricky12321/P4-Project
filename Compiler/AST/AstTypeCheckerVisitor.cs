@@ -105,7 +105,8 @@ namespace Compiler.AST
                             {
                                 AllType? attributeType = _createdSymbolTabe.GetAttributeType(variableName, extentiontype ?? default(AllType));
 
-                                if(!(attributeType == extentiontype)){
+                                if (!(attributeType == extentiontype))
+                                {
                                     //type wrong
                                     _createdSymbolTabe.WrongTypeError(Attributes.Item1.Name, Attributes.Item1.ClassVariableName);
                                 }
@@ -928,7 +929,11 @@ namespace Compiler.AST
         {
             _createdSymbolTabe.SetCurrentNode(node);
             _createdSymbolTabe.OpenScope(BlockType.ForLoop);
-            node.Increment.Accept(this);
+
+            if (node.Increment != null)
+            {
+                node.Increment.Accept(this);
+            }
             node.VariableDeclaration.Accept(this);
             node.ToValueOperation.Accept(this);
             AllType? varDclNodeType;
