@@ -785,6 +785,17 @@ namespace Compiler.AST
             {
                 ForLoop.Increment = Visit(contextInside.expression(1));
             }
+            else
+            {
+                ExpressionNode expNode = new ExpressionNode(context.Start.Line, context.Start.Column);
+                ConstantNode conNode = new ConstantNode(context.Start.Line, context.Start.Column);
+                conNode.Type = "INT";
+                conNode.Value = "1";
+                expNode.ExpressionParts.Add(conNode);
+
+                ForLoop.Increment = expNode;
+                //ForLoop.Increment
+            }
 
             // Visit all the children of the Codeblock associated with the ForLoop
             foreach (var Child in context.codeBlock().codeBlockContent())
