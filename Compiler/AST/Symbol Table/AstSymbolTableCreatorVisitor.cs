@@ -301,7 +301,16 @@ namespace Compiler.AST.SymbolTable
         public override void Visit(WhereNode node)
         {
             SymbolTable.SetCurrentNode(node);
-            VisitChildren(node);
+            foreach (var item in node.Children)
+            {
+                if (item is AttributeNode) {
+                    if (!SymbolTable.IsExtended(item.Name, node.AttributeClass)) {
+                        SymbolTable.UndeclaredError(item.Name);
+                    }
+                } else {
+                    item.Accept(this);
+                }
+            }
         }
 
         public override void Visit(ExtendNode node)
@@ -390,6 +399,7 @@ namespace Compiler.AST.SymbolTable
             CheckDeclared(node.Variable);
             if (node.WhereCondition != null)
             {
+                (node.WhereCondition as WhereNode).AttributeClass = SymbolTable.RetrieveSymbol(node.Variable) ?? default(AllType);
                 node.WhereCondition.Accept(this);
             }
         }
@@ -440,6 +450,9 @@ namespace Compiler.AST.SymbolTable
             if (CheckAlreadyDeclared(node.Name))
             {
                 SymbolTable.EnterSymbol(node.Name, node.Type_enum, node.CollectionDcl);
+            }
+            if (node.Assignment != null) {
+                node.Assignment.Accept(this);
             }
         }
 

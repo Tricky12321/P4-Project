@@ -74,7 +74,7 @@ namespace Compiler.AST
         //-----------------------------Visitor----------------------------------------------
         public override void Visit(ParameterNode node)
         {
-            _createdSymbolTabe.NotImplementedError(node);
+            VisitChildren(node);
         }
 
         public override void Visit(StartNode node)
@@ -153,6 +153,7 @@ namespace Compiler.AST
         public override void Visit(PredicateNode node)
         {
             _createdSymbolTabe.SetCurrentNode(node);
+            _createdSymbolTabe.NotImplementedError(node);
             VisitChildren(node);
         }
 
@@ -191,7 +192,6 @@ namespace Compiler.AST
                     }
                     else
                     {
-                        Console.WriteLine("hvorfor bliver denne kaldt 2 gange?");
                         //the collection type is either int, decimal or null. which are not legal.
                         _createdSymbolTabe.ExtractCollNotIntOrDeciError();
                         //SKAL FINDE UD AF OM DEN ERROR I SYMTABLE ER KORREKT AT BRUGE ET ELLER ANDET STED HER
@@ -648,6 +648,10 @@ namespace Compiler.AST
         public override void Visit(FunctionNode node)
         {
             _createdSymbolTabe.SetCurrentNode(node);
+            foreach(AbstractNode item in node.Parameters)
+            {
+                item.Accept(this);
+            }
             VisitChildrenNewScope(node, node.Name);
         }
 
@@ -1066,6 +1070,8 @@ namespace Compiler.AST
         public override void Visit(PredicateCall node)
         {
             _createdSymbolTabe.SetCurrentNode(node);
+
+
             _createdSymbolTabe.NotImplementedError(node);
         }
     }

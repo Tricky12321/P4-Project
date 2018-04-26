@@ -218,7 +218,7 @@ namespace Unittests
             SymbolTable.OpenScope(BlockType.IfStatement);
             var SecondRealType = SymbolTable.RetrieveSymbol(VariableName);
             SymbolTable.CloseScope(); // Closing the last if statement
-            SymbolTable.CloseScope(); // Closing the test method scope
+            SymbolTable.CloseScope(); // Closing the test method scope  
             if (FirstRealType == FirstType && SecondType == SecondRealType) {
                 Assert.Pass();
             } else {

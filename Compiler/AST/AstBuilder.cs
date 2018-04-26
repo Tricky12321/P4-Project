@@ -663,7 +663,7 @@ namespace Compiler.AST
         public override AbstractNode VisitEnqueueOP([NotNull] GiraphParser.EnqueueOPContext context)
         {
             EnqueueQueryNode EnqueueNode = new EnqueueQueryNode(context.Start.Line, context.Start.Column);
-            EnqueueNode.VariableToAdd = Visit(context.varOrConst());
+            EnqueueNode.VariableToAdd = Visit(context.expression());
             EnqueueNode.VariableCollection = context.variable().GetText();
             return EnqueueNode;
         }
@@ -685,7 +685,7 @@ namespace Compiler.AST
         public override AbstractNode VisitPushOP([NotNull] GiraphParser.PushOPContext context)
         {
             PushQueryNode PushNode = new PushQueryNode(context.Start.Line, context.Start.Column);
-            PushNode.VariableToAdd = Visit(context.varOrConst());
+            PushNode.VariableToAdd = Visit(context.expression());
             PushNode.VariableCollection = context.variable().GetText();
             return PushNode;
         }
