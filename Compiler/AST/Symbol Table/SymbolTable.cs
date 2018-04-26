@@ -794,5 +794,11 @@ namespace Compiler.AST.SymbolTable
                 }
             }
         }
+
+        public void RunFunctionError(string actualParameter, string formalParameter)
+        {
+            Console.WriteLine($"Actual parameter: {actualParameter} and formal parameter: {formalParameter} are a type missmatch");
+            Error();
+        }
     }
 }
