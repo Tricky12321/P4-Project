@@ -21,13 +21,6 @@ namespace Compiler
             Compile();
         }
 
-        private static void PrintCompilerMessage(string text, ConsoleColor color = ConsoleColor.Red)
-        {
-            Console.ForegroundColor = color;
-            Console.WriteLine(text);
-            Console.ResetColor(); ;
-        }
-
         public static void Compile() {
             Stopwatch TotalTimer = new Stopwatch();
             TotalTimer.Start();
@@ -37,7 +30,7 @@ namespace Compiler
             GiraphParser.StartContext CST = BuildCST("kode.giraph");
             AbstractNode AST = BuildAST(CST);
             SymTable SymbolTable = BuildSymbolTable(AST as StartNode);
-            if (Utilities.GetOS() != OS.MacOS) {
+            if (Utilities.GetOS() != OS.MacOS || true) {
 				TypeCheck(SymbolTable, AST as StartNode);
             }
             //PrettyPrint(AST as StartNode);
@@ -145,6 +138,13 @@ namespace Compiler
             codeWriter.FillAll();
             WriteTimer.Stop();
             PrintCompilerMessage($"Writing Code timer: {WriteTimer.ElapsedMilliseconds}ms");
+        }
+
+        private static void PrintCompilerMessage(string text, ConsoleColor color = ConsoleColor.Red)
+        {
+            Console.ForegroundColor = color;
+            Console.WriteLine(text);
+            Console.ResetColor(); ;
         }
     }
 }

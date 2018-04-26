@@ -111,7 +111,6 @@ namespace Compiler.CodeGeneration.GenerationCode
                     }
                 }
             }
-
             if (node.Assignment == null)
             {
                 _currentStringBuilder.Append(";\n");
