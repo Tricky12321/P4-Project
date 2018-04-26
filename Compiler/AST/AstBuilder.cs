@@ -236,7 +236,7 @@ namespace Compiler.AST
         public override AbstractNode VisitExpression([NotNull] GiraphParser.ExpressionContext context)
         {
             ExpressionNode ExpNode = new ExpressionNode(context.Start.Line, context.Start.Column);
-            ExpNode.ExpressionParts = (EvaluateExpression(context));
+            ExpNode.ExpressionParts = EvaluateExpression(context);
             //ExpNode.AdoptChildren(Visit(context.GetChild(0)));
 
             return ExpNode;
@@ -776,12 +776,15 @@ namespace Compiler.AST
             }
             else if (contextInside.forConditionStart().expression() != null)
             {
-
-                ForLoop.ToValueOperation = Visit(contextInside.forConditionStart().expression());
+                ForLoop.VariableDeclaration = Visit(contextInside.forConditionStart().expression());
+                ForLoop.ToValueOperation = Visit(contextInside.expression(0));
             }
-            boolComparison.Right = Visit(contextInside.expression(0));
-            ForLoop.Increment = Visit(contextInside.expression(1));
 
+            boolComparison.Right = Visit(contextInside.expression(0));
+            if (contextInside.expression(1) != null)
+            {
+                ForLoop.Increment = Visit(contextInside.expression(1));
+            }
 
             // Visit all the children of the Codeblock associated with the ForLoop
             foreach (var Child in context.codeBlock().codeBlockContent())
@@ -989,16 +992,17 @@ namespace Compiler.AST
             return VariableNode;
         }
 
-		public override AbstractNode VisitPredicateCall([NotNull] GiraphParser.PredicateCallContext context)
-		{
+        public override AbstractNode VisitPredicateCall([NotNull] GiraphParser.PredicateCallContext context)
+        {
             PredicateCall predicateCall = new PredicateCall(context.Start.Line, context.Start.Column);
             predicateCall.Name = context.variable().GetText();
 
-            foreach (var item in context.parameters().varOrConst()) {
+            foreach (var item in context.parameters().varOrConst())
+            {
                 predicateCall.AdoptChildren(Visit(item));
             }
 
             return predicateCall;
-		}
-	}
+        }
+    }
 }

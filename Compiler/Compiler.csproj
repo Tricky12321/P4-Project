@@ -71,7 +71,7 @@
     <Compile Include="AST\Nodes\QueryNodes\AbstractExtractNode.cs" />
     <Compile Include="AST\Symbol Table\AstSymbolTableCreatorVisitor.cs" />
     <Compile Include="AST\Symbol Table\SymbolTableEntry.cs" />
-    <Compile Include="CodeGeneration\GenerationCode\stetestsetsetset.cs" />
+    <Compile Include="CodeGeneration\sfdsdfdfsdfsdsf.cs" />
     <Compile Include="Program\Utilities.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program\Program.cs" />
