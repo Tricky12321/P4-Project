@@ -1065,28 +1065,33 @@ namespace Compiler.AST
         {
             _createdSymbolTabe.SetCurrentNode(node);
             List<FunctionParameterEntry> test = _createdSymbolTabe.GetParameterTypes(node.FunctionName);
-            AllType? varType = null;
+            test.OrderBy(x => x.ID);
             int i = 0;
+            AllType placeholderType = 0;
+            AllType? varType = null;
+
             if (node.Children != null)
             {
                 foreach (AbstractNode child in node.Children)
                 {
-                    if(child is VariableNode varNode)
+                    if (child is VariableNode varNode)
                     {
                         varType = _createdSymbolTabe.RetrieveSymbol(child.Name);
-                        AllType placeholderType = varType ?? default(AllType);
-                        
-                        
-                        if( placeholderType == test[i].Type)
+                        placeholderType = varType ?? default(AllType);
+                        if (placeholderType != test[i].Type)
                         {
-                            // correct
+                            //type error
+                            _createdSymbolTabe.RunFunctionError(child.Name, test[i].Name);
                         }
-                        ++i;
-
                     }
+
                     else if (child is ConstantNode constNode)
                     {
-
+                        if (child.Type_enum != test[i].Type)
+                        {
+                            _createdSymbolTabe.RunFunctionError(child.Name, test[i].Name);
+                            //type error
+                        }
                     }
                 }
             }
