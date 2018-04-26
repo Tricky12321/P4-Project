@@ -927,16 +927,16 @@ namespace Compiler.AST
 
         public override void Visit(ForLoopNode node)
         {
+            AllType? varDclNodeType;
             _createdSymbolTabe.SetCurrentNode(node);
             _createdSymbolTabe.OpenScope(BlockType.ForLoop);
 
-            if (node.Increment != null)
+            if (node.Increment != null && node.VariableDeclaration != null && node.ToValueOperation != null)
             {
                 node.Increment.Accept(this);
+                node.VariableDeclaration.Accept(this);
+                node.ToValueOperation.Accept(this);
             }
-            node.VariableDeclaration.Accept(this);
-            node.ToValueOperation.Accept(this);
-            AllType? varDclNodeType;
 
             if (node.VariableDeclaration is VariableDclNode varDclNode && node.Increment is ExpressionNode incrementNode)
             {
@@ -946,6 +946,11 @@ namespace Compiler.AST
                     _createdSymbolTabe.WrongTypeConditionError();
                 }
             }
+            if (node.VariableDeclaration is ConstantNode constantNode)
+            {
+
+            }
+
 
             VisitChildren(node);
             _createdSymbolTabe.CloseScope();
