@@ -501,7 +501,10 @@ namespace Compiler.AST.SymbolTable
                 node.VariableDeclaration.Accept(this);
             }
             node.ToValueOperation.Accept(this);
-            node.Increment.Accept(this);
+
+            if(node.Increment != null){
+                node.Increment.Accept(this);
+            }
             VisitChildren(node);
             SymbolTable.CloseScope();
         }
