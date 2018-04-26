@@ -43,7 +43,6 @@ namespace Compiler.AST.SymbolTable
                     _globalDepthTrue = value;
                 }
             }
-
         }
         private AbstractNode _currentNode;
         public bool errorOccured = false;
@@ -243,9 +242,11 @@ namespace Compiler.AST.SymbolTable
             return GetAttributeType(name, type, out IsCollection);
         }
 
-        public bool IsExtended(string Name, AllType Class) {
+        public bool IsExtended(string Name, AllType Class)
+        {
             Name = Name.Trim('\'');
-            if (IsClass(Class) && _classesTable[Class].ContainsKey(Name)) {
+            if (IsClass(Class) && _classesTable[Class].ContainsKey(Name))
+            {
                 return true;
             }
             return false;
@@ -348,7 +349,7 @@ namespace Compiler.AST.SymbolTable
         /// <param name="Name">Name.</param>
         /// <param name="IsCollection">If set to <c>true</c> is collection.</param>
         /// <param name="ShowErrors">If set to <c>true</c> show errors.</param>
-        public AllType? RetrieveSymbol(string Name, out bool IsCollection, bool ShowErrors = true )
+        public AllType? RetrieveSymbol(string Name, out bool IsCollection, bool ShowErrors = true)
         {
             // Check if its a dot function
             if (Name.Contains('.'))
@@ -409,14 +410,19 @@ namespace Compiler.AST.SymbolTable
             }
         }
 
-        public bool IsFunctionDeclared(string FunctionName) {
+        public bool IsFunctionDeclared(string FunctionName)
+        {
             return _symTable.ContainsKey(FunctionName);
         }
 
-        public AllType? FunctionReturnType(string FunctionName) {
-            if (_symTable.ContainsKey(FunctionName)) {
-				return _symTable[FunctionName].Type;
-            } else {
+        public AllType? FunctionReturnType(string FunctionName)
+        {
+            if (_symTable.ContainsKey(FunctionName))
+            {
+                return _symTable[FunctionName].Type;
+            }
+            else
+            {
                 return null;
             }
         }
@@ -562,34 +568,47 @@ namespace Compiler.AST.SymbolTable
             }
         }
 
-        public void EnterFunctionParameter(string FunctionName, string ParameterName, AllType ParameterType) {
+        public void EnterFunctionParameter(string FunctionName, string ParameterName, AllType ParameterType)
+        {
             FunctionParameterEntry FuncParEntry = new FunctionParameterEntry(ParameterName, ParameterType);
-            if (!_functionTable.ContainsKey(FunctionName)) {
-				_functionTable.Add(FunctionName, new Dictionary<string, FunctionParameterEntry>());
+            if (!_functionTable.ContainsKey(FunctionName))
+            {
+                _functionTable.Add(FunctionName, new Dictionary<string, FunctionParameterEntry>());
                 _functionTable[FunctionName].Add(ParameterName, FuncParEntry);
-            } else {
+            }
+            else
+            {
                 _functionTable[FunctionName].Add(ParameterName, FuncParEntry);
             }
         }
 
-        public AllType? GetParameterType(string FunctionName, string ParameterName) {
-            if (_functionTable.ContainsKey(FunctionName)) {
-                if (_functionTable[FunctionName].ContainsKey(ParameterName)) {
-					return _functionTable[FunctionName][ParameterName].Type;
-                } else {
+        public AllType? GetParameterType(string FunctionName, string ParameterName)
+        {
+            if (_functionTable.ContainsKey(FunctionName))
+            {
+                if (_functionTable[FunctionName].ContainsKey(ParameterName))
+                {
+                    return _functionTable[FunctionName][ParameterName].Type;
+                }
+                else
+                {
                     UndefinedParameter(ParameterName, FunctionName);
                     return null;
                 }
-            } else {
+            }
+            else
+            {
                 return null;
             }
         }
 
-        public List<FunctionParameterEntry> GetParameterTypes(string FunctionName) {
+        public List<FunctionParameterEntry> GetParameterTypes(string FunctionName)
+        {
             var Output = new List<FunctionParameterEntry>();
             if (_functionTable.ContainsKey(FunctionName))
             {
-                foreach (var parameter in _functionTable[FunctionName]) {
+                foreach (var parameter in _functionTable[FunctionName])
+                {
                     Output.Add(parameter.Value);
                 }
             }
@@ -699,32 +718,38 @@ namespace Compiler.AST.SymbolTable
             Error();
         }
 
-        public void DuplicateParameterInFunction(string ParameterName, string FunctionName) {
+        public void DuplicateParameterInFunction(string ParameterName, string FunctionName)
+        {
             Console.WriteLine($"There is already a parameter with the name {ParameterName} in function {FunctionName} declared {GetLineNumber()}");
             Error();
         }
 
-        public void UndefinedParameter(string ParameterName, string FunctionName) {
+        public void UndefinedParameter(string ParameterName, string FunctionName)
+        {
             Console.WriteLine($"There is no parameter defined with the name {ParameterName} in function {FunctionName} {GetLineNumber()}");
             Error();
         }
 
-        public void TypeExpressionMismatch() {
+        public void TypeExpressionMismatch()
+        {
             Console.WriteLine($"There is a type mismatch in the expression on {GetLineNumber()}");
             Error();
         }
 
-        public void MainHasParameters() {
+        public void MainHasParameters()
+        {
             Console.WriteLine($"The Main function has parameters, which is illegal! {GetLineNumber()}");
             Error();
         }
 
-        public void MainHasWrongReturnType() {
+        public void MainHasWrongReturnType()
+        {
             Console.WriteLine($"The Main function has a wrong return type! Only void is allowed! {GetLineNumber()}");
             Error();
         }
 
-        public void MainUndefined() {
+        public void MainUndefined()
+        {
             Console.WriteLine($"There is no Main function declared, program wont work!");
             Error();
         }
@@ -741,7 +766,8 @@ namespace Compiler.AST.SymbolTable
             Error();
         }
 
-        public void UndeclaredFunction(string FunctionName) {
+        public void UndeclaredFunction(string FunctionName)
+        {
             Console.WriteLine($"The function {FunctionName} is undeclared, and can therefore not be used {GetLineNumber()}");
             Error();
         }
@@ -756,6 +782,17 @@ namespace Compiler.AST.SymbolTable
         {
             Console.WriteLine($"Trying to return to void function: {FunctionName}, at {GetLineNumber()}");
             Error();
+        }
+
+        public void AddClassVariablesToScope(AllType type)
+        {
+            if (IsClass(type) )
+            {
+                foreach (var item in _classesTable[type])
+                {
+                    EnterSymbol(item.Key, item.Value.Type, item.Value.Collection);
+                }
+            }
         }
     }
 }

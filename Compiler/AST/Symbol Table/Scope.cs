@@ -98,9 +98,6 @@ namespace Compiler.AST.SymbolTable
                 case BlockType.WhereStatement:
                     prefix = "[WHERE]";
                     break;
-                case BlockType.PredicateStatement:
-                    prefix = "[PREDICATE]";
-                    break;
             }
             // Add the prefix, to the prefix list, this is to better identify scopes later, and makes it easier to debug
             _prefixes.Add(prefix+GetCounter(type));
@@ -134,8 +131,6 @@ namespace Compiler.AST.SymbolTable
                     return _elseStatementCounter++;
                 case BlockType.WhereStatement:
                     return _whereStatementCounter++;
-                case BlockType.PredicateStatement:
-                    return _predicateStatementCounter++;
             }
             return 0;
         }

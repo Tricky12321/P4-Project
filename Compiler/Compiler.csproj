@@ -139,6 +139,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
     <Compile Include="AST\Nodes\PredicateCall.cs" />
+    <Compile Include="AST\Symbol Table\SymbolTableErrors.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

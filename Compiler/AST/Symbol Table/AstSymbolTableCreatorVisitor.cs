@@ -301,16 +301,10 @@ namespace Compiler.AST.SymbolTable
         public override void Visit(WhereNode node)
         {
             SymbolTable.SetCurrentNode(node);
-            foreach (var item in node.Children)
-            {
-                if (item is AttributeNode) {
-                    if (!SymbolTable.IsExtended(item.Name, node.AttributeClass)) {
-                        SymbolTable.UndeclaredError(item.Name);
-                    }
-                } else {
-                    item.Accept(this);
-                }
-            }
+            SymbolTable.OpenScope(BlockType.WhereStatement);
+            SymbolTable.AddClassVariablesToScope(node.AttributeClass);
+            VisitChildren(node);
+            SymbolTable.CloseScope();
         }
 
         public override void Visit(ExtendNode node)
