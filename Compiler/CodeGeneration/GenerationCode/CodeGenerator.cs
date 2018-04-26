@@ -111,7 +111,6 @@ namespace Compiler.CodeGeneration.GenerationCode
                     }
                 }
             }
-
             if (node.Assignment == null)
             {
                 _currentStringBuilder.Append(";\n");
@@ -630,14 +629,8 @@ namespace Compiler.CodeGeneration.GenerationCode
                 node.VariableDeclaration.Accept(this);
                 node.ToValueOperation.Accept(this);
                 _currentStringBuilder.Append($";{node.VariableDeclaration.Name} += ");
-                if (node.Increment != null) {
-                    node.Increment.Accept(this);
-                } else {
-                    node.Increment = new ConstantNode(0, 0);
-                    node.Increment.Type = "INT";
-                    (node.Increment as ConstantNode).Value = "1";
-                    node.Increment.Accept(this);
-                }
+
+                node.Increment.Accept(this);
             }
             else
             {

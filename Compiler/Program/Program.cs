@@ -21,13 +21,6 @@ namespace Compiler
             Compile();
         }
 
-        private static void PrintCompilerMessage(string text, ConsoleColor color = ConsoleColor.Red)
-        {
-            Console.ForegroundColor = color;
-            Console.WriteLine(text);
-            Console.ResetColor(); ;
-        }
-
         public static void Compile() {
             Stopwatch TotalTimer = new Stopwatch();
             TotalTimer.Start();
@@ -145,6 +138,13 @@ namespace Compiler
             codeWriter.FillAll();
             WriteTimer.Stop();
             PrintCompilerMessage($"Writing Code timer: {WriteTimer.ElapsedMilliseconds}ms");
+        }
+
+        private static void PrintCompilerMessage(string text, ConsoleColor color = ConsoleColor.Red)
+        {
+            Console.ForegroundColor = color;
+            Console.WriteLine(text);
+            Console.ResetColor(); ;
         }
     }
 }

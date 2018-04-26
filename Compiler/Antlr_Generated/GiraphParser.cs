@@ -1717,8 +1717,8 @@ public partial class GiraphParser : Parser {
 	}
 
 	public partial class FormalParamContext : ParserRuleContext {
-		public AllTypeContext allType() {
-			return GetRuleContext<AllTypeContext>(0);
+		public AllTypeWithCollContext allTypeWithColl() {
+			return GetRuleContext<AllTypeWithCollContext>(0);
 		}
 		public VariableContext variable() {
 			return GetRuleContext<VariableContext>(0);
@@ -1742,7 +1742,7 @@ public partial class GiraphParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 380; allType();
+			State = 380; allTypeWithColl();
 			State = 381; variable();
 			}
 		}
@@ -1800,7 +1800,7 @@ public partial class GiraphParser : Parser {
 			State = 388;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
-			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << TYPE) | (1L << GRAPHOBJ) | (1L << VERTEXOBJ) | (1L << EDGEOBJ))) != 0)) {
+			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << TYPE) | (1L << GRAPHOBJ) | (1L << VERTEXOBJ) | (1L << EDGEOBJ) | (1L << COLLECTION))) != 0)) {
 				{
 				State = 387; formalParams();
 				}
@@ -6464,7 +6464,7 @@ public partial class GiraphParser : Parser {
 		'\x2', '\x17B', '\x179', '\x3', '\x2', '\x2', '\x2', '\x17B', '\x17C', 
 		'\x3', '\x2', '\x2', '\x2', '\x17C', '/', '\x3', '\x2', '\x2', '\x2', 
 		'\x17D', '\x17B', '\x3', '\x2', '\x2', '\x2', '\x17E', '\x17F', '\x5', 
-		'\x8C', 'G', '\x2', '\x17F', '\x180', '\x5', '@', '!', '\x2', '\x180', 
+		'\x8E', 'H', '\x2', '\x17F', '\x180', '\x5', '@', '!', '\x2', '\x180', 
 		'\x31', '\x3', '\x2', '\x2', '\x2', '\x181', '\x182', '\x5', '@', '!', 
 		'\x2', '\x182', '\x183', '\a', '\x30', '\x2', '\x2', '\x183', '\x184', 
 		'\x5', '\x8E', 'H', '\x2', '\x184', '\x186', '\a', '\x16', '\x2', '\x2', 

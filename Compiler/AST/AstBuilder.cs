@@ -43,7 +43,7 @@ namespace Compiler.AST
             {
                 foreach (var Parameter in context.formalParams().formalParam())
                 {
-                    var Type = Parameter.allType().GetText();  // Parameter Type
+                    var Type = Parameter.allTypeWithColl().GetText();  // Parameter Type
                     var Name = Parameter.variable().GetText(); // Parameter Name
 
                     FNode.AddParameter(Type, Name, context.Start.Line, context.Start.Column);
@@ -607,7 +607,7 @@ namespace Compiler.AST
                 foreach (var Param in context.formalParams().formalParam())
                 {
                     string ParameterName = Param.variable().GetText();
-                    string ParameterType = Param.allType().GetText();
+                    string ParameterType = Param.allTypeWithColl().GetText();
                     // Add them to the paramter list
                     PNode.AddParameter(ParameterType, ParameterName, context.Start.Line, context.Start.Column);
                 }
@@ -784,6 +784,17 @@ namespace Compiler.AST
             if (contextInside.expression(1) != null)
             {
                 ForLoop.Increment = Visit(contextInside.expression(1));
+            }
+            else
+            {
+                ExpressionNode expNode = new ExpressionNode(context.Start.Line, context.Start.Column);
+                ConstantNode conNode = new ConstantNode(context.Start.Line, context.Start.Column);
+                conNode.Type = "INT";
+                conNode.Value = "1";
+                expNode.ExpressionParts.Add(conNode);
+
+                ForLoop.Increment = expNode;
+                //ForLoop.Increment
             }
 
             // Visit all the children of the Codeblock associated with the ForLoop
