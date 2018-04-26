@@ -43,7 +43,7 @@ namespace Compiler.AST
             {
                 foreach (var Parameter in context.formalParams().formalParam())
                 {
-                    var Type = Parameter.allType().GetText();  // Parameter Type
+                    var Type = Parameter.allTypeWithColl().GetText();  // Parameter Type
                     var Name = Parameter.variable().GetText(); // Parameter Name
 
                     FNode.AddParameter(Type, Name, context.Start.Line, context.Start.Column);
@@ -607,7 +607,7 @@ namespace Compiler.AST
                 foreach (var Param in context.formalParams().formalParam())
                 {
                     string ParameterName = Param.variable().GetText();
-                    string ParameterType = Param.allType().GetText();
+                    string ParameterType = Param.allTypeWithColl().GetText();
                     // Add them to the paramter list
                     PNode.AddParameter(ParameterType, ParameterName, context.Start.Line, context.Start.Column);
                 }
