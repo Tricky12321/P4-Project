@@ -937,6 +937,7 @@ namespace Compiler.AST
                     _createdSymbolTabe.WrongTypeConditionError();
                 }
             }
+
             VisitChildren(node);
             _createdSymbolTabe.CloseScope();
         }
@@ -1059,13 +1060,24 @@ namespace Compiler.AST
         public override void Visit(RunQueryNode node)
         {
             _createdSymbolTabe.SetCurrentNode(node);
-            
-            if(node.Children != null)
+            List<FunctionParameterEntry> test = _createdSymbolTabe.GetParameterTypes(node.FunctionName);
+            AllType? varType = null;
+            int i = 0;
+            if (node.Children != null)
             {
                 foreach (AbstractNode child in node.Children)
                 {
                     if(child is VariableNode varNode)
                     {
+                        varType = _createdSymbolTabe.RetrieveSymbol(child.Name);
+                        AllType placeholderType = varType ?? default(AllType);
+                        
+                        
+                        if( placeholderType == test[i].Type)
+                        {
+                            // correct
+                        }
+                        ++i;
 
                     }
                     else if (child is ConstantNode constNode)
