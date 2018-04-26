@@ -790,7 +790,7 @@ namespace Compiler.AST.SymbolTable
             {
                 foreach (var item in _classesTable[type])
                 {
-                    EnterSymbol(item.Key, item.Value.Type, item.Value.Collection);
+                    EnterSymbol("'"+item.Key+"'", item.Value.Type, item.Value.Collection);
                 }
             }
         }
