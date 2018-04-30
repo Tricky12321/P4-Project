@@ -752,7 +752,7 @@ namespace Compiler.AST
                         }
                         else
                         {
-                            Console.WriteLine("select all, but something went wrong.");
+                            _createdSymbolTabe.TypeExpressionMismatch();
                         }
                     }
                 }
@@ -765,8 +765,10 @@ namespace Compiler.AST
             {
                 VisitChildren(node);
                 typeOfVariable = _createdSymbolTabe.RetrieveSymbol(node.Name, out bool isCollection, false);
-                Console.WriteLine("her i declaration node. noget er ikke assigned.");
-
+                if(typeOfVariable == AllType.VOID)
+                {
+                    _createdSymbolTabe.DeclarationCantBeTypeVoid();
+                }
                 //The declaration assignment is just null, and therefore the collection is not set to something
             }
         }
@@ -1021,6 +1023,10 @@ namespace Compiler.AST
         {
             _createdSymbolTabe.SetCurrentNode(node);
             AllType? variableType = _createdSymbolTabe.RetrieveSymbol(node.Name);
+            if (node.Type_enum == AllType.VOID)
+            {
+                _createdSymbolTabe.DeclarationCantBeTypeVoid();
+            }
 
             if (node.Children != null)
             {

@@ -865,6 +865,12 @@ namespace Compiler.AST.SymbolTable
             Error();
         }
 
+        public void DeclarationCantBeTypeVoid()
+        {
+            Console.WriteLine("Declaration cant be of type void! " + GetLineNumber());
+            Error();
+        }
+
         public void AddClassVariablesToScope(AllType type)
         {
             if (IsClass(type))
