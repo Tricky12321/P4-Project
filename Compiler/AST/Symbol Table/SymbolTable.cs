@@ -391,9 +391,10 @@ namespace Compiler.AST.SymbolTable
             {
                 Name = GetName(Name);
                 bool match = _symTable.ContainsKey(Name);
-                while (!match)
+                var names = Name.Split('.').ToList();
+
+                while (!match && names.Count > 1)
                 {
-                    var names = Name.Split('.').ToList();
                     names.RemoveAt(names.Count - 2);
                     Name = "";
                     bool first = true;
