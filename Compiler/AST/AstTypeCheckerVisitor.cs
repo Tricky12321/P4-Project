@@ -1133,10 +1133,9 @@ namespace Compiler.AST
                 }
                 else
                 {
-                    //error
+                    _createdSymbolTabe.PredicateTypeError(item.Name);
                 }
                 iterator++;
-
             }
 
         }
