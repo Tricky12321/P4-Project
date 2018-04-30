@@ -1110,9 +1110,11 @@ namespace Compiler.AST
         public override void Visit(PredicateCall node)
         {
             _createdSymbolTabe.SetCurrentNode(node);
-            AllType? ok = _createdSymbolTabe.RetrieveSymbol(node.Name);
+            _createdSymbolTabe.OpenScope(node.Name);
             VisitChildren(node);
+            List<AllType> predParaTypes = _createdSymbolTabe.GetPredicateParameters(node.Name);
             _createdSymbolTabe.NotImplementedError(node);
+            _createdSymbolTabe.CloseScope();
         }
     }
 }
