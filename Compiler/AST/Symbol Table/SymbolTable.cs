@@ -818,7 +818,5 @@ namespace Compiler.AST.SymbolTable
                 }
             }
         }
-
-
     }
 }

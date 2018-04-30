@@ -154,7 +154,6 @@ namespace Compiler.AST
         {
             _createdSymbolTabe.SetCurrentNode(node);
             _createdSymbolTabe.OpenScope(node.Name);
-            List<FunctionParameterEntry> test = _createdSymbolTabe.GetParameterTypes(node.Name);
 
             VisitChildren(node);
 
@@ -657,7 +656,7 @@ namespace Compiler.AST
         public override void Visit(FunctionNode node)
         {
             _createdSymbolTabe.SetCurrentNode(node);
-            foreach(AbstractNode item in node.Parameters)
+            foreach (AbstractNode item in node.Parameters)
             {
                 item.Accept(this);
             }
@@ -994,8 +993,11 @@ namespace Compiler.AST
             }
 
             _createdSymbolTabe.SetCurrentNode(node);
-            ExpressionNode parentNode = (ExpressionNode)node.Parent;
-            parentNode.OverAllType = _createdSymbolTabe.RetrieveSymbol(node.Name);
+            if (node.Parent is ExpressionNode expNode)
+            {
+                expNode.OverAllType = _createdSymbolTabe.RetrieveSymbol(node.Name);
+            }
+            node.Type = _createdSymbolTabe.RetrieveSymbol(node.Name).ToString();
             VisitChildren(node);
         }
 
@@ -1108,9 +1110,8 @@ namespace Compiler.AST
         public override void Visit(PredicateCall node)
         {
             _createdSymbolTabe.SetCurrentNode(node);
-            List<FunctionParameterEntry> test = _createdSymbolTabe.GetParameterTypes(node.Name);
-
-
+            AllType? ok = _createdSymbolTabe.RetrieveSymbol(node.Name);
+            VisitChildren(node);
             _createdSymbolTabe.NotImplementedError(node);
         }
     }
