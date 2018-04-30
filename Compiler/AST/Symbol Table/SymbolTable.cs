@@ -640,13 +640,6 @@ namespace Compiler.AST.SymbolTable
 
         public List<AllType> GetPredicateParameters(string PredicateName)
         {
-            if (_globalDepth > 0)
-            {
-                CloseScope();
-                PredicateName = GetName(PredicateName);
-                OpenScope(PredicateName);
-            }
-
             if (_predicateTable.ContainsKey(PredicateName) && PredicateName.Contains("."))
             {
                 return _predicateTable[PredicateName];
