@@ -12,17 +12,18 @@ namespace Compiler.AST.SymbolTable
         private Dictionary<AllType, Dictionary<string, ClassEntry>> _classesTable = new Dictionary<AllType, Dictionary<string, ClassEntry>>();
         private Dictionary<string, Dictionary<string, FunctionParameterEntry>> _functionTable = new Dictionary<string, Dictionary<string, FunctionParameterEntry>>();
 
+        private Dictionary<string, List<AllType>> _predicateTable = new Dictionary<string, List<AllType>>();
+
         // Get/Set to keep track of what is the deepest methods are stored!
         public string CurrentLine => GetLineNumber();
 
         private uint _globalDepthTrue = 0;
         private List<string> _reservedKeywords = new List<string> {
-            "VertexFrom","VertexTo","IsEmpty","Adjacent",
-            "IsAdjacent","EdgeBetween","EdgesBetween","IsEmpty","Directed","Vertices","Edges","vertex",
-            "edge","graph","int","decimal","double","string","void","bool","if","elseif","else","to",
-            "in","for","foreach","return","while","do","set","select","selectall","from","where",
+            "VertexFrom","VertexTo", "Directed","Vertices","Edges","vertex",
+            "edge","graph","int","decimal","string","void","bool","if","elseif","else","to",
+            "in","for","foreach","return","while","set","select","selectall","from","where",
             "add","collection","run","with","extend","predicate","pop","push","peek","enqueue",
-            "dequeue","extractmin","extractmax","print","inf","true","false","isin", "value"
+            "dequeue","extractmin","extractmax","print","inf","true","false"
         };
 
         private uint _globalDepth
@@ -414,6 +415,9 @@ namespace Compiler.AST.SymbolTable
                         IsCollection = _symTable[Name].IsCollection;
                         var type = _symTable[Name].Type;
                         return type;
+                    } else {
+                        IsCollection = false;
+                        return null;
                     }
                 }
                 if (match)
@@ -617,6 +621,25 @@ namespace Compiler.AST.SymbolTable
             {
                 return null;
             }
+        }
+
+        public void EnterPredicateParameter(string PredicateName, AllType ParameterType) {
+            PredicateName = GetName(PredicateName);
+            if (_predicateTable.ContainsKey(PredicateName)) {
+                _predicateTable[PredicateName].Add(ParameterType);
+            } else {
+                _predicateTable.Add(PredicateName, new List<AllType>());
+                _predicateTable[PredicateName].Add(ParameterType);
+
+            }
+        }
+
+        public List<AllType> GetPredicateParameters(string PredicateName) {
+            PredicateName = GetName(PredicateName);
+            if (_predicateTable.ContainsKey(PredicateName)) {
+                return _predicateTable[PredicateName];
+            }
+            return null;
         }
 
         public List<FunctionParameterEntry> GetParameterTypes(string FunctionName)

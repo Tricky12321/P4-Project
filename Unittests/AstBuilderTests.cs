@@ -131,5 +131,60 @@ namespace Unittests
             }
         }
 
+        [TestCase("p", AllType.BOOL, ExpectedResult = true)]
+        [TestCase("as", AllType.GRAPH, ExpectedResult = true)]
+        [TestCase("bs", AllType.VERTEX, ExpectedResult = true)]
+        [TestCase("ds", AllType.DECIMAL, ExpectedResult = true)]
+        [TestCase("es", AllType.INT, ExpectedResult = true)]
+        [TestCase("gs", AllType.EDGE, ExpectedResult = true)]
+
+        [TestCase("gs", AllType.GRAPH, ExpectedResult = false)]
+        [TestCase("es", AllType.DECIMAL, ExpectedResult = false)]
+        [TestCase("gs", AllType.INT, ExpectedResult = false)]
+        [TestCase("es", AllType.VERTEX, ExpectedResult = false)]
+        [TestCase("es", AllType.EDGE, ExpectedResult = false)]
+        [TestCase("gs", AllType.BOOL, ExpectedResult = false)]
+        [TestCase("as", AllType.EDGE, ExpectedResult = false)]
+        public bool CheckPredicateDefinitions1Parameter(string PredicateName, AllType ParameterType) {
+            var Start = AST.Children.Where(x => (x is PredicateNode) && (x as PredicateNode).Name == PredicateName).First();
+            if (Start != null) {
+				if ((Start as PredicateNode).Parameters[0].Type_enum == ParameterType) {
+					return true;
+				} else {
+					return false;
+				}
+            }
+            return false;
+        }
+
+        [TestCase("psv", AllType.GRAPH, AllType.INT, ExpectedResult = true)]
+        [TestCase("psg", AllType.EDGE, AllType.DECIMAL, ExpectedResult = true)]
+        [TestCase("psd", AllType.VERTEX, AllType.INT, ExpectedResult = true)]
+        [TestCase("psa", AllType.BOOL, AllType.BOOL, ExpectedResult = true)]
+        [TestCase("pse", AllType.DECIMAL, AllType.EDGE, ExpectedResult = true)]
+
+        [TestCase("psg", AllType.GRAPH, AllType.GRAPH, ExpectedResult = false)]
+        [TestCase("psa", AllType.DECIMAL, AllType.GRAPH, ExpectedResult = false)]
+        [TestCase("psd", AllType.INT,AllType.EDGE, ExpectedResult = false)]
+        [TestCase("psg", AllType.VERTEX,AllType.GRAPH, ExpectedResult = false)]
+        [TestCase("psa", AllType.EDGE,AllType.GRAPH, ExpectedResult = false)]
+        [TestCase("psd", AllType.BOOL,AllType.EDGE, ExpectedResult = false)]
+        [TestCase("psa", AllType.EDGE,AllType.GRAPH, ExpectedResult = false)]
+        public bool CheckPredicateDefinitions2Parameters(string PredicateName, AllType ParameterType1, AllType ParameterType2)
+        {
+            var Start = AST.Children.Where(x => (x is PredicateNode) && (x as PredicateNode).Name == PredicateName).First();
+            if (Start != null)
+            {
+                if ((Start as PredicateNode).Parameters[0].Type_enum == ParameterType1 && (Start as PredicateNode).Parameters[1].Type_enum == ParameterType2)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            return false;
+        }
     }
 }

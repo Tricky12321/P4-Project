@@ -406,6 +406,7 @@ namespace Compiler.AST.SymbolTable
             SymbolTable.OpenScope(node.Name);
             foreach (ParameterNode parameter in node.Parameters)
             {
+                SymbolTable.EnterPredicateParameter(node.Name, parameter.Type_enum);
                 parameter.Accept(this);
             }
 
