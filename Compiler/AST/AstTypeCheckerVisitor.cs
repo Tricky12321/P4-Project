@@ -949,7 +949,7 @@ namespace Compiler.AST
 
                 if (node.VariableDeclaration is ExpressionNode expNode)
                 {
-                    if (expNode.OverAllType != AllType.INT && incrementNode.OverAllType != AllType.INT)
+                    if (expNode.OverAllType != AllType.INT || incrementNode.OverAllType != AllType.INT)
                     {
                         _createdSymbolTabe.WrongTypeConditionError();
                     }
