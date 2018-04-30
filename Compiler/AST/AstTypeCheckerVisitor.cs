@@ -719,44 +719,54 @@ namespace Compiler.AST
         public override void Visit(DeclarationNode node)
         {
             _createdSymbolTabe.SetCurrentNode(node);
+            AllType? typeOfVariable;
             if (node.Assignment != null)
             {
                 node.Assignment.Parent = node;
                 node.Assignment.Accept(this);
-            }
-            VisitChildren(node);
-            AllType? typeOfVariable = _createdSymbolTabe.RetrieveSymbol(node.Name, out bool isCollection, false);
-            if (node.Assignment is ExpressionNode exprNode)
-            {
-                if (typeOfVariable == exprNode.OverAllType)
+
+                VisitChildren(node);
+                typeOfVariable = _createdSymbolTabe.RetrieveSymbol(node.Name, out bool isCollection, false);
+                if (node.Assignment is ExpressionNode exprNode)
                 {
-                    //the expression type and the variable is of same time.
-                }
-                else
-                {
-                    _createdSymbolTabe.TypeExpressionMismatch();
-                }
-            }
-            else if (node.Assignment is SelectAllQueryNode selAll)
-            {
-                if (typeOfVariable == selAll.Type_enum && isCollection)
-                {
-                    //type correct, variable is a coll, and collections have the same time. inner collection is checked in selectallNode.
-                }
-                else
-                {
-                    if (!isCollection)
+                    if (typeOfVariable == exprNode.OverAllType)
                     {
-                        _createdSymbolTabe.TargetIsNotCollError(node.Name);
+                        //the expression type and the variable is of same time.
                     }
                     else
                     {
-                        Console.WriteLine("select all, but something went wrong.");
+                        _createdSymbolTabe.TypeExpressionMismatch();
                     }
+                }
+                else if (node.Assignment is SelectAllQueryNode selAll)
+                {
+                    if (typeOfVariable == selAll.Type_enum && isCollection)
+                    {
+                        //type correct, variable is a coll, and collections have the same time. inner collection is checked in selectallNode.
+                    }
+                    else
+                    {
+                        if (!isCollection)
+                        {
+                            _createdSymbolTabe.TargetIsNotCollError(node.Name);
+                        }
+                        else
+                        {
+                            Console.WriteLine("select all, but something went wrong.");
+                        }
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("something weird - spørg ezzi");
                 }
             }
             else
             {
+                VisitChildren(node);
+                typeOfVariable = _createdSymbolTabe.RetrieveSymbol(node.Name, out bool isCollection, false);
+                Console.WriteLine("her i declaration node. noget er ikke assigned.");
+
                 //The declaration assignment is just null, and therefore the collection is not set to something
             }
         }
