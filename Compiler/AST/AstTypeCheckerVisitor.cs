@@ -153,8 +153,11 @@ namespace Compiler.AST
         public override void Visit(PredicateNode node)
         {
             _createdSymbolTabe.SetCurrentNode(node);
-            _createdSymbolTabe.NotImplementedError(node);
+            _createdSymbolTabe.OpenScope(node.Name);
+
             VisitChildren(node);
+
+            _createdSymbolTabe.CloseScope();
         }
 
         public override void Visit(ExtractMaxQueryNode node)
@@ -359,7 +362,7 @@ namespace Compiler.AST
                 }
                 else
                 {
-                    //TODO correct error message pls
+                    _createdSymbolTabe.FromVarIsNotCollError(node.Variable);
                 }
 
                 if (node.WhereCondition != null)
@@ -653,7 +656,7 @@ namespace Compiler.AST
         public override void Visit(FunctionNode node)
         {
             _createdSymbolTabe.SetCurrentNode(node);
-            foreach(AbstractNode item in node.Parameters)
+            foreach (AbstractNode item in node.Parameters)
             {
                 item.Accept(this);
             }
@@ -990,8 +993,11 @@ namespace Compiler.AST
             }
 
             _createdSymbolTabe.SetCurrentNode(node);
-            ExpressionNode parentNode = (ExpressionNode)node.Parent;
-            parentNode.OverAllType = _createdSymbolTabe.RetrieveSymbol(node.Name);
+            if (node.Parent is ExpressionNode expNode)
+            {
+                expNode.OverAllType = _createdSymbolTabe.RetrieveSymbol(node.Name);
+            }
+            node.Type = _createdSymbolTabe.RetrieveSymbol(node.Name).ToString();
             VisitChildren(node);
         }
 
@@ -1005,11 +1011,9 @@ namespace Compiler.AST
         {
             _createdSymbolTabe.SetCurrentNode(node);
             AllType? variableType = _createdSymbolTabe.RetrieveSymbol(node.Name);
-            AllType? ok = node.Type_enum;
 
             if (node.Children != null)
             {
-                //VisitChildren(node);
                 foreach (AbstractNode child in node.Children)
                 {
                     if (child is ExpressionNode expNode)
@@ -1106,9 +1110,27 @@ namespace Compiler.AST
         public override void Visit(PredicateCall node)
         {
             _createdSymbolTabe.SetCurrentNode(node);
+            _createdSymbolTabe.OpenScope(node.Name);
+            VisitChildren(node);
+            List<AllType> predParaTypes = _createdSymbolTabe.GetPredicateParameters(node.Name);
+            int iterator = 0;
+            foreach (AbstractNode item in node.Children)
+            {
+                AllType formalParameterType = predParaTypes[iterator];
+                AllType actualParameterType = item.Type_enum;
+                if (formalParameterType == actualParameterType)
+                {
+                    //typecorrect
+                }
+                else
+                {
+                    //error
+                }
+                iterator++;
 
+            }
 
-            _createdSymbolTabe.NotImplementedError(node);
+            _createdSymbolTabe.CloseScope();
         }
     }
 }

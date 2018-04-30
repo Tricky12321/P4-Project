@@ -866,7 +866,5 @@ namespace Compiler.AST.SymbolTable
                 }
             }
         }
-
-
     }
 }
