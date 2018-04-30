@@ -416,7 +416,9 @@ namespace Compiler.AST.SymbolTable
                         IsCollection = _symTable[Name].IsCollection;
                         var type = _symTable[Name].Type;
                         return type;
-                    } else {
+                    }
+                    else
+                    {
                         IsCollection = false;
                         return null;
                     }
@@ -624,20 +626,28 @@ namespace Compiler.AST.SymbolTable
             }
         }
 
-        public void EnterPredicateParameter(string PredicateName, AllType ParameterType) {
-            PredicateName = GetName(PredicateName);
-            if (_predicateTable.ContainsKey(PredicateName)) {
-                _predicateTable[PredicateName].Add(ParameterType);
-            } else {
-                _predicateTable.Add(PredicateName, new List<AllType>());
-                _predicateTable[PredicateName].Add(ParameterType);
-
-            }
+        public void AddPredicateToList(string PredicateName)
+        {
+            _predicateTable.Add(GetName(PredicateName), new List<AllType>());
         }
 
-        public List<AllType> GetPredicateParameters(string PredicateName) {
-            PredicateName = GetName(PredicateName);
-            if (_predicateTable.ContainsKey(PredicateName)) {
+        public void EnterPredicateParameter(string PredicateName, AllType ParameterType)
+        {
+            CloseScope();
+            _predicateTable[GetName(PredicateName)].Add(ParameterType);
+            OpenScope(PredicateName);
+        }
+
+        public List<AllType> GetPredicateParameters(string PredicateName)
+        {
+            if (_globalDepth > 0)
+            {
+                CloseScope();
+                PredicateName = GetName(PredicateName);
+                OpenScope(PredicateName);
+            }
+            if (_predicateTable.ContainsKey(PredicateName))
+            {
                 return _predicateTable[PredicateName];
             }
             return null;
