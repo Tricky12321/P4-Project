@@ -1113,7 +1113,23 @@ namespace Compiler.AST
             _createdSymbolTabe.OpenScope(node.Name);
             VisitChildren(node);
             List<AllType> predParaTypes = _createdSymbolTabe.GetPredicateParameters(node.Name);
-            _createdSymbolTabe.NotImplementedError(node);
+            int iterator = 0;
+            foreach (AbstractNode item in node.Children)
+            {
+                AllType formalParameterType = predParaTypes[iterator];
+                AllType actualParameterType = item.Type_enum;
+                if (formalParameterType == actualParameterType)
+                {
+                    //typecorrect
+                }
+                else
+                {
+                    //error
+                }
+                iterator++;
+
+            }
+
             _createdSymbolTabe.CloseScope();
         }
     }
