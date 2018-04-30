@@ -646,9 +646,30 @@ namespace Compiler.AST.SymbolTable
                 PredicateName = GetName(PredicateName);
                 OpenScope(PredicateName);
             }
-            if (_predicateTable.ContainsKey(PredicateName))
+
+            if (_predicateTable.ContainsKey(PredicateName) && PredicateName.Contains("."))
             {
                 return _predicateTable[PredicateName];
+            } else {
+                var names = PredicateName.Split('.').ToList();
+                if (names.Count > 2) {
+                    names.RemoveAt(names.Count - 2);
+                } else {
+                    names.RemoveAt(0);
+                }
+                string name = "";
+                bool first = true;
+                foreach (var item in names)
+                {
+                    if (first) {
+                        name += item;
+                        first = false;
+                    } else {
+                        name += "." + item;
+                    }
+                }
+
+                return GetPredicateParameters(name);
             }
             return null;
         }
