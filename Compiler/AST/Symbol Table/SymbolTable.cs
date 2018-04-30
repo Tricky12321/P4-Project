@@ -638,23 +638,20 @@ namespace Compiler.AST.SymbolTable
             OpenScope(PredicateName);
         }
 
-        public List<AllType> GetPredicateParameters(string PredicateName)
+        public List<AllType> GetPredicateParameters(string PredicateName, bool Initial = true)
         {
-            if (_globalDepth > 0)
-            {
-                CloseScope();
+            if (Initial) {
                 PredicateName = GetName(PredicateName);
-                OpenScope(PredicateName);
             }
 
-            if (_predicateTable.ContainsKey(PredicateName) && PredicateName.Contains("."))
+            if (_predicateTable.ContainsKey(PredicateName))
             {
                 return _predicateTable[PredicateName];
             } else {
                 var names = PredicateName.Split('.').ToList();
                 if (names.Count > 2) {
                     names.RemoveAt(names.Count - 2);
-                } else {
+                } else if (names.Count == 2) {
                     names.RemoveAt(0);
                 }
                 string name = "";
@@ -669,7 +666,7 @@ namespace Compiler.AST.SymbolTable
                     }
                 }
 
-                return GetPredicateParameters(name);
+                return GetPredicateParameters(name, false);
             }
             return null;
         }

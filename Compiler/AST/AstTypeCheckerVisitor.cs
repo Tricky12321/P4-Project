@@ -1120,7 +1120,6 @@ namespace Compiler.AST
         public override void Visit(PredicateCall node)
         {
             _createdSymbolTabe.SetCurrentNode(node);
-            _createdSymbolTabe.OpenScope(node.Name);
             VisitChildren(node);
             List<AllType> predParaTypes = _createdSymbolTabe.GetPredicateParameters(node.Name);
             int iterator = 0;
@@ -1140,7 +1139,6 @@ namespace Compiler.AST
 
             }
 
-            _createdSymbolTabe.CloseScope();
         }
     }
 }
