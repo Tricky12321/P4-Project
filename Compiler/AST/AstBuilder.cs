@@ -352,6 +352,7 @@ namespace Compiler.AST
                     varAttNode.Name = context.GetText();
                     return varAttNode;
                 case "GiraphParser+AttributeContext":
+                case "GiraphParser+RunFunctionContext":
                     AbstractNode attNode = Visit(context.GetChild(0));
                     return attNode;
             }
