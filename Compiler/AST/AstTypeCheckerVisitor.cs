@@ -70,6 +70,11 @@ namespace Compiler.AST
             }
         }
 
+        private bool IsNotEqual(string name1, string name2)
+        {
+            return !(name1 == name2);
+        }
+
 
         //-----------------------------Visitor----------------------------------------------
         public override void Visit(ParameterNode node)
@@ -719,44 +724,74 @@ namespace Compiler.AST
         public override void Visit(DeclarationNode node)
         {
             _createdSymbolTabe.SetCurrentNode(node);
+            AllType? typeOfVariable;
             if (node.Assignment != null)
             {
                 node.Assignment.Parent = node;
                 node.Assignment.Accept(this);
-            }
-            VisitChildren(node);
-            AllType? typeOfVariable = _createdSymbolTabe.RetrieveSymbol(node.Name, out bool isCollection, false);
-            if (node.Assignment is ExpressionNode exprNode)
-            {
-                if (typeOfVariable == exprNode.OverAllType)
+
+                VisitChildren(node);
+                typeOfVariable = _createdSymbolTabe.RetrieveSymbol(node.Name, out bool isCollection, false);
+                if (node.Assignment is ExpressionNode exprNode)
                 {
-                    //the expression type and the variable is of same time.
-                }
-                else
-                {
-                    _createdSymbolTabe.TypeExpressionMismatch();
-                }
-            }
-            else if (node.Assignment is SelectAllQueryNode selAll)
-            {
-                if (typeOfVariable == selAll.Type_enum && isCollection)
-                {
-                    //type correct, variable is a coll, and collections have the same time. inner collection is checked in selectallNode.
-                }
-                else
-                {
-                    if (!isCollection)
+                    if (typeOfVariable == exprNode.OverAllType)
                     {
-                        _createdSymbolTabe.TargetIsNotCollError(node.Name);
+                        foreach(AbstractNode abnode in exprNode.ExpressionParts)
+                        {
+                            if (IsNotEqual(node.Name, abnode.Name))
+                            {
+                                //the expression type and the variable is of same type, and are not the same collection.
+                            }
+                            else
+                            {
+                                _createdSymbolTabe.DeclarationCantBeSameVariable(node.Name);
+                            }
+                        }
                     }
                     else
                     {
-                        Console.WriteLine("select all, but something went wrong.");
+                        _createdSymbolTabe.TypeExpressionMismatch();
                     }
+                }
+                else if (node.Assignment is SelectAllQueryNode selAll)
+                {
+                    if (typeOfVariable == selAll.Type_enum && isCollection)
+                    {
+                        if (IsNotEqual(node.Name, selAll.Variable))
+                        {
+                            //type correct, variable is a coll, and collections have the same time. inner collection is checked in selectallNode.
+                            //and is not the same collection.
+                        }
+                        else
+                        {
+                            _createdSymbolTabe.DeclarationCantBeSameVariable(node.Name);
+                        }
+                    }
+                    else
+                    {
+                        if (!isCollection)
+                        {
+                            _createdSymbolTabe.TargetIsNotCollError(node.Name);
+                        }
+                        else
+                        {
+                            _createdSymbolTabe.TypeExpressionMismatch();
+                        }
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("something weird - spørg ezzi");
                 }
             }
             else
             {
+                VisitChildren(node);
+                typeOfVariable = _createdSymbolTabe.RetrieveSymbol(node.Name, out bool isCollection, false);
+                if (typeOfVariable == AllType.VOID)
+                {
+                    _createdSymbolTabe.DeclarationCantBeTypeVoid();
+                }
                 //The declaration assignment is just null, and therefore the collection is not set to something
             }
         }
@@ -1011,6 +1046,10 @@ namespace Compiler.AST
         {
             _createdSymbolTabe.SetCurrentNode(node);
             AllType? variableType = _createdSymbolTabe.RetrieveSymbol(node.Name);
+            if (node.Type_enum == AllType.VOID)
+            {
+                _createdSymbolTabe.DeclarationCantBeTypeVoid();
+            }
 
             if (node.Children != null)
             {
@@ -1022,6 +1061,39 @@ namespace Compiler.AST
                         if (expNode.OverAllType != variableType)
                         {
                             _createdSymbolTabe.WrongTypeError(child.Name, node.Name);
+                        }
+                        else
+                        {
+                            if(expNode.Name != null)
+                            {
+                                if (IsNotEqual(expNode.Name, node.Name))
+                                {
+                                    //the variables and the expression is of same type, and have not used the same variable for declaration and for expression.
+                                }
+                                else
+                                {
+                                    _createdSymbolTabe.DeclarationCantBeSameVariable(node.Name);
+                                }
+                            }
+                            else
+                            {
+                                foreach(AbstractNode expPartNode in expNode.ExpressionParts)
+                                {
+                                    if (expPartNode.Name != null)
+                                    {
+                                        if (IsNotEqual(expPartNode.Name, node.Name))
+                                        {
+                                            //the variables and the expression is of same type, and have not used the same variable for declaration and for expression.
+                                        }
+                                        else
+                                        {
+                                            _createdSymbolTabe.DeclarationCantBeSameVariable(node.Name);
+                                        }
+                                    }
+                                }
+                                //the variables and the expression is of same type, and have not used the same variable for declaration and for expression.
+                            }
+
                         }
                     }
                 }
@@ -1123,10 +1195,9 @@ namespace Compiler.AST
                 }
                 else
                 {
-                    //error
+                    _createdSymbolTabe.PredicateTypeError(item.Name);
                 }
                 iterator++;
-
             }
 
         }

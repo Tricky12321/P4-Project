@@ -860,7 +860,25 @@ namespace Compiler.AST.SymbolTable
 
         public void RunFunctionError(string actualParameter, string formalParameter)
         {
-            Console.WriteLine($"Actual parameter: {actualParameter} and formal parameter: {formalParameter} are a type missmatch");
+            Console.WriteLine($"Actual parameter: {actualParameter} and formal parameter: {formalParameter} are a type missmatch " + GetLineNumber());
+            Error();
+        }
+
+        public void PredicateTypeError(string actualParameterName)
+        {
+            Console.WriteLine($"Actual parameter: {actualParameterName} did not match the type of the formal parameter! " + GetLineNumber());
+            Error();
+        }
+
+        public void DeclarationCantBeTypeVoid()
+        {
+            Console.WriteLine("Declaration cant be of type void! " + GetLineNumber());
+            Error();
+        }
+
+        public void DeclarationCantBeSameVariable(string var1)
+        {
+            Console.WriteLine($"It is not possible to declare a variable with the same variable. Duplicates used: {var1} "+ GetLineNumber());
             Error();
         }
 
