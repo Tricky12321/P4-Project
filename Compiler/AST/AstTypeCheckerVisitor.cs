@@ -74,6 +74,12 @@ namespace Compiler.AST
         //-----------------------------Visitor----------------------------------------------
         public override void Visit(ParameterNode node)
         {
+            _createdSymbolTabe.SetCurrentNode(node);
+
+            if(node.Type_enum == AllType.VOID)
+            {
+                //error
+            }
             VisitChildren(node);
         }
 
@@ -844,7 +850,7 @@ namespace Compiler.AST
 
                             }
                         }
-                        if (previousType != node.OverAllType)
+                        else if (previousType != node.OverAllType)
                         {//types are different from eachother
                             if ((previousType == AllType.INT && node.OverAllType == AllType.DECIMAL) || (previousType == AllType.DECIMAL && node.OverAllType == AllType.INT))
                             {//types are accepted if one is int and one is decimal
@@ -1091,22 +1097,35 @@ namespace Compiler.AST
                     {
                         varType = _createdSymbolTabe.RetrieveSymbol(child.Name);
                         placeholderType = varType ?? default(AllType);
-                        if (placeholderType != test[i].Type)
+
+                        if (test.Count > 0)
                         {
-                            //type error
-                            _createdSymbolTabe.RunFunctionError(child.Name, test[i].Name);
+                            if (placeholderType != test[i].Type)
+                            {
+                                //type error
+                                _createdSymbolTabe.RunFunctionTypeError(child.Name, test[i].Name);
+                            }
+                        }
+                        else
+                        {
+                            //calling function with no formal parameters
+                            _createdSymbolTabe.RunFunctionWithNoFormalParameters(node.FunctionName);
                         }
                     }
-
                     else if (child is ConstantNode constNode)
                     {
                         if (child.Type_enum != test[i].Type)
                         {
-                            _createdSymbolTabe.RunFunctionError(child.Name, test[i].Name);
+                            _createdSymbolTabe.RunFunctionTypeError(child.Name, test[i].Name);
                             //type error
                         }
                     }
                 }
+            }
+            else if (test.Count > 0)
+            {
+                //running function without actual parameters, when function has formal parameters
+                _createdSymbolTabe.RunFunctionWithNoActualParameter(node.FunctionName);
             }
 
         }
