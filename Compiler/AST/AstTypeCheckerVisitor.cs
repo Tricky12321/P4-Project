@@ -159,8 +159,11 @@ namespace Compiler.AST
         public override void Visit(PredicateNode node)
         {
             _createdSymbolTabe.SetCurrentNode(node);
-            _createdSymbolTabe.NotImplementedError(node);
+            _createdSymbolTabe.OpenScope(node.Name);
+
             VisitChildren(node);
+
+            _createdSymbolTabe.CloseScope();
         }
 
         public override void Visit(ExtractMaxQueryNode node)
@@ -365,7 +368,7 @@ namespace Compiler.AST
                 }
                 else
                 {
-                    //TODO correct error message pls
+                    _createdSymbolTabe.FromVarIsNotCollError(node.Variable);
                 }
 
                 if (node.WhereCondition != null)
@@ -722,44 +725,56 @@ namespace Compiler.AST
         public override void Visit(DeclarationNode node)
         {
             _createdSymbolTabe.SetCurrentNode(node);
+            AllType? typeOfVariable;
             if (node.Assignment != null)
             {
                 node.Assignment.Parent = node;
                 node.Assignment.Accept(this);
-            }
-            VisitChildren(node);
-            AllType? typeOfVariable = _createdSymbolTabe.RetrieveSymbol(node.Name, out bool isCollection, false);
-            if (node.Assignment is ExpressionNode exprNode)
-            {
-                if (typeOfVariable == exprNode.OverAllType)
+
+                VisitChildren(node);
+                typeOfVariable = _createdSymbolTabe.RetrieveSymbol(node.Name, out bool isCollection, false);
+                if (node.Assignment is ExpressionNode exprNode)
                 {
-                    //the expression type and the variable is of same time.
-                }
-                else
-                {
-                    _createdSymbolTabe.TypeExpressionMismatch();
-                }
-            }
-            else if (node.Assignment is SelectAllQueryNode selAll)
-            {
-                if (typeOfVariable == selAll.Type_enum && isCollection)
-                {
-                    //type correct, variable is a coll, and collections have the same time. inner collection is checked in selectallNode.
-                }
-                else
-                {
-                    if (!isCollection)
+                    if (typeOfVariable == exprNode.OverAllType)
                     {
-                        _createdSymbolTabe.TargetIsNotCollError(node.Name);
+                        //the expression type and the variable is of same time.
                     }
                     else
                     {
-                        Console.WriteLine("select all, but something went wrong.");
+                        _createdSymbolTabe.TypeExpressionMismatch();
                     }
+                }
+                else if (node.Assignment is SelectAllQueryNode selAll)
+                {
+                    if (typeOfVariable == selAll.Type_enum && isCollection)
+                    {
+                        //type correct, variable is a coll, and collections have the same time. inner collection is checked in selectallNode.
+                    }
+                    else
+                    {
+                        if (!isCollection)
+                        {
+                            _createdSymbolTabe.TargetIsNotCollError(node.Name);
+                        }
+                        else
+                        {
+                            _createdSymbolTabe.TypeExpressionMismatch();
+                        }
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("something weird - spørg ezzi");
                 }
             }
             else
             {
+                VisitChildren(node);
+                typeOfVariable = _createdSymbolTabe.RetrieveSymbol(node.Name, out bool isCollection, false);
+                if(typeOfVariable == AllType.VOID)
+                {
+                    _createdSymbolTabe.DeclarationCantBeTypeVoid();
+                }
                 //The declaration assignment is just null, and therefore the collection is not set to something
             }
         }
@@ -1004,8 +1019,12 @@ namespace Compiler.AST
                 AllType? variableExpressionType = _createdSymbolTabe.RetrieveSymbol(node.Assignment.Name);
             }
 
-            ExpressionNode parentNode = (ExpressionNode)node.Parent;
-            parentNode.OverAllType = _createdSymbolTabe.RetrieveSymbol(node.Name);
+            _createdSymbolTabe.SetCurrentNode(node);
+            if (node.Parent is ExpressionNode expNode)
+            {
+                expNode.OverAllType = _createdSymbolTabe.RetrieveSymbol(node.Name);
+            }
+            node.Type = _createdSymbolTabe.RetrieveSymbol(node.Name).ToString();
             VisitChildren(node);
         }
 
@@ -1019,11 +1038,13 @@ namespace Compiler.AST
         {
             _createdSymbolTabe.SetCurrentNode(node);
             AllType? variableType = _createdSymbolTabe.RetrieveSymbol(node.Name);
-            AllType? ok = node.Type_enum;
+            if (node.Type_enum == AllType.VOID)
+            {
+                _createdSymbolTabe.DeclarationCantBeTypeVoid();
+            }
 
             if (node.Children != null)
             {
-                //VisitChildren(node);
                 foreach (AbstractNode child in node.Children)
                 {
                     if (child is ExpressionNode expNode)
@@ -1133,9 +1154,24 @@ namespace Compiler.AST
         public override void Visit(PredicateCall node)
         {
             _createdSymbolTabe.SetCurrentNode(node);
+            VisitChildren(node);
+            List<AllType> predParaTypes = _createdSymbolTabe.GetPredicateParameters(node.Name);
+            int iterator = 0;
+            foreach (AbstractNode item in node.Children)
+            {
+                AllType formalParameterType = predParaTypes[iterator];
+                AllType actualParameterType = item.Type_enum;
+                if (formalParameterType == actualParameterType)
+                {
+                    //typecorrect
+                }
+                else
+                {
+                    _createdSymbolTabe.PredicateTypeError(item.Name);
+                }
+                iterator++;
+            }
 
-
-            _createdSymbolTabe.NotImplementedError(node);
         }
     }
 }

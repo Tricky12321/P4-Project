@@ -12,6 +12,8 @@ namespace Compiler.AST.SymbolTable
         private Dictionary<AllType, Dictionary<string, ClassEntry>> _classesTable = new Dictionary<AllType, Dictionary<string, ClassEntry>>();
         private Dictionary<string, Dictionary<string, FunctionParameterEntry>> _functionTable = new Dictionary<string, Dictionary<string, FunctionParameterEntry>>();
 
+        private Dictionary<string, List<AllType>> _predicateTable = new Dictionary<string, List<AllType>>();
+
         // Get/Set to keep track of what is the deepest methods are stored!
         public string CurrentLine => GetLineNumber();
 
@@ -389,9 +391,10 @@ namespace Compiler.AST.SymbolTable
             {
                 Name = GetName(Name);
                 bool match = _symTable.ContainsKey(Name);
-                while (!match)
+                var names = Name.Split('.').ToList();
+
+                while (!match && names.Count > 1)
                 {
-                    var names = Name.Split('.').ToList();
                     names.RemoveAt(names.Count - 2);
                     Name = "";
                     bool first = true;
@@ -413,6 +416,11 @@ namespace Compiler.AST.SymbolTable
                         IsCollection = _symTable[Name].IsCollection;
                         var type = _symTable[Name].Type;
                         return type;
+                    }
+                    else
+                    {
+                        IsCollection = false;
+                        return null;
                     }
                 }
                 if (match)
@@ -618,6 +626,51 @@ namespace Compiler.AST.SymbolTable
             }
         }
 
+        public void AddPredicateToList(string PredicateName)
+        {
+            _predicateTable.Add(GetName(PredicateName), new List<AllType>());
+        }
+
+        public void EnterPredicateParameter(string PredicateName, AllType ParameterType)
+        {
+            CloseScope();
+            _predicateTable[GetName(PredicateName)].Add(ParameterType);
+            OpenScope(PredicateName);
+        }
+
+        public List<AllType> GetPredicateParameters(string PredicateName, bool Initial = true)
+        {
+            if (Initial) {
+                PredicateName = GetName(PredicateName);
+            }
+
+            if (_predicateTable.ContainsKey(PredicateName))
+            {
+                return _predicateTable[PredicateName];
+            } else {
+                var names = PredicateName.Split('.').ToList();
+                if (names.Count > 2) {
+                    names.RemoveAt(names.Count - 2);
+                } else if (names.Count == 2) {
+                    names.RemoveAt(0);
+                }
+                string name = "";
+                bool first = true;
+                foreach (var item in names)
+                {
+                    if (first) {
+                        name += item;
+                        first = false;
+                    } else {
+                        name += "." + item;
+                    }
+                }
+
+                return GetPredicateParameters(name, false);
+            }
+            return null;
+        }
+
         public List<FunctionParameterEntry> GetParameterTypes(string FunctionName)
         {
             var Output = new List<FunctionParameterEntry>();
@@ -800,21 +853,21 @@ namespace Compiler.AST.SymbolTable
             Error();
         }
 
-        public void RunFunctionTypeError(string actualParameter, string formalParameter)
+        public void RunFunctionError(string actualParameter, string formalParameter)
         {
-            Console.WriteLine($"Actual parameter: {actualParameter} and formal parameter: {formalParameter} are a type missmatch. {GetLineNumber()}");
+            Console.WriteLine($"Actual parameter: {actualParameter} and formal parameter: {formalParameter} are a type missmatch " + GetLineNumber());
             Error();
         }
 
-        public void RunFunctionWithNoActualParameter(string funcName)
+        public void PredicateTypeError(string actualParameterName)
         {
-            Console.WriteLine($"Trying to run function: {funcName}, without actual parameters, but function got formal parameters. {GetLineNumber()}");
+            Console.WriteLine($"Actual parameter: {actualParameterName} did not match the type of the formal parameter! " + GetLineNumber());
             Error();
         }
 
-        public void RunFunctionWithNoFormalParameters(string funcName)
+        public void DeclarationCantBeTypeVoid()
         {
-            Console.WriteLine($"Trying to run fucntion: {funcName}, with paramters, but function got no formal parameters. {GetLineNumber()}");
+            Console.WriteLine("Declaration cant be of type void! " + GetLineNumber());
             Error();
         }
 
@@ -835,7 +888,5 @@ namespace Compiler.AST.SymbolTable
                 }
             }
         }
-
-
     }
 }

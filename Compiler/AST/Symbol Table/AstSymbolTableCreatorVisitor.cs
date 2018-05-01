@@ -403,9 +403,11 @@ namespace Compiler.AST.SymbolTable
             SymbolTable.SetCurrentNode(node);
             string predicateName = node.Name;
             SymbolTable.EnterSymbol(predicateName, AllType.BOOL);
+            SymbolTable.AddPredicateToList(predicateName);
             SymbolTable.OpenScope(node.Name);
             foreach (ParameterNode parameter in node.Parameters)
             {
+                SymbolTable.EnterPredicateParameter(node.Name, parameter.Type_enum);
                 parameter.Accept(this);
             }
 
