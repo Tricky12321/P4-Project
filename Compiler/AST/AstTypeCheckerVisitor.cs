@@ -111,7 +111,7 @@ namespace Compiler.AST
                     {
                         //skal finde ud af hvad der er extended.
                         AllType? extentiontype = _createdSymbolTabe.RetrieveSymbol(Attributes.Item1.Name);
-                        
+                        AllType? testi = _createdSymbolTabe.GetVariableType(Attributes.Item1.Name);
                         if (extentiontype != null)
                         {
                             if (_createdSymbolTabe.IsExtended(variableName, extentiontype ?? default(AllType)))
