@@ -853,9 +853,21 @@ namespace Compiler.AST.SymbolTable
             Error();
         }
 
-        public void RunFunctionError(string actualParameter, string formalParameter)
+        public void RunFunctionTypeError(string actualParameter, string formalParameter)
         {
             Console.WriteLine($"Actual parameter: {actualParameter} and formal parameter: {formalParameter} are a type missmatch " + GetLineNumber());
+            Error();
+        }
+
+        public void RunFunctionWithNoFormalParameters(string funcName)
+        {
+            Console.WriteLine($"Trying to call a function: {funcName}, that does not have any formal parameters");
+            Error();
+        }
+
+        public void RunFunctionWithNoActualParameter(string funcName)
+        {
+            Console.WriteLine($"Trying to call a function: {funcName}, without actual parameters");
             Error();
         }
 
@@ -873,7 +885,7 @@ namespace Compiler.AST.SymbolTable
 
         public void ParamerIsVoid(string function, string parameter)
         {
-            Console.WriteLine($"{parameter} cannot be of type void,");
+            Console.WriteLine($"The parameter: {parameter} cannot be of type void" + GetLineNumber());
             Error();
         }
 

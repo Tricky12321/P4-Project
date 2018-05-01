@@ -78,7 +78,7 @@ namespace Compiler.AST
 
             if(node.Type_enum == AllType.VOID)
             {
-                //error
+                _createdSymbolTabe.ParamerIsVoid(node.Parent.Name, node.Name);
             }
             VisitChildren(node);
         }
@@ -101,10 +101,12 @@ namespace Compiler.AST
                 foreach (Tuple<VariableAttributeNode, string, ExpressionNode> Attributes in node.Attributes)
                 {
                     variableName = Attributes.Item1.Name;
+
                     if (Attributes.Item1 is AttributeNode attNode)
                     {
                         //skal finde ud af hvad der er extended.
-                        AllType? extentiontype = _createdSymbolTabe.RetrieveSymbol(Attributes.Item1.ClassVariableName);
+                        AllType? extentiontype = _createdSymbolTabe.RetrieveSymbol(Attributes.Item1.Name);
+                        
                         if (extentiontype != null)
                         {
                             if (_createdSymbolTabe.IsExtended(variableName, extentiontype ?? default(AllType)))
@@ -129,10 +131,13 @@ namespace Compiler.AST
                         Attributes.Item3.Accept(this);
                     }
 
-                    if (Attributes.Item3.OverAllType != variableType)
+                    if (variableType != null)
                     {
-                        //type between varible and overalltyper
-                        _createdSymbolTabe.WrongTypeError(variableName, Attributes.Item3.Name);
+                        if (Attributes.Item3.OverAllType != variableType)
+                        {
+                            //type between varible and overalltyper
+                            _createdSymbolTabe.TypeExpressionMismatch();
+                        }
                     }
 
                     if (node.InVariable != null)
@@ -144,8 +149,6 @@ namespace Compiler.AST
                         }
                     }
                 }
-
-
             }
             VisitChildren(node);
         }
