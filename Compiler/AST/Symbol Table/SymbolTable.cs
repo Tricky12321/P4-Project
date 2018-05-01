@@ -883,6 +883,12 @@ namespace Compiler.AST.SymbolTable
             Error();
         }
 
+        public void DeclarationCantBeSameVariable(string var1)
+        {
+            Console.WriteLine($"It is not possible to declare a variable with the same variable. Duplicates used: {var1} "+ GetLineNumber());
+            Error();
+        }
+
         public void ParamerIsVoid(string function, string parameter)
         {
             Console.WriteLine($"The parameter: {parameter} cannot be of type void" + GetLineNumber());
