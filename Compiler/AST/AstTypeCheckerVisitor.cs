@@ -81,7 +81,7 @@ namespace Compiler.AST
         {
             _createdSymbolTabe.SetCurrentNode(node);
 
-            if(node.Type_enum == AllType.VOID)
+            if (node.Type_enum == AllType.VOID)
             {
                 _createdSymbolTabe.ParamerIsVoid(node.Parent.Name, node.Name);
             }
@@ -97,7 +97,9 @@ namespace Compiler.AST
         {
             _createdSymbolTabe.SetCurrentNode(node);
             AllType? variableType = null;
-            AllType? inVariableType;
+            AllType? inVariableType = null;
+            bool isAttributeCollection = false;
+            bool isTypeCollection = false;
             string variableName;
 
             if (node.Attributes != null)
@@ -110,25 +112,17 @@ namespace Compiler.AST
                     if (Attributes.Item1 is AttributeNode attNode)
                     {
                         //skal finde ud af hvad der er extended.
-                        AllType? extentiontype = _createdSymbolTabe.RetrieveSymbol(Attributes.Item1.Name);
-                        AllType? testi = _createdSymbolTabe.GetVariableType(Attributes.Item1.Name);
-                        if (extentiontype != null)
-                        {
-                            if (_createdSymbolTabe.IsExtended(variableName, extentiontype ?? default(AllType)))
-                            {
-                                AllType? attributeType = _createdSymbolTabe.GetAttributeType(variableName, extentiontype ?? default(AllType));
 
-                                if (!(attributeType == extentiontype))
-                                {
-                                    //type wrong
-                                    _createdSymbolTabe.WrongTypeError(Attributes.Item1.Name, Attributes.Item1.ClassVariableName);
-                                }
-                            }
+                        if (node.InVariable != null)
+                        {
+                            inVariableType = _createdSymbolTabe.RetrieveSymbol(node.InVariable.Name);
+
+                            variableType = _createdSymbolTabe.GetAttributeType(attNode.Name, inVariableType ?? default(AllType), out isAttributeCollection);
                         }
                     }
                     else
                     {
-                        variableType = _createdSymbolTabe.RetrieveSymbol(variableName);
+                        variableType = _createdSymbolTabe.RetrieveSymbol(variableName, out isTypeCollection);
                     }
 
                     if (Attributes.Item3 != null)
@@ -136,21 +130,12 @@ namespace Compiler.AST
                         Attributes.Item3.Accept(this);
                     }
 
-                    if (variableType != null)
+                    if (variableType != null && isTypeCollection == isAttributeCollection)
                     {
                         if (Attributes.Item3.OverAllType != variableType)
                         {
                             //type between varible and overalltyper
                             _createdSymbolTabe.TypeExpressionMismatch();
-                        }
-                    }
-
-                    if (node.InVariable != null)
-                    {
-                        inVariableType = _createdSymbolTabe.RetrieveSymbol(node.InVariable.Name);
-                        if (inVariableType != variableType)
-                        {
-                            //error  with invariable
                         }
                     }
                 }
@@ -745,7 +730,7 @@ namespace Compiler.AST
                 {
                     if (typeOfVariable == exprNode.OverAllType)
                     {
-                        foreach(AbstractNode abnode in exprNode.ExpressionParts)
+                        foreach (AbstractNode abnode in exprNode.ExpressionParts)
                         {
                             if (IsNotEqual(node.Name, abnode.Name))
                             {
@@ -1082,7 +1067,7 @@ namespace Compiler.AST
                         }
                         else
                         {
-                            if(expNode.Name != null)
+                            if (expNode.Name != null)
                             {
                                 if (IsNotEqual(expNode.Name, node.Name))
                                 {
@@ -1095,7 +1080,7 @@ namespace Compiler.AST
                             }
                             else
                             {
-                                foreach(AbstractNode expPartNode in expNode.ExpressionParts)
+                                foreach (AbstractNode expPartNode in expNode.ExpressionParts)
                                 {
                                     if (expPartNode.Name != null)
                                     {
