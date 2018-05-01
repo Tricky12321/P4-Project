@@ -871,6 +871,12 @@ namespace Compiler.AST.SymbolTable
             Error();
         }
 
+        public void DeclarationCantBeSameVariable(string var1)
+        {
+            Console.WriteLine($"It is not possible to declare a variable with the same variable. Duplicates used: {var1} "+ GetLineNumber());
+            Error();
+        }
+
         public void AddClassVariablesToScope(AllType type)
         {
             if (IsClass(type))
