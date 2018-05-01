@@ -623,6 +623,7 @@ namespace Compiler.AST
             SelectQueryNode SelectNode = new SelectQueryNode(context.Start.Line, context.Start.Column);
             SelectNode.Type = getContextType(context.variableFunc());
             SelectNode.Variable = context.variableFunc().GetText();
+            SelectNode.Name = SelectNode.Variable;
             if (context.where() != null)
             {
                 SelectNode.WhereCondition = Visit(context.where());
@@ -635,6 +636,7 @@ namespace Compiler.AST
             SelectAllQueryNode SelectNode = new SelectAllQueryNode(context.Start.Line, context.Start.Column);
             SelectNode.Type = getContextType(context.variableFunc());
             SelectNode.Variable = context.variableFunc().GetText();
+            SelectNode.Name = SelectNode.Variable;
             if (context.where() != null)
             {
                 SelectNode.WhereCondition = Visit(context.where());
@@ -673,6 +675,7 @@ namespace Compiler.AST
         {
             DequeueQueryNode DequeueNode = new DequeueQueryNode(context.Start.Line, context.Start.Column);
             DequeueNode.Variable = context.variable().GetText();
+            DequeueNode.Name = DequeueNode.Variable;
             return DequeueNode;
         }
 
@@ -680,6 +683,7 @@ namespace Compiler.AST
         {
             PopQueryNode PopNode = new PopQueryNode(context.Start.Line, context.Start.Column);
             PopNode.Variable = context.variable().GetText();
+            PopNode.Name = PopNode.Variable;
             return PopNode;
         }
 
@@ -696,6 +700,7 @@ namespace Compiler.AST
             ExtractMinQueryNode ExtractQuery = new ExtractMinQueryNode(context.Start.Line, context.Start.Column);
 
             ExtractQuery.Variable = context.variable().GetText();
+            ExtractQuery.Name = ExtractQuery.Variable;
             if (context.attribute() != null)
             {
                 ExtractQuery.Attribute = context.attribute().GetText();
@@ -712,6 +717,7 @@ namespace Compiler.AST
             ExtractMaxQueryNode ExtractQuery = new ExtractMaxQueryNode(context.Start.Line, context.Start.Column);
 
             ExtractQuery.Variable = context.variable().GetText();
+            ExtractQuery.Name = ExtractQuery.Variable;
             if (context.attribute() != null)
             {
                 ExtractQuery.Attribute = context.attribute().GetText();
@@ -727,6 +733,7 @@ namespace Compiler.AST
         {
             DequeueQueryNode DequeueNode = new DequeueQueryNode(context.Start.Line, context.Start.Column);
             DequeueNode.Variable = context.variable().GetText();
+            DequeueNode.Name = DequeueNode.Variable;
             return DequeueNode;
         }
 
