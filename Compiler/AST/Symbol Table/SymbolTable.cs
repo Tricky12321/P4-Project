@@ -165,7 +165,12 @@ namespace Compiler.AST.SymbolTable
             // Loop, until there is only the name left to check, this is because we check all scopes above this, to ensure a variable isnt declared
             while (toCheckFor != name)
             {
-                if (_symTable.ContainsKey(toCheckFor))
+                if (name.Contains(".")) {
+                    var names = name.Split('.');
+                    AllType? type = RetrieveSymbol(names[0]);
+                    AllType type_notNull = type ?? default(AllType);
+                    return GetAttributeType(names[1], type_notNull) ?? default(AllType);
+                } else if (_symTable.ContainsKey(toCheckFor))
                 {
                     return _symTable[toCheckFor].Type;
                 }
@@ -644,7 +649,7 @@ namespace Compiler.AST.SymbolTable
                 PredicateName = GetName(PredicateName);
             }
 
-            if (_predicateTable.ContainsKey(PredicateName))
+                if (_predicateTable.ContainsKey(PredicateName))
             {
                 return _predicateTable[PredicateName];
             } else {
