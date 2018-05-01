@@ -75,6 +75,27 @@ namespace Compiler.AST
             return !(name1 == name2);
         }
 
+        private void checkCollectionFollowsCollection(string varName)
+        {
+            if (varName.Contains('.'))
+            {
+                string[] names = varName.Split('.');
+                string lastString = "";
+                for (int i = 0; i < names.Length - 1; i++)
+                {
+                    string currentCheck = lastString + names[i];
+                    lastString = currentCheck + ".";
+                    _createdSymbolTabe.RetrieveSymbol(currentCheck, out bool isCollection, false);
+                    {
+                        if (isCollection)
+                        {
+                            _createdSymbolTabe.IllegalCollectionPath(varName);
+                        }
+                    }
+                }
+            }
+        }
+
 
         //-----------------------------Visitor----------------------------------------------
         public override void Visit(ParameterNode node)
@@ -90,6 +111,7 @@ namespace Compiler.AST
         public override void Visit(SetQueryNode node)
         {
             _createdSymbolTabe.SetCurrentNode(node);
+            checkCollectionFollowsCollection(node.InVariable.Name);
             AllType? variableType = null;
             AllType? inVariableType;
             string variableName;
@@ -168,7 +190,7 @@ namespace Compiler.AST
         public override void Visit(ExtractMaxQueryNode node)
         {
             _createdSymbolTabe.SetCurrentNode(node);
-
+            checkCollectionFollowsCollection(node.Variable);
             AllType? collectionNameType = _createdSymbolTabe.RetrieveSymbol(node.Variable, out bool isCollectionInQuery, false);
             AllType? typeAttribute = AllType.UNKNOWNTYPE;
             if (isCollectionInQuery)
@@ -185,6 +207,7 @@ namespace Compiler.AST
                                 //variable is a collection, which are different from decimal and int collections, 
                                 //an attribute is specified, and are of type int or decimal, which ir MUST be!
                                 node.Type = collectionNameType.ToString();
+                                node.Name = node.Variable;
                             }
                             else
                             {
@@ -245,7 +268,7 @@ namespace Compiler.AST
         public override void Visit(ExtractMinQueryNode node)
         {
             _createdSymbolTabe.SetCurrentNode(node);
-
+            checkCollectionFollowsCollection(node.Variable);
             AllType? collectionNameType = _createdSymbolTabe.RetrieveSymbol(node.Variable, out bool isCollectionInQuery, false);
             AllType? typeAttribute = AllType.UNKNOWNTYPE;
             if (isCollectionInQuery)
@@ -262,6 +285,7 @@ namespace Compiler.AST
                                 //variable is a collection, which are different from decimal and int collections, 
                                 //an attribute is specified, and are of type int or decimal, which ir MUST be!
                                 node.Type = collectionNameType.ToString();
+                                node.Name = node.Variable;
                             }
                             else
                             {
@@ -322,6 +346,7 @@ namespace Compiler.AST
         public override void Visit(SelectAllQueryNode node)
         {
             _createdSymbolTabe.SetCurrentNode(node);
+            checkCollectionFollowsCollection(node.Variable);
             AllType? collectionNameType = _createdSymbolTabe.RetrieveSymbol(node.Variable, out bool isCollectionInQuery, false);
             bool fromIsColl = isCollectionInQuery;
             if (fromIsColl)
@@ -329,7 +354,7 @@ namespace Compiler.AST
                 if (node.Parent is DeclarationNode dclNode)
                 {
                     node.Type = collectionNameType.ToString();
-                    node.Name = dclNode.Name;
+                    node.Name = node.Variable;
                 }
                 else if (node.Parent is ExpressionNode expNode)
                 {
@@ -352,6 +377,7 @@ namespace Compiler.AST
         public override void Visit(SelectQueryNode node)
         {
             _createdSymbolTabe.SetCurrentNode(node);
+            checkCollectionFollowsCollection(node.Variable);
             if (node.Parent != null)
             {
                 AllType? collectionNameType = _createdSymbolTabe.RetrieveSymbol(node.Variable, out bool isCollectionInQuery, false);
@@ -364,6 +390,7 @@ namespace Compiler.AST
                         expNode.Name = node.Variable;
                     }
                     node.Type = collectionNameType.ToString();
+                    node.Name = node.Variable;
                 }
                 else
                 {
@@ -380,6 +407,7 @@ namespace Compiler.AST
         public override void Visit(PushQueryNode node)
         {
             _createdSymbolTabe.SetCurrentNode(node);
+            checkCollectionFollowsCollection(node.VariableCollection);
             AllType? varToAdd;
             AllType? collectionToAddTo = _createdSymbolTabe.RetrieveSymbol(node.VariableCollection, out bool isCollectionInQuery, false);
             node.Type = collectionToAddTo.ToString();
@@ -419,6 +447,7 @@ namespace Compiler.AST
         public override void Visit(PopQueryNode node)
         {
             _createdSymbolTabe.SetCurrentNode(node);
+            checkCollectionFollowsCollection(node.Variable);
             if (node.Parent != null)
             {
                 AllType? collectionNameType = _createdSymbolTabe.RetrieveSymbol(node.Variable, out bool isCollectionInQuery, false);
@@ -431,6 +460,7 @@ namespace Compiler.AST
                         expNode.Name = node.Variable;
                     }
                     node.Type = collectionNameType.ToString();
+                    node.Name = node.Variable;
                 }
                 else
                 {
@@ -442,6 +472,7 @@ namespace Compiler.AST
         public override void Visit(EnqueueQueryNode node)
         {
             _createdSymbolTabe.SetCurrentNode(node);
+            checkCollectionFollowsCollection(node.VariableCollection);
             AllType? varToAdd;
             AllType? collectionToAddTo = _createdSymbolTabe.RetrieveSymbol(node.VariableCollection, out bool isCollectionInQuery, false);
             node.Type = collectionToAddTo.ToString();
@@ -477,8 +508,10 @@ namespace Compiler.AST
         public override void Visit(DequeueQueryNode node)
         {
             _createdSymbolTabe.SetCurrentNode(node);
+            checkCollectionFollowsCollection(node.Variable);
             AllType? collection = _createdSymbolTabe.RetrieveSymbol(node.Variable, out bool isCollectionInQuery, false);
             bool FromIsColl = isCollectionInQuery;
+            checkCollectionFollowsCollection(node.Variable);
             if (FromIsColl)
             {
                 if (node.Parent is ExpressionNode expNode)
@@ -487,6 +520,7 @@ namespace Compiler.AST
                     expNode.Name = node.Variable;
                 }
                 node.Type = collection.ToString();
+                node.Name = node.Variable;
             }
             else
             {
@@ -497,6 +531,7 @@ namespace Compiler.AST
         public override void Visit(AddQueryNode node)
         {
             _createdSymbolTabe.SetCurrentNode(node);
+            checkCollectionFollowsCollection(node.ToVariable);
             if (node.IsGraph)
             {//control statement for input to graphs
                 AllType? TypeOfTargetCollection = _createdSymbolTabe.RetrieveSymbol(node.ToVariable, out bool isCollectionTargetColl, false);
@@ -736,7 +771,7 @@ namespace Compiler.AST
                 {
                     if (typeOfVariable == exprNode.OverAllType)
                     {
-                        foreach(AbstractNode abnode in exprNode.ExpressionParts)
+                        foreach (AbstractNode abnode in exprNode.ExpressionParts)
                         {
                             if (IsNotEqual(node.Name, abnode.Name))
                             {
@@ -753,11 +788,12 @@ namespace Compiler.AST
                         _createdSymbolTabe.TypeExpressionMismatch();
                     }
                 }
-                else if (node.Assignment is SelectAllQueryNode selAll)
+                else
                 {
-                    if (typeOfVariable == selAll.Type_enum && isCollection)
+                    AbstractNode abNode = node.Assignment;
+                    if (typeOfVariable == abNode.Type_enum && isCollection)
                     {
-                        if (IsNotEqual(node.Name, selAll.Variable))
+                        if (IsNotEqual(node.Name, abNode.Name))
                         {
                             //type correct, variable is a coll, and collections have the same time. inner collection is checked in selectallNode.
                             //and is not the same collection.
@@ -778,10 +814,6 @@ namespace Compiler.AST
                             _createdSymbolTabe.TypeExpressionMismatch();
                         }
                     }
-                }
-                else
-                {
-                    Console.WriteLine("something weird - spørg ezzi");
                 }
             }
             else
@@ -1064,7 +1096,7 @@ namespace Compiler.AST
                         }
                         else
                         {
-                            if(expNode.Name != null)
+                            if (expNode.Name != null)
                             {
                                 if (IsNotEqual(expNode.Name, node.Name))
                                 {
@@ -1077,7 +1109,7 @@ namespace Compiler.AST
                             }
                             else
                             {
-                                foreach(AbstractNode expPartNode in expNode.ExpressionParts)
+                                foreach (AbstractNode expPartNode in expNode.ExpressionParts)
                                 {
                                     if (expPartNode.Name != null)
                                     {

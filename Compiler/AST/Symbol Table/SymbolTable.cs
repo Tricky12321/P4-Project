@@ -877,6 +877,12 @@ namespace Compiler.AST.SymbolTable
             Error();
         }
 
+        public void IllegalCollectionPath(string collectionpath)
+        {
+            Console.WriteLine($"One or more collections is used in the variable path: {collectionpath} " + GetLineNumber());
+            Error();
+        }
+
         public void AddClassVariablesToScope(AllType type)
         {
             if (IsClass(type))
