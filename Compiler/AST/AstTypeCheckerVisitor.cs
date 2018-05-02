@@ -75,10 +75,37 @@ namespace Compiler.AST
             return !(name1 == name2);
         }
 
+        private void checkCollectionFollowsCollection(string varName)
+        {
+            if (varName.Contains('.'))
+            {
+                string[] names = varName.Split('.');
+                string lastString = "";
+                for (int i = 0; i < names.Length - 1; i++)
+                {
+                    string currentCheck = lastString + names[i];
+                    lastString = currentCheck + ".";
+                    _createdSymbolTabe.RetrieveSymbol(currentCheck, out bool isCollection, false);
+                    {
+                        if (isCollection)
+                        {
+                            _createdSymbolTabe.IllegalCollectionPath(varName);
+                        }
+                    }
+                }
+            }
+        }
+
 
         //-----------------------------Visitor----------------------------------------------
         public override void Visit(ParameterNode node)
         {
+            _createdSymbolTabe.SetCurrentNode(node);
+
+            if (node.Type_enum == AllType.VOID)
+            {
+                _createdSymbolTabe.ParamerIsVoid(node.Parent.Name, node.Name);
+            }
             VisitChildren(node);
         }
 
@@ -91,7 +118,9 @@ namespace Compiler.AST
         {
             _createdSymbolTabe.SetCurrentNode(node);
             AllType? variableType = null;
-            AllType? inVariableType;
+            AllType? inVariableType = null;
+            bool isAttributeCollection = false;
+            bool isTypeCollection = false;
             string variableName;
 
             if (node.Attributes != null)
@@ -100,51 +129,44 @@ namespace Compiler.AST
                 foreach (Tuple<VariableAttributeNode, string, ExpressionNode> Attributes in node.Attributes)
                 {
                     variableName = Attributes.Item1.Name;
+
                     if (Attributes.Item1 is AttributeNode attNode)
                     {
                         //skal finde ud af hvad der er extended.
-                        AllType? extentiontype = _createdSymbolTabe.RetrieveSymbol(Attributes.Item1.ClassVariableName);
-                        if (extentiontype != null)
-                        {
-                            if (_createdSymbolTabe.IsExtended(variableName, extentiontype ?? default(AllType)))
-                            {
-                                AllType? attributeType = _createdSymbolTabe.GetAttributeType(variableName, extentiontype ?? default(AllType));
 
-                                if (!(attributeType == extentiontype))
-                                {
-                                    //type wrong
-                                    _createdSymbolTabe.WrongTypeError(Attributes.Item1.Name, Attributes.Item1.ClassVariableName);
-                                }
-                            }
+                        if (node.InVariable != null)
+                        {
+                            checkCollectionFollowsCollection(node.InVariable.Name);
+                            inVariableType = _createdSymbolTabe.RetrieveSymbol(node.InVariable.Name);
+                            variableType = _createdSymbolTabe.GetAttributeType(attNode.Name, inVariableType ?? default(AllType), out isAttributeCollection);
                         }
                     }
                     else
                     {
-                        variableType = _createdSymbolTabe.RetrieveSymbol(variableName);
+                        variableType = _createdSymbolTabe.RetrieveSymbol(variableName, out isTypeCollection);
                     }
 
                     if (Attributes.Item3 != null)
                     {
                         Attributes.Item3.Accept(this);
                     }
-
-                    if (Attributes.Item3.OverAllType != variableType)
+                    //skriv en fejlbesked
+                    if (variableType != null)
                     {
-                        //type between varible and overalltyper
-                        _createdSymbolTabe.WrongTypeError(variableName, Attributes.Item3.Name);
-                    }
-
-                    if (node.InVariable != null)
-                    {
-                        inVariableType = _createdSymbolTabe.RetrieveSymbol(node.InVariable.Name);
-                        if (inVariableType != variableType)
+                        if (isTypeCollection == isAttributeCollection)
                         {
-                            //error  with invariable
+                            if (Attributes.Item3.OverAllType != variableType)
+                            {
+                                //type between varible and overalltyper
+                                _createdSymbolTabe.TypeExpressionMismatch();
+                            }
+                        }
+                        else
+                        {
+                            _createdSymbolTabe.WrongTypeConditionError();
                         }
                     }
                 }
-
-
             }
             VisitChildren(node);
         }
@@ -168,7 +190,7 @@ namespace Compiler.AST
         public override void Visit(ExtractMaxQueryNode node)
         {
             _createdSymbolTabe.SetCurrentNode(node);
-
+            checkCollectionFollowsCollection(node.Variable);
             AllType? collectionNameType = _createdSymbolTabe.RetrieveSymbol(node.Variable, out bool isCollectionInQuery, false);
             AllType? typeAttribute = AllType.UNKNOWNTYPE;
             if (isCollectionInQuery)
@@ -185,6 +207,7 @@ namespace Compiler.AST
                                 //variable is a collection, which are different from decimal and int collections, 
                                 //an attribute is specified, and are of type int or decimal, which ir MUST be!
                                 node.Type = collectionNameType.ToString();
+                                node.Name = node.Variable;
                             }
                             else
                             {
@@ -245,7 +268,7 @@ namespace Compiler.AST
         public override void Visit(ExtractMinQueryNode node)
         {
             _createdSymbolTabe.SetCurrentNode(node);
-
+            checkCollectionFollowsCollection(node.Variable);
             AllType? collectionNameType = _createdSymbolTabe.RetrieveSymbol(node.Variable, out bool isCollectionInQuery, false);
             AllType? typeAttribute = AllType.UNKNOWNTYPE;
             if (isCollectionInQuery)
@@ -262,6 +285,7 @@ namespace Compiler.AST
                                 //variable is a collection, which are different from decimal and int collections, 
                                 //an attribute is specified, and are of type int or decimal, which ir MUST be!
                                 node.Type = collectionNameType.ToString();
+                                node.Name = node.Variable;
                             }
                             else
                             {
@@ -322,6 +346,7 @@ namespace Compiler.AST
         public override void Visit(SelectAllQueryNode node)
         {
             _createdSymbolTabe.SetCurrentNode(node);
+            checkCollectionFollowsCollection(node.Variable);
             AllType? collectionNameType = _createdSymbolTabe.RetrieveSymbol(node.Variable, out bool isCollectionInQuery, false);
             bool fromIsColl = isCollectionInQuery;
             if (fromIsColl)
@@ -329,7 +354,7 @@ namespace Compiler.AST
                 if (node.Parent is DeclarationNode dclNode)
                 {
                     node.Type = collectionNameType.ToString();
-                    node.Name = dclNode.Name;
+                    node.Name = node.Variable;
                 }
                 else if (node.Parent is ExpressionNode expNode)
                 {
@@ -352,6 +377,7 @@ namespace Compiler.AST
         public override void Visit(SelectQueryNode node)
         {
             _createdSymbolTabe.SetCurrentNode(node);
+            checkCollectionFollowsCollection(node.Variable);
             if (node.Parent != null)
             {
                 AllType? collectionNameType = _createdSymbolTabe.RetrieveSymbol(node.Variable, out bool isCollectionInQuery, false);
@@ -364,6 +390,7 @@ namespace Compiler.AST
                         expNode.Name = node.Variable;
                     }
                     node.Type = collectionNameType.ToString();
+                    node.Name = node.Variable;
                 }
                 else
                 {
@@ -380,6 +407,7 @@ namespace Compiler.AST
         public override void Visit(PushQueryNode node)
         {
             _createdSymbolTabe.SetCurrentNode(node);
+            checkCollectionFollowsCollection(node.VariableCollection);
             AllType? varToAdd;
             AllType? collectionToAddTo = _createdSymbolTabe.RetrieveSymbol(node.VariableCollection, out bool isCollectionInQuery, false);
             node.Type = collectionToAddTo.ToString();
@@ -419,6 +447,7 @@ namespace Compiler.AST
         public override void Visit(PopQueryNode node)
         {
             _createdSymbolTabe.SetCurrentNode(node);
+            checkCollectionFollowsCollection(node.Variable);
             if (node.Parent != null)
             {
                 AllType? collectionNameType = _createdSymbolTabe.RetrieveSymbol(node.Variable, out bool isCollectionInQuery, false);
@@ -431,6 +460,7 @@ namespace Compiler.AST
                         expNode.Name = node.Variable;
                     }
                     node.Type = collectionNameType.ToString();
+                    node.Name = node.Variable;
                 }
                 else
                 {
@@ -442,6 +472,7 @@ namespace Compiler.AST
         public override void Visit(EnqueueQueryNode node)
         {
             _createdSymbolTabe.SetCurrentNode(node);
+            checkCollectionFollowsCollection(node.VariableCollection);
             AllType? varToAdd;
             AllType? collectionToAddTo = _createdSymbolTabe.RetrieveSymbol(node.VariableCollection, out bool isCollectionInQuery, false);
             node.Type = collectionToAddTo.ToString();
@@ -477,8 +508,10 @@ namespace Compiler.AST
         public override void Visit(DequeueQueryNode node)
         {
             _createdSymbolTabe.SetCurrentNode(node);
+            checkCollectionFollowsCollection(node.Variable);
             AllType? collection = _createdSymbolTabe.RetrieveSymbol(node.Variable, out bool isCollectionInQuery, false);
             bool FromIsColl = isCollectionInQuery;
+            checkCollectionFollowsCollection(node.Variable);
             if (FromIsColl)
             {
                 if (node.Parent is ExpressionNode expNode)
@@ -487,6 +520,7 @@ namespace Compiler.AST
                     expNode.Name = node.Variable;
                 }
                 node.Type = collection.ToString();
+                node.Name = node.Variable;
             }
             else
             {
@@ -497,6 +531,7 @@ namespace Compiler.AST
         public override void Visit(AddQueryNode node)
         {
             _createdSymbolTabe.SetCurrentNode(node);
+            checkCollectionFollowsCollection(node.ToVariable);
             if (node.IsGraph)
             {//control statement for input to graphs
                 AllType? TypeOfTargetCollection = _createdSymbolTabe.RetrieveSymbol(node.ToVariable, out bool isCollectionTargetColl, false);
@@ -620,12 +655,9 @@ namespace Compiler.AST
             _createdSymbolTabe.SetCurrentNode(node);
             AllType? vertexFromType = _createdSymbolTabe.RetrieveSymbol(node.VertexNameFrom, false);
             AllType? vertexToType = _createdSymbolTabe.RetrieveSymbol(node.VertexNameTo, false);
-            if (vertexFromType == AllType.VERTEX && vertexToType == AllType.VERTEX)
+            if (!(vertexFromType == AllType.VERTEX && vertexToType == AllType.VERTEX))
             {
-                //both from and to targets are of type vertex, which they MUST be.
-            }
-            else
-            {
+                //type error
                 _createdSymbolTabe.TypeExpressionMismatch();
             }
             foreach (KeyValuePair<string, AbstractNode> item in node.ValueList)
@@ -633,14 +665,18 @@ namespace Compiler.AST
                 item.Value.Parent = node;
                 item.Value.Accept(this);
                 AllType? typeOfKey = _createdSymbolTabe.GetAttributeType(item.Key, AllType.EDGE);
-                if (typeOfKey == node.Type_enum)
+                if (item.Value is ExpressionNode expNode)
                 {
-
+                    if (typeOfKey != expNode.OverAllType)
+                    {
+                        _createdSymbolTabe.TypeExpressionMismatch();
+                    }
                 }
                 else
                 {
-                    _createdSymbolTabe.TypeExpressionMismatch();
+                    throw new Exception("haha gg");
                 }
+
             }
         }
 
@@ -736,7 +772,7 @@ namespace Compiler.AST
                 {
                     if (typeOfVariable == exprNode.OverAllType)
                     {
-                        foreach(AbstractNode abnode in exprNode.ExpressionParts)
+                        foreach (AbstractNode abnode in exprNode.ExpressionParts)
                         {
                             if (IsNotEqual(node.Name, abnode.Name))
                             {
@@ -753,11 +789,12 @@ namespace Compiler.AST
                         _createdSymbolTabe.TypeExpressionMismatch();
                     }
                 }
-                else if (node.Assignment is SelectAllQueryNode selAll)
+                else
                 {
-                    if (typeOfVariable == selAll.Type_enum && isCollection)
+                    AbstractNode abNode = node.Assignment;
+                    if (typeOfVariable == abNode.Type_enum && isCollection)
                     {
-                        if (IsNotEqual(node.Name, selAll.Variable))
+                        if (IsNotEqual(node.Name, abNode.Name))
                         {
                             //type correct, variable is a coll, and collections have the same time. inner collection is checked in selectallNode.
                             //and is not the same collection.
@@ -778,10 +815,6 @@ namespace Compiler.AST
                             _createdSymbolTabe.TypeExpressionMismatch();
                         }
                     }
-                }
-                else
-                {
-                    Console.WriteLine("something weird - spørg ezzi");
                 }
             }
             else
@@ -882,41 +915,39 @@ namespace Compiler.AST
 
                             }
                         }
-                        else
-                        {
-                            if (previousType != node.OverAllType)
-                            {//types are different from eachother
-                                if ((previousType == AllType.INT && node.OverAllType == AllType.DECIMAL) || (previousType == AllType.DECIMAL && node.OverAllType == AllType.INT))
-                                {//types are accepted if one is int and one is decimal
-                                    node.OverAllType = AllType.DECIMAL;
-                                    //do nothing, but set overalltype to decimal.
-                                }
-                                else
-                                {//types are different from eachother, and do not allow operates between them
-                                    _createdSymbolTabe.TypeExpressionMismatch();
-                                }
+                        else if (previousType != node.OverAllType)
+                        {//types are different from eachother
+                            if ((previousType == AllType.INT && node.OverAllType == AllType.DECIMAL) || (previousType == AllType.DECIMAL && node.OverAllType == AllType.INT))
+                            {//types are accepted if one is int and one is decimal
+                                node.OverAllType = AllType.DECIMAL;
+                                //do nothing, but set overalltype to decimal.
                             }
                             else
-                            {//times are of the same time
-                                //bools to control which types are not allowed to be operated upon, even if same time.
-                                bool bothIsBool = previousType == AllType.BOOL && node.OverAllType == AllType.BOOL;
-                                bool bothIsGraph = previousType == AllType.GRAPH && node.OverAllType == AllType.GRAPH;
-                                bool bothIsVertex = previousType == AllType.VERTEX && node.OverAllType == AllType.VERTEX;
-                                bool bothIsEdge = previousType == AllType.EDGE && node.OverAllType == AllType.EDGE;
-                                bool bothIsVoid = previousType == AllType.VOID && node.OverAllType == AllType.VOID;
-                                bool bothIsCollection = previousType == AllType.COLLECTION && node.OverAllType == AllType.COLLECTION;
-
-                                if (bothIsBool || bothIsGraph || bothIsVertex || bothIsEdge || bothIsVoid || bothIsCollection)
-                                {
-                                    _createdSymbolTabe.TypeExpressionMismatch();
-                                }
-                                else
-                                {
-                                    //do nothing, both is the same type and are allowed, so everything is fine.
-                                }
-
+                            {//types are different from eachother, and do not allow operates between them
+                                _createdSymbolTabe.TypeExpressionMismatch();
                             }
                         }
+                        else
+                        {//times are of the same time
+                         //bools to control which types are not allowed to be operated upon, even if same time.
+                            bool bothIsBool = previousType == AllType.BOOL && node.OverAllType == AllType.BOOL;
+                            bool bothIsGraph = previousType == AllType.GRAPH && node.OverAllType == AllType.GRAPH;
+                            bool bothIsVertex = previousType == AllType.VERTEX && node.OverAllType == AllType.VERTEX;
+                            bool bothIsEdge = previousType == AllType.EDGE && node.OverAllType == AllType.EDGE;
+                            bool bothIsVoid = previousType == AllType.VOID && node.OverAllType == AllType.VOID;
+                            bool bothIsCollection = previousType == AllType.COLLECTION && node.OverAllType == AllType.COLLECTION;
+
+                            if (bothIsBool || bothIsGraph || bothIsVertex || bothIsEdge || bothIsVoid || bothIsCollection)
+                            {
+                                _createdSymbolTabe.TypeExpressionMismatch();
+                            }
+                            else
+                            {
+                                //do nothing, both is the same type and are allowed, so everything is fine.
+                            }
+
+                        }
+
                     }
                 }
             }
@@ -965,29 +996,40 @@ namespace Compiler.AST
 
         public override void Visit(ForLoopNode node)
         {
+            AllType? varDclNodeType;
             _createdSymbolTabe.SetCurrentNode(node);
             _createdSymbolTabe.OpenScope(BlockType.ForLoop);
 
-            if (node.Increment != null)
+            if (node.Increment != null && node.VariableDeclaration != null && node.ToValueOperation != null)
             {
                 node.Increment.Accept(this);
+                node.VariableDeclaration.Accept(this);
+                node.ToValueOperation.Accept(this);
             }
-            node.VariableDeclaration.Accept(this);
-            node.ToValueOperation.Accept(this);
-            AllType? varDclNodeType;
 
-            if (node.VariableDeclaration is VariableDclNode varDclNode && node.Increment is ExpressionNode incrementNode)
+            if (node.Increment is ExpressionNode incrementNode)
             {
-                varDclNodeType = _createdSymbolTabe.RetrieveSymbol(varDclNode.Name);
-                if (!(varDclNodeType == AllType.INT && incrementNode.OverAllType == AllType.INT))
+                if (node.VariableDeclaration is VariableDclNode varDclNode)
                 {
-                    _createdSymbolTabe.WrongTypeConditionError();
+                    varDclNodeType = _createdSymbolTabe.RetrieveSymbol(varDclNode.Name);
+                    if (varDclNodeType != AllType.INT && incrementNode.OverAllType != AllType.INT)
+                    {
+                        _createdSymbolTabe.WrongTypeConditionError();
+                    }
+                }
+
+                if (node.VariableDeclaration is ExpressionNode expNode)
+                {
+                    if (expNode.OverAllType != AllType.INT || incrementNode.OverAllType != AllType.INT)
+                    {
+                        _createdSymbolTabe.WrongTypeConditionError();
+                    }
                 }
             }
-
             VisitChildren(node);
             _createdSymbolTabe.CloseScope();
         }
+
 
         public override void Visit(ForeachLoopNode node)
         {
@@ -1020,7 +1062,7 @@ namespace Compiler.AST
 
         public override void Visit(VariableNode node)
         {
-            AllType? variableType;
+            _createdSymbolTabe.SetCurrentNode(node);
 
             if (node.Assignment != null)
             {
@@ -1064,7 +1106,7 @@ namespace Compiler.AST
                         }
                         else
                         {
-                            if(expNode.Name != null)
+                            if (expNode.Name != null)
                             {
                                 if (IsNotEqual(expNode.Name, node.Name))
                                 {
@@ -1077,7 +1119,7 @@ namespace Compiler.AST
                             }
                             else
                             {
-                                foreach(AbstractNode expPartNode in expNode.ExpressionParts)
+                                foreach (AbstractNode expPartNode in expNode.ExpressionParts)
                                 {
                                     if (expPartNode.Name != null)
                                     {
@@ -1159,22 +1201,36 @@ namespace Compiler.AST
                     {
                         varType = _createdSymbolTabe.RetrieveSymbol(child.Name);
                         placeholderType = varType ?? default(AllType);
-                        if (placeholderType != test[i].Type)
+
+                        if (test.Count > 0)
                         {
-                            //type error
-                            _createdSymbolTabe.RunFunctionError(child.Name, test[i].Name);
+                            if (placeholderType != test[i].Type)
+                            {
+                                //type error
+                                _createdSymbolTabe.RunFunctionTypeError(child.Name, test[i].Name);
+                            }
+                        }
+                        else
+                        {
+                            //calling function with no formal parameters
+                            _createdSymbolTabe.RunFunctionWithNoFormalParameters(node.FunctionName);
                         }
                     }
-
                     else if (child is ConstantNode constNode)
                     {
                         if (child.Type_enum != test[i].Type)
                         {
-                            _createdSymbolTabe.RunFunctionError(child.Name, test[i].Name);
+                            _createdSymbolTabe.RunFunctionTypeError(child.Name, test[i].Name);
                             //type error
                         }
                     }
+                    ++i;
                 }
+            }
+            else if (test.Count > 0)
+            {
+                //running function without actual parameters, when function has formal parameters
+                _createdSymbolTabe.RunFunctionWithNoActualParameter(node.FunctionName);
             }
 
         }

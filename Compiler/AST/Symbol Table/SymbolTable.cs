@@ -884,9 +884,21 @@ namespace Compiler.AST.SymbolTable
             Error();
         }
 
-        public void RunFunctionError(string actualParameter, string formalParameter)
+        public void RunFunctionTypeError(string actualParameter, string formalParameter)
         {
             Console.WriteLine($"Actual parameter: {actualParameter} and formal parameter: {formalParameter} are a type missmatch " + GetLineNumber());
+            Error();
+        }
+
+        public void RunFunctionWithNoFormalParameters(string funcName)
+        {
+            Console.WriteLine($"Trying to call a function: {funcName}, that does not have any formal parameters");
+            Error();
+        }
+
+        public void RunFunctionWithNoActualParameter(string funcName)
+        {
+            Console.WriteLine($"Trying to call a function: {funcName}, without actual parameters");
             Error();
         }
 
@@ -907,10 +919,23 @@ namespace Compiler.AST.SymbolTable
             Console.WriteLine($"It is not possible to declare a variable with the same variable. Duplicates used: {var1} "+ GetLineNumber());
             Error();
         }
-
-        public void NotCollection(string var1)
+	
+	public void NotCollection(string var1)
         {
             Console.WriteLine($"{var1} is not a collection, and therefore remove is not able to be used " + GetLineNumber());
+            Error();
+        }
+
+
+        public void IllegalCollectionPath(string collectionpath)
+        {
+            Console.WriteLine($"One or more collections is used in the variable path: {collectionpath} " + GetLineNumber());
+            Error();
+        }
+
+        public void ParamerIsVoid(string function, string parameter)
+        {
+            Console.WriteLine($"The parameter: {parameter} cannot be of type void" + GetLineNumber());
             Error();
         }
 
