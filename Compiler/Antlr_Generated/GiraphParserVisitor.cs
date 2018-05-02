@@ -212,29 +212,11 @@ public interface IGiraphParserVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <return>The visitor result.</return>
 	Result VisitVarOrConst([NotNull] GiraphParser.VarOrConstContext context);
 	/// <summary>
-	/// Visit a parse tree produced by <see cref="GiraphParser.varOrFuncOrConst"/>.
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	/// <return>The visitor result.</return>
-	Result VisitVarOrFuncOrConst([NotNull] GiraphParser.VarOrFuncOrConstContext context);
-	/// <summary>
 	/// Visit a parse tree produced by <see cref="GiraphParser.variable"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
 	Result VisitVariable([NotNull] GiraphParser.VariableContext context);
-	/// <summary>
-	/// Visit a parse tree produced by <see cref="GiraphParser.variableFunc"/>.
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	/// <return>The visitor result.</return>
-	Result VisitVariableFunc([NotNull] GiraphParser.VariableFuncContext context);
-	/// <summary>
-	/// Visit a parse tree produced by <see cref="GiraphParser.dotFunction"/>.
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	/// <return>The visitor result.</return>
-	Result VisitDotFunction([NotNull] GiraphParser.DotFunctionContext context);
 	/// <summary>
 	/// Visit a parse tree produced by <see cref="GiraphParser.constant"/>.
 	/// </summary>
