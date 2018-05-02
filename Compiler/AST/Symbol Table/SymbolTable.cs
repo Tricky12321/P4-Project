@@ -189,6 +189,7 @@ namespace Compiler.AST.SymbolTable
             // Now that there is only the name left to check, check that too
             return _symTable[toCheckFor].Type;
         }
+            
         /// <summary>
         /// Adds a varaible to the symbol table
         /// </summary>
@@ -597,9 +598,9 @@ namespace Compiler.AST.SymbolTable
             }
         }
 
-        public void EnterFunctionParameter(string FunctionName, string ParameterName, AllType ParameterType)
+        public void EnterFunctionParameter(string FunctionName, string ParameterName, AllType ParameterType, bool IsCollection = false)
         {
-            FunctionParameterEntry FuncParEntry = new FunctionParameterEntry(ParameterName, ParameterType);
+            FunctionParameterEntry FuncParEntry = new FunctionParameterEntry(ParameterName, ParameterType, IsCollection);
             if (!_functionTable.ContainsKey(FunctionName))
             {
                 _functionTable.Add(FunctionName, new Dictionary<string, FunctionParameterEntry>());
@@ -610,6 +611,8 @@ namespace Compiler.AST.SymbolTable
                 _functionTable[FunctionName].Add(ParameterName, FuncParEntry);
             }
         }
+
+
 
         public AllType? GetParameterType(string FunctionName, string ParameterName)
         {
@@ -627,6 +630,29 @@ namespace Compiler.AST.SymbolTable
             }
             else
             {
+                return null;
+            }
+        }
+
+        public AllType? GetParameterType(string FunctionName, string ParameterName, out bool IsCollection)
+        {
+            if (_functionTable.ContainsKey(FunctionName))
+            {
+                if (_functionTable[FunctionName].ContainsKey(ParameterName))
+                {
+                    IsCollection = _functionTable[FunctionName][ParameterName].Collection;
+                    return _functionTable[FunctionName][ParameterName].Type;
+                }
+                else
+                {
+                    IsCollection = false;
+                    UndefinedParameter(ParameterName, FunctionName);
+                    return null;
+                }
+            }
+            else
+            {
+                IsCollection = false;
                 return null;
             }
         }
@@ -879,6 +905,12 @@ namespace Compiler.AST.SymbolTable
         public void DeclarationCantBeSameVariable(string var1)
         {
             Console.WriteLine($"It is not possible to declare a variable with the same variable. Duplicates used: {var1} "+ GetLineNumber());
+            Error();
+        }
+
+        public void NotCollection(string var1)
+        {
+            Console.WriteLine($"{var1} is not a collection, and therefore remove is not able to be used " + GetLineNumber());
             Error();
         }
 

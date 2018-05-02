@@ -176,6 +176,7 @@ namespace Compiler.AST.SymbolTable
 
                 foreach (ParameterNode parameter in node.Parameters)
                 {
+                    SymbolTable.EnterFunctionParameter(node.Name, parameter.Name, parameter.Type_enum);
                     parameter.Accept(this);
                 }
                 if (_initialBuildDone)
@@ -195,7 +196,6 @@ namespace Compiler.AST.SymbolTable
                 SymbolTable.EnterSymbol(node.Name, node.Type_enum);
                 if (node.Parent != null && (node.Parent is FunctionNode))
                 {
-                    SymbolTable.EnterFunctionParameter(node.Parent.Name, node.Name, node.Type_enum);
 
                 }
             }
@@ -328,8 +328,9 @@ namespace Compiler.AST.SymbolTable
         {
             // TODO: Check if a its a variable that is being added or a constant
             SymbolTable.SetCurrentNode(node);
-            if (node.Variable != null) {
-				CheckDeclared(node.Variable);
+            if (node.Variable != null)
+            {
+                CheckDeclared(node.Variable);
             }
         }
 
@@ -447,7 +448,8 @@ namespace Compiler.AST.SymbolTable
             {
                 SymbolTable.EnterSymbol(node.Name, node.Type_enum, node.CollectionDcl);
             }
-            if (node.Assignment != null) {
+            if (node.Assignment != null)
+            {
                 node.Assignment.Accept(this);
             }
         }
@@ -504,14 +506,15 @@ namespace Compiler.AST.SymbolTable
         {
             SymbolTable.SetCurrentNode(node);
 
-			SymbolTable.OpenScope(BlockType.ForLoop);
+            SymbolTable.OpenScope(BlockType.ForLoop);
             if (node.VariableDeclaration != null)
             {
                 node.VariableDeclaration.Accept(this);
             }
             node.ToValueOperation.Accept(this);
 
-            if(node.Increment != null){
+            if (node.Increment != null)
+            {
                 node.Increment.Accept(this);
             }
             VisitChildren(node);
@@ -600,7 +603,7 @@ namespace Compiler.AST.SymbolTable
 
         public override void Visit(ConstantNode node)
         {
-            
+
             // Constants are note entered into the symbol table, so these can be ignored
             // SymbolTable.NotImplementedError(node);
         }
@@ -614,7 +617,8 @@ namespace Compiler.AST.SymbolTable
         public override void Visit(RunQueryNode node)
         {
             var Type = SymbolTable.FunctionReturnType(node.FunctionName);
-            if (Type == null) {
+            if (Type == null)
+            {
                 SymbolTable.UndeclaredFunction(node.FunctionName);
             }
             VisitChildren(node);
@@ -622,7 +626,29 @@ namespace Compiler.AST.SymbolTable
 
         public override void Visit(PredicateCall node)
         {
-            
+            CheckDeclared(node.Name);
+        }
+
+        public override void Visit(RemoveQueryNode node)
+        {
+            if (CheckDeclared(node.Variable))
+            {
+                if (node.WhereCondition != null)
+                {
+                    node.WhereCondition.Accept(this);
+                }
+            }
+        }
+
+        public override void Visit(RemoveAllQueryNode node)
+        {
+            if (CheckDeclared(node.Variable))
+            {
+                if (node.WhereCondition != null)
+                {
+                    node.WhereCondition.Accept(this);
+                }
+            }
         }
     }
 }

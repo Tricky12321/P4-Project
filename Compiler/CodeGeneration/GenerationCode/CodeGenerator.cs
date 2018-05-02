@@ -160,7 +160,7 @@ namespace Compiler.CodeGeneration.GenerationCode
                 _currentStringBuilder.Append(") \n");
                 _tabCount++;
                 Indent();
-                _currentStringBuilder.Append(" {");
+                _currentStringBuilder.Append(" {\n");
                 VisitChildren(node);
                 Indent();
                 _currentStringBuilder.Append("\n}");
@@ -855,5 +855,79 @@ namespace Compiler.CodeGeneration.GenerationCode
             }
         }
 
-    }
+		public override void Visit(RemoveAllQueryNode node)
+		{
+            _currentStringBuilder.Append("\n");
+            if (node.WhereCondition != null) {
+                Indent();
+                _currentStringBuilder.Append($"foreach (var val in {node.Variable})\n");
+                Indent();
+                _currentStringBuilder.Append($"{{\n");
+                // ForeachBody
+                _tabCount++;
+                // Open If
+                _currentStringBuilder.Append($"if (");
+                node.WhereCondition.Accept(this);
+                _currentStringBuilder.Append(") \n");
+                Indent();
+                _currentStringBuilder.Append($"{{\n");
+                _tabCount++;
+                // IfBody
+                Indent();
+                _currentStringBuilder.Append($"{node.Variable}.Remove(val);\n");
+                _tabCount--;
+                Indent();
+                // Close IfBody
+                _currentStringBuilder.Append($"}}");
+                _currentStringBuilder.Append($"\n");
+                _tabCount--;
+                Indent();
+                // Close Foreach
+                _currentStringBuilder.Append($"}}");
+            } else {
+                Indent();
+                _currentStringBuilder.Append($"{node.Variable}.RemoveAll();\n");
+            }
+		}
+
+		public override void Visit(RemoveQueryNode node)
+		{
+            _currentStringBuilder.Append("\n");
+            if (node.WhereCondition != null)
+            {
+                Indent();
+                _currentStringBuilder.Append($"foreach (var val in {node.Variable})\n");
+                Indent();
+                _currentStringBuilder.Append($"{{\n");
+                // ForeachBody
+                _tabCount++;
+                // Open If
+                _currentStringBuilder.Append($"if (");
+                node.WhereCondition.Accept(this);
+                _currentStringBuilder.Append(") \n");
+                Indent();
+                _currentStringBuilder.Append($"{{\n");
+                _tabCount++;
+                // IfBody
+                Indent();
+                _currentStringBuilder.Append($"{node.Variable}.Remove(val);\n");
+                _currentStringBuilder.Append($"break;\n");
+                _tabCount--;
+                Indent();
+                // Close IfBody
+                _currentStringBuilder.Append($"}}");
+                _currentStringBuilder.Append($"\n");
+                _tabCount--;
+                Indent();
+                // Close Foreach
+                _currentStringBuilder.Append($"}}");
+            }
+            else
+            {
+                Indent();
+                _currentStringBuilder.Append($"{node.Variable}.RemoveAt(0);\n");
+            }
+		}
+
+	}
 }
