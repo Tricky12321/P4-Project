@@ -1224,6 +1224,7 @@ namespace Compiler.AST
                             //type error
                         }
                     }
+                    ++i;
                 }
             }
             else if (test.Count > 0)
