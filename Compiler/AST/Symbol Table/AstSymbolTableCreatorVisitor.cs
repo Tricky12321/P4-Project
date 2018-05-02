@@ -176,7 +176,7 @@ namespace Compiler.AST.SymbolTable
 
                 foreach (ParameterNode parameter in node.Parameters)
                 {
-                    SymbolTable.EnterFunctionParameter(node.Name, parameter.Name, parameter.Type_enum);
+                    SymbolTable.EnterFunctionParameter(node.Name, parameter.Name, parameter.Type_enum, parameter.IsCollection);
                     parameter.Accept(this);
                 }
                 if (_initialBuildDone)
