@@ -63,5 +63,7 @@ namespace Compiler.AST
         public abstract void Visit(PrintQueryNode node);
         public abstract void Visit(RunQueryNode node);
         public abstract void Visit(PredicateCall node);
+        public abstract void Visit(RemoveQueryNode node);
+        public abstract void Visit(RemoveAllQueryNode node);
     }
 }

@@ -1,7 +1,7 @@
 ﻿using System;
 namespace Giraph.Classes
 {
-    public class Edge
+    public class Edge : IDisposable
     {
         public Vertex VertexFrom;
         public Vertex VertexTo;
@@ -13,6 +13,11 @@ namespace Giraph.Classes
         {
             VertexFrom = vertexFrom;
             VertexTo = vertexTo; 
+        }
+
+        public void Dispose()
+        {
+            GC.SuppressFinalize(this);
         }
     }
 }

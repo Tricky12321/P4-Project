@@ -8,7 +8,6 @@ using Compiler;
 using System.Collections.Generic;
 using System.Linq;
 using System.Collections;
-using Compiler.AST.Nodes;
 using Compiler.AST.Nodes.DatatypeNodes;
 using Compiler.AST.Nodes.LoopNodes;
 using Compiler.AST.Nodes.QueryNodes;

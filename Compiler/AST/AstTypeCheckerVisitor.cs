@@ -1258,5 +1258,29 @@ namespace Compiler.AST
             }
 
         }
+
+        public override void Visit(RemoveQueryNode node)
+        {
+            var type = _createdSymbolTabe.RetrieveSymbol(node.Variable, out bool IsCollection);
+            if (IsCollection != true) {
+                _createdSymbolTabe.NotCollection(node.Variable);
+            }
+            if (node.WhereCondition != null) {
+				(node.WhereCondition as WhereNode).Type = type.ToString().ToLower();
+            }
+        }
+
+        public override void Visit(RemoveAllQueryNode node)
+        {
+            var type = _createdSymbolTabe.RetrieveSymbol(node.Variable, out bool IsCollection);
+            if (IsCollection != true)
+            {
+                _createdSymbolTabe.NotCollection(node.Variable);
+            }
+            if (node.WhereCondition != null)
+            {
+                (node.WhereCondition as WhereNode).Type = type.ToString().ToLower();
+            }
+        }
     }
 }

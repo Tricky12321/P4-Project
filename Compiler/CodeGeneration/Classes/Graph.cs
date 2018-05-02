@@ -3,8 +3,8 @@ namespace Giraph.Classes
 {
     public class Graph
     {
-        public Collection<Vertex> Vertices = new Collection<Vertex>();
-        public Collection<Edge> Edges = new Collection<Edge>();
+        public GraphCollection<Vertex> Vertices = new GraphCollection<Vertex>();
+        public GraphCollection<Edge> Edges = new GraphCollection<Edge>();
         public bool Directed = false;
 
         //EXTENSIONS HERE
