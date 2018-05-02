@@ -413,5 +413,15 @@ namespace Compiler.AST
         public override void Visit(PredicateCall node)
         {
         }
+
+        public override void Visit(RemoveQueryNode node)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void Visit(RemoveAllQueryNode node)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

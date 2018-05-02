@@ -577,4 +577,16 @@ public interface IGiraphParserVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
 	Result VisitComments([NotNull] GiraphParser.CommentsContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="GiraphParser.removeQuery"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitRemoveQuery([NotNull] GiraphParser.RemoveQueryContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="GiraphParser.removeAllQuery"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitRemoveAllQuery([NotNull] GiraphParser.RemoveAllQueryContext context);
 }

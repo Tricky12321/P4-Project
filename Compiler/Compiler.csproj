@@ -139,6 +139,11 @@
     </Compile>
     <Compile Include="AST\Nodes\PredicateCall.cs" />
     <Compile Include="AST\Symbol Table\SymbolTableErrors.cs" />
+    <Compile Include="AST\Nodes\QueryNodes\RemoveQueryNode.cs" />
+    <Compile Include="AST\Nodes\QueryNodes\RemoveAllQueryNode.cs" />
+    <Compile Include="CodeGeneration\Classes\GraphCollection.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

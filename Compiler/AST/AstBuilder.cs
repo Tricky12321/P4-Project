@@ -1023,5 +1023,25 @@ namespace Compiler.AST
 
             return predicateCall;
         }
-    }
+
+		public override AbstractNode VisitRemoveQuery([NotNull] GiraphParser.RemoveQueryContext context)
+		{
+            RemoveQueryNode removeQueryNode = new RemoveQueryNode(context.Start.Line, context.Start.Column);
+            removeQueryNode.Variable = context.variable().GetText();
+            if (context.where() != null) {
+                removeQueryNode.WhereCondition = Visit(context.where());
+            }
+            return removeQueryNode;
+        }
+
+		public override AbstractNode VisitRemoveAllQuery([NotNull] GiraphParser.RemoveAllQueryContext context)
+		{
+            RemoveAllQueryNode removeAllQueryNode = new RemoveAllQueryNode(context.Start.Line, context.Start.Column);
+            removeAllQueryNode.Variable = context.variable().GetText();
+            if (context.where() != null) {
+                removeAllQueryNode.WhereCondition = Visit(context.where());
+            }
+            return removeAllQueryNode;
+        }
+	}
 }

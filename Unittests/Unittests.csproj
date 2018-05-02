@@ -45,6 +45,9 @@
     <None Include="kode_ast.giraph">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="kode_generator.giraph">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Compiler\Compiler.csproj">
