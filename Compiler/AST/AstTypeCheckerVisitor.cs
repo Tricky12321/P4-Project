@@ -1261,9 +1261,9 @@ namespace Compiler.AST
 
         public override void Visit(RemoveQueryNode node)
         {
-            var type = _createdSymbolTabe.RetrieveSymbol(node.Variable, out bool IsCollection);
+            var type = _symbolTable.RetrieveSymbol(node.Variable, out bool IsCollection);
             if (IsCollection != true) {
-                _createdSymbolTabe.NotCollection(node.Variable);
+                _symbolTable.NotCollection(node.Variable);
             }
             if (node.WhereCondition != null) {
 				(node.WhereCondition as WhereNode).Type = type.ToString().ToLower();
@@ -1272,10 +1272,10 @@ namespace Compiler.AST
 
         public override void Visit(RemoveAllQueryNode node)
         {
-            var type = _createdSymbolTabe.RetrieveSymbol(node.Variable, out bool IsCollection);
+            var type = _symbolTable.RetrieveSymbol(node.Variable, out bool IsCollection);
             if (IsCollection != true)
             {
-                _createdSymbolTabe.NotCollection(node.Variable);
+                _symbolTable.NotCollection(node.Variable);
             }
             if (node.WhereCondition != null)
             {
