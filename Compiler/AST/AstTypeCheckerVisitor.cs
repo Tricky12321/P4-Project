@@ -117,7 +117,6 @@ namespace Compiler.AST
         public override void Visit(SetQueryNode node)
         {
             _createdSymbolTabe.SetCurrentNode(node);
-            checkCollectionFollowsCollection(node.InVariable.Name);
             AllType? variableType = null;
             AllType? inVariableType = null;
             bool isAttributeCollection = false;
@@ -137,8 +136,8 @@ namespace Compiler.AST
 
                         if (node.InVariable != null)
                         {
+                            checkCollectionFollowsCollection(node.InVariable.Name);
                             inVariableType = _createdSymbolTabe.RetrieveSymbol(node.InVariable.Name);
-
                             variableType = _createdSymbolTabe.GetAttributeType(attNode.Name, inVariableType ?? default(AllType), out isAttributeCollection);
                         }
                     }
@@ -151,13 +150,20 @@ namespace Compiler.AST
                     {
                         Attributes.Item3.Accept(this);
                     }
-
-                    if (variableType != null && isTypeCollection == isAttributeCollection)
+                    //skriv en fejlbesked
+                    if (variableType != null)
                     {
-                        if (Attributes.Item3.OverAllType != variableType)
+                        if (isTypeCollection == isAttributeCollection)
                         {
-                            //type between varible and overalltyper
-                            _createdSymbolTabe.TypeExpressionMismatch();
+                            if (Attributes.Item3.OverAllType != variableType)
+                            {
+                                //type between varible and overalltyper
+                                _createdSymbolTabe.TypeExpressionMismatch();
+                            }
+                        }
+                        else
+                        {
+                            _createdSymbolTabe.WrongTypeConditionError();
                         }
                     }
                 }
@@ -649,12 +655,9 @@ namespace Compiler.AST
             _createdSymbolTabe.SetCurrentNode(node);
             AllType? vertexFromType = _createdSymbolTabe.RetrieveSymbol(node.VertexNameFrom, false);
             AllType? vertexToType = _createdSymbolTabe.RetrieveSymbol(node.VertexNameTo, false);
-            if (vertexFromType == AllType.VERTEX && vertexToType == AllType.VERTEX)
+            if (!(vertexFromType == AllType.VERTEX && vertexToType == AllType.VERTEX))
             {
-                //both from and to targets are of type vertex, which they MUST be.
-            }
-            else
-            {
+                //type error
                 _createdSymbolTabe.TypeExpressionMismatch();
             }
             foreach (KeyValuePair<string, AbstractNode> item in node.ValueList)
@@ -662,14 +665,18 @@ namespace Compiler.AST
                 item.Value.Parent = node;
                 item.Value.Accept(this);
                 AllType? typeOfKey = _createdSymbolTabe.GetAttributeType(item.Key, AllType.EDGE);
-                if (typeOfKey == node.Type_enum)
+                if (item.Value is ExpressionNode expNode)
                 {
-
+                    if (typeOfKey != expNode.OverAllType)
+                    {
+                        _createdSymbolTabe.TypeExpressionMismatch();
+                    }
                 }
                 else
                 {
-                    _createdSymbolTabe.TypeExpressionMismatch();
+                    throw new Exception("haha gg");
                 }
+
             }
         }
 
