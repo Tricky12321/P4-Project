@@ -12,10 +12,11 @@ namespace Compiler.AST.Nodes
             
         }
 
-        public void AddParameter(string ParameterType, string ParameterName, int LineNumber, int CharIndex) {
+        public void AddParameter(string ParameterType, string ParameterName, bool IsCollection, int LineNumber, int CharIndex) {
             ParameterNode NewParameter = new ParameterNode(LineNumber, CharIndex);
             NewParameter.Name = ParameterName;
             NewParameter.Type = ParameterType;
+            NewParameter.IsCollection = IsCollection;
             Parameters.Add(NewParameter);
             NewParameter.Parent = this;
         }

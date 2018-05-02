@@ -43,10 +43,10 @@ namespace Compiler.AST
             {
                 foreach (var Parameter in context.formalParams().formalParam())
                 {
-                    var Type = Parameter.allTypeWithColl().GetText();  // Parameter Type
+                    var Type = Parameter.allTypeWithColl().allType().GetText();  // Parameter Type
                     var Name = Parameter.variable().GetText(); // Parameter Name
-
-                    FNode.AddParameter(Type, Name, context.Start.Line, context.Start.Column);
+                    bool IsCollection = Parameter.allTypeWithColl().COLLECTION() != null;
+                    FNode.AddParameter(Type, Name, IsCollection ,context.Start.Line, context.Start.Column);
                 }
             }
             foreach (var Child in context.codeBlock().codeBlockContent())
