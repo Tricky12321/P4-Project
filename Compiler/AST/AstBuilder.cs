@@ -190,11 +190,11 @@ namespace Compiler.AST
                 BCompare.AdoptChildren(Visit(context.boolComparisons(0)));
             }
             // Checks if there is a Suffix, if there is, add it to the Node
-            if (context.suffix != null)
+            /*if (context.suffix != null)
             {
                 BCompare.Suffix = context.suffix.Text;
                 BCompare.AdoptChildren(Visit(context.boolComparisons(0)));
-            }
+            }*/
             // Check if there are left and right "()" around the boolcomparison
             if (context.rightP != null && context.leftP != null && context.boolComparisons() != null)
             {
@@ -256,10 +256,10 @@ namespace Compiler.AST
             return VarNode;
         }
 
-        public override AbstractNode VisitVariableFunc([NotNull] GiraphParser.VariableFuncContext context)
+        /*public override AbstractNode VisitVariableFunc([NotNull] GiraphParser.VariableFuncContext context)
         {
             return Visit(context.GetChild(0));
-        }
+        }*/
 
         public override AbstractNode VisitLoopDcl([NotNull] GiraphParser.LoopDclContext context)
         {
@@ -341,7 +341,7 @@ namespace Compiler.AST
                     conNode.Type = ExpressionPartTypeFinder(context.GetChild(0).GetChild(0)).ToString();
                     conNode.Value = context.GetText();
                     return conNode;
-                case "GiraphParser+VariableFuncContext":
+                case "GiraphParser+VariableContext":
                     VariableNode varNode = new VariableNode(context.Start.Line, context.Start.Column);
                     varNode.Name = context.GetText();
                     return varNode;
@@ -543,7 +543,7 @@ namespace Compiler.AST
         {
             DeclarationNode DclNode = new DeclarationNode(context.Start.Line, context.Start.Column);
             DclNode.Type = context.objects().GetText();
-            DclNode.Name = context.variable().GetText();
+            DclNode.Name = context.variable(0).GetText();
             if (context.expression() != null)
             {
                 DclNode.Assignment = Visit(context.expression());
@@ -621,8 +621,8 @@ namespace Compiler.AST
         public override AbstractNode VisitSelect([NotNull] GiraphParser.SelectContext context)
         {
             SelectQueryNode SelectNode = new SelectQueryNode(context.Start.Line, context.Start.Column);
-            SelectNode.Type = getContextType(context.variableFunc());
-            SelectNode.Variable = context.variableFunc().GetText();
+            SelectNode.Type = getContextType(context.variable());
+            SelectNode.Variable = context.variable().GetText();
             SelectNode.Name = SelectNode.Variable;
             if (context.where() != null)
             {
@@ -634,8 +634,8 @@ namespace Compiler.AST
         public override AbstractNode VisitSelectAll([NotNull] GiraphParser.SelectAllContext context)
         {
             SelectAllQueryNode SelectNode = new SelectAllQueryNode(context.Start.Line, context.Start.Column);
-            SelectNode.Type = getContextType(context.variableFunc());
-            SelectNode.Variable = context.variableFunc().GetText();
+            SelectNode.Type = getContextType(context.variable());
+            SelectNode.Variable = context.variable().GetText();
             SelectNode.Name = SelectNode.Variable;
             if (context.where() != null)
             {
@@ -846,9 +846,9 @@ namespace Compiler.AST
         public override AbstractNode VisitForeachLoop([NotNull] GiraphParser.ForeachLoopContext context)
         {
             ForeachLoopNode ForeachNode = new ForeachLoopNode(context.Start.Line, context.Start.Column);
-            ForeachNode.VariableName = context.foreachCondition().variable().GetText();
+            ForeachNode.VariableName = context.foreachCondition().variable(0).GetText();
             ForeachNode.VariableType = context.foreachCondition().allType().GetText();
-            ForeachNode.InVariableName = context.foreachCondition().variableFunc().GetText();
+            ForeachNode.InVariableName = context.foreachCondition().variable(1).GetText();
             // Check the where condition
             if (context.where() != null && context.where().GetText().Length > 0)
             {
@@ -972,10 +972,10 @@ namespace Compiler.AST
             throw new Exception("Error at " + node.GetText() + " " + node.Parent.SourceInterval);
         }
 
-        public override AbstractNode VisitVarOrFuncOrConst([NotNull] GiraphParser.VarOrFuncOrConstContext context)
+        /*public override AbstractNode VisitVarOrFuncOrConst([NotNull] GiraphParser.VarOrFuncOrConstContext context)
         {
             return Visit(context.GetChild(0));
-        }
+        }*/
 
         public override AbstractNode VisitRunFunction([NotNull] GiraphParser.RunFunctionContext context)
         {
