@@ -1187,6 +1187,7 @@ namespace Compiler.AST
         public override void Visit(RunQueryNode node)
         {
             _symbolTable.SetCurrentNode(node);
+            bool isCollection = false;
             VisitChildren(node);
             List<FunctionParameterEntry> test = _symbolTable.GetParameterTypes(node.FunctionName);
             test.OrderBy(x => x.ID);
@@ -1200,12 +1201,12 @@ namespace Compiler.AST
                 {
                     if (child is VariableNode varNode)
                     {
-                        varType = _symbolTable.RetrieveSymbol(child.Name);
+                        varType = _symbolTable.RetrieveSymbol(child.Name, out isCollection);
                         placeholderType = varType ?? default(AllType);
 
                         if (test.Count > 0)
                         {
-                            if (placeholderType != test[i].Type)
+                            if (placeholderType != test[i].Type && test[i].Collection == isCollection)
                             {
                                 //type error
                                 _symbolTable.RunFunctionTypeError(child.Name, test[i].Name);
