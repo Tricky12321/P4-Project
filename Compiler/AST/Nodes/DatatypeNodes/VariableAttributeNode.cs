@@ -7,6 +7,7 @@ namespace Compiler.AST.Nodes.DatatypeNodes
         public AllType ClassType;
         public string ClassVariableName;
         public bool IsAttribute = false;
+        public bool IsCollection = false;
         public VariableAttributeNode(int LineNumber, int CharIndex) : base(LineNumber, CharIndex)
         {
         }

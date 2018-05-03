@@ -562,8 +562,15 @@ namespace Compiler.AST.SymbolTable
             SymbolTable.SetCurrentNode(node);
             if (node.IsAttribute && CheckDeclared(node.ClassVariableName))
             {
+                bool IsCollection = false;
+
                 node.ClassType = SymbolTable.GetVariableType(node.ClassVariableName);
-                SymbolTable.AttributeDefined(node.Name, node.ClassType);
+                SymbolTable.RetrieveSymbol(node.ClassVariableName, out IsCollection);
+                node.IsCollection = IsCollection;
+
+                if (SymbolTable.AttributeDefined(node.Name, node.ClassType)) {
+                    var AttriType = SymbolTable.GetAttributeType(node.Name, node.ClassType, out IsCollection);
+                }
             }
             else
             {
@@ -575,6 +582,10 @@ namespace Compiler.AST.SymbolTable
         {
             SymbolTable.SetCurrentNode(node);
             CheckDeclared(node.Name);
+            bool IsCollection = false;
+            var name = node.Name;
+            node.Type = (SymbolTable.RetrieveSymbol(node.Name, out IsCollection) ?? default(AllType)).ToString().ToLower();
+            node.IsCollection = IsCollection;
         }
 
         public override void Visit(AddQueryNode node)

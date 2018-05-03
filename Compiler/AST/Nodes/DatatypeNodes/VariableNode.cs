@@ -8,6 +8,7 @@ namespace Compiler.AST.Nodes.DatatypeNodes
         public bool Declaration = false;
         public AbstractNode Assignment;
         public List<String> variableParts = new List<string>();
+        public bool IsCollection = false;
         public VariableNode(int LineNumber, int CharIndex) : base(LineNumber, CharIndex)
         {
 
