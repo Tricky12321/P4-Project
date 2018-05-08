@@ -25,8 +25,7 @@ namespace Compiler
             Stopwatch TotalTimer = new Stopwatch();
             TotalTimer.Start();
 
-            Console.ForegroundColor = ConsoleColor.Red;
-            PrintCompilerMessage("Giraph Compiler 1.0.1", ConsoleColor.Red);
+            PrintCompilerMessage("Giraph Compiler 1.0.1");
             GiraphParser.StartContext CST = BuildCST("kode.giraph");
             AbstractNode AST = BuildAST(CST);
             SymTable SymbolTable = BuildSymbolTable(AST as StartNode);
