@@ -1,4 +1,5 @@
 ﻿using NUnit.Framework;
+using NUnit;
 using System;
 using Compiler.AST;
 using Compiler.CodeGeneration;
