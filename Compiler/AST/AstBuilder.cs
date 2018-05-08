@@ -784,7 +784,7 @@ namespace Compiler.AST
             }
             else if (contextInside.forConditionStart().expression() != null)
             {
-                ForLoop.VariableDeclaration = Visit(contextInside.forConditionStart().expression());
+                ForLoop.FromValueNode = Visit(contextInside.forConditionStart().expression());
                 ForLoop.ToValueOperation = Visit(contextInside.expression(0));
             }
 
@@ -797,7 +797,7 @@ namespace Compiler.AST
             {
                 ExpressionNode expNode = new ExpressionNode(context.Start.Line, context.Start.Column);
                 ConstantNode conNode = new ConstantNode(context.Start.Line, context.Start.Column);
-                conNode.Type = "INT";
+                conNode.Type = "int";
                 conNode.Value = "1";
                 expNode.ExpressionParts.Add(conNode);
 

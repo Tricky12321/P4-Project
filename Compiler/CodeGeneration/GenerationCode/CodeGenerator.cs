@@ -90,11 +90,12 @@ namespace Compiler.CodeGeneration.GenerationCode
                 }
                 else
                 {
-                    _currentStringBuilder.Append($"= new Collection<{ResolveTypeToCS(node.Type_enum)}>()");
+                    _currentStringBuilder.Append($" = new Collection<{ResolveTypeToCS(node.Type_enum)}>()");
                 }
             }
             else
             {
+                Indent();
                 _currentStringBuilder.Append(ResolveTypeToCS(node.Type_enum) + " ");
                 _currentStringBuilder.Append(node.Name);
                 if (node.Assignment != null)
@@ -124,11 +125,13 @@ namespace Compiler.CodeGeneration.GenerationCode
                 _currentStringBuilder = MainBody;
                 _tabCount++;
                 VisitChildren(node);
+                _tabCount--;
             }
             else
             {
-                Indent();
                 _currentStringBuilder = Functions;
+                _currentStringBuilder.Append("\n");
+                Indent();
                 _currentStringBuilder.Append($"public static");
                 if (node.IsCollection)
                 {
@@ -158,14 +161,15 @@ namespace Compiler.CodeGeneration.GenerationCode
                     }
                 }
                 _currentStringBuilder.Append(") \n");
+                Indent();
+                _currentStringBuilder.Append("{\n");
                 _tabCount++;
-                Indent();
-                _currentStringBuilder.Append(" {\n");
                 VisitChildren(node);
+                _tabCount--;
+                _currentStringBuilder.Append("\n");
                 Indent();
-                _currentStringBuilder.Append("\n}");
+                _currentStringBuilder.Append("}");
             }
-            _tabCount--;
             _currentStringBuilder = Functions;
         }
 
@@ -222,7 +226,7 @@ namespace Compiler.CodeGeneration.GenerationCode
 
                 }
                 Indent();
-                _currentStringBuilder.Append($"{node.Name}.Vertices.Push({vertexName});\n\n");
+                _currentStringBuilder.Append($"{node.Name}.Vertices.Add({vertexName});\n\n");
             }
             Indent();
             _currentStringBuilder.Append($"Edge _newEdge{node.Name};\n");
@@ -254,15 +258,16 @@ namespace Compiler.CodeGeneration.GenerationCode
                 }
                 Indent();
 
-                _currentStringBuilder.Append($"{node.Name}.Edges.Push({edgeName});\n\n");
+                _currentStringBuilder.Append($"{node.Name}.Edges.Add({edgeName});\n\n");
             }
             Indent();
             _currentStringBuilder.Append($"{node.Name}.Directed = {ResolveBoolean(node.Directed)};\n\n");
-            _tabCount++;
         }
 
         public override void Visit(VariableDclNode node)
         {
+            _currentStringBuilder.Append("\n");
+
             Indent();
             _currentStringBuilder.Append(ResolveTypeToCS(node.Type_enum) + " ");
             _currentStringBuilder.Append(node.Name);
@@ -300,12 +305,58 @@ namespace Compiler.CodeGeneration.GenerationCode
                 foreach (var item in node.Attributes)
                 {
                     string InVaraible = node.InVariable.Name;
-                    string VariableName = item.Item1.Name;
+                    string VariableName = item.Item1.Name.Trim('\'');
                     string AssignOperator = item.Item2;
+                    bool IsCollection = (item.Item1 as VariableAttributeNode).IsCollection;
                     ExpressionNode expression = item.Item3;
-                    _currentStringBuilder.Append($"{InVaraible}.{VariableName} {AssignOperator} ");
-                    expression.Accept(this);
-                    _currentStringBuilder.Append($";\n");
+                    if (IsCollection)
+                    {
+                        Indent();
+                        _currentStringBuilder.Append($"foreach (var val in {InVaraible}) \n");
+                        Indent();
+                        _currentStringBuilder.Append($"{{\n");
+                        _tabCount++;
+                        //Foreach body
+                        if (node.WhereCondition != null)
+                        {
+                            Indent();
+                            _currentStringBuilder.Append($"if (");
+                            node.WhereCondition.Accept(this);
+                            _currentStringBuilder.Append($")\n");
+                            Indent();
+                            _currentStringBuilder.Append($"{{\n");
+                            // IfBody
+                            _tabCount++;
+                            Indent();
+                            _currentStringBuilder.Append($"val.{VariableName} {AssignOperator} ");
+                            expression.Accept(this);
+                            _currentStringBuilder.Append($";\n");
+
+                            Indent();
+                            _currentStringBuilder.Append($"}}");
+                        }
+                        else
+                        {
+                            Indent();
+                            _currentStringBuilder.Append($"val.{VariableName} {AssignOperator} ");
+                            expression.Accept(this);
+                            _currentStringBuilder.Append($";\n");
+
+                        }
+
+                        _currentStringBuilder.Append($"\n");
+                        _tabCount--;
+                        Indent();
+                        _currentStringBuilder.Append($"}}\n");
+                    }
+                    else
+                    {
+                        Indent();
+                        _currentStringBuilder.Append($"{InVaraible}.{VariableName} {AssignOperator} ");
+                        expression.Accept(this);
+                        _currentStringBuilder.Append($";\n");
+
+                    }
                 }
             }
             else if (node.SetVariables)
@@ -315,6 +366,7 @@ namespace Compiler.CodeGeneration.GenerationCode
                     string VariableName = item.Item1.Name;
                     string AssignOperator = item.Item2;
                     ExpressionNode expression = item.Item3;
+                    Indent();
                     _currentStringBuilder.Append($"{VariableName} {AssignOperator} ");
                     expression.Accept(this);
                     _currentStringBuilder.Append($";\n");
@@ -434,7 +486,7 @@ namespace Compiler.CodeGeneration.GenerationCode
             node.IfCondition.Accept(this);
             _currentStringBuilder.Append(") \n");
             Indent();
-            _currentStringBuilder.Append("{");
+            _currentStringBuilder.Append("{\n");
             _tabCount++;
             node.IfCodeBlock.Accept(this);
             _tabCount--;
@@ -622,29 +674,35 @@ namespace Compiler.CodeGeneration.GenerationCode
 
         public override void Visit(ForLoopNode node)
         {
+            _currentStringBuilder.Append("\n");
             Indent();
-            _currentStringBuilder.Append("\nfor (");
+            _currentStringBuilder.Append("for (");
             if (node.VariableDeclaration != null)
             {
                 node.VariableDeclaration.Accept(this);
                 node.ToValueOperation.Accept(this);
                 _currentStringBuilder.Append($";{node.VariableDeclaration.Name} += ");
-
                 node.Increment.Accept(this);
             }
-            else
+            else if (node.FromValueNode != null)
             {
-                _currentStringBuilder.Append($"int _i{_forLoopCounter} = 0; _i{_forLoopCounter} < ");
+                _currentStringBuilder.Append($"int _i{_forLoopCounter} = ");
+                node.FromValueNode.Accept(this);
+                _currentStringBuilder.Append($"; _i{_forLoopCounter} < ");
                 node.ToValueOperation.Accept(this);
-                _currentStringBuilder.Append($";_i{_forLoopCounter} = ");
-                node.ToValueOperation.Accept(this);
+                _currentStringBuilder.Append($";_i{_forLoopCounter} += ");
+                _forLoopCounter++;
+                node.Increment.Accept(this);
             }
-            _currentStringBuilder.Append($") \n {{");
+            _currentStringBuilder.Append($") \n");
+            Indent();
+            _currentStringBuilder.Append($"{{");
             _tabCount++;
             VisitChildren(node);
             _tabCount--;
+            _currentStringBuilder.Append($"\n");
             Indent();
-            _currentStringBuilder.Append($"\n}}");
+            _currentStringBuilder.Append($"}}");
         }
 
         public override void Visit(ForeachLoopNode node)
@@ -670,13 +728,13 @@ namespace Compiler.CodeGeneration.GenerationCode
             Indent();
             _currentStringBuilder.Append("while (");
             node.BoolCompare.Accept(this);
-            _currentStringBuilder.Append(")");
+            _currentStringBuilder.Append(")\n");
             Indent();
             _currentStringBuilder.Append("{");
             VisitChildren(node);
             _currentStringBuilder.Append("\n");
             Indent();
-            _currentStringBuilder.Append("}");
+            _currentStringBuilder.Append("}\n");
 
         }
 
@@ -761,7 +819,9 @@ namespace Compiler.CodeGeneration.GenerationCode
 
         public override void Visit(RunQueryNode node)
         {
-            _currentStringBuilder.Append("\n" + node.FunctionName + "(");
+            _currentStringBuilder.Append("\n");
+            Indent();
+            _currentStringBuilder.Append(node.FunctionName + "(");
             bool first = true;
             foreach (var item in node.Children)
             {
@@ -785,6 +845,7 @@ namespace Compiler.CodeGeneration.GenerationCode
 
         public void ExtendClass(AllType Class, AllType ExtendType, string ExtendName, string ExtendNameShort, bool IsCollection = false)
         {
+            _tabCount = 2;
             // TODO: Default values for extended variables needs to be set
             StringBuilder _currentExtension;
             // Find out what class to extend, as they have their own extension classes.
@@ -805,36 +866,84 @@ namespace Compiler.CodeGeneration.GenerationCode
             // If its a collection
             if (IsCollection)
             {
-                _currentExtension.AppendLine($"\npublic Collection<{ResolveTypeToCS(ExtendType)}> {ExtendName} = new Collection<{ResolveTypeToCS(ExtendType)}>();");
+                _currentExtension.Append("\n");
+                Indent(ref _currentExtension);
+                _currentExtension.Append($"public Collection<{ResolveTypeToCS(ExtendType)}> {ExtendName} = new Collection<{ResolveTypeToCS(ExtendType)}>();\n");
                 if (ExtendNameShort != null && ExtendNameShort != "")
                 {
-                    _currentExtension.AppendLine($"\npublic Collection<{ResolveTypeToCS(ExtendType)}> {ExtendNameShort} {{ ");
-                    _currentExtension.AppendLine("get");
-                    _currentExtension.AppendLine($"{{return {ExtendName};}}");
-                    _currentExtension.AppendLine("set");
-                    _currentExtension.AppendLine($"{{{ExtendName} = value;}}");
-                    _currentExtension.AppendLine("}");
+                    _currentExtension.Append("\n");
+                    Indent(ref _currentExtension);
+                    _currentExtension.Append($"public Collection<{ResolveTypeToCS(ExtendType)}> {ExtendNameShort} {{ \n");
+                    _tabCount++;
+                    Indent(ref _currentExtension);
+                    _currentExtension.Append("get\n");
+                    Indent(ref _currentExtension);
+                    _currentExtension.Append($"{{\n");
+                    _tabCount++;
+                    Indent(ref _currentExtension);
+                    _currentExtension.Append($"return { ExtendName};\n");
+                    _tabCount--;
+                    Indent(ref _currentExtension);
+                    _currentExtension.Append($"}}\n");
+                    Indent(ref _currentExtension);
+                    _currentExtension.Append("set \n");
+                    Indent(ref _currentExtension);
+                    _currentExtension.Append($"{{\n");
+                    _tabCount++;
+                    Indent(ref _currentExtension);
+                    _currentExtension.Append($"{ExtendName} = value;\n");
+                    _tabCount--;
+                    Indent(ref _currentExtension);
+                    _currentExtension.Append($"}}\n");
+                    _tabCount--;
+                    Indent(ref _currentExtension);
+                    _currentExtension.Append("}\n");
                 }
             }
             else // if its everything else
             {
 
-                if (ExtendType == AllType.GRAPH || ExtendType == AllType.VERTEX || ExtendType == AllType.EDGE)
+                if (ExtendType == AllType.GRAPH)
                 {
-                    _currentExtension.AppendLine($"\npublic {ResolveTypeToCS(ExtendType)} {ExtendName} = new {ResolveTypeToCS(ExtendType)};");
+                    _currentExtension.Append("\n");
+                    Indent(ref _currentExtension);
+                    _currentExtension.Append($"public {ResolveTypeToCS(ExtendType)} {ExtendName} = new {ResolveTypeToCS(ExtendType)}();\n");
                 }
                 else
                 {
-                    _currentExtension.AppendLine($"\npublic {ResolveTypeToCS(ExtendType)} {ExtendName};");
+                    _currentExtension.Append("\n");
+                    Indent(ref _currentExtension);
+                    _currentExtension.Append($"public {ResolveTypeToCS(ExtendType)} {ExtendName};\n");
                 }
                 if (ExtendNameShort != null && ExtendNameShort != "")
                 {
-                    _currentExtension.AppendLine($"\npublic {ResolveTypeToCS(ExtendType)} {ExtendNameShort} {{ ");
-                    _currentExtension.AppendLine("get");
-                    _currentExtension.AppendLine($"{{return {ExtendName};}}");
-                    _currentExtension.AppendLine("set");
-                    _currentExtension.AppendLine($"{{{ExtendName} = value;}}");
-                    _currentExtension.AppendLine("}\n");
+                    _currentExtension.Append("\n");
+                    Indent(ref _currentExtension);
+                    _currentExtension.Append($"public {ResolveTypeToCS(ExtendType)} {ExtendNameShort} {{ \n");
+                    _tabCount++;
+                    Indent(ref _currentExtension);
+                    _currentExtension.Append("get\n");
+                    Indent(ref _currentExtension);
+                    _currentExtension.Append($"{{\n");
+                    _tabCount++;
+                    Indent(ref _currentExtension);
+                    _currentExtension.Append($"return { ExtendName};\n");
+                    _tabCount--;
+                    Indent(ref _currentExtension);
+                    _currentExtension.Append($"}}\n");
+                    Indent(ref _currentExtension);
+                    _currentExtension.Append("set\n");
+                    Indent(ref _currentExtension);
+                    _currentExtension.Append($"{{\n");
+                    _tabCount++;
+                    Indent(ref _currentExtension);
+                    _currentExtension.Append($"{ExtendName} = value;\n");
+                    _tabCount--;
+                    Indent(ref _currentExtension);
+                    _currentExtension.Append($"}}\n");
+                    _tabCount--;
+                    Indent(ref _currentExtension);
+                    _currentExtension.Append("}\n");
                 }
             }
 
@@ -847,6 +956,13 @@ namespace Compiler.CodeGeneration.GenerationCode
             _currentStringBuilder.Append($")");
         }
 
+        public void Indent(ref StringBuilder stringBuilder) {
+            for (int i = 0; i < _tabCount; i++)
+            {
+                stringBuilder.Append("\t");
+            }
+        }
+
         public void Indent()
         {
             for (int i = 0; i < _tabCount; i++)
@@ -855,10 +971,11 @@ namespace Compiler.CodeGeneration.GenerationCode
             }
         }
 
-		public override void Visit(RemoveAllQueryNode node)
-		{
+        public override void Visit(RemoveAllQueryNode node)
+        {
             _currentStringBuilder.Append("\n");
-            if (node.WhereCondition != null) {
+            if (node.WhereCondition != null)
+            {
                 Indent();
                 _currentStringBuilder.Append($"foreach (var val in {node.Variable})\n");
                 Indent();
@@ -884,14 +1001,16 @@ namespace Compiler.CodeGeneration.GenerationCode
                 Indent();
                 // Close Foreach
                 _currentStringBuilder.Append($"}}");
-            } else {
+            }
+            else
+            {
                 Indent();
                 _currentStringBuilder.Append($"{node.Variable}.RemoveAll();\n");
             }
-		}
+        }
 
-		public override void Visit(RemoveQueryNode node)
-		{
+        public override void Visit(RemoveQueryNode node)
+        {
             _currentStringBuilder.Append("\n");
             if (node.WhereCondition != null)
             {
@@ -927,7 +1046,7 @@ namespace Compiler.CodeGeneration.GenerationCode
                 Indent();
                 _currentStringBuilder.Append($"{node.Variable}.RemoveAt(0);\n");
             }
-		}
+        }
 
-	}
+    }
 }
