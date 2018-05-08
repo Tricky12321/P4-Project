@@ -165,12 +165,14 @@ namespace Compiler.AST.SymbolTable
             // Loop, until there is only the name left to check, this is because we check all scopes above this, to ensure a variable isnt declared
             while (toCheckFor != name)
             {
-                if (name.Contains(".")) {
+                if (name.Contains("."))
+                {
                     var names = name.Split('.');
                     AllType? type = RetrieveSymbol(names[0]);
                     AllType type_notNull = type ?? default(AllType);
                     return GetAttributeType(names[1], type_notNull) ?? default(AllType);
-                } else if (_symTable.ContainsKey(toCheckFor))
+                }
+                else if (_symTable.ContainsKey(toCheckFor))
                 {
                     return _symTable[toCheckFor].Type;
                 }
@@ -186,10 +188,10 @@ namespace Compiler.AST.SymbolTable
                     toCheckFor = name;
                 }
             }
-            // Now that there is only the name left to check, check that too
+            // Now that there is only the name left to check, check that too, which means that it should be in the global scope
             return _symTable[toCheckFor].Type;
         }
-            
+
         /// <summary>
         /// Adds a varaible to the symbol table
         /// </summary>
@@ -359,85 +361,91 @@ namespace Compiler.AST.SymbolTable
         public AllType? RetrieveSymbol(string Name, out bool IsCollection, bool ShowErrors = true)
         {
             // Check if its a dot function
-            if (Name.Contains('.'))
+            if (Name != null)
             {
-                // Split the string into the different subnames
-                List<string> names = Name.Split('.').ToList();
-                // Check if the symbol table contains the first name given, and that it is reachable
-                if (_symTable.ContainsKey(names[0]))
-                {
-                    if (ShowErrors)
-                    {
-                        UndeclaredError(names[0]);
-                        Console.WriteLine(names[0] + " is undeclared in this scope! On line:" + GetLineNumber());
-                    }
-                    IsCollection = false;
-                    return null;
-                }
-                // Check if there is any results to get
-                else
-                {
-                    var Names = Name.Split('.').ToList();
-                    if (Names.Count() > 1)
-                    {
-                        var ClassName = Names[0];
-                        Names.RemoveAt(0);
-                        var test = GetName(ClassName);
-                        var type = RetrieveSymbol(ClassName) ?? default(AllType);
 
-                        var output = RetrieveTypeFromClasses(Names, type, out IsCollection);
-                        return output;
-                    }
-
-                    IsCollection = false;
-                    return null;
-                }
-            }
-            else
-            {
-                Name = GetName(Name);
-                bool match = _symTable.ContainsKey(Name);
-                var names = Name.Split('.').ToList();
-
-                while (!match && names.Count > 1)
+                if (Name.Contains('.'))
                 {
-                    names.RemoveAt(names.Count - 2);
-                    Name = "";
-                    bool first = true;
-                    foreach (var item in names)
+                    // Split the string into the different subnames
+                    List<string> names = Name.Split('.').ToList();
+                    // Check if the symbol table contains the first name given, and that it is reachable
+                    if (_symTable.ContainsKey(names[0]))
                     {
-                        if (first)
+                        if (ShowErrors)
                         {
-                            Name += item;
-                            first = false;
+                            UndeclaredError(names[0]);
+                            Console.WriteLine(names[0] + " is undeclared in this scope! On line:" + GetLineNumber());
                         }
-                        else
-                        {
-                            Name += "." + item;
-                        }
+                        IsCollection = false;
+                        return null;
                     }
-                    if (_symTable.ContainsKey(Name))
-                    {
-                        match = true;
-                        IsCollection = _symTable[Name].IsCollection;
-                        var type = _symTable[Name].Type;
-                        return type;
-                    }
+                    // Check if there is any results to get
                     else
                     {
+                        var Names = Name.Split('.').ToList();
+                        if (Names.Count() > 1)
+                        {
+                            var ClassName = Names[0];
+                            Names.RemoveAt(0);
+                            var test = GetName(ClassName);
+                            var type = RetrieveSymbol(ClassName) ?? default(AllType);
+
+                            var output = RetrieveTypeFromClasses(Names, type, out IsCollection);
+                            return output;
+                        }
+
                         IsCollection = false;
                         return null;
                     }
                 }
-                if (match)
+                else
                 {
-                    IsCollection = _symTable[Name].IsCollection;
-                    var type = _symTable[Name].Type;
-                    return type;
+                    Name = GetName(Name);
+                    bool match = _symTable.ContainsKey(Name);
+                    var names = Name.Split('.').ToList();
+
+                    while (!match && names.Count > 1)
+                    {
+                        names.RemoveAt(names.Count - 2);
+                        Name = "";
+                        bool first = true;
+                        foreach (var item in names)
+                        {
+                            if (first)
+                            {
+                                Name += item;
+                                first = false;
+                            }
+                            else
+                            {
+                                Name += "." + item;
+                            }
+                        }
+                        if (_symTable.ContainsKey(Name))
+                        {
+                            match = true;
+                            IsCollection = _symTable[Name].IsCollection;
+                            var type = _symTable[Name].Type;
+                            return type;
+                        }
+                        else
+                        {
+                            IsCollection = false;
+                            return null;
+                        }
+                    }
+                    if (match)
+                    {
+                        IsCollection = _symTable[Name].IsCollection;
+                        var type = _symTable[Name].Type;
+                        return type;
+                    }
+                    IsCollection = false;
+                    return null;
                 }
-                IsCollection = false;
-                return null;
             }
+            IsCollection = false;
+            return null;
         }
 
         public bool IsFunctionDeclared(string FunctionName)
@@ -671,28 +679,37 @@ namespace Compiler.AST.SymbolTable
 
         public List<AllType> GetPredicateParameters(string PredicateName, bool Initial = true)
         {
-            if (Initial) {
+            if (Initial)
+            {
                 PredicateName = GetName(PredicateName);
             }
 
-                if (_predicateTable.ContainsKey(PredicateName))
+            if (_predicateTable.ContainsKey(PredicateName))
             {
                 return _predicateTable[PredicateName];
-            } else {
+            }
+            else
+            {
                 var names = PredicateName.Split('.').ToList();
-                if (names.Count > 2) {
+                if (names.Count > 2)
+                {
                     names.RemoveAt(names.Count - 2);
-                } else if (names.Count == 2) {
+                }
+                else if (names.Count == 2)
+                {
                     names.RemoveAt(0);
                 }
                 string name = "";
                 bool first = true;
                 foreach (var item in names)
                 {
-                    if (first) {
+                    if (first)
+                    {
                         name += item;
                         first = false;
-                    } else {
+                    }
+                    else
+                    {
                         name += "." + item;
                     }
                 }
@@ -916,11 +933,11 @@ namespace Compiler.AST.SymbolTable
 
         public void DeclarationCantBeSameVariable(string var1)
         {
-            Console.WriteLine($"It is not possible to declare a variable with the same variable. Duplicates used: {var1} "+ GetLineNumber());
+            Console.WriteLine($"It is not possible to declare a variable with the same variable. Duplicates used: {var1} " + GetLineNumber());
             Error();
         }
-	
-	public void NotCollection(string var1)
+
+        public void NotCollection(string var1)
         {
             Console.WriteLine($"{var1} is not a collection, and therefore remove is not able to be used " + GetLineNumber());
             Error();
