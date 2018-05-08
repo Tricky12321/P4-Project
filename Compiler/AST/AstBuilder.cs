@@ -972,11 +972,6 @@ namespace Compiler.AST
             throw new Exception("Error at " + node.GetText() + " " + node.Parent.SourceInterval);
         }
 
-        /*public override AbstractNode VisitVarOrFuncOrConst([NotNull] GiraphParser.VarOrFuncOrConstContext context)
-        {
-            return Visit(context.GetChild(0));
-        }*/
-
         public override AbstractNode VisitRunFunction([NotNull] GiraphParser.RunFunctionContext context)
         {
             RunQueryNode node = new RunQueryNode(context.Start.Line, context.Start.Column);

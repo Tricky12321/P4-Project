@@ -22,9 +22,23 @@ namespace Unittests
         [TestCase("ints", ExpectedResult = AllType.UNKNOWNTYPE)]
         [TestCase("dicimals", ExpectedResult = AllType.UNKNOWNTYPE)]
         [TestCase("grande int", ExpectedResult = AllType.UNKNOWNTYPE)]
-        [TestCase("haha",ExpectedResult = AllType.UNKNOWNTYPE)]
-        public AllType GetTypeFromStringTest(string Value) {
+        [TestCase("haha", ExpectedResult = AllType.UNKNOWNTYPE)]
+        public AllType GetTypeFromStringTest(string Value)
+        {
             return Utilities.FindTypeFromString(Value);
+        }
+
+        [Test]
+        public void TestOS()
+        {
+            if (Utilities.IsLinux || Utilities.IsMacOS || Utilities.IsWindows)
+            {
+                Assert.Pass();
+            }
+            else
+            {
+                Assert.Fail();
+            }
         }
     }
 }

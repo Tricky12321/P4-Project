@@ -50,7 +50,7 @@ namespace Compiler
             get
             {
                 int p = (int)Environment.OSVersion.Platform;
-                return (p == 4) || Environment.OSVersion.ToString().ToLower().Contains("unix");
+                return (p == 4) && Environment.OSVersion.ToString().ToLower().Contains("unix");
             }
         }
 
