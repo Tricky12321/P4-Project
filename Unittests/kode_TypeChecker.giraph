@@ -1,0 +1,59 @@
+﻿extend edge int     'intSomethingLong':'intSom';
+extend edge decimal 'decimalSomethingLong':'decSom';
+extend edge edge    'edgeSomethingLong':'edgSom';
+extend edge vertex  'vertexSomethingLong':'verSom';
+extend edge graph   'graphSomethingLong':'graSom';
+extend edge bool    'boolSomethingLong':'booSom';
+
+extend vertex int     'intSomethingLong':'intSom';
+extend vertex decimal 'decimalSomethingLong':'decSom';
+extend vertex edge    'edgeSomethingLong':'edgSom';
+extend vertex vertex  'vertexSomethingLong':'verSom';
+extend vertex graph   'graphSomethingLong':'graSom';
+extend vertex bool    'boolSomethingLong':'booSom';
+
+extend graph int     'intSomethingLong':'intSom';
+extend graph decimal 'decimalSomethingLong':'decSom';
+extend graph edge    'edgeSomethingLong':'edgSom';
+extend graph vertex  'vertexSomethingLong':'verSom';
+extend graph graph   'graphSomethingLong':'graSom';
+extend graph bool    'boolSomethingLong':'booSom';
+
+extend graph collection int 'testintCollection';
+extend graph collection decimal 'testdecimalCollection';
+extend graph collection vertex 'testvertexCollection';
+extend graph collection edge 'testedgeCollection';
+extend graph collection bool 'testboolCollection';
+extend graph collection graph 'testgraphCollection';
+
+extend vertex collection int 'testintCollection';
+extend vertex collection decimal 'testdecimalCollection';
+extend vertex collection vertex 'testvertexCollection';
+extend vertex collection edge 'testedgeCollection';
+extend vertex collection bool 'testboolCollection';
+extend vertex collection graph 'testgraphCollection';
+
+extend edge collection int 'testintCollection';
+extend edge collection decimal 'testdecimalCollection';
+extend edge collection vertex 'testvertexCollection';
+extend edge collection edge 'testedgeCollection';
+extend edge collection bool 'testboolCollection';
+extend edge collection graph 'testgraphCollection';
+
+Main -> void () {
+    graph g1
+    {
+        vertex va(), vb(), vc(), vd(), ve();
+        edge x(vb, vd), y(vd, ve), z(va, vc);
+        set 'Directed' = false;
+    }
+
+
+}
+
+voidFunc -> void(void parameter){
+	collection int tim;
+	collection string hej;
+
+
+}

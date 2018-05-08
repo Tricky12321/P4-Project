@@ -53,6 +53,7 @@
     <None Include="kode_generator.giraph">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="kode_TypeChecker.giraph" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
