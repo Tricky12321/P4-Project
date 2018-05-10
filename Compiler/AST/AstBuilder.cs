@@ -291,12 +291,12 @@ namespace Compiler.AST
                 SetNode.InVariable = Visit(context.variable());
                 //SetNode.InVariable.Name = context.variable().GetText();
                 SetNode.SetAttributes = true;
-                foreach (var ExpNode in context.setExpressionAtri())
+                foreach (var ExpNode in context.setExpressionAtriSim())
                 {
                     VariableAttributeNode attribute = Visit(ExpNode.attribute()) as VariableAttributeNode;
                     attribute.ClassVariableName = SetNode.InVariable.Name; //  Only set Class Variable if its an attribute
                     attribute.IsAttribute = true;
-                    ExpressionNode expression = Visit(ExpNode.expression()) as ExpressionNode;
+                    ExpressionNode expression = Visit(ExpNode.simpleExpression()) as ExpressionNode;
                     SetNode.Attributes.Add(Tuple.Create(attribute, ExpNode.compoundAssign().GetText(), expression));
                 }
             }
