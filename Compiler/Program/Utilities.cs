@@ -3,11 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using System.IO;
+using System.Reflection;
 namespace Compiler
 {
     public static class Utilities
     {
+		public static string CurrentPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+
         public static AllType FindTypeFromString(string Type)
         {
             if (Type != null)

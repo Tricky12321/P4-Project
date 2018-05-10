@@ -95,7 +95,7 @@ namespace Compiler.AST
                     {
                         foreach (var Attribute in NestedChild.assignment())
                         {
-                            VNode.ValueList.Add(Attribute.variable().GetText(), Visit(Attribute.expression()));
+                            VNode.ValueList.Add(Attribute.variable().GetText(), Visit(Attribute.boolComparisons()));
                         }
                     }
                     GNode.Vertices.Add(VNode);
@@ -127,7 +127,7 @@ namespace Compiler.AST
                             // This is in order to ignore the attributes that are without 
                             if (Attribute.variable() != null)
                             {
-                                ENode.ValueList.Add(Attribute.variable().GetText(), Visit(Attribute.expression()));
+                                ENode.ValueList.Add(Attribute.variable().GetText(), Visit(Attribute.boolComparisons()));
                             }
                         }
                     }
@@ -291,12 +291,12 @@ namespace Compiler.AST
                 SetNode.InVariable = Visit(context.variable());
                 //SetNode.InVariable.Name = context.variable().GetText();
                 SetNode.SetAttributes = true;
-                foreach (var ExpNode in context.setExpressionAtri())
+                foreach (var ExpNode in context.setExpressionAtriSim())
                 {
                     VariableAttributeNode attribute = Visit(ExpNode.attribute()) as VariableAttributeNode;
                     attribute.ClassVariableName = SetNode.InVariable.Name; //  Only set Class Variable if its an attribute
                     attribute.IsAttribute = true;
-                    ExpressionNode expression = Visit(ExpNode.expression()) as ExpressionNode;
+                    ExpressionNode expression = Visit(ExpNode.simpleBoolComparison()) as ExpressionNode;
                     SetNode.Attributes.Add(Tuple.Create(attribute, ExpNode.compoundAssign().GetText(), expression));
                 }
             }
@@ -307,7 +307,7 @@ namespace Compiler.AST
                 foreach (var ExpNode in context.setExpressionVari())
                 {
                     VariableAttributeNode attribute = Visit(ExpNode.variable()) as VariableAttributeNode;
-                    ExpressionNode expression = Visit(ExpNode.expression()) as ExpressionNode;
+                    ExpressionNode expression = Visit(ExpNode.boolComparisons()) as ExpressionNode;
                     SetNode.Attributes.Add(Tuple.Create(attribute, ExpNode.compoundAssign().GetText(), expression));
                 }
             }
@@ -508,7 +508,7 @@ namespace Compiler.AST
         public override AbstractNode VisitWhere([NotNull] GiraphParser.WhereContext context)
         {
             WhereNode WNode = new WhereNode(context.Start.Line, context.Start.Column);
-            WNode.AdoptChildren(Visit(context.boolComparisons()));
+            WNode.AdoptChildren(Visit(context.simpleBoolComparison()));
             /*foreach (var Child in context.boolComparisons().children)
             {
                 WNode.AdoptChildren(Visit(Child));
@@ -543,10 +543,10 @@ namespace Compiler.AST
         {
             DeclarationNode DclNode = new DeclarationNode(context.Start.Line, context.Start.Column);
             DclNode.Type = context.objects().GetText();
-            DclNode.Name = context.variable(0).GetText();
-            if (context.expression() != null)
+            DclNode.Name = context.variable().GetText();
+            if (context.boolComparisons() != null)
             {
-                DclNode.Assignment = Visit(context.expression());
+				DclNode.Assignment = Visit(context.boolComparisons());
             }
             return DclNode;
         }
@@ -614,7 +614,7 @@ namespace Compiler.AST
                 }
             }
             // Adopt the boolcomparisons of the Predicate as children to the PNode
-            PNode.AdoptChildren(Visit(context.boolComparisons()));
+            PNode.AdoptChildren(Visit(context.simpleBoolComparison()));
             return PNode;
         }
 
@@ -672,7 +672,7 @@ namespace Compiler.AST
         public override AbstractNode VisitEnqueueOP([NotNull] GiraphParser.EnqueueOPContext context)
         {
             EnqueueQueryNode EnqueueNode = new EnqueueQueryNode(context.Start.Line, context.Start.Column);
-            EnqueueNode.VariableToAdd = Visit(context.expression());
+			EnqueueNode.VariableToAdd = Visit(context.boolComparisons());
             EnqueueNode.VariableCollection = context.variable().GetText();
             return EnqueueNode;
         }
@@ -696,7 +696,7 @@ namespace Compiler.AST
         public override AbstractNode VisitPushOP([NotNull] GiraphParser.PushOPContext context)
         {
             PushQueryNode PushNode = new PushQueryNode(context.Start.Line, context.Start.Column);
-            PushNode.VariableToAdd = Visit(context.expression());
+			PushNode.VariableToAdd = Visit(context.boolComparisons());
             PushNode.VariableCollection = context.variable().GetText();
             return PushNode;
         }
@@ -760,7 +760,7 @@ namespace Compiler.AST
             VariableNode.Name = context.variable().GetText();
             if (context.EQUALS() != null)
             {
-                VariableNode.AdoptChildren(Visit(context.expression()));
+				VariableNode.AdoptChildren(Visit(context.boolComparisons()));
             }
             return VariableNode;
         }
@@ -902,12 +902,12 @@ namespace Compiler.AST
             {
                 AddNode.IsColl = true;
                 // ITS ALL TYPE
-                AddNode.TypeOrVariable.Add(Visit(context.addToColl().collExpression().expression()));
+				AddNode.TypeOrVariable.Add(Visit(context.addToColl().collExpression().boolComparisons()));
                 if (context.addToColl().collExpressionExt() != null)
                 {
                     foreach (var item in context.addToColl().collExpressionExt())
                     {
-                        AddNode.TypeOrVariable.Add(Visit(item.collExpression().expression()));
+						AddNode.TypeOrVariable.Add(Visit(item.collExpression().boolComparisons()));
                     }
                 }
                 // Shared
@@ -1045,6 +1045,95 @@ namespace Compiler.AST
                 removeAllQueryNode.WhereCondition = Visit(context.where());
             }
             return removeAllQueryNode;
+        }
+
+		public override AbstractNode VisitSimpleOperand([NotNull] GiraphParser.SimpleOperandContext context)
+		{
+
+            var switchString = context.GetChild(0).GetType().ToString();
+            switch (switchString)
+            {
+                case "GiraphParser+ConstantContext":
+                    ConstantNode conNode = new ConstantNode(context.Start.Line, context.Start.Column);
+                    conNode.Type = ExpressionPartTypeFinder(context.GetChild(0).GetChild(0)).ToString();
+                    conNode.Value = context.GetText();
+                    return conNode;
+                case "GiraphParser+VariableContext":
+                    VariableNode varNode = new VariableNode(context.Start.Line, context.Start.Column);
+                    varNode.Name = context.GetText();
+                    return varNode;
+                case "Antlr4.Runtime.Tree.TerminalNodeImpl":
+                    AbstractNode varAttNode = Visit(context.GetChild(1));
+                    varAttNode.Name = context.GetText();
+                    return varAttNode;
+                case "GiraphParser+AttributeContext":
+                    AbstractNode attNode = Visit(context.GetChild(0));
+                    return attNode;
+            }
+            //Skal returnere en constnode eller en varnode;
+            throw new VisitVarOrConstWrongTypeException("Fejl i Mads' Kode igen!!");
+		}
+
+		public override AbstractNode VisitSimpleExpression([NotNull] GiraphParser.SimpleExpressionContext context)
+		{
+            ExpressionNode ExpNode = new ExpressionNode(context.Start.Line, context.Start.Column);
+            ExpNode.ExpressionParts = EvaluateExpression(context);
+            //ExpNode.AdoptChildren(Visit(context.GetChild(0)));
+
+            return ExpNode;
+		}
+
+		public override AbstractNode VisitSimpleBoolComparison([NotNull] GiraphParser.SimpleBoolComparisonContext context)
+		{
+            BoolComparisonNode BCompare = new BoolComparisonNode(context.Start.Line, context.Start.Column);
+            // Checks if there is a prefix, if there is, add it to the Node
+            if (context.prefix != null)
+            {
+                BCompare.Prefix = context.prefix.Text;
+                BCompare.AdoptChildren(Visit(context.simpleBoolComparison(0)));
+            }
+            // Checks if there is a Suffix, if there is, add it to the Node
+            /*if (context.suffix != null)
+            {
+                BCompare.Suffix = context.suffix.Text;
+                BCompare.AdoptChildren(Visit(context.boolComparisons(0)));
+            }*/
+            // Check if there are left and right "()" around the boolcomparison
+            if (context.rightP != null && context.leftP != null && context.simpleBoolComparison() != null)
+            {
+                BCompare.InsideParentheses = true;
+                BCompare.AdoptChildren(Visit(context.simpleBoolComparison(0)));
+            }
+            // Checks if there is a left and right statement, because this will indicatef that the boolcomparison, has a left bool and right bool, compared by the operator.
+            else if (context.right != null && context.left != null && context.simpleBoolComparison() != null)
+            {
+                BCompare.Left = Visit(context.left);
+                BCompare.Right = Visit(context.right);
+                BCompare.Left.Parent = BCompare;
+                BCompare.Right.Parent = BCompare;
+
+                if (context.BOOLOPERATOR() != null)
+                {
+                    BCompare.ComparisonOperator = context.BOOLOPERATOR().GetText();
+                }
+                else if (context.andOr() != null)
+                {
+                    BCompare.ComparisonOperator = context.andOr().GetText();
+                }
+            }
+            // A boolcomparison can end in an expression or a predicate, this is handled here. 
+            else
+            {
+                if (context.predi != null)
+                {
+                    BCompare.AdoptChildren(Visit(context.predi));
+                }
+                else if (context.exp != null)
+                {
+                    BCompare.AdoptChildren(Visit(context.exp));
+                }
+            }
+            return BCompare;
         }
 	}
 }

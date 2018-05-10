@@ -98,7 +98,7 @@ namespace Unittests
         [TestCase("anton", AllType.INT, "ogjfpbjwfpjwf", ExpectedResult = false)]
         [TestCase("123123", AllType.DECIMAL, "asdf", ExpectedResult = false)]
         [TestCase("pkasnd", AllType.GRAPH, "asdf", ExpectedResult = false)]
-        [TestCase("something something",AllType.BOOL, "dont know", ExpectedResult = false)]
+        [TestCase("msomething something",AllType.BOOL, "dont know", ExpectedResult = false)]
         public bool CheckDeclarationNode(string VariableName, AllType ExpectedType, string Function) {
             var Start = AST.Children.Where(x => (x is FunctionNode) && (x as FunctionNode).Name == Function);
             if (Start.Count() == 0) {

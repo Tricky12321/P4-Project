@@ -116,11 +116,23 @@ public interface IGiraphParserVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <return>The visitor result.</return>
 	Result VisitExpression([NotNull] GiraphParser.ExpressionContext context);
 	/// <summary>
+	/// Visit a parse tree produced by <see cref="GiraphParser.simpleExpression"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitSimpleExpression([NotNull] GiraphParser.SimpleExpressionContext context);
+	/// <summary>
 	/// Visit a parse tree produced by <see cref="GiraphParser.operand"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
 	Result VisitOperand([NotNull] GiraphParser.OperandContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="GiraphParser.simpleOperand"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitSimpleOperand([NotNull] GiraphParser.SimpleOperandContext context);
 	/// <summary>
 	/// Visit a parse tree produced by <see cref="GiraphParser.query"/>.
 	/// </summary>
@@ -277,6 +289,12 @@ public interface IGiraphParserVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
 	Result VisitBoolComparisons([NotNull] GiraphParser.BoolComparisonsContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="GiraphParser.simpleBoolComparison"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitSimpleBoolComparison([NotNull] GiraphParser.SimpleBoolComparisonContext context);
 	/// <summary>
 	/// Visit a parse tree produced by <see cref="GiraphParser.predicate"/>.
 	/// </summary>
@@ -463,6 +481,12 @@ public interface IGiraphParserVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
 	Result VisitSetExpressionAtri([NotNull] GiraphParser.SetExpressionAtriContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="GiraphParser.setExpressionAtriSim"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitSetExpressionAtriSim([NotNull] GiraphParser.SetExpressionAtriSimContext context);
 	/// <summary>
 	/// Visit a parse tree produced by <see cref="GiraphParser.setExpressionVari"/>.
 	/// </summary>

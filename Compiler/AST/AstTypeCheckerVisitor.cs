@@ -70,11 +70,6 @@ namespace Compiler.AST
             }
         }
 
-        private bool IsNotEqual(string name1, string name2)
-        {
-            return !(name1 == name2);
-        }
-
         private void checkCollectionFollowsCollection(string varName)
         {
             if (varName.Contains('.'))
@@ -768,6 +763,7 @@ namespace Compiler.AST
 
         public override void Visit(DeclarationNode node)
         {
+            VisitChildren(node);
             _symbolTable.SetCurrentNode(node);
             AllType? typeOfVariable;
             if (node.Assignment != null)
@@ -783,13 +779,13 @@ namespace Compiler.AST
                     {
                         foreach (AbstractNode abnode in exprNode.ExpressionParts)
                         {
-                            if (IsNotEqual(node.Name, abnode.Name))
+                            if (node.Name != abnode.Name)
                             {
-                                //the expression type and the variable is of same type, and are not the same collection.
+                                _symbolTable.DeclarationCantBeSameVariable(node.Name);
                             }
                             else
                             {
-                                _symbolTable.DeclarationCantBeSameVariable(node.Name);
+                                //the expression type and the variable is of same type, and are not the same collection.
                             }
                         }
                     }
@@ -804,14 +800,14 @@ namespace Compiler.AST
                     AllType? typeOfRetreiveVariable = _symbolTable.RetrieveSymbol(abNode.Name, out bool isCollectionRetrieve, false);
                     if (typeOfVariable == abNode.Type_enum && isCollectionRetrieve)
                     {
-                        if (IsNotEqual(node.Name, abNode.Name))
+                        if (node.Name != abNode.Name)
                         {
-                            //type correct, variable is a coll, and collections have the same time. inner collection is checked in selectallNode.
-                            //and is not the same collection.
+                            _symbolTable.DeclarationCantBeSameVariable(node.Name);
                         }
                         else
                         {
-                            _symbolTable.DeclarationCantBeSameVariable(node.Name);
+                            //type correct, variable is a coll, and collections have the same time. inner collection is checked in selectallNode.
+                            //and is not the same collection.
                         }
                     }
                     else
@@ -829,7 +825,6 @@ namespace Compiler.AST
             }
             else
             {
-                VisitChildren(node);
                 typeOfVariable = _symbolTable.RetrieveSymbol(node.Name, out bool isCollection, false);
                 if (typeOfVariable == AllType.VOID)
                 {
@@ -896,6 +891,7 @@ namespace Compiler.AST
 
         public override void Visit(ExpressionNode node)
         {
+            VisitChildren(node);
             _symbolTable.SetCurrentNode(node);
             AllType? previousType = null;
             bool firstWasCollection = false;
@@ -1020,6 +1016,7 @@ namespace Compiler.AST
             AllType? varDclNodeType;
             _symbolTable.SetCurrentNode(node);
             _symbolTable.OpenScope(BlockType.ForLoop);
+            VisitChildren(node);
 
             if (node.Increment != null && node.VariableDeclaration != null && node.ToValueOperation != null)
             {
@@ -1047,10 +1044,8 @@ namespace Compiler.AST
                     }
                 }
             }
-            VisitChildren(node);
             _symbolTable.CloseScope();
         }
-
 
         public override void Visit(ForeachLoopNode node)
         {
@@ -1083,6 +1078,7 @@ namespace Compiler.AST
 
         public override void Visit(VariableNode node)
         {
+            VisitChildren(node);
             _symbolTable.SetCurrentNode(node);
 
             if (node.Assignment != null)
@@ -1096,7 +1092,6 @@ namespace Compiler.AST
                 expNode.OverAllType = _symbolTable.RetrieveSymbol(node.Name);
             }
             node.Type = _symbolTable.RetrieveSymbol(node.Name).ToString();
-            VisitChildren(node);
         }
 
         public override void Visit(CodeBlockNode node)
@@ -1129,13 +1124,13 @@ namespace Compiler.AST
                         {
                             if (expNode.Name != null)
                             {
-                                if (IsNotEqual(expNode.Name, node.Name))
+                                if (expNode.Name != node.Name)
                                 {
-                                    //the variables and the expression is of same type, and have not used the same variable for declaration and for expression.
+                                    _symbolTable.DeclarationCantBeSameVariable(node.Name);
                                 }
                                 else
                                 {
-                                    _symbolTable.DeclarationCantBeSameVariable(node.Name);
+                                    //the variables and the expression is of same type, and have not used the same variable for declaration and for expression.
                                 }
                             }
                             else
@@ -1144,13 +1139,13 @@ namespace Compiler.AST
                                 {
                                     if (expPartNode.Name != null)
                                     {
-                                        if (IsNotEqual(expPartNode.Name, node.Name))
+                                        if (expPartNode.Name != node.Name)
                                         {
-                                            //the variables and the expression is of same type, and have not used the same variable for declaration and for expression.
+                                            _symbolTable.DeclarationCantBeSameVariable(node.Name);
                                         }
                                         else
                                         {
-                                            _symbolTable.DeclarationCantBeSameVariable(node.Name);
+                                            //the variables and the expression is of same type, and have not used the same variable for declaration and for expression.
                                         }
                                     }
                                 }

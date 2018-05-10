@@ -12,6 +12,8 @@ using System.Diagnostics;
 using System.Management;
 using Compiler.CodeGeneration.GenerationCode;
 using Giraph.Classes;
+using System.Reflection;
+using System.Globalization;
 namespace Compiler
 {
     public static class Program
@@ -62,7 +64,7 @@ namespace Compiler
         public static GiraphParser.StartContext BuildCST(string FilePath) {
             Stopwatch CSTTimer = new Stopwatch();
             CSTTimer.Start();
-            string input = File.ReadAllText(FilePath);
+			string input = File.ReadAllText(Utilities.CurrentPath+"/"+FilePath);
             ICharStream stream = CharStreams.fromstring(input);
             ITokenSource lexer = new GiraphLexer(stream);
             ITokenStream tokens = new CommonTokenStream(lexer);
