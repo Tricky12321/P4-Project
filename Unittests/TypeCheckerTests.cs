@@ -18,7 +18,7 @@ namespace Unittests
         [SetUp]
         public void Init()
         {
-            CST = Program.BuildCST("C:\\Users\\Ezzi\\Source\\Repos\\P4-Project\\Unittests\\kode_TypeChecker.giraph");
+            CST = Program.BuildCST(Utilities.CurrentPath+"kode_TypeChecker.giraph");
             AST = Program.BuildAST(CST);
             SymbolTable = Program.BuildSymbolTable(AST as StartNode);
             Program.TypeCheck(SymbolTable, AST as StartNode);

@@ -1018,10 +1018,17 @@ namespace Compiler.AST
             _symbolTable.OpenScope(BlockType.ForLoop);
             VisitChildren(node);
 
-            if (node.Increment != null && node.VariableDeclaration != null && node.ToValueOperation != null)
+            if (node.Increment != null && (node.VariableDeclaration != null || node.FromValueNode != null) && node.ToValueOperation != null)
             {
                 node.Increment.Accept(this);
+                if(node.VariableDeclaration != null)
+                {
                 node.VariableDeclaration.Accept(this);
+                }
+                if(node.FromValueNode != null)
+                {
+                    node.FromValueNode.Accept(this);
+                }
                 node.ToValueOperation.Accept(this);
             }
 
@@ -1030,7 +1037,14 @@ namespace Compiler.AST
                 if (node.VariableDeclaration is VariableDclNode varDclNode)
                 {
                     varDclNodeType = _symbolTable.RetrieveSymbol(varDclNode.Name);
-                    if (varDclNodeType != AllType.INT && incrementNode.OverAllType != AllType.INT)
+                    if (varDclNodeType != AllType.INT || incrementNode.OverAllType != AllType.INT)
+                    {
+                        _symbolTable.WrongTypeConditionError();
+                    }
+                }
+                else
+                {
+                    if(node.FromValueNode.Type_enum != AllType.INT || incrementNode.OverAllType != AllType.INT)
                     {
                         _symbolTable.WrongTypeConditionError();
                     }

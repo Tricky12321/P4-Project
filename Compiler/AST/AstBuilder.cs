@@ -948,7 +948,7 @@ namespace Compiler.AST
             {
                 foreach (var Child in context.assignment())
                 {
-                    VarNode.ValueList.Add(Child.variable().GetText(), Visit(Child.expression()));
+                    VarNode.ValueList.Add(Child.variable().GetText(), Visit(Child.boolComparisons()));
                     VarNode.AdoptChildren(Visit(Child));
                 }
             }
@@ -968,7 +968,7 @@ namespace Compiler.AST
             {
                 foreach (var Child in context.assignment())
                 {
-                    VarNode.ValueList.Add(Child.variable().GetText(), Visit(Child.expression()));
+                    VarNode.ValueList.Add(Child.variable().GetText(), Visit(Child.boolComparisons()));
                     VarNode.AdoptChildren(Visit(Child));
                 }
             }
