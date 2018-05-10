@@ -6,6 +6,7 @@ extend edge graph   'graphSomethingLong':'graSom';
 extend edge bool    'boolSomethingLong':'booSom';
 
 extend vertex int     'intSomethingLong':'intSom';
+extend vertex int     'intSomethingLong2':'intSom2';
 extend vertex decimal 'decimalSomethingLong':'decSom';
 extend vertex edge    'edgeSomethingLong':'edgSom';
 extend vertex vertex  'vertexSomethingLong':'verSom';
@@ -27,6 +28,7 @@ extend graph collection bool 'testboolCollection';
 extend graph collection graph 'testgraphCollection';
 
 extend vertex collection int 'testintCollection';
+extend vertex collection int 'testintCollection2';
 extend vertex collection decimal 'testdecimalCollection';
 extend vertex collection vertex 'testvertexCollection';
 extend vertex collection edge 'testedgeCollection';
@@ -48,12 +50,49 @@ Main -> void () {
         set 'Directed' = false;
     }
 
-
-}
-
-voidFunc -> void(void parameter){
 	collection int tim;
 	collection string hej;
+	int timint = 5;
+	set 'intSom' = 5.5 in g1.Edges;
+	set 'testintCollection' = 5.5 in g1.Edges;
+
+	extractmax 'booSom' from g1.Edges;
+	extractmax 'intSom2' from g1.Edges;
+	extractmax 'booSom' from g1.edgSom.testintCollection;
+	extractmax from g1.edgSom.testboolCollection;
+	extractmax from g1.intSom;
+
+	extractmin 'booSom' from g1.Edges;
+	extractmin 'intSom2' from g1.Edges;
+	extractmin 'booSom' from g1.testintCollection;
+	extractmin from g1.edgSom.testboolCollection;
+	extractmin from g1.intSom;
+
+	collection int fratim = selectall from timint;
+	int endnuentim = select from timint;
+	decimal timdouble = 15.5;
+	push endnuentim+1+2.5+3 to tim;
+	push timdouble to tim;
+	pop from endnuentim;
+	enqueue endnuentim+1+2.5+3 to tim;
+	enqueue timdouble to tim;
+
+
+
+
+
+
+
+
+
+	graph g2
+	{
+		vertex vx(intSom = 4.5), vxx(intSom = 3);
+		edge ex(vx, vxx, intSom = 5);
+	}
+}
+
+voidFunc -> void (void parameter) {
 
 
 }

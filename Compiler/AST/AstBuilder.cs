@@ -649,8 +649,14 @@ namespace Compiler.AST
             string switchString = context.GetType().ToString();
             switch (switchString)
             {
-                case "GiraphParser+VariableFuncContext":
-                    switch (context.GetChild(0).GetChild(context.GetChild(0).ChildCount - 1).GetText())
+                case "GiraphParser+VariableContext":
+
+                    var text = context.GetChild(0).GetChild(context.GetChild(0).ChildCount - 1);
+                    if (text == null)
+                    {
+                        return "void";
+                    }
+                    switch (text.GetText())
                     {
                         case "Vertices":
                             return "vertex";
@@ -871,7 +877,7 @@ namespace Compiler.AST
             // ITS A GRAPH ADD
             if (context.addToGraph() != null)
             {
-                AddNode.IsGraph = true;
+                AddNode.IsGraph = true; 
                 if (context.addToGraph().vertexDcls() != null)
                 {
                     foreach (var Child in context.addToGraph().vertexDcls().vertexDcl())
@@ -942,6 +948,7 @@ namespace Compiler.AST
             {
                 foreach (var Child in context.assignment())
                 {
+                    VarNode.ValueList.Add(Child.variable().GetText(), Visit(Child.expression()));
                     VarNode.AdoptChildren(Visit(Child));
                 }
             }
@@ -961,6 +968,7 @@ namespace Compiler.AST
             {
                 foreach (var Child in context.assignment())
                 {
+                    VarNode.ValueList.Add(Child.variable().GetText(), Visit(Child.expression()));
                     VarNode.AdoptChildren(Visit(Child));
                 }
             }

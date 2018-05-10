@@ -819,6 +819,14 @@ namespace Compiler.AST.SymbolTable
             Error();
         }
 
+        public void DeclarationsCantBeAdded(string declarationSet, string graphCollection){
+            string errormessage = $"The {declarationSet} cannot be added to the collection in the graph! " + GetLineNumber();
+            Console.WriteLine(errormessage);
+            TypeCheckErrorList.Add(errormessage);
+            Error();
+
+        }
+
         public void WrongTypeErrorCollection(string variable1, string variable2)
         {
             string errormessage = $"Variable {variable1} and {variable2} are missmatch of collection. Line number {GetLineNumber()}";
