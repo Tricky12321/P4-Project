@@ -649,8 +649,14 @@ namespace Compiler.AST
             string switchString = context.GetType().ToString();
             switch (switchString)
             {
-                case "GiraphParser+VariableFuncContext":
-                    switch (context.GetChild(0).GetChild(context.GetChild(0).ChildCount - 1).GetText())
+                case "GiraphParser+VariableContext":
+                    IParseTree childString = context.GetChild(0).GetChild(context.GetChild(0).ChildCount - 1);
+                    if(childString == null)
+                    {
+                        return "void";
+                    }
+
+                    switch (childString.GetText())
                     {
                         case "Vertices":
                             return "vertex";
