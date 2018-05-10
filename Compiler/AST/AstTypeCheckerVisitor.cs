@@ -675,7 +675,7 @@ namespace Compiler.AST
                 }
                 else
                 {
-                    throw new Exception("haha gg");
+                    //throw new Exception("haha gg");
                 }
 
             }
@@ -1045,7 +1045,9 @@ namespace Compiler.AST
             {
                 _symbolTable.WrongTypeError(node.VariableName, node.InVariableName);
             }
+			_symbolTable.OpenScope(BlockType.ForEachLoop);
             VisitChildren(node);
+			_symbolTable.CloseScope();
         }
 
         public override void Visit(WhileLoopNode node)

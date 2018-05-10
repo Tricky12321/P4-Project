@@ -371,7 +371,7 @@ namespace Compiler.AST.SymbolTable
                     // Split the string into the different subnames
                     List<string> names = Name.Split('.').ToList();
                     // Check if the symbol table contains the first name given, and that it is reachable
-                    if (_symTable.ContainsKey(names[0]))
+					if (_symTable.ContainsKey(names[0]))
                     {
                         if (ShowErrors)
                         {
