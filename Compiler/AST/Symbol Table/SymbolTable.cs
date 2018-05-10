@@ -89,8 +89,10 @@ namespace Compiler.AST.SymbolTable
             ClassEntry Vertices = new ClassEntry("Vertices", AllType.VERTEX, true);
             ClassEntry Edges = new ClassEntry("Edges", AllType.EDGE, true);
             // Method Calls
-            _classesTable[AllType.EDGE].Add(VertexFrom.Name, VertexFrom);
-            _classesTable[AllType.EDGE].Add(VertexTo.Name, VertexTo);
+            _classesTable[AllType.EDGE].Add("From", VertexFrom);
+            _classesTable[AllType.EDGE].Add("To", VertexTo);
+			_classesTable[AllType.EDGE].Add(VertexFrom.Name, VertexFrom);
+			_classesTable[AllType.EDGE].Add(VertexTo.Name, VertexTo);
             _classesTable[AllType.GRAPH].Add("EdgeBetween", EdgeBetween);
             _classesTable[AllType.GRAPH].Add("EdgesBetween", EdgesBetween);
             _classesTable[AllType.GRAPH].Add("Adjacent", Adjacent);

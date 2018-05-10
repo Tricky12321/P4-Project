@@ -171,7 +171,7 @@ namespace Compiler.AST.SymbolTable
             string functionName = node.Name;
             if (!SymbolTable.DeclaredLocally(functionName))
             {
-                SymbolTable.EnterSymbol(functionName, type);
+                SymbolTable.EnterSymbol(functionName, type, node.IsCollection);
                 SymbolTable.OpenScope(node.Name);
 
                 foreach (ParameterNode parameter in node.Parameters)

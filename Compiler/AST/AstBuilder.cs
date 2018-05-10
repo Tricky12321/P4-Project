@@ -95,7 +95,7 @@ namespace Compiler.AST
                     {
                         foreach (var Attribute in NestedChild.assignment())
                         {
-                            VNode.ValueList.Add(Attribute.variable().GetText(), Visit(Attribute.expression()));
+                            VNode.ValueList.Add(Attribute.variable().GetText(), Visit(Attribute.boolComparisons()));
                         }
                     }
                     GNode.Vertices.Add(VNode);
@@ -127,7 +127,7 @@ namespace Compiler.AST
                             // This is in order to ignore the attributes that are without 
                             if (Attribute.variable() != null)
                             {
-                                ENode.ValueList.Add(Attribute.variable().GetText(), Visit(Attribute.expression()));
+                                ENode.ValueList.Add(Attribute.variable().GetText(), Visit(Attribute.boolComparisons()));
                             }
                         }
                     }
@@ -296,7 +296,7 @@ namespace Compiler.AST
                     VariableAttributeNode attribute = Visit(ExpNode.attribute()) as VariableAttributeNode;
                     attribute.ClassVariableName = SetNode.InVariable.Name; //  Only set Class Variable if its an attribute
                     attribute.IsAttribute = true;
-                    ExpressionNode expression = Visit(ExpNode.simpleExpression()) as ExpressionNode;
+                    ExpressionNode expression = Visit(ExpNode.simpleBoolComparison()) as ExpressionNode;
                     SetNode.Attributes.Add(Tuple.Create(attribute, ExpNode.compoundAssign().GetText(), expression));
                 }
             }
@@ -307,7 +307,7 @@ namespace Compiler.AST
                 foreach (var ExpNode in context.setExpressionVari())
                 {
                     VariableAttributeNode attribute = Visit(ExpNode.variable()) as VariableAttributeNode;
-                    ExpressionNode expression = Visit(ExpNode.expression()) as ExpressionNode;
+                    ExpressionNode expression = Visit(ExpNode.boolComparisons()) as ExpressionNode;
                     SetNode.Attributes.Add(Tuple.Create(attribute, ExpNode.compoundAssign().GetText(), expression));
                 }
             }
@@ -543,10 +543,10 @@ namespace Compiler.AST
         {
             DeclarationNode DclNode = new DeclarationNode(context.Start.Line, context.Start.Column);
             DclNode.Type = context.objects().GetText();
-            DclNode.Name = context.variable(0).GetText();
-            if (context.expression() != null)
+            DclNode.Name = context.variable().GetText();
+            if (context.boolComparisons() != null)
             {
-                DclNode.Assignment = Visit(context.expression());
+				DclNode.Assignment = Visit(context.boolComparisons());
             }
             return DclNode;
         }
@@ -666,7 +666,7 @@ namespace Compiler.AST
         public override AbstractNode VisitEnqueueOP([NotNull] GiraphParser.EnqueueOPContext context)
         {
             EnqueueQueryNode EnqueueNode = new EnqueueQueryNode(context.Start.Line, context.Start.Column);
-            EnqueueNode.VariableToAdd = Visit(context.expression());
+			EnqueueNode.VariableToAdd = Visit(context.boolComparisons());
             EnqueueNode.VariableCollection = context.variable().GetText();
             return EnqueueNode;
         }
@@ -690,7 +690,7 @@ namespace Compiler.AST
         public override AbstractNode VisitPushOP([NotNull] GiraphParser.PushOPContext context)
         {
             PushQueryNode PushNode = new PushQueryNode(context.Start.Line, context.Start.Column);
-            PushNode.VariableToAdd = Visit(context.expression());
+			PushNode.VariableToAdd = Visit(context.boolComparisons());
             PushNode.VariableCollection = context.variable().GetText();
             return PushNode;
         }
@@ -754,7 +754,7 @@ namespace Compiler.AST
             VariableNode.Name = context.variable().GetText();
             if (context.EQUALS() != null)
             {
-                VariableNode.AdoptChildren(Visit(context.expression()));
+				VariableNode.AdoptChildren(Visit(context.boolComparisons()));
             }
             return VariableNode;
         }
@@ -896,12 +896,12 @@ namespace Compiler.AST
             {
                 AddNode.IsColl = true;
                 // ITS ALL TYPE
-                AddNode.TypeOrVariable.Add(Visit(context.addToColl().collExpression().expression()));
+				AddNode.TypeOrVariable.Add(Visit(context.addToColl().collExpression().boolComparisons()));
                 if (context.addToColl().collExpressionExt() != null)
                 {
                     foreach (var item in context.addToColl().collExpressionExt())
                     {
-                        AddNode.TypeOrVariable.Add(Visit(item.collExpression().expression()));
+						AddNode.TypeOrVariable.Add(Visit(item.collExpression().boolComparisons()));
                     }
                 }
                 // Shared
