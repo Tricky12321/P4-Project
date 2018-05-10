@@ -121,7 +121,7 @@ namespace Compiler.AST
             if (node.Attributes != null)
             {
                 //set query has attributes which is placed in a list
-                foreach (Tuple<VariableAttributeNode, string, ExpressionNode> Attributes in node.Attributes)
+                foreach (Tuple<VariableAttributeNode, string, AbstractNode> Attributes in node.Attributes)
                 {
                     variableName = Attributes.Item1.Name;
 
@@ -150,7 +150,8 @@ namespace Compiler.AST
                     {
                         if (isTypeCollection == isAttributeCollection)
                         {
-                            if (Attributes.Item3.OverAllType != variableType)
+							if (Attributes.Item3 is BoolComparisonNode && (Attributes.Item3 as BoolComparisonNode).Children[0] is ExpressionNode)
+							if ((Attributes.Item3.Children[0] as ExpressionNode).OverAllType != variableType)
                             {
                                 //type between varible and overalltyper
                                 _symbolTable.TypeExpressionMismatch();
@@ -570,14 +571,19 @@ namespace Compiler.AST
             {
                 AllType? TypeOfTargetCollection = _symbolTable.RetrieveSymbol(node.ToVariable, out bool isCollectionTargetColl, false);
                 node.Type = TypeOfTargetCollection.ToString();
-                AllType? typeOfVar;
+				AllType? typeOfVar = null;
 
                 foreach (var item in node.TypeOrVariable)
                 {
                     item.Accept(this);
 
-                    ExpressionNode expressionToAdd = (ExpressionNode)item;
-                    typeOfVar = expressionToAdd.OverAllType;
+                    AbstractNode expressionToAdd = item;
+
+					if (expressionToAdd.Children[0] is ExpressionNode) {
+						typeOfVar = (expressionToAdd.Children[0] as ExpressionNode).OverAllType;
+					} else {
+						typeOfVar = expressionToAdd.Type_enum;
+					}
                     bool targetIsGraph = TypeOfTargetCollection == AllType.GRAPH;
 
                     if (isCollectionTargetColl)
@@ -740,7 +746,7 @@ namespace Compiler.AST
             string targetName = node.Attributes.Item1.Name;
             AllType? targetType = _symbolTable.GetAttributeType(targetName, AllType.GRAPH);
             node.Attributes.Item3.Accept(this);
-            AllType? assignedType = node.Attributes.Item3.OverAllType;
+			AllType? assignedType = node.Attributes.Item3.OverAllType;
 
             if (targetType == assignedType)
             {

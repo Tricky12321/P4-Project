@@ -137,7 +137,7 @@ namespace Compiler.AST
             foreach (var attribute in node.Attributes)
             {
                 InsertComma(ref i);
-                ProgramCode.Append($"'{attribute.Item1.Name}' = {attribute.Item3.ExpressionString()}");
+                //ProgramCode.Append($"'{attribute.Item1.Name}' = {attribute.Item3.ExpressionString()}");
             }
             ProgramCode.Append($" IN {node.InVariable}");
             if (node.WhereCondition != null)

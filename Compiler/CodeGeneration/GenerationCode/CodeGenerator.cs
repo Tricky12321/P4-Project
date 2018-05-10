@@ -308,7 +308,7 @@ namespace Compiler.CodeGeneration.GenerationCode
                     string VariableName = item.Item1.Name.Trim('\'');
                     string AssignOperator = item.Item2;
                     bool IsCollection = (item.Item1 as VariableAttributeNode).IsCollection;
-                    ExpressionNode expression = item.Item3;
+                    AbstractNode expression = item.Item3;
                     if (IsCollection)
                     {
                         Indent();
@@ -365,7 +365,7 @@ namespace Compiler.CodeGeneration.GenerationCode
                 {
                     string VariableName = item.Item1.Name;
                     string AssignOperator = item.Item2;
-                    ExpressionNode expression = item.Item3;
+                    AbstractNode expression = item.Item3;
                     Indent();
                     _currentStringBuilder.Append($"{VariableName} {AssignOperator} ");
                     expression.Accept(this);

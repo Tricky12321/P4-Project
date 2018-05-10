@@ -180,8 +180,10 @@ Main -> void () {
 
     add k to icolltest1;
     add 123 to icolltest1;
-    add i to bcolltest1
+    add i to bcolltest1;
     add 10 to dcolltest1;
+
+    bool testasdfghjkl = k > 9;
 
 }
 
