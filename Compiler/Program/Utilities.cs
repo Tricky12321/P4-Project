@@ -3,11 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using System.IO;
+using System.Reflection;
 namespace Compiler
 {
     public static class Utilities
     {
+		public static string CurrentPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+
         public static AllType FindTypeFromString(string Type)
         {
             if (Type != null)
@@ -50,7 +53,7 @@ namespace Compiler
             get
             {
                 int p = (int)Environment.OSVersion.Platform;
-                return (p == 4) || Environment.OSVersion.ToString().ToLower().Contains("unix");
+                return (p == 4) && Environment.OSVersion.ToString().ToLower().Contains("unix");
             }
         }
 

@@ -1,0 +1,86 @@
+﻿extend edge int 'v';
+extend vertex int 'v';
+extend edge decimal 'd';
+extend edge graph 'gr1';
+extend edge vertex 'vertEdge';
+extend vertex vertex 'vertVertex';
+extend graph vertex 'vertEdge1';
+extend graph vertex 'vertEdge2';
+extend edge int 'length';
+extend graph decimal 'val':'v';
+extend graph int 'valInt':'vi';
+
+Main -> void () {
+    int i = 0;
+    collection int hej;
+    push 5 to hej;
+
+    set i = pop from hej;
+    decimal d;
+    collection vertex vertexColl;
+    graph g1 
+    {
+        vertex va(v=1), vb(v=2), vc(v=1), vd(v=2), ve(v=1);
+        edge x(vb, vd, v = 4), y(vd, ve, v = 7), z(va, vc, v = 10);
+    }
+
+    graph g2 
+    {
+        vertex (), (), (), (), ();
+    }
+
+    if (i == i) {
+        decimal decimalInIf;
+        vertex vertexInIf;
+        edge edgeInIf;
+        graph graphInIf;
+        if (i == i) { 
+            decimal NesteddecimalInIf;
+            vertex NestedvertexInIf;
+            edge NestededgeInIf;
+            graph NestedgraphInIf;
+        }
+    }
+
+    for int q = 0 to 1000 : 1 {
+        decimal decimalInFor;
+        vertex vertexInFor;
+        edge edgeInFor;
+        graph graphInFor;
+        for int o = 0 to 1000 : 1 {
+            decimal NesteddecimalInFor;
+            vertex NestedvertexInFor;
+            edge NestededgeInFor;
+            graph NestedgraphInFor;
+        }
+    }
+}
+
+Test -> void () {
+    int i;
+    decimal d;
+    graph g2 
+    {
+        vertex va(v=1), vb(v=2), vc(v=1), vd(v=2), ve(v=1);
+        edge x(vb, vd, v = 4), y(vd, ve, v = 7), z(va, vc, v = 10);
+    }
+
+    if (i == i) { 
+            decimal Test1;
+            graph Test2;
+            vertex Test3;
+            edge Test4;
+            int Test5;
+            int Test6;
+    }
+    if (i == i) { 
+            int Test1;
+            graph Test2;
+            edge Test3;
+            int Test4;
+            vertex Test5;
+            graph Test6;
+            
+    }
+
+}

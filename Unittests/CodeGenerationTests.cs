@@ -19,7 +19,7 @@ namespace Unittests
     {
         GiraphParser.StartContext CST;
         AbstractNode AST;
-        string CodeGeneratorOutputPath = "CodeGeneration";
+		string CodeGeneratorOutputPath = Utilities.CurrentPath+"/CodeGeneration";
         string CodeGeneratorClassOutputPath = "/Classes";
         string ProgramCSFile => CodeGeneratorOutputPath + "/Program.cs";
         string GraphFile => CodeGeneratorOutputPath + CodeGeneratorClassOutputPath + "/Graph.cs";
@@ -28,6 +28,9 @@ namespace Unittests
         [SetUp]
         public void Init()
         {
+            if (Utilities.IsWindows) {
+                CodeGeneratorOutputPath = "SMID JERES PATH HER";
+            }
             CST = Program.BuildCST("kode_generator.giraph");
             AST = Program.BuildAST(CST);
             Program.WriteCodeToFiles(AST as StartNode);

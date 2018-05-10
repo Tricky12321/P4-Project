@@ -14,10 +14,10 @@ namespace Compiler.CodeGeneration.GenerationCode
         public StringBuilder VertexExtends = new StringBuilder();
 
 
-        private string _programFile = "CodeGeneration/Program.cs";
-        private string _edgeClassFile = "CodeGeneration/Classes/Edge.cs";
-        private string _graphClassFile = "CodeGeneration/Classes/Graph.cs";
-        private string _vertexClassFile = "CodeGeneration/Classes/Vertex.cs";
+		private string _programFile = Utilities.CurrentPath+"/CodeGeneration/Program.cs";
+		private string _edgeClassFile = Utilities.CurrentPath +"/CodeGeneration/Classes/Edge.cs";
+		private string _graphClassFile = Utilities.CurrentPath +"/CodeGeneration/Classes/Graph.cs";
+		private string _vertexClassFile = Utilities.CurrentPath +"/CodeGeneration/Classes/Vertex.cs";
         private string _mainBody = "*****MAINBODY*****";
         private string _functions = "*****FUNCTIONS*****";
         private string _global = "*****GLOBAL*****";

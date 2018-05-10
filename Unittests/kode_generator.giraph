@@ -1,0 +1,214 @@
+﻿extend edge int 'intSomething';
+extend edge decimal 'decimalSomething';
+extend edge edge 'edgeSomething';
+extend edge vertex 'vertexSomething';
+extend edge graph 'graphSomething';
+extend edge bool 'boolSomething';
+
+extend graph int 'intSomething';
+extend graph decimal 'decimalSomething';
+extend graph edge 'edgeSomething';
+extend graph vertex 'vertexSomething';
+extend graph graph 'graphSomething';
+extend graph bool 'boolSomething';
+
+extend vertex int 'intSomething';
+extend vertex decimal 'decimalSomething';
+extend vertex edge 'edgeSomething';
+extend vertex vertex 'vertexSomething';
+extend vertex graph 'graphSomething';
+extend vertex bool 'boolSomething';
+
+
+extend edge int     'intSomethingLong':'intSom';
+extend edge decimal 'decimalSomethingLong':'decSom';
+extend edge edge    'edgeSomethingLong':'edgSom';
+extend edge vertex  'vertexSomethingLong':'verSom';
+extend edge graph   'graphSomethingLong':'graSom';
+extend edge bool    'boolSomethingLong':'booSom';
+
+extend vertex int     'intSomethingLong':'intSom';
+extend vertex decimal 'decimalSomethingLong':'decSom';
+extend vertex edge    'edgeSomethingLong':'edgSom';
+extend vertex vertex  'vertexSomethingLong':'verSom';
+extend vertex graph   'graphSomethingLong':'graSom';
+extend vertex bool    'boolSomethingLong':'booSom';
+
+extend graph int     'intSomethingLong':'intSom';
+extend graph decimal 'decimalSomethingLong':'decSom';
+extend graph edge    'edgeSomethingLong':'edgSom';
+extend graph vertex  'vertexSomethingLong':'verSom';
+extend graph graph   'graphSomethingLong':'graSom';
+extend graph bool    'boolSomethingLong':'booSom';
+
+
+
+extend graph collection int 'testintCollection';
+extend graph collection decimal 'testdecimalCollection';
+extend graph collection vertex 'testvertexCollection';
+extend graph collection edge 'testedgeCollection';
+extend graph collection bool 'testboolCollection';
+extend graph collection graph 'testgraphCollection';
+
+extend vertex collection int 'testintCollection';
+extend vertex collection decimal 'testdecimalCollection';
+extend vertex collection vertex 'testvertexCollection';
+extend vertex collection edge 'testedgeCollection';
+extend vertex collection bool 'testboolCollection';
+extend vertex collection graph 'testgraphCollection';
+
+extend edge collection int 'testintCollection';
+extend edge collection decimal 'testdecimalCollection';
+extend edge collection vertex 'testvertexCollection';
+extend edge collection edge 'testedgeCollection';
+extend edge collection bool 'testboolCollection';
+extend edge collection graph 'testgraphCollection';
+
+
+
+
+
+
+extend graph collection int 'testintCollectionLong':'testintCollectionShort';
+extend graph collection decimal 'testdecimalCollectionLong':'testdecimalCollectionShort';
+extend graph collection vertex 'testvertexCollectionLong':'testvertexCollectionShort';
+extend graph collection edge 'testedgeCollectionLong':'testedgeCollectionShort';
+extend graph collection bool 'testboolCollectionLong':'testboolCollectionShort';
+extend graph collection graph 'testgraphCollectionLong':'testgraphCollectionShort';
+
+extend vertex collection int 'testintCollectionLong':'testintCollectionShort';
+extend vertex collection decimal 'testdecimalCollectionLong':'testdecimalCollectionShort';
+extend vertex collection vertex 'testvertexCollectionLong':'testvertexCollectionShort';
+extend vertex collection edge 'testedgeCollectionLong':'testedgeCollectionShort';
+extend vertex collection bool 'testboolCollectionLong':'testboolCollectionShort';
+extend vertex collection graph 'testgraphCollectionLong':'testgraphCollectionShort';
+
+extend edge collection int 'testintCollectionLong':'testintCollectionShort';
+extend edge collection decimal 'testdecimalCollectionLong':'testdecimalCollectionShort';
+extend edge collection vertex 'testvertexCollectionLong':'testvertexCollectionShort';
+extend edge collection edge 'testedgeCollectionLong':'testedgeCollectionShort';
+extend edge collection bool 'testboolCollectionLong':'testboolCollectionShort';
+extend edge collection graph 'testgraphCollectionLong':'testgraphCollectionShort';
+
+
+Main -> void () {
+    graph g1
+    {
+        vertex va(), vb(), vc(), vd(), ve();
+        edge x(vb, vd), y(vd, ve), z(va, vc);
+        set 'Directed' = false;
+    }
+
+    graph g2
+    {
+        vertex (), (), (), (), ();
+        set 'Directed' = false;
+    }
+
+    for 1 to 10 : 1
+    {
+
+    }
+
+    for 1 to 1000 : 1
+    {
+
+    }
+
+    for 5 to 10 : 1
+    {
+
+    }
+
+    for 5 to 1000 : 1
+    {
+
+    }
+
+    for 5 to 1000 : 10
+    {
+
+    }
+
+
+    for 100 to 1234 : 1
+    {
+        for 9999 to 10 : 1
+        {
+            for 9 to 1234 : 9123
+            {
+
+            }
+        }
+    }
+    bool i = false;
+    
+    while (true) {
+    }
+
+    while(i) {
+    }
+
+    while i {
+    }
+    while (i | true) {
+    }
+    while (i&true) {
+    }
+
+    foreach vertex v in g1.Vertices {
+    }
+
+    foreach edge e in g1.Edges {
+    }
+
+    collection vertex vcolltest1;
+    collection edge ecolltest1;
+    collection int icolltest1;
+    collection decimal dcolltest1;
+    collection graph gcolltest1;
+    collection bool bcolltest1;
+    int k = 0;
+    set i = false;
+    set k = 10;
+    set k = 12;
+    set k = 1;
+    set k = 5;
+    set k = 9;
+    set k = 4;
+    set k = 3;
+
+    add k to icolltest1;
+    add 123 to icolltest1;
+    add i to bcolltest1
+    add 10 to dcolltest1;
+
+}
+
+Test -> void () {
+    decimal i = 0;
+}
+
+Test2 -> graph () {
+    graph g;
+}
+
+Test3 -> int () {
+    int i = 2;
+}
+
+Test4 -> vertex () {
+    vertex v;
+}
+
+Test5 -> edge () {
+    edge e;
+}
+
+Test6 -> decimal () {
+    decimal de;
+}
+
+Test7 -> bool () {
+    bool trueFalseThing;
+}

@@ -12,6 +12,8 @@ using System.Diagnostics;
 using System.Management;
 using Compiler.CodeGeneration.GenerationCode;
 using Giraph.Classes;
+using System.Reflection;
+using System.Globalization;
 namespace Compiler
 {
     public static class Program
@@ -25,8 +27,7 @@ namespace Compiler
             Stopwatch TotalTimer = new Stopwatch();
             TotalTimer.Start();
 
-            Console.ForegroundColor = ConsoleColor.Red;
-            PrintCompilerMessage("Giraph Compiler 1.0.1", ConsoleColor.Red);
+            PrintCompilerMessage("Giraph Compiler 1.0.1");
             GiraphParser.StartContext CST = BuildCST("kode.giraph");
             AbstractNode AST = BuildAST(CST);
             SymTable SymbolTable = BuildSymbolTable(AST as StartNode);
@@ -63,7 +64,7 @@ namespace Compiler
         public static GiraphParser.StartContext BuildCST(string FilePath) {
             Stopwatch CSTTimer = new Stopwatch();
             CSTTimer.Start();
-            string input = File.ReadAllText(FilePath);
+			string input = File.ReadAllText(Utilities.CurrentPath+"/"+FilePath);
             ICharStream stream = CharStreams.fromstring(input);
             ITokenSource lexer = new GiraphLexer(stream);
             ITokenStream tokens = new CommonTokenStream(lexer);
