@@ -159,9 +159,9 @@ namespace Compiler.AST
             VariableAttributeNode attribute = Visit(context.GetChild(1).GetChild(0)) as VariableAttributeNode;
 
             attribute.ClassType = AllType.GRAPH;
-            ExpressionNode expression = Visit(context.GetChild(1).GetChild(2)) as ExpressionNode;
+			ExpressionNode expression = Visit(context.GetChild(1).GetChild(2)) as ExpressionNode;
             string expType = context.GetChild(1).GetChild(1).GetText();
-            SetQuery.Attributes = (Tuple.Create<VariableAttributeNode, string, ExpressionNode>(attribute, expType, expression));
+			SetQuery.Attributes = (Tuple.Create<VariableAttributeNode, string, ExpressionNode>(attribute, expType, expression));
 
             return SetQuery;
         }
@@ -296,7 +296,7 @@ namespace Compiler.AST
                     VariableAttributeNode attribute = Visit(ExpNode.attribute()) as VariableAttributeNode;
                     attribute.ClassVariableName = SetNode.InVariable.Name; //  Only set Class Variable if its an attribute
                     attribute.IsAttribute = true;
-                    ExpressionNode expression = Visit(ExpNode.simpleBoolComparison()) as ExpressionNode;
+                    AbstractNode expression = Visit(ExpNode.simpleBoolComparison());
                     SetNode.Attributes.Add(Tuple.Create(attribute, ExpNode.compoundAssign().GetText(), expression));
                 }
             }
@@ -307,7 +307,7 @@ namespace Compiler.AST
                 foreach (var ExpNode in context.setExpressionVari())
                 {
                     VariableAttributeNode attribute = Visit(ExpNode.variable()) as VariableAttributeNode;
-                    ExpressionNode expression = Visit(ExpNode.boolComparisons()) as ExpressionNode;
+					AbstractNode expression = Visit(ExpNode.boolComparisons()) as AbstractNode;
                     SetNode.Attributes.Add(Tuple.Create(attribute, ExpNode.compoundAssign().GetText(), expression));
                 }
             }
