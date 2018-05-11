@@ -294,6 +294,7 @@ namespace Compiler.AST.SymbolTable
             }
             if (node.WhereCondition != null)
             {
+				(node.WhereCondition as WhereNode).AttributeClass = node.Type_enum;
                 node.WhereCondition.Accept(this);
             }
         }
@@ -383,6 +384,8 @@ namespace Compiler.AST.SymbolTable
             CheckDeclared(node.Variable);
             if (node.WhereCondition != null)
             {
+				var type = SymbolTable.RetrieveSymbol(node.Variable);
+				(node.WhereCondition as WhereNode).AttributeClass = type ?? default(AllType);
                 node.WhereCondition.Accept(this);
             }
 

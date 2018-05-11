@@ -650,13 +650,13 @@ namespace Compiler.AST
             switch (switchString)
             {
                 case "GiraphParser+VariableContext":
-
-                    var text = context.GetChild(0).GetChild(context.GetChild(0).ChildCount - 1);
-                    if (text == null)
+                    IParseTree childString = context.GetChild(0).GetChild(context.GetChild(0).ChildCount - 1);
+                    if(childString == null)
                     {
                         return "void";
                     }
-                    switch (text.GetText())
+
+                    switch (childString.GetText())
                     {
                         case "Vertices":
                             return "vertex";
