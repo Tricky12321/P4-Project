@@ -294,7 +294,7 @@ namespace Compiler.AST.SymbolTable
             }
             if (node.WhereCondition != null)
             {
-				(node.WhereCondition as WhereNode).AttributeClass = node.Type_enum;
+				(node.WhereCondition as WhereNode).AttributeClass = SymbolTable.RetrieveSymbol(node.InVariable.Name) ?? default(AllType);
                 node.WhereCondition.Accept(this);
             }
         }
@@ -304,8 +304,10 @@ namespace Compiler.AST.SymbolTable
             SymbolTable.SetCurrentNode(node);
             SymbolTable.OpenScope(BlockType.WhereStatement);
 			SymbolTable.EnterSymbol("val", node.AttributeClass);
+			SymbolTable.OpenScope("val");
             SymbolTable.AddClassVariablesToScope(node.AttributeClass);
-            VisitChildren(node);
+			SymbolTable.CloseScope();
+			VisitChildren(node);
             SymbolTable.CloseScope();
         }
 
