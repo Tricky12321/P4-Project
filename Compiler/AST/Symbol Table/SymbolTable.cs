@@ -14,8 +14,15 @@ namespace Compiler.AST.SymbolTable
 
         private Dictionary<string, List<AllType>> _predicateTable = new Dictionary<string, List<AllType>>();
 
+        private List<String> TypeCheckErrorList = new List<string>();
+
         // Get/Set to keep track of what is the deepest methods are stored!
         public string CurrentLine => GetLineNumber();
+
+        public List<String> getTypeCheckErrorList()
+        {
+            return TypeCheckErrorList;
+        }
 
         private uint _globalDepthTrue = 0;
         private List<string> _reservedKeywords = new List<string> {
@@ -744,7 +751,9 @@ namespace Compiler.AST.SymbolTable
 
         public void NotImplementedError(AbstractNode node)
         {
-            Console.WriteLine("This node is visited, but its not implemented! - " + node.ToString());
+            string errormessage = "This node is visited, but its not implemented! - " + node.ToString();
+            Console.WriteLine(errormessage);
+            TypeCheckErrorList.Add(errormessage);
             Error();
         }
 
@@ -774,43 +783,65 @@ namespace Compiler.AST.SymbolTable
 
         public void AttributeIllegal()
         {
-            Console.WriteLine("Type of attribute must be of type Integer or Decimal " + GetLineNumber());
+            string errormessage = "Type of attribute must be of type Integer or Decimal " + GetLineNumber();
+            Console.WriteLine(errormessage);
+            TypeCheckErrorList.Add(errormessage);
             Error();
         }
 
         public void AttributeNotExtendedOnClass(string attriName, AllType? TypeOfClass)
         {
-            Console.WriteLine($"Given attribute: {attriName} is not extended on Class: {TypeOfClass.ToString()} " + GetLineNumber());
+            string errormessage = $"Given attribute: {attriName} is not extended on Class: {TypeOfClass.ToString()} " + GetLineNumber();
+            Console.WriteLine(errormessage);
+            TypeCheckErrorList.Add(errormessage);
             Error();
         }
 
         public void NoAttriProvidedCollNeedsToBeIntOrDecimalError()
         {
-            Console.WriteLine($"If no attribute is provided for assortment, the specified collection must be of type Decimal or Integer " + GetLineNumber());
+            string errormessage = $"If no attribute is provided for assortment, the specified collection must be of type Decimal or Integer " + GetLineNumber();
+            Console.WriteLine(errormessage);
+            TypeCheckErrorList.Add(errormessage);
             Error();
         }
 
         public void ExtractCollNotIntOrDeciError()
         {
-            Console.WriteLine("If a attribute is provided for assortment, the specified collection must not be of type Decimal or Integer " + GetLineNumber());
+            string errormessage = "If a attribute is provided for assortment, the specified collection must not be of type Decimal or Integer " + GetLineNumber();
+            Console.WriteLine(errormessage);
+            TypeCheckErrorList.Add(errormessage);
             Error();
         }
 
         public void WrongTypeError(string variable1, string variable2)
         {
-            Console.WriteLine($"Variable {variable1} and {variable2} are missmatch of types. Line number {GetLineNumber()}");
+            string errormessage = $"Variable {variable1} and {variable2} are missmatch of types. Line number {GetLineNumber()}";
+            Console.WriteLine(errormessage);
+            TypeCheckErrorList.Add(errormessage);
             Error();
+        }
+
+        public void DeclarationsCantBeAdded(string declarationSet, string graphCollection){
+            string errormessage = $"The {declarationSet} cannot be added to the collection in the graph! " + GetLineNumber();
+            Console.WriteLine(errormessage);
+            TypeCheckErrorList.Add(errormessage);
+            Error();
+
         }
 
         public void WrongTypeErrorCollection(string variable1, string variable2)
         {
-            Console.WriteLine($"Variable {variable1} and {variable2} are missmatch of collection. Line number {GetLineNumber()}");
+            string errormessage = $"Variable {variable1} and {variable2} are missmatch of collection. Line number {GetLineNumber()}";
+            Console.WriteLine(errormessage);
+            TypeCheckErrorList.Add(errormessage);
             Error();
         }
 
         public void WrongTypeConditionError()
         {
-            Console.WriteLine($"There is a type mismatch in the condition on Line number {GetLineNumber()}");
+            string errormessage = $"There is a type mismatch in the condition on Line number {GetLineNumber()}";
+            Console.WriteLine(errormessage);
+            TypeCheckErrorList.Add(errormessage);
             Error();
         }
 
@@ -823,6 +854,7 @@ namespace Compiler.AST.SymbolTable
         public void BoolAdditionError(string variable1)
         {
             Console.WriteLine($"Cannot add Booleans {variable1}! {GetLineNumber()}");
+            Error();
         }
 
         public void ReservedKeyword(string name)
@@ -851,7 +883,9 @@ namespace Compiler.AST.SymbolTable
 
         public void TypeExpressionMismatch()
         {
-            Console.WriteLine($"There is a type mismatch in the expression on {GetLineNumber()}");
+            string errormessage = $"There is a type mismatch in the expression on {GetLineNumber()}";
+            Console.WriteLine(errormessage);
+            TypeCheckErrorList.Add(errormessage);
             Error();
         }
 
@@ -881,7 +915,9 @@ namespace Compiler.AST.SymbolTable
 
         public void FromVarIsNotCollError(string name)
         {
-            Console.WriteLine($"The variable retrieved from: {name} is not of type collection {GetLineNumber()}");
+            string errormessage = $"The variable retrieved from: {name} is not of type collection {GetLineNumber()}";
+            Console.WriteLine(errormessage);
+            TypeCheckErrorList.Add(errormessage);
             Error();
         }
 
@@ -893,68 +929,90 @@ namespace Compiler.AST.SymbolTable
 
         public void NonPrintableError()
         {
-            Console.WriteLine($"one or more provided variables or constants is not legal to print. {GetLineNumber()}");
+            string errormessage = $"one or more provided variables or constants is not legal to print. {GetLineNumber()}";
+            Console.WriteLine(errormessage);
+            TypeCheckErrorList.Add(errormessage);
             Error();
         }
 
         public void FunctionIsVoidError(string FunctionName)
         {
-            Console.WriteLine($"Trying to return to void function: {FunctionName}, at {GetLineNumber()}");
+            string errormessage = $"Trying to return to void function: {FunctionName}, at {GetLineNumber()}";
+            Console.WriteLine(errormessage);
+            TypeCheckErrorList.Add(errormessage);
             Error();
         }
 
         public void RunFunctionTypeError(string actualParameter, string formalParameter)
         {
-            Console.WriteLine($"Actual parameter: {actualParameter} and formal parameter: {formalParameter} are a type missmatch " + GetLineNumber());
+            string errormessage = $"Actual parameter: {actualParameter} and formal parameter: {formalParameter} are a type missmatch " + GetLineNumber();
+            Console.WriteLine(errormessage);
+            TypeCheckErrorList.Add(errormessage);
             Error();
         }
 
         public void RunFunctionWithNoFormalParameters(string funcName)
         {
-            Console.WriteLine($"Trying to call a function: {funcName}, that does not have any formal parameters");
+            string errormessage = $"Trying to call a function: {funcName}, that does not have any formal parameters" + GetLineNumber();
+            Console.WriteLine(errormessage);
+            TypeCheckErrorList.Add(errormessage);
             Error();
         }
 
         public void RunFunctionWithNoActualParameter(string funcName)
         {
-            Console.WriteLine($"Trying to call a function: {funcName}, without actual parameters");
+            string errormessage = $"Trying to call a function: {funcName}, without actual parameters" + GetLineNumber();
+            Console.WriteLine(errormessage);
+            TypeCheckErrorList.Add(errormessage);
             Error();
         }
 
         public void PredicateTypeError(string actualParameterName)
         {
-            Console.WriteLine($"Actual parameter: {actualParameterName} did not match the type of the formal parameter! " + GetLineNumber());
+            string errormessage = $"Actual parameter: {actualParameterName} did not match the type of the formal parameter! " + GetLineNumber();
+            Console.WriteLine(errormessage);
+            TypeCheckErrorList.Add(errormessage);
             Error();
         }
 
         public void DeclarationCantBeTypeVoid()
         {
-            Console.WriteLine("Declaration cant be of type void! " + GetLineNumber());
+            string errormessage = "Declaration cant be of type void! " + GetLineNumber();
+            Console.WriteLine(errormessage);
+            TypeCheckErrorList.Add(errormessage);
             Error();
         }
 
         public void DeclarationCantBeSameVariable(string var1)
         {
-            Console.WriteLine($"It is not possible to declare a variable with the same variable. Duplicates used: {var1} " + GetLineNumber());
+            string errormessage = $"It is not possible to declare a variable with the same variable. Duplicates used: {var1} " + GetLineNumber();
+            Console.WriteLine(errormessage);
+            TypeCheckErrorList.Add(errormessage);
             Error();
         }
 
         public void NotCollection(string var1)
         {
-            Console.WriteLine($"{var1} is not a collection, and therefore remove is not able to be used " + GetLineNumber());
+            string errormessage = $"{var1} is not a collection, and therefore remove is not able to be used " + GetLineNumber();
+            Console.WriteLine(errormessage);
+            TypeCheckErrorList.Add(errormessage);
             Error();
         }
 
 
         public void IllegalCollectionPath(string collectionpath)
         {
-            Console.WriteLine($"One or more collections is used in the variable path: {collectionpath} " + GetLineNumber());
+            string errorMessage = $"One or more collections is used in the variable path: {collectionpath} " + GetLineNumber();
+            Console.WriteLine(errorMessage);
+            TypeCheckErrorList.Add(errorMessage);
             Error();
         }
 
         public void ParamerIsVoid(string function, string parameter)
         {
-            Console.WriteLine($"The parameter: {parameter} cannot be of type void" + GetLineNumber());
+            string errormessage = $"The parameter: {parameter} cannot be of type void" + GetLineNumber();
+            Console.WriteLine(errormessage);
+            TypeCheckErrorList.Add(errormessage);
             Error();
         }
 

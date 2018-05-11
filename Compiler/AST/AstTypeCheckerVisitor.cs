@@ -49,7 +49,7 @@ namespace Compiler.AST
         private string DeclarationSetPrint(AddQueryNode node)
         {
             StringBuilder dclList = new StringBuilder();
-            dclList.Append($"declaration_set(");
+            dclList.Append($"declaration set:(");
             foreach (AbstractNode v in node.Dcls)
             {
                 dclList.Append($"{v.Name}, ");
@@ -63,6 +63,7 @@ namespace Compiler.AST
         {
             foreach (AbstractNode child in node.GetChildren())
             {
+                child.Parent = node;
                 if (child != null)
                 {
                     child.Accept(this);
@@ -150,12 +151,12 @@ namespace Compiler.AST
                     {
                         if (isTypeCollection == isAttributeCollection)
                         {
-							if (Attributes.Item3 is BoolComparisonNode && (Attributes.Item3 as BoolComparisonNode).Children[0] is ExpressionNode)
-							if ((Attributes.Item3.Children[0] as ExpressionNode).OverAllType != variableType)
-                            {
-                                //type between varible and overalltyper
-                                _symbolTable.TypeExpressionMismatch();
-                            }
+                            if (Attributes.Item3 is BoolComparisonNode && (Attributes.Item3 as BoolComparisonNode).Children[0] is ExpressionNode)
+                                if ((Attributes.Item3.Children[0] as ExpressionNode).OverAllType != variableType)
+                                {
+                                    //type between varible and overalltyper
+                                    _symbolTable.TypeExpressionMismatch();
+                                }
                         }
                         else
                         {
@@ -362,7 +363,7 @@ namespace Compiler.AST
             }
             else
             {
-                //TODO correct error message pls
+                _symbolTable.FromVarIsNotCollError(node.Variable);
             }
             if (node.WhereCondition != null)
             {
@@ -407,36 +408,44 @@ namespace Compiler.AST
             AllType? varToAdd;
             AllType? collectionToAddTo = _symbolTable.RetrieveSymbol(node.VariableCollection, out bool isCollectionInQuery, false);
             node.Type = collectionToAddTo.ToString();
-            if (node.VariableToAdd is ConstantNode constant)
+            ExpressionNode expNode = (ExpressionNode)node.VariableToAdd.Children[0];
+            foreach (AbstractNode abnode in expNode.ExpressionParts)
             {
-                varToAdd = constant.Type_enum;
-                bool sameType = varToAdd == collectionToAddTo;
-                bool typeCorrect = sameType && isCollectionInQuery;
-                if (typeCorrect)
+                if (!(abnode is OperatorNode))
                 {
-                    //constant is fine, collection is fine
+                    if (abnode is ConstantNode constant)
+                    {
+                        varToAdd = constant.Type_enum;
+                        constant.Parent = expNode;
+                        bool sameType = varToAdd == collectionToAddTo;
+                        bool typeCorrect = sameType && isCollectionInQuery;
+                        if (typeCorrect)
+                        {
+                            //constant is fine, collection is fine
+                        }
+                        else
+                        {
+                            _symbolTable.WrongTypeError(node.variableName, node.VariableCollection);
+                        }
+                        abnode.Accept(this);
+                    }
+                    else
+                    {
+                        varToAdd = _symbolTable.RetrieveSymbol(abnode.Name, out bool isCollectionVarToAdd, false);
+                        bool sameType = varToAdd == collectionToAddTo;
+                        bool VarIsNotCollAndToIsColl = !isCollectionVarToAdd && isCollectionInQuery;
+                        bool typeCorrect = sameType && VarIsNotCollAndToIsColl;
+                        if (typeCorrect)
+                        {
+                            //varie is fine, collection is fine
+                        }
+                        else
+                        {
+                            _symbolTable.WrongTypeError(node.variableName, node.VariableCollection);
+                        }
+                        abnode.Accept(this);
+                    }
                 }
-                else
-                {
-                    _symbolTable.WrongTypeError(node.variableName, node.VariableCollection);
-                }
-                node.VariableToAdd.Accept(this);
-            }
-            else
-            {
-                varToAdd = _symbolTable.RetrieveSymbol(node.variableName, out bool isCollectionVarToAdd, false);
-                bool sameType = varToAdd == collectionToAddTo;
-                bool VarIsNotCollAndToIsColl = !isCollectionVarToAdd && isCollectionInQuery;
-                bool typeCorrect = sameType && VarIsNotCollAndToIsColl;
-                if (typeCorrect)
-                {
-                    //varie is fine, collection is fine
-                }
-                else
-                {
-                    _symbolTable.WrongTypeError(node.variableName, node.VariableCollection);
-                }
-                node.VariableToAdd.Accept(this);
             }
         }
 
@@ -460,7 +469,7 @@ namespace Compiler.AST
                 }
                 else
                 {
-                    //TODO find ordenlig error.
+                    _symbolTable.FromVarIsNotCollError(node.Variable);
                 }
             }
         }
@@ -472,32 +481,44 @@ namespace Compiler.AST
             AllType? varToAdd;
             AllType? collectionToAddTo = _symbolTable.RetrieveSymbol(node.VariableCollection, out bool isCollectionInQuery, false);
             node.Type = collectionToAddTo.ToString();
-            if (node.VariableToAdd is ConstantNode constant)
+            ExpressionNode expNode = (ExpressionNode)node.VariableToAdd.Children[0];
+            foreach (AbstractNode abnode in expNode.ExpressionParts)
             {
-                varToAdd = constant.Type_enum;
-                bool sameType = varToAdd == collectionToAddTo;
-                bool typeCorrect = sameType && isCollectionInQuery;
-                if (typeCorrect)
+                if (!(abnode is OperatorNode))
                 {
-                    //constant is fine, collection is fine
+                    if (abnode is ConstantNode constant)
+                    {
+                        varToAdd = constant.Type_enum;
+                        constant.Parent = expNode;
+                        bool sameType = varToAdd == collectionToAddTo;
+                        bool typeCorrect = sameType && isCollectionInQuery;
+                        if (typeCorrect)
+                        {
+                            //constant is fine, collection is fine
+                        }
+                        else
+                        {
+                            _symbolTable.WrongTypeError(node.variableName, node.VariableCollection);
+                        }
+                        abnode.Accept(this);
+                    }
+                    else
+                    {
+                        varToAdd = _symbolTable.RetrieveSymbol(abnode.Name, out bool isCollectionVarToAdd, false);
+                        bool sameType = varToAdd == collectionToAddTo;
+                        bool VarIsNotCollAndToIsColl = !isCollectionVarToAdd && isCollectionInQuery;
+                        bool typeCorrect = sameType && VarIsNotCollAndToIsColl;
+                        if (typeCorrect)
+                        {
+                            //varie is fine, collection is fine
+                        }
+                        else
+                        {
+                            _symbolTable.WrongTypeError(node.variableName, node.VariableCollection);
+                        }
+                        abnode.Accept(this);
+                    }
                 }
-                node.VariableToAdd.Accept(this);
-            }
-            else
-            {
-                varToAdd = _symbolTable.RetrieveSymbol(node.variableName, out bool isCollectionVarToAdd, false);
-                bool sameType = varToAdd == collectionToAddTo;
-                bool VarIsNotCollAndToIsColl = !isCollectionVarToAdd && isCollectionInQuery;
-                bool typeCorrect = sameType && VarIsNotCollAndToIsColl;
-                if (typeCorrect)
-                {
-                    //varie is fine, collection is fine
-                }
-                else
-                {
-                    _symbolTable.WrongTypeError(node.variableName, node.VariableCollection);
-                }
-                node.VariableToAdd.Accept(this);
             }
         }
 
@@ -539,15 +560,7 @@ namespace Compiler.AST
                 {//if declarations are added to the graph.
                     foreach (AbstractNode edgeOrVertexdcl in node.Dcls)
                     {
-                        if (edgeOrVertexdcl is GraphDeclVertexNode || edgeOrVertexdcl is GraphDeclEdgeNode)
-                        {
-                            //vertex or edge is added to the graph
-                        }
-                        else
-                        {
-                            //error raised, because af dcl is not of type edge or vertex.
-                            _symbolTable.WrongTypeError(edgeOrVertexdcl.Name, node.ToVariable);
-                        }
+                        edgeOrVertexdcl.Accept(this);
                     }
                 }
                 else if (IsGraphVertexCollection || isGraphEdgeCollection)
@@ -556,14 +569,15 @@ namespace Compiler.AST
                     {
                         if (vertexOrEdgedcl is GraphDeclVertexNode || vertexOrEdgedcl is GraphDeclEdgeNode)
                         {
-                            _symbolTable.WrongTypeError(DeclarationSetPrint(node), node.ToVariable);
+                            _symbolTable.DeclarationsCantBeAdded(DeclarationSetPrint(node), node.ToVariable);
                             break;
                         }
                     }
                 }
                 else
                 {
-                    _symbolTable.WrongTypeError(DeclarationSetPrint(node), node.ToVariable);
+                    Console.WriteLine("should not be possible to reach this. IsGraph bool can only be true if its declarations for a graph"
+                        + "or vertices/edges added to the graphs original attributes:   .Vertices and .Edges");
                 }
             }
             //if the ToVariable is a collection:
@@ -571,7 +585,7 @@ namespace Compiler.AST
             {
                 AllType? TypeOfTargetCollection = _symbolTable.RetrieveSymbol(node.ToVariable, out bool isCollectionTargetColl, false);
                 node.Type = TypeOfTargetCollection.ToString();
-				AllType? typeOfVar = null;
+                AllType? typeOfVar = null;
 
                 foreach (var item in node.TypeOrVariable)
                 {
@@ -579,11 +593,14 @@ namespace Compiler.AST
 
                     AbstractNode expressionToAdd = item;
 
-					if (expressionToAdd.Children[0] is ExpressionNode) {
-						typeOfVar = (expressionToAdd.Children[0] as ExpressionNode).OverAllType;
-					} else {
-						typeOfVar = expressionToAdd.Type_enum;
-					}
+                    if (expressionToAdd.Children[0] is ExpressionNode)
+                    {
+                        typeOfVar = (expressionToAdd.Children[0] as ExpressionNode).OverAllType;
+                    }
+                    else
+                    {
+                        typeOfVar = expressionToAdd.Type_enum;
+                    }
                     bool targetIsGraph = TypeOfTargetCollection == AllType.GRAPH;
 
                     if (isCollectionTargetColl)
@@ -614,16 +631,12 @@ namespace Compiler.AST
                     {
                         _symbolTable.TargetIsNotCollError(node.ToVariable);
                     }
-
                 }
-
-
             }
             else
             {
                 Console.WriteLine("Is neither collection or Graph. This should not be possible");
             }
-
         }
 
         public override void Visit(WhereNode node)
@@ -640,7 +653,8 @@ namespace Compiler.AST
                 item.Value.Parent = node;
                 item.Value.Accept(this);
                 AllType? typeOfKey = _symbolTable.GetAttributeType(item.Key, AllType.VERTEX);
-                if (typeOfKey == node.Type_enum)
+                ExpressionNode expNode = (ExpressionNode)item.Value.Children[0];
+                if (typeOfKey == expNode.OverAllType)
                 {
 
                 }
@@ -666,7 +680,7 @@ namespace Compiler.AST
                 item.Value.Parent = node;
                 item.Value.Accept(this);
                 AllType? typeOfKey = _symbolTable.GetAttributeType(item.Key, AllType.EDGE);
-                if (item.Value is ExpressionNode expNode)
+                if (item.Value.Children[0] is ExpressionNode expNode)
                 {
                     if (typeOfKey != expNode.OverAllType)
                     {
@@ -746,7 +760,7 @@ namespace Compiler.AST
             string targetName = node.Attributes.Item1.Name;
             AllType? targetType = _symbolTable.GetAttributeType(targetName, AllType.GRAPH);
             node.Attributes.Item3.Accept(this);
-			AllType? assignedType = node.Attributes.Item3.OverAllType;
+            AllType? assignedType = node.Attributes.Item3.OverAllType;
 
             if (targetType == assignedType)
             {
@@ -771,7 +785,7 @@ namespace Compiler.AST
                 VisitChildren(node);
                 typeOfVariable = _symbolTable.RetrieveSymbol(node.Name, out bool isCollection, false);
                 if (node.Assignment is ExpressionNode exprNode)
-                {
+                {//TODO typecheckunittests, se om der kan ramme de to fejl herunder
                     if (typeOfVariable == exprNode.OverAllType)
                     {
                         foreach (AbstractNode abnode in exprNode.ExpressionParts)
@@ -794,7 +808,8 @@ namespace Compiler.AST
                 else
                 {
                     AbstractNode abNode = node.Assignment;
-                    if (typeOfVariable == abNode.Type_enum && isCollection)
+                    AllType? typeOfRetreiveVariable = _symbolTable.RetrieveSymbol(abNode.Name, out bool isCollectionRetrieve, false);
+                    if (typeOfVariable == abNode.Type_enum && isCollectionRetrieve)
                     {
                         if (node.Name != abNode.Name)
                         {
@@ -808,7 +823,7 @@ namespace Compiler.AST
                     }
                     else
                     {
-                        if (!isCollection)
+                        if (!isCollectionRetrieve)
                         {
                             _symbolTable.TargetIsNotCollError(node.Name);
                         }
@@ -890,6 +905,7 @@ namespace Compiler.AST
             VisitChildren(node);
             _symbolTable.SetCurrentNode(node);
             AllType? previousType = null;
+            bool firstWasCollection = false;
             if (node.ExpressionParts.Where(x => x.Type != null && x.Type_enum == AllType.STRING).Count() > 0)
             {
                 node.OverAllType = AllType.STRING;
@@ -906,18 +922,35 @@ namespace Compiler.AST
 
                         if (previousType == null)
                         {//first call - setting previous type as the first type encountered
-                            previousType = node.OverAllType;
-                            if (node.Parent is GraphDeclVertexNode vDcl)
+                            if(node.Parent is BoolComparisonNode boolcNode)
                             {
-                                vDcl.Type = node.OverAllType.ToString();
+                                if (boolcNode.Parent is GraphDeclVertexNode vDcl1)
+                                {
+                                    vDcl1.Type = node.OverAllType.ToString();
+                                }
+                                else if (boolcNode.Parent is GraphDeclEdgeNode eDcl1)
+                                {
+
+                                }
+                            }
+                            if (node.Parent is GraphDeclVertexNode vDcl2)
+                            {
+                                vDcl2.Type = node.OverAllType.ToString();
+                            }
+                            else if (node.Parent is GraphDeclEdgeNode eDcl2)
+                            {
 
                             }
-                            else if (node.Parent is GraphDeclEdgeNode eDcl)
+                            else if (item is VariableNode)
                             {
-
+                                previousType = _symbolTable.RetrieveSymbol(item.Name, out firstWasCollection);
+                            }
+                            else
+                            {
+                                previousType = node.OverAllType;
                             }
                         }
-                        else if (previousType != node.OverAllType)
+                        else if (previousType != item.Type_enum)
                         {//types are different from eachother
                             if ((previousType == AllType.INT && node.OverAllType == AllType.DECIMAL) || (previousType == AllType.DECIMAL && node.OverAllType == AllType.INT))
                             {//types are accepted if one is int and one is decimal
@@ -932,14 +965,19 @@ namespace Compiler.AST
                         else
                         {//times are of the same time
                          //bools to control which types are not allowed to be operated upon, even if same time.
-                            bool bothIsBool = previousType == AllType.BOOL && node.OverAllType == AllType.BOOL;
-                            bool bothIsGraph = previousType == AllType.GRAPH && node.OverAllType == AllType.GRAPH;
-                            bool bothIsVertex = previousType == AllType.VERTEX && node.OverAllType == AllType.VERTEX;
-                            bool bothIsEdge = previousType == AllType.EDGE && node.OverAllType == AllType.EDGE;
-                            bool bothIsVoid = previousType == AllType.VOID && node.OverAllType == AllType.VOID;
-                            bool bothIsCollection = previousType == AllType.COLLECTION && node.OverAllType == AllType.COLLECTION;
+                            bool currentWasCollection = false;
+                            if (item is VariableNode)
+                            {
+                                _symbolTable.RetrieveSymbol(item.Name, out currentWasCollection);
+                            }
+                            bool bothIsBool = previousType == AllType.BOOL && item.Type_enum == AllType.BOOL;
+                            bool bothIsGraph = previousType == AllType.GRAPH && item.Type_enum == AllType.GRAPH;
+                            bool bothIsVertex = previousType == AllType.VERTEX && item.Type_enum == AllType.VERTEX;
+                            bool bothIsEdge = previousType == AllType.EDGE && item.Type_enum == AllType.EDGE;
+                            bool bothIsVoid = previousType == AllType.VOID && item.Type_enum == AllType.VOID;
+                            bool OneWasCollection = firstWasCollection || currentWasCollection;
 
-                            if (bothIsBool || bothIsGraph || bothIsVertex || bothIsEdge || bothIsVoid || bothIsCollection)
+                            if (bothIsBool || bothIsGraph || bothIsVertex || bothIsEdge || bothIsVoid || OneWasCollection)
                             {
                                 _symbolTable.TypeExpressionMismatch();
                             }
@@ -947,14 +985,12 @@ namespace Compiler.AST
                             {
                                 //do nothing, both is the same type and are allowed, so everything is fine.
                             }
-
                         }
-
                     }
                 }
             }
             if (node.OverAllType == AllType.UNKNOWNTYPE)
-            {
+            {//TODO: cant have unit tests, can force an error in giraph to get unknowntype.
                 _symbolTable.TypeExpressionMismatch();
             }
         }
@@ -980,7 +1016,7 @@ namespace Compiler.AST
             {
                 _symbolTable.FunctionIsVoidError(node.FuncName);
             }
-            if (ReturnTypeCollection == FuncTypeCollection)
+            else if (ReturnTypeCollection == FuncTypeCollection)
             // går ikke derind, function bool er false, wait for fix
             {
                 if (!(funcType == returnType))
@@ -1003,10 +1039,17 @@ namespace Compiler.AST
             _symbolTable.OpenScope(BlockType.ForLoop);
             VisitChildren(node);
 
-            if (node.Increment != null && node.VariableDeclaration != null && node.ToValueOperation != null)
+            if (node.Increment != null && (node.VariableDeclaration != null || node.FromValueNode != null) && node.ToValueOperation != null)
             {
                 node.Increment.Accept(this);
-                node.VariableDeclaration.Accept(this);
+                if (node.VariableDeclaration != null)
+                {
+                    node.VariableDeclaration.Accept(this);
+                }
+                if (node.FromValueNode != null)
+                {
+                    node.FromValueNode.Accept(this);
+                }
                 node.ToValueOperation.Accept(this);
             }
 
@@ -1015,15 +1058,14 @@ namespace Compiler.AST
                 if (node.VariableDeclaration is VariableDclNode varDclNode)
                 {
                     varDclNodeType = _symbolTable.RetrieveSymbol(varDclNode.Name);
-                    if (varDclNodeType != AllType.INT && incrementNode.OverAllType != AllType.INT)
+                    if (varDclNodeType != AllType.INT || incrementNode.OverAllType != AllType.INT)
                     {
                         _symbolTable.WrongTypeConditionError();
                     }
                 }
-
-                if (node.VariableDeclaration is ExpressionNode expNode)
+                else
                 {
-                    if (expNode.OverAllType != AllType.INT || incrementNode.OverAllType != AllType.INT)
+                    if (node.FromValueNode.Type_enum != AllType.INT || incrementNode.OverAllType != AllType.INT)
                     {
                         _symbolTable.WrongTypeConditionError();
                     }
@@ -1100,24 +1142,21 @@ namespace Compiler.AST
             {
                 foreach (AbstractNode child in node.Children)
                 {
-                    if (child is ExpressionNode expNode)
+                    if (child.Children.Count != 0)
                     {
-                        expNode.Accept(this);
-                        if (expNode.OverAllType != variableType)
+                        if (child.Children[0] is ExpressionNode expNode)
                         {
-                            _symbolTable.WrongTypeError(child.Name, node.Name);
-                        }
-                        else
-                        {
-                            if (expNode.Name != null)
+                            expNode.Accept(this);
+                            if (expNode.OverAllType != variableType)
                             {
-                                if (expNode.Name != node.Name)
+                                if (variableType == AllType.DECIMAL && expNode.OverAllType == AllType.INT)
                                 {
-                                    _symbolTable.DeclarationCantBeSameVariable(node.Name);
+                                    //TODO det bliver mærkeligt med select query...
+                                    //ints can be added to decimal variables, but not vice versa
                                 }
                                 else
                                 {
-                                    //the variables and the expression is of same type, and have not used the same variable for declaration and for expression.
+                                    _symbolTable.WrongTypeError(child.Name, node.Name);
                                 }
                             }
                             else
@@ -1126,7 +1165,7 @@ namespace Compiler.AST
                                 {
                                     if (expPartNode.Name != null)
                                     {
-                                        if (expPartNode.Name != node.Name)
+                                        if (expPartNode.Name == node.Name)
                                         {
                                             _symbolTable.DeclarationCantBeSameVariable(node.Name);
                                         }
@@ -1138,7 +1177,6 @@ namespace Compiler.AST
                                 }
                                 //the variables and the expression is of same type, and have not used the same variable for declaration and for expression.
                             }
-
                         }
                     }
                 }
@@ -1154,35 +1192,37 @@ namespace Compiler.AST
         public override void Visit(ConstantNode node)
         {
             _symbolTable.SetCurrentNode(node);
-            ExpressionNode parentNode = (ExpressionNode)node.Parent;
-            parentNode.OverAllType = node.Type_enum;
+            if (node.Parent is ExpressionNode)
+            {
+                ExpressionNode parentNode = (ExpressionNode)node.Parent;
+                parentNode.OverAllType = node.Type_enum;
+            }
+
         }
 
         public override void Visit(PrintQueryNode node)
         {
             _symbolTable.SetCurrentNode(node);
-            foreach (ExpressionNode exp in node.Children)
+            foreach (BoolComparisonNode abnode in node.Children)
             {
+                ExpressionNode exp = (ExpressionNode)abnode.Children[0];
+                bool iscollection = false;
+                foreach (AbstractNode item in exp.ExpressionParts)
+                {
+                    if (!iscollection)
+                    {//skal bare finde en der er true for collection, så snart den finder en, behøver den ikke gøre mere.
+                        if(item is VariableNode)
+                        {
+                            _symbolTable.RetrieveSymbol(item.Name, out iscollection);
+                        }
+                    }
+                }
                 exp.Accept(this);
                 bool NonPrintableTypes = exp.OverAllType == AllType.GRAPH || exp.OverAllType == AllType.VERTEX || exp.OverAllType == AllType.EDGE ||
-                                         exp.OverAllType == AllType.UNKNOWNTYPE || exp.OverAllType == AllType.VOID || exp.OverAllType == AllType.COLLECTION;
+                                         exp.OverAllType == AllType.UNKNOWNTYPE || exp.OverAllType == AllType.VOID || iscollection;
                 if (NonPrintableTypes)
                 {
                     _symbolTable.NonPrintableError();
-                }
-                else
-                {
-                    foreach (AbstractNode item in exp.ExpressionParts)
-                    {
-                        if (!(item is ConstantNode))
-                        {
-                            AllType? NonUsedVariable = _symbolTable.RetrieveSymbol(item.Name, out bool isCollection, false);
-                            if (isCollection)
-                            {
-                                _symbolTable.NonPrintableError();
-                            }
-                        }
-                    }
                 }
             }
         }
@@ -1198,7 +1238,7 @@ namespace Compiler.AST
             AllType placeholderType = 0;
             AllType? varType = null;
 
-            if (node.Children != null)
+            if (node.Children.Count > 0)
             {
                 foreach (AbstractNode child in node.Children)
                 {
@@ -1222,17 +1262,24 @@ namespace Compiler.AST
                         }
                     }
                     else if (child is ConstantNode constNode)
-                    {
-                        if (child.Type_enum != test[i].Type)
+                    {//TODO hvis man kalder en func, der ikke har parameter, med en constant, indexoutofrange.
+                        if(test.Count == 0)
                         {
-                            _symbolTable.RunFunctionTypeError(child.Name, test[i].Name);
-                            //type error
+                            _symbolTable.RunFunctionWithNoFormalParameters(child.Name);
+                        }
+                        else
+                        {
+                            if (child.Type_enum != test[i].Type)
+                            {
+                                _symbolTable.RunFunctionTypeError(child.Name, test[i].Name);
+                                //type error
+                            }
                         }
                     }
                     ++i;
                 }
             }
-            else if (test.Count > 0)
+            else
             {
                 //running function without actual parameters, when function has formal parameters
                 _symbolTable.RunFunctionWithNoActualParameter(node.FunctionName);
@@ -1266,11 +1313,13 @@ namespace Compiler.AST
         public override void Visit(RemoveQueryNode node)
         {
             var type = _symbolTable.RetrieveSymbol(node.Variable, out bool IsCollection);
-            if (IsCollection != true) {
+            if (IsCollection != true)
+            {
                 _symbolTable.NotCollection(node.Variable);
             }
-            if (node.WhereCondition != null) {
-				(node.WhereCondition as WhereNode).Type = type.ToString().ToLower();
+            if (node.WhereCondition != null)
+            {
+                (node.WhereCondition as WhereNode).Type = type.ToString().ToLower();
             }
         }
 

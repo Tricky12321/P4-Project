@@ -1,0 +1,98 @@
+﻿extend edge int     'intSomethingLong':'intSom';
+extend edge decimal 'decimalSomethingLong':'decSom';
+extend edge edge    'edgeSomethingLong':'edgSom';
+extend edge vertex  'vertexSomethingLong':'verSom';
+extend edge graph   'graphSomethingLong':'graSom';
+extend edge bool    'boolSomethingLong':'booSom';
+
+extend vertex int     'intSomethingLong':'intSom';
+extend vertex int     'intSomethingLong2':'intSom2';
+extend vertex decimal 'decimalSomethingLong':'decSom';
+extend vertex edge    'edgeSomethingLong':'edgSom';
+extend vertex vertex  'vertexSomethingLong':'verSom';
+extend vertex graph   'graphSomethingLong':'graSom';
+extend vertex bool    'boolSomethingLong':'booSom';
+
+extend graph int     'intSomethingLong':'intSom';
+extend graph decimal 'decimalSomethingLong':'decSom';
+extend graph edge    'edgeSomethingLong':'edgSom';
+extend graph vertex  'vertexSomethingLong':'verSom';
+extend graph graph   'graphSomethingLong':'graSom';
+extend graph bool    'boolSomethingLong':'booSom';
+
+extend graph collection int 'testintCollection';
+extend graph collection decimal 'testdecimalCollection';
+extend graph collection vertex 'testvertexCollection';
+extend graph collection edge 'testedgeCollection';
+extend graph collection bool 'testboolCollection';
+extend graph collection graph 'testgraphCollection';
+
+extend vertex collection int 'testintCollection';
+extend vertex collection int 'testintCollection2';
+extend vertex collection decimal 'testdecimalCollection';
+extend vertex collection vertex 'testvertexCollection';
+extend vertex collection edge 'testedgeCollection';
+extend vertex collection bool 'testboolCollection';
+extend vertex collection graph 'testgraphCollection';
+
+extend edge collection int 'testintCollection';
+extend edge collection decimal 'testdecimalCollection';
+extend edge collection vertex 'testvertexCollection';
+extend edge collection edge 'testedgeCollection';
+extend edge collection bool 'testboolCollection';
+extend edge collection graph 'testgraphCollection';
+
+Main -> void () {
+    graph g1
+    {
+        vertex va(), vb(), vc(), vd(), ve();
+        edge x(vb, vd), y(vd, ve), z(va, vc);
+        set 'Directed' = false;
+    }
+
+	collection int tim;
+	collection string hej;
+	int timint = 5;
+	set 'intSom' = 5.5 in g1.Edges;
+	set 'testintCollection' = 5.5 in g1.Edges;
+
+	extractmax 'booSom' from g1.Edges;
+	extractmax 'intSom2' from g1.Edges;
+	extractmax 'booSom' from g1.edgSom.testintCollection;
+	extractmax from g1.edgSom.testboolCollection;
+	extractmax from g1.intSom;
+
+	extractmin 'booSom' from g1.Edges;
+	extractmin 'intSom2' from g1.Edges;
+	extractmin 'booSom' from g1.testintCollection;
+	extractmin from g1.edgSom.testboolCollection;
+	extractmin from g1.intSom;
+
+	collection int fratim = selectall from timint;
+	int endnuentim = select from timint;
+	decimal timdouble = 15.5;
+	push endnuentim+1+2.5+3 to tim;
+	push timdouble to tim;
+	pop from endnuentim;
+	enqueue endnuentim+1+2.5+3 to tim;
+	enqueue timdouble to tim;
+
+
+
+
+
+
+
+
+
+	graph g2
+	{
+		vertex vx(intSom = 4.5), vxx(intSom = 3);
+		edge ex(vx, vxx, intSom = 5);
+	}
+}
+
+voidFunc -> void (void parameter) {
+
+
+}

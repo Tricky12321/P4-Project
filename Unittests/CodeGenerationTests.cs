@@ -29,7 +29,7 @@ namespace Unittests
         public void Init()
         {
             if (Utilities.IsWindows) {
-                CodeGeneratorOutputPath = "SMID JERES PATH HER";
+                CodeGeneratorOutputPath = "C:\\Users\\Ezzi\\Source\\Repos\\P4-Project\\Unittests\\CodeGeneration";
             }
             CST = Program.BuildCST("kode_generator.giraph");
             AST = Program.BuildAST(CST);

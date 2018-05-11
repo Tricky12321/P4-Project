@@ -877,7 +877,7 @@ namespace Compiler.AST
             // ITS A GRAPH ADD
             if (context.addToGraph() != null)
             {
-                AddNode.IsGraph = true;
+                AddNode.IsGraph = true; 
                 if (context.addToGraph().vertexDcls() != null)
                 {
                     foreach (var Child in context.addToGraph().vertexDcls().vertexDcl())
@@ -948,6 +948,7 @@ namespace Compiler.AST
             {
                 foreach (var Child in context.assignment())
                 {
+                    VarNode.ValueList.Add(Child.variable().GetText(), Visit(Child.boolComparisons()));
                     VarNode.AdoptChildren(Visit(Child));
                 }
             }
@@ -967,6 +968,7 @@ namespace Compiler.AST
             {
                 foreach (var Child in context.assignment())
                 {
+                    VarNode.ValueList.Add(Child.variable().GetText(), Visit(Child.boolComparisons()));
                     VarNode.AdoptChildren(Visit(Child));
                 }
             }
