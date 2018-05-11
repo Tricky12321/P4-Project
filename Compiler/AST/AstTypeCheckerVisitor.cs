@@ -63,6 +63,7 @@ namespace Compiler.AST
         {
             foreach (AbstractNode child in node.GetChildren())
             {
+                child.Parent = node;
                 if (child != null)
                 {
                     child.Accept(this);
@@ -652,7 +653,8 @@ namespace Compiler.AST
                 item.Value.Parent = node;
                 item.Value.Accept(this);
                 AllType? typeOfKey = _symbolTable.GetAttributeType(item.Key, AllType.VERTEX);
-                if (typeOfKey == node.Type_enum)
+                ExpressionNode expNode = (ExpressionNode)item.Value.Children[0];
+                if (typeOfKey == expNode.OverAllType)
                 {
 
                 }
@@ -920,12 +922,22 @@ namespace Compiler.AST
 
                         if (previousType == null)
                         {//first call - setting previous type as the first type encountered
-                            if (node.Parent is GraphDeclVertexNode vDcl)
+                            if(node.Parent is BoolComparisonNode boolcNode)
                             {
-                                vDcl.Type = node.OverAllType.ToString();
+                                if (boolcNode.Parent is GraphDeclVertexNode vDcl1)
+                                {
+                                    vDcl1.Type = node.OverAllType.ToString();
+                                }
+                                else if (boolcNode.Parent is GraphDeclEdgeNode eDcl1)
+                                {
 
+                                }
                             }
-                            else if (node.Parent is GraphDeclEdgeNode eDcl)
+                            if (node.Parent is GraphDeclVertexNode vDcl2)
+                            {
+                                vDcl2.Type = node.OverAllType.ToString();
+                            }
+                            else if (node.Parent is GraphDeclEdgeNode eDcl2)
                             {
 
                             }
