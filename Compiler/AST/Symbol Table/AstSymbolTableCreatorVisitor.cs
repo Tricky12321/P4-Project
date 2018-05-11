@@ -303,6 +303,7 @@ namespace Compiler.AST.SymbolTable
         {
             SymbolTable.SetCurrentNode(node);
             SymbolTable.OpenScope(BlockType.WhereStatement);
+			SymbolTable.EnterSymbol("val", node.AttributeClass);
             SymbolTable.AddClassVariablesToScope(node.AttributeClass);
             VisitChildren(node);
             SymbolTable.CloseScope();

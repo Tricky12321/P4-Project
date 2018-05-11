@@ -385,16 +385,16 @@ namespace Compiler.CodeGeneration.GenerationCode
             }
             //_currentStringBuilder.Append($"{ResolveTypeToCS(node.Type_enum)} _val{node.ID};\n");
 
-            _currentStringBuilder.Append($"foreach (var place in {node.Variable}){{\n");
+            _currentStringBuilder.Append($"foreach (var val in {node.Variable}){{\n");
             if (node.WhereCondition != null)
             {
                 _currentStringBuilder.Append("if (");
-                _boolComparisonPrefix = "place.";
+				_boolComparisonPrefix = "val.";
                 node.WhereCondition.Children[0].Accept(this);
                 _boolComparisonPrefix = "";
                 _currentStringBuilder.Append("){\n");
             }
-            _currentStringBuilder.Append($"_col{node.ID}.Add(place);\n}}\n");
+			_currentStringBuilder.Append($"_col{node.ID}.Add(val);\n}}\n");
             if (node.WhereCondition != null)
             {
                 _currentStringBuilder.Append("}\n");
@@ -414,11 +414,11 @@ namespace Compiler.CodeGeneration.GenerationCode
             }
             _currentStringBuilder.Append($"{ResolveTypeToCS(node.Type_enum)} _val{node.ID} = null;\n");
 
-            _currentStringBuilder.Append($"foreach (var place in {node.Variable}){{\n");
+            _currentStringBuilder.Append($"foreach (var val in {node.Variable}){{\n");
             if (node.WhereCondition != null)
             {
                 _currentStringBuilder.Append("if (");
-                _boolComparisonPrefix = "place.";
+				_boolComparisonPrefix = "val.";
                 node.WhereCondition.Children[0].Accept(this);
                 _boolComparisonPrefix = "";
                 _currentStringBuilder.Append("){\n");
@@ -470,7 +470,7 @@ namespace Compiler.CodeGeneration.GenerationCode
 
         public override void Visit(WhereNode node)
         {
-            throw new NotImplementedException();
+			VisitChildren(node);
         }
 
         public override void Visit(ExtendNode node)
