@@ -203,6 +203,21 @@ namespace Compiler.AST.SymbolTable
 
         public override void Visit(StartNode node)
         {
+
+            // Startnode is responcible for ignoring top-down programming
+            // This is done by visiting the diffent global nodes in the correct order, to ensure that functions, predicate, and extend nodes
+            // can see each other when the program is run the first time
+            // This is very important because if this was not the case, predicates wouldnt be able to use extend attributes of classes.
+
+
+
+            /* Inspections order of AST nodes. VERY IMPORTANT
+             * 1. Extend nodes
+             * 2. Functions nodes
+             * 3. Predicate node ( Makes it possible for Predicates to call functions, but this has been removed)
+             * 4. Function bodies
+             * 5. Predicate bodies
+             */
             SymbolTable.SetCurrentNode(node);
             List<AbstractNode> PredicateNodes;
             List<AbstractNode> FunctionNodes;
@@ -229,18 +244,24 @@ namespace Compiler.AST.SymbolTable
 
         public override void Visit(GraphNode node)
         {
+			// GraphNodes are magic, and have a lot of complex scope rules. 
+            // 
             SymbolTable.SetCurrentNode(node);
             if (CheckAlreadyDeclared(node.Name))
             {
                 SymbolTable.EnterSymbol(node.Name, AllType.GRAPH);
+                // Visits all the different vertex declarations in the graph declaration
                 foreach (var Vertex in node.Vertices)
                 {
                     Vertex.Accept(this);
                 }
+				// Visits all the different Edge declarations in the graph declaration
                 foreach (var Edge in node.Edges)
                 {
                     Edge.Accept(this);
                 }
+                // Now the last children of the graph node will be visited, this is stuff like the set Directed
+                // This also includes extended attributes on the graph. 
                 VisitChildren(node);
             }
         }
@@ -279,34 +300,55 @@ namespace Compiler.AST.SymbolTable
         public override void Visit(SetQueryNode node)
         {
             SymbolTable.SetCurrentNode(node);
+            // SetQuery, is kinda magic. 
+            // It expects attributes, if there is any
+			// visits the varaible dcl node, and the assignment expression (Item1, Item3)
             foreach (var Exp in node.Attributes)
             {
                 Exp.Item1.Accept(this);
                 Exp.Item3.Accept(this);
             }
+            // What children does a setNode have? 
+            // Maybe variables? I dont know...
             if (node.HasChildren)
             {
                 VisitChildren(node);
             }
+            // If there is a collection which this needs to be set in, this is where it happens
+
             if (node.InVariable != null)
             {
                 CheckDeclared(node.InVariable.Name);
             }
+            // WhereCondition nodes are magic, and should not be tempered with. 
+            // Ask Thue
             if (node.WhereCondition != null)
             {
+				// This tells the WhereCondition what type the val variable should have, if this is not set corretly, the program will crash
 				(node.WhereCondition as WhereNode).AttributeClass = SymbolTable.RetrieveSymbol(node.InVariable.Name) ?? default(AllType);
-                node.WhereCondition.Accept(this);
+                // When this is done, we will visit the WhereNode, since its now ready
+				node.WhereCondition.Accept(this);
             }
         }
 
         public override void Visit(WhereNode node)
         {
-            SymbolTable.SetCurrentNode(node);
+            // Where node is very special, because, it expects it AttributeClass to be set
+            // This is done because it needs to know what Class val should be. 
+			SymbolTable.SetCurrentNode(node);
             SymbolTable.OpenScope(BlockType.WhereStatement);
-			SymbolTable.EnterSymbol("val", node.AttributeClass);
+            // Adds val to the symbol table.
+			SymbolTable.EnterSymbol("val", node.AttributeClass, IgnoreReserved: true);
+            // Opens val as a new scope, since this will fix bugs later
+            // This is very much a ugly hack, but it was simple to implement and it works
 			SymbolTable.OpenScope("val");
+            // Adds all variables from the class val is, if its a class, else its ignored later
             SymbolTable.AddClassVariablesToScope(node.AttributeClass);
+            // Close the newly created val scope. Since its only needed for the val expressions.
 			SymbolTable.CloseScope();
+            // Visit the children if the where condition, this involves all the differnet bool comparison.
+            // These can now use the val, and all the attributes on the val node assiociated with the val class
+            // Seems very complex, and it is... Ask Thue....
 			VisitChildren(node);
             SymbolTable.CloseScope();
         }
@@ -314,6 +356,7 @@ namespace Compiler.AST.SymbolTable
         public override void Visit(ExtendNode node)
         {
             SymbolTable.SetCurrentNode(node);
+            
             string longAttributeName = node.ExtensionName;
             // If there is a shortname AND a long name, create 2 entries in the class table
             if (node.ExtensionShortName != null && node.ExtensionShortName.Length > 0)
@@ -342,7 +385,6 @@ namespace Compiler.AST.SymbolTable
         {
             SymbolTable.SetCurrentNode(node);
             CheckDeclared(node.VariableCollection);
-
         }
 
         public override void Visit(ExtractMaxQueryNode node)
@@ -565,6 +607,9 @@ namespace Compiler.AST.SymbolTable
 
         public override void Visit(VariableAttributeNode node)
         {
+			// Variable AttrbuteNode is a combined node.
+            // It can be either a Variable or an Attribute, but not both. 
+            // This is mostly to abstract from variables and attributes in differnet queryes. 
             SymbolTable.SetCurrentNode(node);
             if (node.IsAttribute && CheckDeclared(node.ClassVariableName))
             {
@@ -597,6 +642,7 @@ namespace Compiler.AST.SymbolTable
         public override void Visit(AddQueryNode node)
         {
             SymbolTable.SetCurrentNode(node);
+            // AddQuery is special for graphs, because here it allows for the creations of edges and vertices. 
             if (node.IsGraph)
             {
                 foreach (var item in node.Dcls)

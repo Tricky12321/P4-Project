@@ -480,6 +480,11 @@ namespace Compiler.CodeGeneration.GenerationCode
 
         public override void Visit(IfElseIfElseNode node)
         {
+			// This is magic, dont try to learn it...
+			// It works by:
+			// if (boolComparison) {statement}
+			// elseif (boolComparison) {statement} (unlimited times...)
+			// else {statement}
             _currentStringBuilder.Append("\n");
             Indent();
             _currentStringBuilder.Append("if (");

@@ -30,7 +30,7 @@ namespace Compiler.AST.SymbolTable
             "edge","graph","int","decimal","string","void","bool","if","elseif","else","to",
             "in","for","foreach","return","while","set","select","selectall","from","where",
             "add","collection","run","with","extend","predicate","pop","push","peek","enqueue",
-            "dequeue","extractmin","extractmax","print","inf","true","false"
+            "dequeue","extractmin","extractmax","print","inf","true","false","val"
         };
 
         private uint _globalDepth
@@ -112,7 +112,7 @@ namespace Compiler.AST.SymbolTable
 
         }
 
-        private bool CheckReserved(string name) => _reservedKeywords.Contains(name);
+		private bool CheckReserved(string name, bool Ignore) => Ignore ? false : _reservedKeywords.Contains(name);
 
         public bool CheckIfDefined(string name)
         {
@@ -201,15 +201,15 @@ namespace Compiler.AST.SymbolTable
             return _symTable[toCheckFor].Type;
         }
 
-        /// <summary>
-        /// Adds a varaible to the symbol table
-        /// </summary>
-        /// <param name="name">Name of variable</param>
-        /// <param name="type">Type of varialbe</param>
-        /// <param name="IsCollection">If set to <c>true</c> its a collection.</param>
-        public void EnterSymbol(string name, AllType type, bool IsCollection = false)
+		/// <summary>
+		/// Adds a varaible to the symbol table
+		/// </summary>
+		/// <param name="name">Name of variable</param>
+		/// <param name="type">Type of varialbe</param>
+		/// <param name="IsCollection">If set to <c>true</c> its a collection.</param>
+		public void EnterSymbol(string name, AllType type, bool IsCollection = false, bool IgnoreReserved = false)
         {
-            if (!CheckReserved(name))
+			if (!CheckReserved(name, IgnoreReserved))
             {
 
                 if (name != null && name != "")
