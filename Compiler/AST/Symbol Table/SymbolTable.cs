@@ -370,6 +370,11 @@ namespace Compiler.AST.SymbolTable
         public AllType? RetrieveSymbol(string Name, out bool IsCollection, bool ShowErrors = true)
         {
             // Check if its a dot function
+			if (_symTable.ContainsKey(Name)) {
+				var output = _symTable[Name];
+				IsCollection = output.IsCollection;
+				return output.Type;
+			}
             if (Name != null)
             {
 
