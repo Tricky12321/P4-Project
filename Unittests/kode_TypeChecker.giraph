@@ -76,23 +76,78 @@ Main -> void () {
 	pop from endnuentim;
 	enqueue endnuentim+1+2.5+3 to tim;
 	enqueue timdouble to tim;
+	dequeue from endnuentim;
+	
+	vertex vcv = pop from g1.Vertices;
+	add vertex kokoko() to g1;
+	add vertex vvcv() to g1.Vertices;
+	add timdouble to tim;
+	add 5 to g1;
+	add 5 to endnuentim;
 
-
-
-
-
-
-
-
+	add vertex vcm(intSom = 1.5) to g1;
+	add edge ecvc(endnuentim, vcv) to g1;
+	add edge evvc(vcv, vcv, intSom = 2.5) to g1;
 
 	graph g2
 	{
-		vertex vx(intSom = 4.5), vxx(intSom = 3);
+		vertex vx(intSom = 4), vxx(intSom = 3);
 		edge ex(vx, vxx, intSom = 5);
+		set 'Directed' = 25;
 	}
+
+
+	collection int fratim2 = fratim2;
+	collection int fratim3 = endnuentim;
+	collection int fratim4 = hej;
+	collection int fratim5 = selectall from hej;
+	vertex vtim1 = pop from g1.Edges;
+
+	collection void voidvar;
+	int testinti = 5;
+	bool adsf = testinti < 5;
+	int expint = testinti + hej;
+	int expint2 = fratim2 + fratim3;
+	bool booltest123 = adsf < testinti;
+	
 }
 
 voidFunc -> void (void parameter) {
-
-
+	return 5;
 }
+wrongreturnFunc -> bool () {
+	return 5;
+}
+collreturnfunc -> collection int () {
+	collection int anotherintcoll;
+	return 5;
+}
+newFunc -> void () {
+	for(int fori = 1 to 10 : 2.5){
+	}
+	for(1 to 10 : 2.5){
+	}
+
+
+	collection int nyhej;
+	foreach vertex v in nyhej{
+	}
+	void voidVar;
+	int decitest = 1+1.5;
+	int k = k;
+	int i = i+i;
+	print k, i+nyhej;
+
+	run voidFunc with (k);
+	run wrongreturnFunc with (k);
+	run wrongreturnFunc with (2.5);
+	run voidFunc with (2.5);
+	run wrongreturnFunc;
+
+	predicate po(int predint) : { predint < 5 };
+	if (po(5.5)) {
+	}
+	remove from i;
+	removeall from i;
+}
+

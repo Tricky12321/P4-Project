@@ -64,7 +64,15 @@ namespace Compiler
         public static GiraphParser.StartContext BuildCST(string FilePath) {
             Stopwatch CSTTimer = new Stopwatch();
             CSTTimer.Start();
-			string input = File.ReadAllText(Utilities.CurrentPath+"/"+FilePath);
+            string input;
+            if (Utilities.GetOS() != OS.MacOS || true)
+            {
+                input = File.ReadAllText(Utilities.CurrentPath + "\\" + FilePath);
+            }//C:\Users\Ezzi\Source\Repos\P4-Project\Unittests\kode_TypeChecker.giraph
+            else
+            {
+                input = File.ReadAllText(Utilities.CurrentPath + "/" + FilePath);
+            }
             ICharStream stream = CharStreams.fromstring(input);
             ITokenSource lexer = new GiraphLexer(stream);
             ITokenStream tokens = new CommonTokenStream(lexer);

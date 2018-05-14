@@ -731,20 +731,25 @@ namespace Compiler.AST
             // If conditions
             node.IfCondition.Accept(this);
             // If codeblock
+            _symbolTable.OpenScope(BlockType.IfStatement);
             foreach (var item in node.IfCodeBlock.Children)
             {
                 item.Accept(this);
             }
+            _symbolTable.CloseScope();
             // Elseif statements
             foreach (var item in node.ElseIfList)
             {
                 item.Item1.Accept(this);
+                _symbolTable.OpenScope(BlockType.ElseifStatement);
                 foreach (var child in item.Item2.Children)
                 {
                     child.Accept(this);
                 }
+                _symbolTable.CloseScope();
             }
             // Else statement
+            _symbolTable.OpenScope(BlockType.ElseStatement);
             if (node.ElseCodeBlock != null)
             {
                 foreach (var child in node.ElseCodeBlock.Children)
@@ -752,6 +757,7 @@ namespace Compiler.AST
                     child.Accept(this);
                 }
             }
+            _symbolTable.CloseScope();
         }
 
         public override void Visit(GraphSetQuery node)
@@ -784,20 +790,42 @@ namespace Compiler.AST
 
                 VisitChildren(node);
                 typeOfVariable = _symbolTable.RetrieveSymbol(node.Name, out bool isCollection, false);
-                if (node.Assignment is ExpressionNode exprNode)
-                {//TODO typecheckunittests, se om der kan ramme de to fejl herunder
-                    if (typeOfVariable == exprNode.OverAllType)
-                    {
-                        foreach (AbstractNode abnode in exprNode.ExpressionParts)
+                if (node.Assignment is BoolComparisonNode)
+                {
+                    if (node.Assignment.Children[0] is ExpressionNode exprNode)
+                    {//TODO typecheckunittests, se om der kan ramme de to fejl herunder
+                        if (typeOfVariable == exprNode.OverAllType)
                         {
-                            if (node.Name != abnode.Name)
+                            foreach (AbstractNode abnode in exprNode.ExpressionParts)
                             {
-                                _symbolTable.DeclarationCantBeSameVariable(node.Name);
+                                if (node.Name == abnode.Name)
+                                {
+                                    _symbolTable.DeclarationCantBeSameVariable(node.Name);
+                                }
+                                else
+                                {
+                                    //the expression type and the variable is of same type, and are not the same collection.
+                                }
                             }
-                            else
-                            {
-                                //the expression type and the variable is of same type, and are not the same collection.
-                            }
+                        }
+                        else
+                        {
+                            _symbolTable.TypeExpressionMismatch();
+                        }
+                    }
+                    
+                    else
+                    {
+                        throw new Exception("Spørg ezzi - declaration");
+                    }
+                }
+                else if (node.Assignment is VariableNode varNode)
+                {
+                    if (typeOfVariable == varNode.Type_enum)
+                    {
+                        if (node.Name == varNode.Name)
+                        {
+                            _symbolTable.DeclarationCantBeSameVariable(node.Name);
                         }
                     }
                     else
@@ -811,7 +839,7 @@ namespace Compiler.AST
                     AllType? typeOfRetreiveVariable = _symbolTable.RetrieveSymbol(abNode.Name, out bool isCollectionRetrieve, false);
                     if (typeOfVariable == abNode.Type_enum && isCollectionRetrieve)
                     {
-                        if (node.Name != abNode.Name)
+                        if (node.Name == abNode.Name)
                         {
                             _symbolTable.DeclarationCantBeSameVariable(node.Name);
                         }
@@ -852,15 +880,15 @@ namespace Compiler.AST
             bool compare = false;
             if (node.Left != null && node.Right != null)
             {
-
                 // Check if the nodes are boolcomparisons
                 if (node.Left is BoolComparisonNode && node.Right is BoolComparisonNode)
                 {
                     node.Left.Accept(this);
+                    node.LeftType = node.Left.Type_enum;
                     node.Right.Accept(this);
+                    node.RightType = node.Right.Type_enum;
                     compare = true;
                 }
-
                 if (node.HasChildren)
                 {
                     // Extract the type from Left and right sides of a bool comparison
@@ -881,15 +909,14 @@ namespace Compiler.AST
                     {
                         node.RightType = _symbolTable.RetrieveSymbol(node.Right.Children[0].Name) ?? default(AllType);
                     }
-
-                    if (node.RightType != AllType.UNKNOWNTYPE && node.LeftType != AllType.UNKNOWNTYPE)
+                }
+                if (node.RightType != AllType.UNKNOWNTYPE && node.LeftType != AllType.UNKNOWNTYPE)
+                {
+                    if (node.RightType != node.LeftType)
                     {
-                        if (node.RightType != node.LeftType)
+                        if (!((node.RightType == AllType.INT && node.LeftType == AllType.DECIMAL) || (node.RightType == AllType.DECIMAL && node.LeftType == AllType.INT)))
                         {
-                            if (!((node.RightType == AllType.INT && node.LeftType == AllType.DECIMAL) || (node.RightType == AllType.DECIMAL && node.LeftType == AllType.INT)))
-                            {
-                                _symbolTable.WrongTypeConditionError();
-                            }
+                            _symbolTable.WrongTypeConditionError();
                         }
                     }
                 }
@@ -897,6 +924,13 @@ namespace Compiler.AST
             else
             {
                 VisitChildren(node);
+                if (node.HasChildren)
+                {
+                    if(node.Children[0] is ExpressionNode expNode)
+                    {
+                        ExpressionNode exnode = (ExpressionNode)node.Children[0];
+                    }
+                }
             }
         }
 
@@ -944,6 +978,7 @@ namespace Compiler.AST
                             else if (item is VariableNode)
                             {
                                 previousType = _symbolTable.RetrieveSymbol(item.Name, out firstWasCollection);
+                                node.OverAllType = previousType;
                             }
                             else
                             {
@@ -1001,9 +1036,9 @@ namespace Compiler.AST
             _symbolTable.SetCurrentNode(node);
             AllType? funcType = _symbolTable.RetrieveSymbol(node.FuncName, out bool FuncTypeCollection, false);
             AllType? returnType = null;
-            bool ReturnTypeCollection = false;
+            bool ReturnTypeCollection = false;  
 
-            if (node.LeftmostChild is ExpressionNode expNode && expNode.ExpressionParts != null)
+            if (node.LeftmostChild.Children[0] is ExpressionNode expNode && expNode.ExpressionParts != null)
             {
                 if (expNode.QueryName != null)
                 {
@@ -1137,6 +1172,7 @@ namespace Compiler.AST
             {
                 _symbolTable.DeclarationCantBeTypeVoid();
             }
+            VisitChildren(node);
 
             if (node.Children != null)
             {
@@ -1254,6 +1290,13 @@ namespace Compiler.AST
                                 //type error
                                 _symbolTable.RunFunctionTypeError(child.Name, test[i].Name);
                             }
+                            else
+                            {
+                                if(node.Parent is ExpressionNode expNode)
+                                {
+                                    expNode.OverAllType = _symbolTable.RetrieveSymbol(node.FunctionName); ;
+                                }
+                            }
                         }
                         else
                         {
@@ -1273,6 +1316,13 @@ namespace Compiler.AST
                             {
                                 _symbolTable.RunFunctionTypeError(child.Name, test[i].Name);
                                 //type error
+                            }
+                            else
+                            {
+                                if (node.Parent is ExpressionNode expNode)
+                                {
+                                    expNode.OverAllType = _symbolTable.RetrieveSymbol(node.FunctionName);
+                                }
                             }
                         }
                     }

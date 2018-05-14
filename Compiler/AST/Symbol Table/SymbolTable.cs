@@ -1010,7 +1010,7 @@ namespace Compiler.AST.SymbolTable
 
         public void ParamerIsVoid(string function, string parameter)
         {
-            string errormessage = $"The parameter: {parameter} cannot be of type void" + GetLineNumber();
+            string errormessage = $"The parameter: {parameter} cannot be of type void " + GetLineNumber();
             Console.WriteLine(errormessage);
             TypeCheckErrorList.Add(errormessage);
             Error();
