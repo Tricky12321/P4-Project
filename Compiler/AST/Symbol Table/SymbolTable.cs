@@ -914,7 +914,9 @@ namespace Compiler.AST.SymbolTable
 
         public void TargetIsNotCollError(string name)
         {
-            Console.WriteLine($"Target variable: {name} is not of type collection {GetLineNumber()}");
+            string errormessage = $"Target variable: {name} is not of type collection {GetLineNumber()}";
+            Console.WriteLine(errormessage);
+            TypeCheckErrorList.Add(errormessage);
             Error();
         }
 

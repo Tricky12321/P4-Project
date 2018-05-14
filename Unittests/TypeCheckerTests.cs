@@ -26,6 +26,7 @@ namespace Unittests
         }
 
         [TestCase("The parameter: parameter cannot be of type void 115:0")]
+        [TestCase("The parameter: anothervoidparameter cannot be of type void 154:0")]
         public void functionParameterCantBeVoidTest(string errorMessage)
         {
             Assert.IsTrue(errorlist.Contains(errorMessage));
@@ -59,12 +60,14 @@ namespace Unittests
         }
 
         [TestCase("The variable retrieved from: timint is not of type collection 71:25")]
+        [TestCase("The variable retrieved from: hej2 is not of type collection 156:24")]
         public void selectallErrors(string errorMessage)
         {
             Assert.IsTrue(errorlist.Contains(errorMessage));
         }
 
         [TestCase("The variable retrieved from: timint is not of type collection 72:18")]
+        [TestCase("The variable retrieved from: hej2 is not of type collection 156:24")]
         public void selectErrors(string errorMessage)
         {
             Assert.IsTrue(errorlist.Contains(errorMessage));
@@ -78,6 +81,7 @@ namespace Unittests
         }
 
         [TestCase("The variable retrieved from: endnuentim is not of type collection 76:1")]
+        [TestCase("The variable retrieved from: hej2 is not of type collection 158:1")]
         public void popErrors(string errorMessage)
         {
             Assert.IsTrue(errorlist.Contains(errorMessage));
@@ -91,6 +95,7 @@ namespace Unittests
         }
 
         [TestCase("The variable retrieved from: endnuentim is not of type collection 79:1")]
+        [TestCase("The variable retrieved from: hej2 is not of type collection 159:1")]
         public void dequeueErrors(string errorMessage)
         {
             Assert.IsTrue(errorlist.Contains(errorMessage));
@@ -106,6 +111,7 @@ namespace Unittests
         }
 
         [TestCase("There is a type mismatch in the expression on 88:25")]
+        [TestCase("There is a type mismatch in the expression on 167:27")]
         public void graphdclVertexErrors(string errorMessage)
         {
             Assert.IsTrue(errorlist.Contains(errorMessage));
@@ -119,78 +125,104 @@ namespace Unittests
         }
 
         [TestCase("Variable 'Directed' and  are missmatch of types. Line number 96:19")]
+        [TestCase("Variable 'Directed' and  are missmatch of types. Line number 165:19")]
         public void graphSetErrors(string errorMessage)
         {
             Assert.IsTrue(errorlist.Contains(errorMessage));
         }
 
-        [TestCase("")]
+        [TestCase("Target variable: fratim is not of type collection 71:25")]
+        [TestCase("It is not possible to declare a variable with the same variable. Duplicates used: fratim2 100:26")]
+        [TestCase("There is a type mismatch in the expression on 102:26")]
+        [TestCase("There is a type mismatch in the expression on 103:26")]
+        [TestCase("There is a type mismatch in the expression on 104:16")]
+        [TestCase("Declaration cant be of type void! 106:1")]
         public void declarationsErrors(string errorMessage)
         {
             Assert.IsTrue(errorlist.Contains(errorMessage));
         }
 
-        [TestCase("")]
+        [TestCase("There is a type mismatch in the condition on Line number 111:27")]
+        [TestCase("There is a type mismatch in the condition on Line number 169:24")]
         public void BoolComparisonErrors(string errorMessage)
         {
             Assert.IsTrue(errorlist.Contains(errorMessage));
         }
 
-        [TestCase("")]
+        [TestCase("There is a type mismatch in the expression on 109:25")]
+        [TestCase("There is a type mismatch in the expression on 110:25")]
+        [TestCase("There is a type mismatch in the expression on 139:12")]
         public void ExpressionErrors(string errorMessage)
         {
             Assert.IsTrue(errorlist.Contains(errorMessage));
         }
 
-        [TestCase("")]
+        [TestCase("Trying to return to void function: voidFunc, at 116:1")]
+        [TestCase("Variable wrongreturnFunc and  are missmatch of types. Line number 119:1")]
+        [TestCase("Variable collreturnfunc and  are missmatch of collection. Line number 123:1")]
         public void ReturnErrors(string errorMessage)
         {
             Assert.IsTrue(errorlist.Contains(errorMessage));
         }
 
-        [TestCase("")]
+        [TestCase("There is a type mismatch in the condition on Line number 126:1")]
+        [TestCase("There is a type mismatch in the condition on Line number 128:10")]
         public void forLoopErrors(string errorMessage)
         {
             Assert.IsTrue(errorlist.Contains(errorMessage));
         }
 
-        [TestCase("")]
+        [TestCase("Variable v and nyhej are missmatch of types. Line number 133:1")]
+        [TestCase("Variable e and g3.Vertices are missmatch of types. Line number 171:1")]
         public void foreachErrors(string errorMessage)
         {
             Assert.IsTrue(errorlist.Contains(errorMessage));
         }
 
-        [TestCase("")]
+        [TestCase("Variable  and endnuentim are missmatch of types. Line number 72:18")]
+        [TestCase("Variable  and expint are missmatch of types. Line number 109:14")]
+        [TestCase("Declaration cant be of type void! 135:1")]
+        [TestCase("Variable  and decitest are missmatch of types. Line number 136:18")]
+        [TestCase("It is not possible to declare a variable with the same variable. Duplicates used: k 137:9")]
+        [TestCase("It is not possible to declare a variable with the same variable. Duplicates used: i 138:11")]
         public void variableDclErrors(string errorMessage)
         {
             Assert.IsTrue(errorlist.Contains(errorMessage));
         }
 
-        [TestCase("")]
+        [TestCase("one or more provided variables or constants is not legal to print. 139:12")]
+        [TestCase("one or more provided variables or constants is not legal to print. 173:7")]
         public void printErrors(string errorMessage)
         {
             Assert.IsTrue(errorlist.Contains(errorMessage));
         }
 
-        [TestCase("")]
+        [TestCase("Actual parameter: k and formal parameter: parameter are a type missmatch 141:1")]
+        [TestCase("Trying to call a function: wrongreturnFunc, that does not have any formal parameters142:1")]
+        [TestCase("Trying to call a function: , that does not have any formal parameters143:1")]
+        [TestCase("Actual parameter:  and formal parameter: parameter are a type missmatch 144:1")]
+        [TestCase("Trying to call a function: wrongreturnFunc, without actual parameters145:1")]
         public void runErrors(string errorMessage)
         {
             Assert.IsTrue(errorlist.Contains(errorMessage));
         }
 
-        [TestCase("")]
+        [TestCase("Actual parameter:  did not match the type of the formal parameter! 148:8")]
+        [TestCase("Actual parameter:  did not match the type of the formal parameter! 175:17")]
         public void predicateCallErrors(string errorMessage)
         {
             Assert.IsTrue(errorlist.Contains(errorMessage));
         }
 
-        [TestCase("")]
+        [TestCase("i is not a collection, and therefore remove is not able to be used 150:1")]
+        [TestCase("hej2 is not a collection, and therefore remove is not able to be used 177:1")]
         public void removeErrors(string errorMessage)
         {
             Assert.IsTrue(errorlist.Contains(errorMessage));
         }
 
-        [TestCase("")]
+        [TestCase("i is not a collection, and therefore remove is not able to be used 151:1")]
+        [TestCase("hej2 is not a collection, and therefore remove is not able to be used 178:1")]
         public void removeAllErrors(string errorMessage)
         {
             Assert.IsTrue(errorlist.Contains(errorMessage));

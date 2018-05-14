@@ -151,3 +151,29 @@ newFunc -> void () {
 	removeall from i;
 }
 
+anothervoidFunc -> void (void anothervoidparameter){
+	string hej2;
+	collection edge ecol = selectall from hej2;
+	string hej3 = select from hej2;
+	pop from hej2;
+	dequeue from hej2;
+
+	graph g3
+	{
+		vertex vvvx(intSom = 4), vxxxx(intSom = 3);
+		edge exxxx(vvvx, vxxxx, intSom = 5);
+		set 'Directed' = 10.5;
+	}
+	add vertex vcmmm(intSom = 73.5) to g3;
+
+	bool testbool = hej2 < ecol;
+
+	foreach edge e in g3.Vertices{
+	}
+	print g3;
+	predicate prediTester(int predicateint) : { predicateint < 10 };
+	if (prediTester(5.5)) {
+	}
+	remove from hej2;
+	removeall from hej2;
+}

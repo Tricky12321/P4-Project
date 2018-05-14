@@ -929,6 +929,7 @@ namespace Compiler.AST
                     if(node.Children[0] is ExpressionNode expNode)
                     {
                         ExpressionNode exnode = (ExpressionNode)node.Children[0];
+                        node.Type = exnode.OverAllType.ToString();
                     }
                 }
             }
@@ -1362,6 +1363,7 @@ namespace Compiler.AST
 
         public override void Visit(RemoveQueryNode node)
         {
+            _symbolTable.SetCurrentNode(node);
             var type = _symbolTable.RetrieveSymbol(node.Variable, out bool IsCollection);
             if (IsCollection != true)
             {
@@ -1375,6 +1377,7 @@ namespace Compiler.AST
 
         public override void Visit(RemoveAllQueryNode node)
         {
+            _symbolTable.SetCurrentNode(node);
             var type = _symbolTable.RetrieveSymbol(node.Variable, out bool IsCollection);
             if (IsCollection != true)
             {
