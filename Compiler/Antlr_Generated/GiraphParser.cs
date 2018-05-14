@@ -196,7 +196,7 @@ public partial class GiraphParser : Parser {
 			}
 		}
 		catch (RecognitionException re) {
-			_localctx.exception = re;
+ 			_localctx.exception = re;
 			ErrorHandler.ReportError(this, re);
 			ErrorHandler.Recover(this, re);
 		}

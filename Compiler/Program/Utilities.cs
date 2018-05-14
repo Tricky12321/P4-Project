@@ -5,6 +5,10 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using System.Reflection;
+using Newtonsoft.Json;
+using Newtonsoft;
+using Newtonsoft.Json.Converters;
+
 namespace Compiler
 {
     public static class Utilities
@@ -85,5 +89,20 @@ namespace Compiler
                 return OS.Unknown;
             }
         }
+
+
+		public static string JsonSerilize(object Item) {
+			JsonSerializer serializer = new JsonSerializer();
+            serializer.Converters.Add(new JavaScriptDateTimeConverter());
+            serializer.NullValueHandling = NullValueHandling.Ignore;
+
+            using (StreamWriter sw = new StreamWriter(@"c:\json.txt"))
+            using (JsonWriter writer = new JsonTextWriter(sw))
+            {
+                serializer.Serialize(writer, Item);
+                // {"ExpiryDate":new Date(1230375600000),"Price":0}
+            }
+			return serializer.ToString();
+		}
     }
 }
