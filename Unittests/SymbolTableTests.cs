@@ -7,6 +7,8 @@ using Compiler.AST.Nodes;
 using Compiler.AST.SymbolTable;
 using System.Diagnostics;
 using Compiler;
+using Newtonsoft.Json;
+using Newtonsoft;
 namespace Unittests
 {
     [TestFixture()]
