@@ -239,7 +239,7 @@ namespace Compiler.CodeGeneration.GenerationCode
                     edgeName = $"_newEdge{node.Name}";
                     Indent();
 
-                    _currentStringBuilder.Append($"{edgeName} = new Edge();\n");
+					_currentStringBuilder.Append($"{edgeName} = new Edge({edge.VertexNameFrom},{edge.VertexNameTo});\n");
                 }
                 else
                 {
@@ -385,16 +385,16 @@ namespace Compiler.CodeGeneration.GenerationCode
             }
             //_currentStringBuilder.Append($"{ResolveTypeToCS(node.Type_enum)} _val{node.ID};\n");
 
-            _currentStringBuilder.Append($"foreach (var place in {node.Variable}){{\n");
+            _currentStringBuilder.Append($"foreach (var val in {node.Variable}){{\n");
             if (node.WhereCondition != null)
             {
                 _currentStringBuilder.Append("if (");
-                _boolComparisonPrefix = "place.";
+				_boolComparisonPrefix = "val.";
                 node.WhereCondition.Children[0].Accept(this);
                 _boolComparisonPrefix = "";
                 _currentStringBuilder.Append("){\n");
             }
-            _currentStringBuilder.Append($"_col{node.ID}.Add(place);\n}}\n");
+			_currentStringBuilder.Append($"_col{node.ID}.Add(val);\n}}\n");
             if (node.WhereCondition != null)
             {
                 _currentStringBuilder.Append("}\n");
@@ -414,16 +414,16 @@ namespace Compiler.CodeGeneration.GenerationCode
             }
             _currentStringBuilder.Append($"{ResolveTypeToCS(node.Type_enum)} _val{node.ID} = null;\n");
 
-            _currentStringBuilder.Append($"foreach (var place in {node.Variable}){{\n");
+            _currentStringBuilder.Append($"foreach (var val in {node.Variable}){{\n");
             if (node.WhereCondition != null)
             {
                 _currentStringBuilder.Append("if (");
-                _boolComparisonPrefix = "place.";
+				_boolComparisonPrefix = "val.";
                 node.WhereCondition.Children[0].Accept(this);
                 _boolComparisonPrefix = "";
                 _currentStringBuilder.Append("){\n");
             }
-            _currentStringBuilder.Append($"_val{node.ID} = place;\n break;\n}}\n");
+            _currentStringBuilder.Append($"_val{node.ID} = val;\n break;\n}}\n");
             if (node.WhereCondition != null)
             {
                 _currentStringBuilder.Append("}\n");
@@ -470,7 +470,7 @@ namespace Compiler.CodeGeneration.GenerationCode
 
         public override void Visit(WhereNode node)
         {
-            throw new NotImplementedException();
+			VisitChildren(node);
         }
 
         public override void Visit(ExtendNode node)
@@ -480,6 +480,11 @@ namespace Compiler.CodeGeneration.GenerationCode
 
         public override void Visit(IfElseIfElseNode node)
         {
+			// This is magic, dont try to learn it...
+			// It works by:
+			// if (boolComparison) {statement}
+			// elseif (boolComparison) {statement} (unlimited times...)
+			// else {statement}
             _currentStringBuilder.Append("\n");
             Indent();
             _currentStringBuilder.Append("if (");
@@ -952,7 +957,17 @@ namespace Compiler.CodeGeneration.GenerationCode
         public override void Visit(PredicateCall node)
         {
             _currentStringBuilder.Append($"{node.Name}(");
-            VisitChildren(node);
+			bool First = true;
+            foreach (var item in node.Children)
+			{
+				if (First) {
+					First = false;
+					item.Accept(this);
+				} else {
+					_currentStringBuilder.Append(",");
+					item.Accept(this);
+				}
+			}
             _currentStringBuilder.Append($")");
         }
 
