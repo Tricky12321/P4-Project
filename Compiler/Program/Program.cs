@@ -19,6 +19,7 @@ namespace Compiler
 	public static class Program
 	{
 		private static bool _error = false;
+		private static bool _ignoreErrors = true;
 		public static void Main(string[] args)
 		{
 			Compile();
@@ -31,24 +32,19 @@ namespace Compiler
 
 			PrintCompilerMessage("Giraph Compiler 1.0.1");
 
-            GiraphParser.StartContext CST = BuildCST("kode.giraph");
-			if (!_error) {
-				AbstractNode AST = BuildAST(CST);
-                SymTable SymbolTable = BuildSymbolTable(AST as StartNode);
-                if (Utilities.GetOS() != OS.MacOS || true)
-                {
-                    TypeCheck(SymbolTable, AST as StartNode);
-                }
-                //PrettyPrint(AST as StartNode);
-                WriteCodeToFiles(AST as StartNode);	
-				TotalTimer.Stop();
-                PrintCompilerMessage($"Total compile timer: {TotalTimer.ElapsedMilliseconds}ms");
-			} else {
-				Console.WriteLine("ERROR... Exited!");
-				Environment.Exit(1);
+			GiraphParser.StartContext CST = BuildCST("kode.giraph");
+			ErrorChecker(_error, 9999, "Code error!");
+			AbstractNode AST = BuildAST(CST);
+			SymTable SymbolTable = BuildSymbolTable(AST as StartNode);
+			if (Utilities.GetOS() != OS.MacOS || true)
+			{
+				TypeCheck(SymbolTable, AST as StartNode);
 			}
-
-
+			//PrettyPrint(AST as StartNode);
+			WriteCodeToFiles(AST as StartNode);
+			TotalTimer.Stop();
+			PrintCompilerMessage($"Total compile timer: {TotalTimer.ElapsedMilliseconds}ms");
+			CompileGeneratedCode(); // Compile the C# code.
 		}
 
 		public static AbstractNode BuildAST(GiraphParser.StartContext start)
@@ -77,7 +73,7 @@ namespace Compiler
 			TextWriter DefaultOut = Console.Out;
 			var sw = new StringWriter();
 			Console.SetOut(sw);
-            Console.SetError(sw);
+			Console.SetError(sw);
 			Stopwatch CSTTimer = new Stopwatch();
 			CSTTimer.Start();
 			string input = File.ReadAllText(Utilities.CurrentPath + "/" + FilePath);
@@ -87,13 +83,14 @@ namespace Compiler
 			GiraphParser parser = new GiraphParser(tokens);
 			parser.BuildParseTree = true;
 			CSTTimer.Stop();
-            var output = parser.start();
-            string result = sw.ToString();
+			var output = parser.start();
+			string result = sw.ToString();
 			Console.SetOut(DefaultOut);
-            Console.SetError(DefaultOut);
+			Console.SetError(DefaultOut);
 			PrintCompilerMessage($"CST Builder took: {CSTTimer.ElapsedMilliseconds}ms");
 			Console.WriteLine(result.ToString());
-			if (result != "") {
+			if (result != "")
+			{
 				_error = true;
 			}
 			return output;
@@ -101,7 +98,7 @@ namespace Compiler
 
 		public static GiraphParser.StartContext BuildCSTText(string Text)
 		{
-			
+
 			Stopwatch CSTTimer = new Stopwatch();
 			CSTTimer.Start();
 			string input = File.ReadAllText(Text);
@@ -127,10 +124,7 @@ namespace Compiler
 			{
 				SymbolTable.SymbolTable.MainUndefined();
 			}
-			if (SymbolTable.SymbolTable.errorOccured) {
-				Console.WriteLine("ERROR... Symbol Table");
-				Environment.Exit(2);
-			}
+			ErrorChecker(SymbolTable.SymbolTable.errorOccured, 1, "Symbol Table");
 			return SymbolTable.SymbolTable;
 		}
 
@@ -142,21 +136,27 @@ namespace Compiler
 			TypeChecker.VisitRoot(node);
 			TypeCheckTimer.Stop();
 			PrintCompilerMessage("Type checking took: " + TypeCheckTimer.ElapsedMilliseconds + "ms");
-			if (SymbolTable.errorOccured)
-            {
-                Console.WriteLine("ERROR... TypeChecker");
-                Environment.Exit(2);
-            }
+			ErrorChecker(SymbolTable.errorOccured, 2, "TypeChecker");
 		}
 
 		public static void CompileGeneratedCode()
 		{
 			if (Utilities.GetOS() == OS.MacOS || Utilities.GetOS() == OS.Linux)
 			{
-				string strCmdText = "CodeGeneration/Program.cs CodeGeneration/Classes/*";
-				Process.Start("csc", strCmdText);
-				strCmdText = "CodeGeneration/Program.exe";
-				Process.Start("mono", strCmdText);
+				if (File.Exists(Utilities.CurrentPath + "/CodeGeneration/program.exe"))
+				{
+					File.Delete(Utilities.CurrentPath + "/CodeGeneration/program.exe");
+				}
+				string strCmdText = Utilities.CurrentPath + "/CodeGeneration/Program.cs " + Utilities.CurrentPath + "/CodeGeneration/Classes/* /out:" + Utilities.CurrentPath + "/CodeGeneration/program.exe";
+				var process = Process.Start("csc", strCmdText);
+				process.WaitForExit();
+				Console.WriteLine("Running program...");
+				System.Threading.Thread.Sleep(1000);
+				strCmdText = Utilities.CurrentPath + "/CodeGeneration/Program.exe";
+				var process2 = Process.Start("mono", strCmdText);
+				process.WaitForExit();
+				System.Threading.Thread.Sleep(1000);
+
 			}
 			else if (Utilities.GetOS() == OS.Windows)
 			{
@@ -164,9 +164,10 @@ namespace Compiler
 				ProcessStartInfo startInfo = new ProcessStartInfo();
 				startInfo.WindowStyle = ProcessWindowStyle.Hidden;
 				startInfo.FileName = "C:\\Program Files (x86)\\Microsoft Visual Studio\\2017\\Community\\MSBuild\\15.0\\Bin\\Roslyn\\csc.exe";
-				startInfo.Arguments = "CodeGeneration/Program.cs CodeGeneration/Classes/*";
+				startInfo.Arguments = Utilities.CurrentPath + "/CodeGeneration/Program.cs " + Utilities.CurrentPath + "/CodeGeneration/Classes/*";
 				process.StartInfo = startInfo;
 				process.Start();
+				process.WaitForExit();
 			}
 		}
 
@@ -177,6 +178,7 @@ namespace Compiler
 			CodeWriter codeWriter = new CodeWriter();
 			CodeGenerator codeGenerator = new CodeGenerator(codeWriter);
 			codeGenerator.Visit(node);
+
 			codeWriter.FillAll();
 			WriteTimer.Stop();
 			PrintCompilerMessage($"Writing Code timer: {WriteTimer.ElapsedMilliseconds}ms");
@@ -187,6 +189,16 @@ namespace Compiler
 			Console.ForegroundColor = color;
 			Console.WriteLine(text);
 			Console.ResetColor(); ;
+		}
+
+
+		public static void ErrorChecker(bool error, int errorCode, string Message)
+		{
+			if (error && !_ignoreErrors)
+			{
+				Console.WriteLine("ERROR... " + Message);
+				Environment.Exit(errorCode);
+			}
 		}
 	}
 }
