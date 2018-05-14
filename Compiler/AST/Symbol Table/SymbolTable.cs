@@ -958,6 +958,14 @@ namespace Compiler.AST.SymbolTable
             Error();
         }
 
+        public void RunFunctionTooManyParametersError()
+        {
+            string errormessage = $"Too many parameters declared in function call " + GetLineNumber();
+            Console.WriteLine(errormessage);
+            TypeCheckErrorList.Add(errormessage);
+            Error();
+        }
+
         public void RunFunctionWithNoFormalParameters(string funcName)
         {
             string errormessage = $"Trying to call a function: {funcName}, that does not have any formal parameters" + GetLineNumber();

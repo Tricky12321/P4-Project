@@ -1277,58 +1277,66 @@ namespace Compiler.AST
 
             if (node.Children.Count > 0)
             {
-                foreach (AbstractNode child in node.Children)
+                if(node.Children.Count <= test.Count)
                 {
-                    if (child is VariableNode varNode)
+                    foreach (AbstractNode child in node.Children)
                     {
-                        varType = _symbolTable.RetrieveSymbol(child.Name, out isCollection);
-                        placeholderType = varType ?? default(AllType);
+                        if (child is VariableNode varNode)
+                        {
+                            varType = _symbolTable.RetrieveSymbol(child.Name, out isCollection);
+                            placeholderType = varType ?? default(AllType);
 
-                        if (test.Count > 0)
-                        {
-                            if (placeholderType != test[i].Type && test[i].Collection == isCollection)
+                            if (test.Count > 0)
                             {
-                                //type error
-                                _symbolTable.RunFunctionTypeError(child.Name, test[i].Name);
+                                if (placeholderType != test[i].Type && test[i].Collection == isCollection)
+                                {
+                                    //type error
+                                    _symbolTable.RunFunctionTypeError(child.Name, test[i].Name);
+                                }
+                                else
+                                {
+                                    if (node.Parent is ExpressionNode expNode)
+                                    {
+                                        expNode.OverAllType = _symbolTable.RetrieveSymbol(node.FunctionName); ;
+                                    }
+                                }
                             }
                             else
                             {
-                                if(node.Parent is ExpressionNode expNode)
-                                {
-                                    expNode.OverAllType = _symbolTable.RetrieveSymbol(node.FunctionName); ;
-                                }
+                                //calling function with no formal parameters
+                                _symbolTable.RunFunctionWithNoFormalParameters(node.FunctionName);
                             }
                         }
-                        else
-                        {
-                            //calling function with no formal parameters
-                            _symbolTable.RunFunctionWithNoFormalParameters(node.FunctionName);
-                        }
-                    }
-                    else if (child is ConstantNode constNode)
-                    {//TODO hvis man kalder en func, der ikke har parameter, med en constant, indexoutofrange.
-                        if(test.Count == 0)
-                        {
-                            _symbolTable.RunFunctionWithNoFormalParameters(child.Name);
-                        }
-                        else
-                        {
-                            if (child.Type_enum != test[i].Type)
+                        else if (child is ConstantNode constNode)
+                        {//TODO hvis man kalder en func, der ikke har parameter, med en constant, indexoutofrange.
+                            if (test.Count == 0)
                             {
-                                _symbolTable.RunFunctionTypeError(child.Name, test[i].Name);
-                                //type error
+                                _symbolTable.RunFunctionWithNoFormalParameters(child.Name);
                             }
                             else
                             {
-                                if (node.Parent is ExpressionNode expNode)
+                                if (child.Type_enum != test[i].Type)
                                 {
-                                    expNode.OverAllType = _symbolTable.RetrieveSymbol(node.FunctionName);
+                                    _symbolTable.RunFunctionTypeError(child.Name, test[i].Name);
+                                    //type error
+                                }
+                                else
+                                {
+                                    if (node.Parent is ExpressionNode expNode)
+                                    {
+                                        expNode.OverAllType = _symbolTable.RetrieveSymbol(node.FunctionName);
+                                    }
                                 }
                             }
                         }
+                        ++i;
                     }
-                    ++i;
                 }
+                else
+                {
+                    _symbolTable.RunFunctionTooManyParametersError();
+                }
+                
             }
             else
             {
