@@ -6,89 +6,83 @@ namespace Giraph
     class Program
     {
 
-        static void Main(string[] args)
+        public static void Main(string[] args)
         {
 
-            Graph g1 = new Graph();
+            Graph graph1 = new Graph();
 
-            Vertex _newVertexg1;
+            Vertex _newVertexgraph1;
             Vertex va = new Vertex();
-            g1.Vertices.Add(va);
+            graph1.Vertices.Add(va);
 
             Vertex vb = new Vertex();
-            g1.Vertices.Add(vb);
+            graph1.Vertices.Add(vb);
 
             Vertex vc = new Vertex();
-            g1.Vertices.Add(vc);
+            graph1.Vertices.Add(vc);
 
             Vertex vd = new Vertex();
-            g1.Vertices.Add(vd);
+            graph1.Vertices.Add(vd);
 
             Vertex ve = new Vertex();
-            g1.Vertices.Add(ve);
+            graph1.Vertices.Add(ve);
 
-            Edge _newEdgeg1;
-            Edge x = new Edge(vb, vd);
-            x.v = 4;
-            g1.Edges.Add(x);
+            Edge _newEdgegraph1;
+            _newEdgegraph1 = new Edge();
+            graph1.Edges.Add(_newEdgegraph1);
 
-            Edge y = new Edge(vd, ve);
-            y.v = 7;
-            g1.Edges.Add(y);
+            _newEdgegraph1 = new Edge();
+            graph1.Edges.Add(_newEdgegraph1);
 
-            Edge z = new Edge(va, vc);
-            z.v = 10;
-            g1.Edges.Add(z);
+            _newEdgegraph1 = new Edge();
+            graph1.Edges.Add(_newEdgegraph1);
 
-            Graph.Directed = False;
+            graph1.Directed = false;
 
 
-            Graph g2 = new Graph();
+            bool First =
+            IsAdjacent(graph1, va, vb);
+            ;
 
-            Vertex _newVertexg2;
-            _newVertexg2 = new Vertex();
-            g2.Vertices.Add(_newVertexg2);
+            bool Second =
+            IsAdjacent(graph1, va, vc);
+            ;
 
-            _newVertexg2 = new Vertex();
-            g2.Vertices.Add(_newVertexg2);
+            Console.WriteLine(First);
 
-            _newVertexg2 = new Vertex();
-            g2.Vertices.Add(_newVertexg2);
+            Console.WriteLine(Second);
 
-            _newVertexg2 = new Vertex();
-            g2.Vertices.Add(_newVertexg2);
-
-            _newVertexg2 = new Vertex();
-            g2.Vertices.Add(_newVertexg2);
-
-            Edge _newEdgeg2;
-            Graph.Directed = False;
-
-            bool h = true;
-            int asdf = 5;
-            if (h == (h))
-            {
-            }
-            for (int i = 0;
-         i < 1000; i += 1)
-            {
-                Console.WriteLine((i));
-
-            }
-            Test("test", 1);
         }
-        public static void Test(string test, int blaah)
+
+        public static bool IsAdjacent(Graph g, Vertex fromVert, Vertex toVert)
         {
-            if (test == "test")
-            {
-                Console.WriteLine(("DU HAR RAMT TEST I DIN IF"));
 
-            }
-            else if (blaah == 2)
+            bool CheckConnections(Edge ed, Vertex vert1, Vertex vert2)
             {
-                Console.WriteLine(("DU HAR RAMT BLAAH I DIN ELSEIF"));
-
+                return ed.From == vert1 && ed.To == vert2;
             }
+
+            foreach (Edge ed in g.Edges)
+            {
+                if ((CheckConnections(edfromVerttoVert)))
+                {
+                    return true;
+
+                }
+
+                else if ((CheckConnections(edtoVertfromVert)))
+                {
+                    return true;
+
+                }
+
+                else
+                {
+                    return false;
+
+                }
+            }
+
         }
     }
 }

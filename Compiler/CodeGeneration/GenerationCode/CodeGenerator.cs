@@ -239,7 +239,7 @@ namespace Compiler.CodeGeneration.GenerationCode
                     edgeName = $"_newEdge{node.Name}";
                     Indent();
 
-                    _currentStringBuilder.Append($"{edgeName} = new Edge();\n");
+					_currentStringBuilder.Append($"{edgeName} = new Edge({edge.VertexNameFrom},{edge.VertexNameTo});\n");
                 }
                 else
                 {
@@ -423,7 +423,7 @@ namespace Compiler.CodeGeneration.GenerationCode
                 _boolComparisonPrefix = "";
                 _currentStringBuilder.Append("){\n");
             }
-            _currentStringBuilder.Append($"_val{node.ID} = place;\n break;\n}}\n");
+            _currentStringBuilder.Append($"_val{node.ID} = val;\n break;\n}}\n");
             if (node.WhereCondition != null)
             {
                 _currentStringBuilder.Append("}\n");
@@ -957,7 +957,17 @@ namespace Compiler.CodeGeneration.GenerationCode
         public override void Visit(PredicateCall node)
         {
             _currentStringBuilder.Append($"{node.Name}(");
-            VisitChildren(node);
+			bool First = true;
+            foreach (var item in node.Children)
+			{
+				if (First) {
+					First = false;
+					item.Accept(this);
+				} else {
+					_currentStringBuilder.Append(",");
+					item.Accept(this);
+				}
+			}
             _currentStringBuilder.Append($")");
         }
 
