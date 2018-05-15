@@ -813,7 +813,7 @@ namespace Compiler.AST
                             _symbolTable.TypeExpressionMismatch();
                         }
                     }
-                    
+
                     else
                     {
                         throw new Exception("Spørg ezzi - declaration");
@@ -926,7 +926,7 @@ namespace Compiler.AST
                 VisitChildren(node);
                 if (node.HasChildren)
                 {
-                    if(node.Children[0] is ExpressionNode expNode)
+                    if (node.Children[0] is ExpressionNode expNode)
                     {
                         ExpressionNode exnode = (ExpressionNode)node.Children[0];
                         node.Type = exnode.OverAllType.ToString();
@@ -957,7 +957,7 @@ namespace Compiler.AST
 
                         if (previousType == null)
                         {//first call - setting previous type as the first type encountered
-                            if(node.Parent is BoolComparisonNode boolcNode)
+                            if (node.Parent is BoolComparisonNode boolcNode)
                             {
                                 if (boolcNode.Parent is GraphDeclVertexNode vDcl1)
                                 {
@@ -1037,7 +1037,7 @@ namespace Compiler.AST
             _symbolTable.SetCurrentNode(node);
             AllType? funcType = _symbolTable.RetrieveSymbol(node.FuncName, out bool FuncTypeCollection, false);
             AllType? returnType = null;
-            bool ReturnTypeCollection = false;  
+            bool ReturnTypeCollection = false;
 
             if (node.LeftmostChild.Children[0] is ExpressionNode expNode && expNode.ExpressionParts != null)
             {
@@ -1101,9 +1101,19 @@ namespace Compiler.AST
                 }
                 else
                 {
-                    if (node.FromValueNode.Type_enum != AllType.INT || incrementNode.OverAllType != AllType.INT)
+                    if (node.FromValueNode is ExpressionNode expNode)
                     {
-                        _symbolTable.WrongTypeConditionError();
+                        if (expNode.OverAllType != AllType.INT || incrementNode.OverAllType != AllType.INT)
+                        {
+                            _symbolTable.WrongTypeConditionError();
+                        }
+                    }
+                    else
+                    {
+                        if (node.FromValueNode.Type_enum != AllType.INT || incrementNode.OverAllType != AllType.INT)
+                        {
+                            _symbolTable.WrongTypeConditionError();
+                        }
                     }
                 }
             }
@@ -1123,9 +1133,9 @@ namespace Compiler.AST
             {
                 _symbolTable.WrongTypeError(node.VariableName, node.InVariableName);
             }
-			_symbolTable.OpenScope(BlockType.ForEachLoop);
+            _symbolTable.OpenScope(BlockType.ForEachLoop);
             VisitChildren(node);
-			_symbolTable.CloseScope();
+            _symbolTable.CloseScope();
         }
 
         public override void Visit(WhileLoopNode node)
@@ -1248,7 +1258,7 @@ namespace Compiler.AST
                 {
                     if (!iscollection)
                     {//skal bare finde en der er true for collection, så snart den finder en, behøver den ikke gøre mere.
-                        if(item is VariableNode)
+                        if (item is VariableNode)
                         {
                             _symbolTable.RetrieveSymbol(item.Name, out iscollection);
                         }
@@ -1277,7 +1287,7 @@ namespace Compiler.AST
 
             if (node.Children.Count > 0)
             {
-                if(node.Children.Count <= test.Count)
+                if (node.Children.Count <= test.Count)
                 {
                     foreach (AbstractNode child in node.Children)
                     {
@@ -1336,7 +1346,7 @@ namespace Compiler.AST
                 {
                     _symbolTable.RunFunctionTooManyParametersError();
                 }
-                
+
             }
             else
             {
