@@ -687,11 +687,6 @@ namespace Compiler.AST
                         _symbolTable.TypeExpressionMismatch();
                     }
                 }
-                else
-                {
-                    //throw new Exception("haha gg");
-                }
-
             }
         }
 
