@@ -1283,6 +1283,10 @@ namespace Compiler.AST
             int i = 0;
             AllType placeholderType = 0;
             AllType? varType = null;
+            if (node.Parent is ExpressionNode expNode)
+            {
+                expNode.OverAllType = _symbolTable.RetrieveSymbol(node.FunctionName); ;
+            }
 
             if (node.Children.Count > 0)
             {
@@ -1301,13 +1305,6 @@ namespace Compiler.AST
                                 {
                                     //type error
                                     _symbolTable.RunFunctionTypeError(child.Name, funcParamList[i].Name);
-                                }
-                                else
-                                {
-                                    if (node.Parent is ExpressionNode expNode)
-                                    {
-                                        expNode.OverAllType = _symbolTable.RetrieveSymbol(node.FunctionName); ;
-                                    }
                                 }
                             }
                             else
