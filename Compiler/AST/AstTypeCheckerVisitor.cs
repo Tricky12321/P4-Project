@@ -61,12 +61,27 @@ namespace Compiler.AST
 
         public override void VisitChildren(AbstractNode node)
         {
-            foreach (AbstractNode child in node.GetChildren())
+            if (node is BoolComparisonNode)
             {
-                child.Parent = node;
-                if (child != null)
+                foreach (var child in (node.Children[0] as ExpressionNode).ExpressionParts)
                 {
-                    child.Accept(this);
+                    child.Parent = node;
+                    if (child != null)
+                    {
+                        child.Accept(this);
+                    }
+                }
+            }
+            else
+            {
+
+                foreach (AbstractNode child in node.GetChildren())
+                {
+                    child.Parent = node;
+                    if (child != null)
+                    {
+                        child.Accept(this);
+                    }
                 }
             }
         }
@@ -1325,13 +1340,6 @@ namespace Compiler.AST
                                 {
                                     _symbolTable.RunFunctionTypeError(child.Name, funcParamList[i].Name);
                                     //type error
-                                }
-                                else
-                                {
-                                    if (node.Parent is ExpressionNode expNode)
-                                    {
-                                        expNode.OverAllType = _symbolTable.RetrieveSymbol(node.FunctionName);
-                                    }
                                 }
                             }
                         }
