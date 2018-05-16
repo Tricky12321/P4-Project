@@ -61,7 +61,7 @@ namespace Compiler.AST
 
         public override void VisitChildren(AbstractNode node)
         {
-            if (node is BoolComparisonNode)
+            if (node is BoolComparisonNode boolNode && boolNode.ChildCount != 0 && boolNode.Children[0] is ExpressionNode)
             {
                 foreach (var child in (node.Children[0] as ExpressionNode).ExpressionParts)
                 {
