@@ -386,12 +386,6 @@ public interface IGiraphParserVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <return>The visitor result.</return>
 	Result VisitWhileLoop([NotNull] GiraphParser.WhileLoopContext context);
 	/// <summary>
-	/// Visit a parse tree produced by <see cref="GiraphParser.doWhileLoop"/>.
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	/// <return>The visitor result.</return>
-	Result VisitDoWhileLoop([NotNull] GiraphParser.DoWhileLoopContext context);
-	/// <summary>
 	/// Visit a parse tree produced by <see cref="GiraphParser.forLoop"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
