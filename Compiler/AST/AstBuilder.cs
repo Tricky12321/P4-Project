@@ -1049,7 +1049,6 @@ namespace Compiler.AST
 
 		public override AbstractNode VisitSimpleOperand([NotNull] GiraphParser.SimpleOperandContext context)
 		{
-
             var switchString = context.GetChild(0).GetType().ToString();
             switch (switchString)
             {
@@ -1063,7 +1062,8 @@ namespace Compiler.AST
                     varNode.Name = context.GetText();
                     return varNode;
                 case "Antlr4.Runtime.Tree.TerminalNodeImpl":
-                    AbstractNode varAttNode = Visit(context.GetChild(1));
+                    ExpressionNode varAttNode = Visit(context.GetChild(1)) as ExpressionNode;
+                    varAttNode.hasparentheses = true;
                     varAttNode.Name = context.GetText();
                     return varAttNode;
                 case "GiraphParser+AttributeContext":
@@ -1076,6 +1076,7 @@ namespace Compiler.AST
 
 		public override AbstractNode VisitSimpleExpression([NotNull] GiraphParser.SimpleExpressionContext context)
 		{
+            var test = context.GetText();
             ExpressionNode ExpNode = new ExpressionNode(context.Start.Line, context.Start.Column);
             ExpNode.ExpressionParts = EvaluateExpression(context);
             //ExpNode.AdoptChildren(Visit(context.GetChild(0)));

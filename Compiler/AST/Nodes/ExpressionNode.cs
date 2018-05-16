@@ -17,6 +17,8 @@ namespace Compiler.AST.Nodes
 
         public AllType? OverAllType;
 
+        public bool hasparentheses = false;
+
         public bool IsCollection;
 
         public string QueryName;
