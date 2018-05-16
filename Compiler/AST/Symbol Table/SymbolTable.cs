@@ -243,6 +243,9 @@ namespace Compiler.AST.SymbolTable
             name = name.Trim('\'');
             List<string> names = new List<string>();
             names.Add(name);
+			if (type == AllType.UNKNOWNTYPE) {
+				
+			}
             AllType? output = RetrieveTypeFromClasses(names, type, out IsCollection, false);
             return output;
         }
@@ -311,6 +314,9 @@ namespace Compiler.AST.SymbolTable
             // [GRAPH/VERTEX/EDGE]-><KEYS>->ClassEntry
             string name = names[0];
             // Check if the class contains a variable with the name given
+			if (type == AllType.UNKNOWNTYPE) {
+				
+			}
             if (_classesTable[type].ContainsKey(name))
             {
                 var entry = _classesTable[type][name];
@@ -404,6 +410,9 @@ namespace Compiler.AST.SymbolTable
                             var test = GetName(ClassName);
                             var type = RetrieveSymbol(ClassName) ?? default(AllType);
 
+							if (type == AllType.UNKNOWNTYPE) {
+								
+							}
                             var output = RetrieveTypeFromClasses(Names, type, out IsCollection);
                             return output;
                         }
