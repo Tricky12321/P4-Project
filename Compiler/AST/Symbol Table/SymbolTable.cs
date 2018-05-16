@@ -451,11 +451,6 @@ namespace Compiler.AST.SymbolTable
                             var type = _symTable[Name].Type;
                             return type;
                         }
-                        else
-                        {
-                            IsCollection = false;
-                            return null;
-                        }
                     }
                     if (match)
                     {
