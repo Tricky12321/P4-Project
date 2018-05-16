@@ -176,4 +176,6 @@ anothervoidFunc -> void (void anothervoidparameter){
 	}
 	remove from hej2;
 	removeall from hej2;
+
+	run voidFunc with (1, 2);
 }
