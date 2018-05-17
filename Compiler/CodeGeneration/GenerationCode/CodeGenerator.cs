@@ -239,7 +239,7 @@ namespace Compiler.CodeGeneration.GenerationCode
                     edgeName = $"_newEdge{node.Name}";
                     Indent();
 
-					_currentStringBuilder.Append($"{edgeName} = new Edge({edge.VertexNameFrom},{edge.VertexNameTo});\n");
+                    _currentStringBuilder.Append($"{edgeName} = new Edge({edge.VertexNameFrom},{edge.VertexNameTo});\n");
                 }
                 else
                 {
@@ -389,12 +389,12 @@ namespace Compiler.CodeGeneration.GenerationCode
             if (node.WhereCondition != null)
             {
                 _currentStringBuilder.Append("if (");
-				_boolComparisonPrefix = "val.";
+                _boolComparisonPrefix = "val.";
                 node.WhereCondition.Children[0].Accept(this);
                 _boolComparisonPrefix = "";
                 _currentStringBuilder.Append("){\n");
             }
-			_currentStringBuilder.Append($"_col{node.ID}.Add(val);\n}}\n");
+            _currentStringBuilder.Append($"_col{node.ID}.Add(val);\n}}\n");
             if (node.WhereCondition != null)
             {
                 _currentStringBuilder.Append("}\n");
@@ -418,7 +418,7 @@ namespace Compiler.CodeGeneration.GenerationCode
             if (node.WhereCondition != null)
             {
                 _currentStringBuilder.Append("if (");
-				_boolComparisonPrefix = "val.";
+                _boolComparisonPrefix = "val.";
                 node.WhereCondition.Children[0].Accept(this);
                 _boolComparisonPrefix = "";
                 _currentStringBuilder.Append("){\n");
@@ -470,7 +470,7 @@ namespace Compiler.CodeGeneration.GenerationCode
 
         public override void Visit(WhereNode node)
         {
-			VisitChildren(node);
+            VisitChildren(node);
         }
 
         public override void Visit(ExtendNode node)
@@ -480,11 +480,11 @@ namespace Compiler.CodeGeneration.GenerationCode
 
         public override void Visit(IfElseIfElseNode node)
         {
-			// This is magic, dont try to learn it...
-			// It works by:
-			// if (boolComparison) {statement}
-			// elseif (boolComparison) {statement} (unlimited times...)
-			// else {statement}
+            // This is magic, dont try to learn it...
+            // It works by:
+            // if (boolComparison) {statement}
+            // elseif (boolComparison) {statement} (unlimited times...)
+            // else {statement}
             _currentStringBuilder.Append("\n");
             Indent();
             _currentStringBuilder.Append("if (");
@@ -561,7 +561,17 @@ namespace Compiler.CodeGeneration.GenerationCode
         {
             foreach (var item in node.ExpressionParts)
             {
+                bool tester = item is ExpressionNode expNode && expNode.hasparentheses;
+                if (tester)
+                {
+                    _currentStringBuilder.Append("(");
+                }
                 item.Accept(this);
+
+                if (tester)
+                {
+                    _currentStringBuilder.Append(")");
+                }
             }
         }
 
@@ -957,21 +967,25 @@ namespace Compiler.CodeGeneration.GenerationCode
         public override void Visit(PredicateCall node)
         {
             _currentStringBuilder.Append($"{node.Name}(");
-			bool First = true;
+            bool First = true;
             foreach (var item in node.Children)
-			{
-				if (First) {
-					First = false;
-					item.Accept(this);
-				} else {
-					_currentStringBuilder.Append(",");
-					item.Accept(this);
-				}
-			}
+            {
+                if (First)
+                {
+                    First = false;
+                    item.Accept(this);
+                }
+                else
+                {
+                    _currentStringBuilder.Append(",");
+                    item.Accept(this);
+                }
+            }
             _currentStringBuilder.Append($")");
         }
 
-        public void Indent(ref StringBuilder stringBuilder) {
+        public void Indent(ref StringBuilder stringBuilder)
+        {
             for (int i = 0; i < _tabCount; i++)
             {
                 stringBuilder.Append("\t");

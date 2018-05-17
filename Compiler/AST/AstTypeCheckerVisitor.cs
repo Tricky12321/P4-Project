@@ -61,12 +61,27 @@ namespace Compiler.AST
 
         public override void VisitChildren(AbstractNode node)
         {
-            foreach (AbstractNode child in node.GetChildren())
+            if (node is BoolComparisonNode boolNode && boolNode.ChildCount != 0 && boolNode.Children[0] is ExpressionNode)
             {
-                child.Parent = node;
-                if (child != null)
+                foreach (var child in (node.Children[0] as ExpressionNode).ExpressionParts)
                 {
-                    child.Accept(this);
+                    child.Parent = node;
+                    if (child != null)
+                    {
+                        child.Accept(this);
+                    }
+                }
+            }
+            else
+            {
+
+                foreach (AbstractNode child in node.GetChildren())
+                {
+                    child.Parent = node;
+                    if (child != null)
+                    {
+                        child.Accept(this);
+                    }
                 }
             }
         }
@@ -974,6 +989,7 @@ namespace Compiler.AST
                             else if (item is VariableNode)
                             {
                                 previousType = _symbolTable.RetrieveSymbol(item.Name, out firstWasCollection);
+                                node.IsCollection = firstWasCollection;
                                 node.OverAllType = previousType;
                             }
                             else
@@ -1041,6 +1057,10 @@ namespace Compiler.AST
                     _symbolTable.RetrieveSymbol(expNode.QueryName, out bool returnTypeCollection, false);
                     ReturnTypeCollection = returnTypeCollection;
                 }
+                else
+                {
+                    ReturnTypeCollection = expNode.IsCollection;
+                }
                 returnType = expNode.OverAllType;
             }
             if (funcType == AllType.VOID)
@@ -1048,7 +1068,6 @@ namespace Compiler.AST
                 _symbolTable.FunctionIsVoidError(node.FuncName);
             }
             else if (ReturnTypeCollection == FuncTypeCollection)
-            // går ikke derind, function bool er false, wait for fix
             {
                 if (!(funcType == returnType))
                 {
@@ -1273,15 +1292,19 @@ namespace Compiler.AST
             _symbolTable.SetCurrentNode(node);
             bool isCollection = false;
             VisitChildren(node);
-            List<FunctionParameterEntry> test = _symbolTable.GetParameterTypes(node.FunctionName);
-            test.OrderBy(x => x.ID);
+            List<FunctionParameterEntry> funcParamList = _symbolTable.GetParameterTypes(node.FunctionName);
+            funcParamList.OrderBy(x => x.ID);
             int i = 0;
             AllType placeholderType = 0;
             AllType? varType = null;
+            if (node.Parent is ExpressionNode expNode)
+            {
+                expNode.OverAllType = _symbolTable.RetrieveSymbol(node.FunctionName); ;
+            }
 
             if (node.Children.Count > 0)
             {
-                if (node.Children.Count <= test.Count)
+                if (node.Children.Count <= funcParamList.Count)
                 {
                     foreach (AbstractNode child in node.Children)
                     {
@@ -1290,19 +1313,12 @@ namespace Compiler.AST
                             varType = _symbolTable.RetrieveSymbol(child.Name, out isCollection);
                             placeholderType = varType ?? default(AllType);
 
-                            if (test.Count > 0)
+                            if (funcParamList.Count > 0)
                             {
-                                if (placeholderType != test[i].Type && test[i].Collection == isCollection)
+                                if (placeholderType != funcParamList[i].Type && funcParamList[i].Collection == isCollection)
                                 {
                                     //type error
-                                    _symbolTable.RunFunctionTypeError(child.Name, test[i].Name);
-                                }
-                                else
-                                {
-                                    if (node.Parent is ExpressionNode expNode)
-                                    {
-                                        expNode.OverAllType = _symbolTable.RetrieveSymbol(node.FunctionName); ;
-                                    }
+                                    _symbolTable.RunFunctionTypeError(child.Name, funcParamList[i].Name);
                                 }
                             }
                             else
@@ -1313,23 +1329,16 @@ namespace Compiler.AST
                         }
                         else if (child is ConstantNode constNode)
                         {//TODO hvis man kalder en func, der ikke har parameter, med en constant, indexoutofrange.
-                            if (test.Count == 0)
+                            if (funcParamList.Count == 0)
                             {
                                 _symbolTable.RunFunctionWithNoFormalParameters(child.Name);
                             }
                             else
                             {
-                                if (child.Type_enum != test[i].Type)
+                                if (child.Type_enum != funcParamList[i].Type)
                                 {
-                                    _symbolTable.RunFunctionTypeError(child.Name, test[i].Name);
+                                    _symbolTable.RunFunctionTypeError(child.Name, funcParamList[i].Name);
                                     //type error
-                                }
-                                else
-                                {
-                                    if (node.Parent is ExpressionNode expNode)
-                                    {
-                                        expNode.OverAllType = _symbolTable.RetrieveSymbol(node.FunctionName);
-                                    }
                                 }
                             }
                         }
@@ -1342,13 +1351,13 @@ namespace Compiler.AST
                 }
 
             }
-            else
+            else if(funcParamList.Count > 0)
             {
                 //running function without actual parameters, when function has formal parameters
                 _symbolTable.RunFunctionWithNoActualParameter(node.FunctionName);
             }
 
-        }
+        } 
 
         public override void Visit(PredicateCall node)
         {
