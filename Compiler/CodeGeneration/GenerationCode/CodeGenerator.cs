@@ -102,6 +102,8 @@ namespace Compiler.CodeGeneration.GenerationCode
                 {
                     _currentStringBuilder.Append(" = ");
                     node.Assignment.Accept(this);
+                    _currentStringBuilder.Append(";");
+
                 }
                 else if (node.Children.Count > 0)
                 {
@@ -375,10 +377,20 @@ namespace Compiler.CodeGeneration.GenerationCode
                 {
                     string VariableName = item.Item1.Name;
                     string AssignOperator = item.Item2;
-                    AbstractNode expression = item.Item3;
+
+                    AbstractNode expression = null;
+                    if (item.Item3 is BoolComparisonNode boolNode && boolNode.ChildCount != 0 && boolNode.Children[0] is ExpressionNode)
+                    {
+                        expression = item.Item3.Children[0];
+                    }
+                    else
+                    {
+                        expression = item.Item3;
+                    }
+
                     Indent();
                     _currentStringBuilder.Append($"{VariableName} {AssignOperator} ");
-                    expression.Accept(this);
+                    expression.Accept(this); 
                     _currentStringBuilder.Append($";\n");
                 }
             }
@@ -422,7 +434,7 @@ namespace Compiler.CodeGeneration.GenerationCode
             {
                 throw new NotImplementedException("Typen skal gerne sættes i typechecker.");
             }
-            _currentStringBuilder.Append($"{ResolveTypeToCS(node.Type_enum)} _val{node.ID} = null;\n");
+            _currentStringBuilder.Append($"{ResolveTypeToCS(node.Type_enum)} _val{node.ID} = default({ResolveTypeToCS(node.Type_enum)});\n");
 
             _currentStringBuilder.Append($"foreach (var val in {node.Variable}){{\n");
             if (node.WhereCondition != null)

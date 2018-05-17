@@ -75,14 +75,14 @@ namespace Compiler.AST
             else
             {
                 */
-                foreach (AbstractNode child in node.GetChildren())
+            foreach (AbstractNode child in node.GetChildren())
+            {
+                child.Parent = node.Children[0];
+                if (child != null)
                 {
-                    child.Parent = node.Children[0];
-                    if (child != null)
-                    {
-                        child.Accept(this);
-                    }
+                    child.Accept(this);
                 }
+            }
             //}
         }
 
@@ -1009,6 +1009,10 @@ namespace Compiler.AST
                                         node.OverAllType = AllType.DECIMAL;
                                         //do nothing, but set overalltype to decimal.
                                     }
+                                    else if (previousType == AllType.INT && node.OverAllType == AllType.INT)
+                                    {
+                                        node.OverAllType = AllType.INT;
+                                    }
                                     else
                                     {//types are different from eachother, and do not allow operates between them
                                         _symbolTable.TypeExpressionMismatch();
@@ -1021,6 +1025,10 @@ namespace Compiler.AST
                                 {//types are accepted if one is int and one is decimal
                                     node.OverAllType = AllType.DECIMAL;
                                     //do nothing, but set overalltype to decimal.
+                                }
+                                else if (previousType == AllType.INT && node.OverAllType == AllType.INT)
+                                {
+                                    node.OverAllType = AllType.INT;
                                 }
                                 else
                                 {//types are different from eachother, and do not allow operates between them
@@ -1277,7 +1285,6 @@ namespace Compiler.AST
                 ExpressionNode parentNode = (ExpressionNode)node.Parent;
                 parentNode.OverAllType = node.Type_enum;
             }
-
         }
 
         public override void Visit(PrintQueryNode node)
@@ -1371,13 +1378,13 @@ namespace Compiler.AST
                 }
 
             }
-            else if(funcParamList.Count > 0)
+            else if (funcParamList.Count > 0)
             {
                 //running function without actual parameters, when function has formal parameters
                 _symbolTable.RunFunctionWithNoActualParameter(node.FunctionName);
             }
 
-        } 
+        }
 
         public override void Visit(PredicateCall node)
         {

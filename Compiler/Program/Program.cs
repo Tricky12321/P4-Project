@@ -23,7 +23,7 @@ namespace Compiler
 		public static void Main(string[] args)
 		{
 			Compile();
-		}
+        }
 
 		public static void Compile()
 		{
