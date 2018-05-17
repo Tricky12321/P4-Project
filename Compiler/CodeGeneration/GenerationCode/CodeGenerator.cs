@@ -375,7 +375,17 @@ namespace Compiler.CodeGeneration.GenerationCode
                 {
                     string VariableName = item.Item1.Name;
                     string AssignOperator = item.Item2;
-                    AbstractNode expression = item.Item3;
+
+                    AbstractNode expression = null;
+                    if (item.Item3 is BoolComparisonNode boolNode && boolNode.ChildCount != 0 && boolNode.Children[0] is ExpressionNode)
+                    {
+                        expression = item.Item3.Children[0];
+                    }
+                    else
+                    {
+                        expression = item.Item3;
+                    }
+
                     Indent();
                     _currentStringBuilder.Append($"{VariableName} {AssignOperator} ");
                     expression.Accept(this);
