@@ -61,7 +61,7 @@ namespace Compiler.AST
 
         public override void VisitChildren(AbstractNode node)
         {
-            if (node is BoolComparisonNode boolNode && boolNode.ChildCount != 0 && boolNode.Children[0] is ExpressionNode)
+            /*if (node is BoolComparisonNode boolNode && boolNode.ChildCount != 0 && boolNode.Children[0] is ExpressionNode)
             {
                 foreach (var child in (node.Children[0] as ExpressionNode).ExpressionParts)
                 {
@@ -74,16 +74,16 @@ namespace Compiler.AST
             }
             else
             {
-
+                */
                 foreach (AbstractNode child in node.GetChildren())
                 {
-                    child.Parent = node;
+                    child.Parent = node.Children[0];
                     if (child != null)
                     {
                         child.Accept(this);
                     }
                 }
-            }
+            //}
         }
 
         private void checkCollectionFollowsCollection(string varName)
@@ -885,6 +885,7 @@ namespace Compiler.AST
 
         public override void Visit(BoolComparisonNode node)
         {
+            VisitChildren(node);
             _symbolTable.SetCurrentNode(node);
             AllType type_check;
             bool compare = false;
@@ -997,16 +998,34 @@ namespace Compiler.AST
                                 previousType = node.OverAllType;
                             }
                         }
-                        else if (previousType != item.Type_enum)
+                        else if (previousType != item.Type_enum || item is ExpressionNode)
                         {//types are different from eachother
-                            if ((previousType == AllType.INT && node.OverAllType == AllType.DECIMAL) || (previousType == AllType.DECIMAL && node.OverAllType == AllType.INT))
-                            {//types are accepted if one is int and one is decimal
-                                node.OverAllType = AllType.DECIMAL;
-                                //do nothing, but set overalltype to decimal.
+                            if (item is ExpressionNode expnode)
+                            {
+                                if (previousType != expnode.OverAllType)
+                                {
+                                    if ((previousType == AllType.INT && node.OverAllType == AllType.DECIMAL) || (previousType == AllType.DECIMAL && node.OverAllType == AllType.INT))
+                                    {//types are accepted if one is int and one is decimal
+                                        node.OverAllType = AllType.DECIMAL;
+                                        //do nothing, but set overalltype to decimal.
+                                    }
+                                    else
+                                    {//types are different from eachother, and do not allow operates between them
+                                        _symbolTable.TypeExpressionMismatch();
+                                    }
+                                }
                             }
                             else
-                            {//types are different from eachother, and do not allow operates between them
-                                _symbolTable.TypeExpressionMismatch();
+                            {
+                                if ((previousType == AllType.INT && node.OverAllType == AllType.DECIMAL) || (previousType == AllType.DECIMAL && node.OverAllType == AllType.INT))
+                                {//types are accepted if one is int and one is decimal
+                                    node.OverAllType = AllType.DECIMAL;
+                                    //do nothing, but set overalltype to decimal.
+                                }
+                                else
+                                {//types are different from eachother, and do not allow operates between them
+                                    _symbolTable.TypeExpressionMismatch();
+                                }
                             }
                         }
                         else
