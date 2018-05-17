@@ -61,7 +61,7 @@ namespace Compiler.AST
 
         public override void VisitChildren(AbstractNode node)
         {
-            if (node is BoolComparisonNode boolNode && boolNode.ChildCount != 0 && boolNode.Children[0] is ExpressionNode)
+            /*if (node is BoolComparisonNode boolNode && boolNode.ChildCount != 0 && boolNode.Children[0] is ExpressionNode)
             {
                 foreach (var child in (node.Children[0] as ExpressionNode).ExpressionParts)
                 {
@@ -74,7 +74,7 @@ namespace Compiler.AST
             }
             else
             {
-
+                */
                 foreach (AbstractNode child in node.GetChildren())
                 {
                     child.Parent = node.Children[0];
@@ -83,7 +83,7 @@ namespace Compiler.AST
                         child.Accept(this);
                     }
                 }
-            }
+            //}
         }
 
         private void checkCollectionFollowsCollection(string varName)
@@ -885,6 +885,7 @@ namespace Compiler.AST
 
         public override void Visit(BoolComparisonNode node)
         {
+            VisitChildren(node);
             _symbolTable.SetCurrentNode(node);
             AllType type_check;
             bool compare = false;
