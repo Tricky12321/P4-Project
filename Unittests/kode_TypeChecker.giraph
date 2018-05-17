@@ -142,7 +142,7 @@ newFunc -> void () {
 	run wrongreturnFunc with (k);
 	run wrongreturnFunc with (2.5);
 	run voidFunc with (2.5);
-	run wrongreturnFunc;
+	run voidFunc;
 
 	predicate po(int predint) : { predint < 5 };
 	if (po(5.5)) {

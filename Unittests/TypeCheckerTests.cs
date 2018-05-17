@@ -199,7 +199,7 @@ namespace Unittests
 
         [TestCase("Actual parameter: k and formal parameter: parameter are a type missmatch 141:1")]
         [TestCase("Actual parameter:  and formal parameter: parameter are a type missmatch 144:1")]
-        [TestCase("Trying to call a function: wrongreturnFunc, without actual parameters145:1")]
+        [TestCase("Trying to call a function: voidFunc, without actual parameters145:1")]
         [TestCase("Too many parameters declared in function call 142:1")]
         public void runErrors(string errorMessage)
         {
