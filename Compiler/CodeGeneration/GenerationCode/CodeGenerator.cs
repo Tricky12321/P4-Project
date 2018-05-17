@@ -388,7 +388,7 @@ namespace Compiler.CodeGeneration.GenerationCode
 
                     Indent();
                     _currentStringBuilder.Append($"{VariableName} {AssignOperator} ");
-                    expression.Accept(this);
+                    expression.Accept(this); 
                     _currentStringBuilder.Append($";\n");
                 }
             }
