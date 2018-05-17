@@ -102,6 +102,8 @@ namespace Compiler.CodeGeneration.GenerationCode
                 {
                     _currentStringBuilder.Append(" = ");
                     node.Assignment.Accept(this);
+                    _currentStringBuilder.Append(";");
+
                 }
                 else if (node.Children.Count > 0)
                 {
