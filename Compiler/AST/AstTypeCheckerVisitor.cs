@@ -997,16 +997,34 @@ namespace Compiler.AST
                                 previousType = node.OverAllType;
                             }
                         }
-                        else if (previousType != item.Type_enum)
+                        else if (previousType != item.Type_enum || item is ExpressionNode)
                         {//types are different from eachother
-                            if ((previousType == AllType.INT && node.OverAllType == AllType.DECIMAL) || (previousType == AllType.DECIMAL && node.OverAllType == AllType.INT))
-                            {//types are accepted if one is int and one is decimal
-                                node.OverAllType = AllType.DECIMAL;
-                                //do nothing, but set overalltype to decimal.
+                            if (item is ExpressionNode expnode)
+                            {
+                                if (previousType != expnode.OverAllType)
+                                {
+                                    if ((previousType == AllType.INT && node.OverAllType == AllType.DECIMAL) || (previousType == AllType.DECIMAL && node.OverAllType == AllType.INT))
+                                    {//types are accepted if one is int and one is decimal
+                                        node.OverAllType = AllType.DECIMAL;
+                                        //do nothing, but set overalltype to decimal.
+                                    }
+                                    else
+                                    {//types are different from eachother, and do not allow operates between them
+                                        _symbolTable.TypeExpressionMismatch();
+                                    }
+                                }
                             }
                             else
-                            {//types are different from eachother, and do not allow operates between them
-                                _symbolTable.TypeExpressionMismatch();
+                            {
+                                if ((previousType == AllType.INT && node.OverAllType == AllType.DECIMAL) || (previousType == AllType.DECIMAL && node.OverAllType == AllType.INT))
+                                {//types are accepted if one is int and one is decimal
+                                    node.OverAllType = AllType.DECIMAL;
+                                    //do nothing, but set overalltype to decimal.
+                                }
+                                else
+                                {//types are different from eachother, and do not allow operates between them
+                                    _symbolTable.TypeExpressionMismatch();
+                                }
                             }
                         }
                         else
