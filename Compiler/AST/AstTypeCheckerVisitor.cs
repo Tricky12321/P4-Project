@@ -65,7 +65,7 @@ namespace Compiler.AST
             {
                 foreach (var child in (node.Children[0] as ExpressionNode).ExpressionParts)
                 {
-                    child.Parent = node;
+                    child.Parent = node.Children[0];
                     if (child != null)
                     {
                         child.Accept(this);
