@@ -432,7 +432,7 @@ namespace Compiler.CodeGeneration.GenerationCode
             {
                 throw new NotImplementedException("Typen skal gerne sættes i typechecker.");
             }
-            _currentStringBuilder.Append($"{ResolveTypeToCS(node.Type_enum)} _val{node.ID} = null;\n");
+            _currentStringBuilder.Append($"{ResolveTypeToCS(node.Type_enum)} _val{node.ID} = default({ResolveTypeToCS(node.Type_enum)});\n");
 
             _currentStringBuilder.Append($"foreach (var val in {node.Variable}){{\n");
             if (node.WhereCondition != null)
