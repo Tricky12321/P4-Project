@@ -77,7 +77,7 @@ namespace Compiler.AST
 
                 foreach (AbstractNode child in node.GetChildren())
                 {
-                    child.Parent = node;
+                    child.Parent = node.Children[0];
                     if (child != null)
                     {
                         child.Accept(this);
