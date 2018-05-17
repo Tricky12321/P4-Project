@@ -1239,7 +1239,6 @@ namespace Compiler.AST
                 ExpressionNode parentNode = (ExpressionNode)node.Parent;
                 parentNode.OverAllType = node.Type_enum;
             }
-
         }
 
         public override void Visit(PrintQueryNode node)
