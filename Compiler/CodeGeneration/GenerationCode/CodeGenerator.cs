@@ -276,7 +276,17 @@ namespace Compiler.CodeGeneration.GenerationCode
                 _currentStringBuilder.Append(" = ");
                 foreach (var item in node.Children)
                 {
+                    bool tester = item is ExpressionNode expNode && expNode.hasparentheses;
+                    if (tester)
+                    {
+                        _currentStringBuilder.Append("(");
+                    }
+
                     item.Accept(this);
+                    if (tester)
+                    {
+                        _currentStringBuilder.Append(")");
+                    }
                 }
             }
 
