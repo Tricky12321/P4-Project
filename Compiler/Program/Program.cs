@@ -19,7 +19,7 @@ namespace Compiler
 	public static class Program
 	{
 		private static bool _error = false;
-		private static bool _ignoreErrors = true;
+		private static bool _ignoreErrors = false;
 		public static void Main(string[] args)
 		{
 			Compile();
@@ -143,16 +143,17 @@ namespace Compiler
 		{
 			if (Utilities.GetOS() == OS.MacOS || Utilities.GetOS() == OS.Linux)
 			{
-				if (File.Exists(Utilities.CurrentPath + "/CodeGeneration/program.exe"))
+				if (File.Exists(Utilities.CurrentPath + "/Compiled_Program.exe"))
 				{
-					File.Delete(Utilities.CurrentPath + "/CodeGeneration/program.exe");
+					File.Delete(Utilities.CurrentPath + "/Compiled_Program.exe");
 				}
 				string strCmdText = Utilities.CurrentPath + "/CodeGeneration/Program.cs " + Utilities.CurrentPath + "/CodeGeneration/Classes/* /out:" + Utilities.CurrentPath + "/CodeGeneration/program.exe";
 				var process = Process.Start("csc", strCmdText);
 				process.WaitForExit();
+				FinishCompiler();
 				Console.WriteLine("Running program...");
 				System.Threading.Thread.Sleep(1000);
-				strCmdText = Utilities.CurrentPath + "/CodeGeneration/Program.exe";
+				strCmdText = Utilities.CurrentPath + "/Compiled_Program.exe";
 				var process2 = Process.Start("mono", strCmdText);
 				process.WaitForExit();
 				System.Threading.Thread.Sleep(1000);
@@ -175,6 +176,7 @@ namespace Compiler
 		{
 			Stopwatch WriteTimer = new Stopwatch();
 			WriteTimer.Start();
+			PrepareCompiler();
 			CodeWriter codeWriter = new CodeWriter();
 			CodeGenerator codeGenerator = new CodeGenerator(codeWriter);
 			codeGenerator.Visit(node);
@@ -199,6 +201,17 @@ namespace Compiler
 				Console.WriteLine("ERROR... " + Message);
 				Environment.Exit(errorCode);
 			}
+		}
+
+
+		public static void PrepareCompiler() {
+			Utilities.CopyAll(Utilities.CurrentPath + "/CodeGeneration",Utilities.CurrentPath + "/CodeGeneration_backup");
+		}
+
+		public static void FinishCompiler() {
+			File.Move(Utilities.CurrentPath + "/CodeGeneration/Program.exe", Utilities.CurrentPath + "/Compiled_Program.exe");
+			Directory.Delete(Utilities.CurrentPath + "/CodeGeneration", true);
+			Directory.Move(Utilities.CurrentPath + "/CodeGeneration_backup", Utilities.CurrentPath + "/CodeGeneration");
 		}
 	}
 }

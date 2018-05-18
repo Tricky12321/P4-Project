@@ -19,15 +19,15 @@ Main -> void () {
     decimal d;
     collection vertex vertexColl;
     graph g1 
-    {
+    [
         vertex va(v=1), vb(v=2), vc(v=1), vd(v=2), ve(v=1);
         edge x(vb, vd, v = 4), y(vd, ve, v = 7), z(va, vc, v = 10);
-    }
+    ]
 
     graph g2 
-    {
+    [
         vertex (), (), (), (), ();
-    }
+    ]
 
     if (i == i) {
         decimal decimalInIf;
@@ -60,10 +60,10 @@ Test -> void () {
     int i;
     decimal d;
     graph g2 
-    {
+    [
         vertex va(v=1), vb(v=2), vc(v=1), vd(v=2), ve(v=1);
         edge x(vb, vd, v = 4), y(vd, ve, v = 7), z(va, vc, v = 10);
-    }
+    ]
 
     if (i == i) { 
             decimal Test1;

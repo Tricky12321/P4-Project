@@ -104,5 +104,24 @@ namespace Compiler
             }
 			return serializer.ToString();
 		}
+
+		// https://stackoverflow.com/questions/10389701/how-to-create-a-recursive-function-to-copy-all-files-and-folders
+		public static void CopyAll(string SourcePath, string DestinationPath)
+        {
+
+            string[] directories = Directory.GetDirectories(SourcePath, "*.*", SearchOption.AllDirectories);
+
+            Parallel.ForEach(directories, dirPath =>
+            {
+                Directory.CreateDirectory(dirPath.Replace(SourcePath, DestinationPath));
+            });
+
+            string[] files = Directory.GetFiles(SourcePath, "*.*", SearchOption.AllDirectories);
+
+            Parallel.ForEach(files, newPath =>
+            {
+                File.Copy(newPath, newPath.Replace(SourcePath, DestinationPath));
+            });
+        }
     }
 }

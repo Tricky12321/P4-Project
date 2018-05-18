@@ -44,11 +44,11 @@ extend edge collection graph 'testgraphCollection';
 
 Main -> void () {
     graph g1
-    {
+    [
         vertex va(), vb(), vc(), vd(), ve();
         edge x(vb, vd), y(vd, ve), z(va, vc);
         set 'Directed' = false;
-    }
+    ]
 
 	collection int tim;
 	collection string hej;
@@ -90,11 +90,11 @@ Main -> void () {
 	add edge evvc(vcv, vcv, intSom = 2.5) to g1;
 
 	graph g2
-	{
+    [
 		vertex vx(intSom = 4), vxx(intSom = 3);
 		edge ex(vx, vxx, intSom = 5);
 		set 'Directed' = 25;
-	}
+	]
 
 
 	collection int fratim2 = fratim2;
@@ -159,11 +159,11 @@ anothervoidFunc -> void (void anothervoidparameter){
 	dequeue from hej2;
 
 	graph g3
-	{
+    [
 		vertex vvvx(intSom = 4), vxxxx(intSom = 3);
 		edge exxxx(vvvx, vxxxx, intSom = 5);
 		set 'Directed' = 10.5;
-	}
+	]
 	add vertex vcmmm(intSom = 73.5) to g3;
 
 	bool testbool = hej2 < ecol;
