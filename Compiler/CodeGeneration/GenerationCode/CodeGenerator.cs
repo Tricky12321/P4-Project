@@ -476,9 +476,9 @@ namespace Compiler.CodeGeneration.GenerationCode
             string placeAttriString = node.Attribute == null ? "" : $".{node.Attribute.Replace("'", "")}";
             string boolOpString = maxIfTrue ? ">" : "<";
 
-            extractString.Append($"{placeFuncString}{node.ID}{functionID}();\n{ResolveTypeToCS(node.Type_enum)} {placeFuncString}{node.ID}{functionID++}(){{\n");
+			extractString.Append($"{placeFuncString}{node.ID}_{functionID}();\n{ResolveTypeToCS(node.Type_enum)} {placeFuncString}{node.ID}_{functionID++}(){{\n");
 
-			extractString.Append($"{ResolveTypeToCS(node.Type_enum)} {placeValString} = {HandleCSharpKeywords(node.Variable)}.First();\ndouble placeDouble = {node.Variable}.First(){HandleCSharpKeywords(placeAttriString)};\n");
+			extractString.Append($"{ResolveTypeToCS(node.Type_enum)} {placeValString} = {HandleCSharpKeywords(node.Variable)}.First();\ndouble placeDouble = {HandleCSharpKeywords(node.Variable)}.First(){placeAttriString};\n");
 
 			extractString.Append($"foreach (var item in {HandleCSharpKeywords(node.Variable)}){{\n");
 
