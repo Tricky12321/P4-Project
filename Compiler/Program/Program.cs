@@ -21,6 +21,7 @@ namespace Compiler
 		private static bool _error = false;
 		private static bool _ignoreErrors = false;
 		private static bool _dontDelete = true;
+		public static bool TestMode = false;
 		public static void Main(string[] args)
 		{
 			Compile();
@@ -197,7 +198,7 @@ namespace Compiler
 
 		public static void ErrorChecker(bool error, int errorCode, string Message)
 		{
-			if (error && !_ignoreErrors)
+			if (error && !_ignoreErrors && !TestMode)
 			{
 				Console.WriteLine("ERROR... " + Message);
 				Environment.Exit(errorCode);

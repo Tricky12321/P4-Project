@@ -25,8 +25,10 @@ namespace Unittests
         [SetUp]
         public void Init()
         {
-            CST = Program.BuildCST("kode_ast.giraph");
+			Program.TestMode = true;
+			CST = Program.BuildCST("kode_ast.giraph");
             AST = Program.BuildAST(CST);
+
         }
 
         [Test()]

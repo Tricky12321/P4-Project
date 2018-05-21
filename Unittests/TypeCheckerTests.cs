@@ -18,6 +18,7 @@ namespace Unittests
         [SetUp]
         public void Init()
         {
+			Program.TestMode = true;
             CST = Program.BuildCST("kode_TypeChecker.giraph");
             AST = Program.BuildAST(CST);
             SymbolTable = Program.BuildSymbolTable(AST as StartNode);

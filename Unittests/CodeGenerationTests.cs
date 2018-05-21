@@ -28,6 +28,7 @@ namespace Unittests
         [SetUp]
         public void Init()
         {
+			Program.TestMode = true;
             if (Utilities.IsWindows) {
                 CodeGeneratorOutputPath = "C:\\Users\\Ezzi\\Source\\Repos\\P4-Project\\Unittests\\CodeGeneration";
             }
