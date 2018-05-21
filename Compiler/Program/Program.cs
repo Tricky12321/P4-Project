@@ -20,6 +20,7 @@ namespace Compiler
 	{
 		private static bool _error = false;
 		private static bool _ignoreErrors = false;
+		private static bool _dontDelete = true;
 		public static void Main(string[] args)
 		{
 			Compile();
@@ -209,9 +210,13 @@ namespace Compiler
 		}
 
 		public static void FinishCompiler() {
-			File.Move(Utilities.CurrentPath + "/CodeGeneration/Program.exe", Utilities.CurrentPath + "/Compiled_Program.exe");
-			Directory.Delete(Utilities.CurrentPath + "/CodeGeneration", true);
-			Directory.Move(Utilities.CurrentPath + "/CodeGeneration_backup", Utilities.CurrentPath + "/CodeGeneration");
+			if (File.Exists(Utilities.CurrentPath + "/CodeGeneration/Program.exe")) {
+				File.Move(Utilities.CurrentPath + "/CodeGeneration/Program.exe", Utilities.CurrentPath + "/Compiled_Program.exe");
+            }
+			if (!_dontDelete) {
+				Directory.Delete(Utilities.CurrentPath + "/CodeGeneration", true);
+				Directory.Move(Utilities.CurrentPath + "/CodeGeneration_backup", Utilities.CurrentPath + "/CodeGeneration");
+            }
 		}
 	}
 }

@@ -31,7 +31,7 @@ namespace Compiler.CodeGeneration.GenerationCode
         }
 
 		private string HandleCSharpKeywords(string VariableName) {
-			return "_name" + VariableName;
+			return "_name" + VariableName.Replace(".","._name");
 		}
 
         public CodeGenerator(CodeWriter codeWriter)
@@ -91,6 +91,7 @@ namespace Compiler.CodeGeneration.GenerationCode
                 {
                     _currentStringBuilder.Append("= ");
                     node.Assignment.Accept(this);
+					_currentStringBuilder.Append(";\n");
                 }
                 else
                 {
@@ -189,7 +190,13 @@ namespace Compiler.CodeGeneration.GenerationCode
 
         public override void Visit(ParameterNode node)
         {
-            _currentStringBuilder.Append(ResolveTypeToCS(node.Type_enum));
+			if (node.IsCollection) {
+				_currentStringBuilder.Append("Collection<");
+				_currentStringBuilder.Append(ResolveTypeToCS(node.Type_enum));
+				_currentStringBuilder.Append("> ");
+			} else {
+				_currentStringBuilder.Append(ResolveTypeToCS(node.Type_enum));
+			}
 			_currentStringBuilder.Append(" " + HandleCSharpKeywords(node.Name));
         }
 
@@ -232,7 +239,7 @@ namespace Compiler.CodeGeneration.GenerationCode
 
                 }
                 Indent();
-				_currentStringBuilder.Append($"{HandleCSharpKeywords(node.Name)}.Vertices.Add({vertexName});\n\n");
+				_currentStringBuilder.Append($"{HandleCSharpKeywords(node.Name)}._nameVertices.Add({vertexName});\n\n");
             }
             Indent();
 			_currentStringBuilder.Append($"Edge _newEdge{HandleCSharpKeywords(node.Name)};\n");
@@ -264,10 +271,10 @@ namespace Compiler.CodeGeneration.GenerationCode
                 }
                 Indent();
 
-				_currentStringBuilder.Append($"{HandleCSharpKeywords(node.Name)}.Edges.Add({edgeName});\n\n");
+				_currentStringBuilder.Append($"{HandleCSharpKeywords(node.Name)}._nameEdges.Add({edgeName});\n\n");
             }
             Indent();
-			_currentStringBuilder.Append($"{HandleCSharpKeywords(node.Name)}.Directed = {ResolveBoolean(node.Directed)};\n\n");
+			_currentStringBuilder.Append($"{HandleCSharpKeywords(node.Name)}._nameDirected = {ResolveBoolean(node.Directed)};\n\n");
         }
 
         public override void Visit(VariableDclNode node)
@@ -411,16 +418,16 @@ namespace Compiler.CodeGeneration.GenerationCode
             }
             //_currentStringBuilder.Append($"{ResolveTypeToCS(node.Type_enum)} _val{node.ID};\n");
 
-            _currentStringBuilder.Append($"foreach (var val in {node.Variable}){{\n");
+			_currentStringBuilder.Append($"foreach (var {HandleCSharpKeywords("val")} in {HandleCSharpKeywords(node.Variable)}){{\n");
             if (node.WhereCondition != null)
             {
                 _currentStringBuilder.Append("if (");
-                _boolComparisonPrefix = "val.";
+				_boolComparisonPrefix = $"{HandleCSharpKeywords("val")}.";
                 node.WhereCondition.Children[0].Accept(this);
                 _boolComparisonPrefix = "";
                 _currentStringBuilder.Append("){\n");
             }
-            _currentStringBuilder.Append($"_col{node.ID}.Add(val);\n}}\n");
+			_currentStringBuilder.Append($"_col{node.ID}.Add({HandleCSharpKeywords("val")});\n}}\n");
             if (node.WhereCondition != null)
             {
                 _currentStringBuilder.Append("}\n");
@@ -624,19 +631,19 @@ namespace Compiler.CodeGeneration.GenerationCode
 
                         foreach (var val in ((GraphDeclVertexNode)item).ValueList)
                         {
-                            _currentStringBuilder.Append($"{_newVariable}.{val.Key} = ");
+							_currentStringBuilder.Append($"{_newVariable}.{HandleCSharpKeywords(val.Key)} = ");
                             val.Value.Accept(this);
                             _currentStringBuilder.Append($";\n");
                         }
                         if (item is GraphDeclEdgeNode)
                         {
                             Indent();
-							_currentStringBuilder.Append($"{HandleCSharpKeywords(node.ToVariable)}.Edges.Push({_newVariable});\n");
+							_currentStringBuilder.Append($"{HandleCSharpKeywords(node.ToVariable)}._nameEdges.Push({_newVariable});\n");
                         }
                         else
                         {
                             Indent();
-							_currentStringBuilder.Append($"{HandleCSharpKeywords(node.ToVariable)}.Vertices.Push({_newVariable});\n");
+							_currentStringBuilder.Append($"{HandleCSharpKeywords(node.ToVariable)}._nameVertices.Push({_newVariable});\n");
                         }
                     }
                 }
@@ -787,7 +794,6 @@ namespace Compiler.CodeGeneration.GenerationCode
 
         public override void Visit(VariableNode node)
         {
-
 			_currentStringBuilder.Append(HandleCSharpKeywords(node.Name));
         }
 

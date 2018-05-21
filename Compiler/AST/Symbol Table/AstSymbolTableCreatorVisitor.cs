@@ -193,7 +193,7 @@ namespace Compiler.AST.SymbolTable
 
             if (CheckAlreadyDeclared(node.Name))
             {
-                SymbolTable.EnterSymbol(node.Name, node.Type_enum);
+                SymbolTable.EnterSymbol(node.Name, node.Type_enum, node.IsCollection);
                 if (node.Parent != null && (node.Parent is FunctionNode))
                 {
 

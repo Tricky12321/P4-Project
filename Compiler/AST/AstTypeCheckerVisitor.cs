@@ -151,7 +151,11 @@ namespace Compiler.AST
                             inVariableType = _symbolTable.RetrieveSymbol(node.InVariable.Name);
                             variableType = _symbolTable.GetAttributeType(attNode.Name, inVariableType ?? default(AllType), out isAttributeCollection);
                         }
-                    }
+					} else if (Attributes.Item1 is VariableNode) {
+						_symbolTable.RetrieveSymbol(Attributes.Item1.Name, out isAttributeCollection);
+						_symbolTable.RetrieveSymbol(variableName, out isTypeCollection);
+                        
+					}
                     else
                     {
                         variableType = _symbolTable.RetrieveSymbol(variableName, out isTypeCollection);
@@ -657,7 +661,7 @@ namespace Compiler.AST
         public override void Visit(WhereNode node)
         {
             _symbolTable.SetCurrentNode(node);
-            VisitChildren(node);
+            VisitChildrenNewScope(node,BlockType.WhereStatement);
         }
 
         public override void Visit(GraphDeclVertexNode node)
@@ -885,7 +889,7 @@ namespace Compiler.AST
 
         public override void Visit(BoolComparisonNode node)
         {
-            VisitChildren(node);
+            //VisitChildren(node);
             _symbolTable.SetCurrentNode(node);
             AllType type_check;
             bool compare = false;
@@ -1395,7 +1399,11 @@ namespace Compiler.AST
             foreach (AbstractNode item in node.Children)
             {
                 AllType formalParameterType = predParaTypes[iterator];
+				item.Accept(this);
                 AllType actualParameterType = item.Type_enum;
+				if (actualParameterType == AllType.UNKNOWNTYPE) {
+					actualParameterType = _symbolTable.RetrieveSymbol(item.Name) ?? AllType.UNKNOWNTYPE;
+				}
                 if (formalParameterType == actualParameterType)
                 {
                     //typecorrect

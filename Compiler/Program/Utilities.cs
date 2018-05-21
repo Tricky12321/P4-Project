@@ -117,10 +117,10 @@ namespace Compiler
             });
 
             string[] files = Directory.GetFiles(SourcePath, "*.*", SearchOption.AllDirectories);
-
+            
             Parallel.ForEach(files, newPath =>
             {
-                File.Copy(newPath, newPath.Replace(SourcePath, DestinationPath));
+                File.Copy(newPath, newPath.Replace(SourcePath, DestinationPath),true);
             });
         }
     }

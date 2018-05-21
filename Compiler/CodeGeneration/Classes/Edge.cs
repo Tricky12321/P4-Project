@@ -5,8 +5,8 @@ namespace Giraph.Classes
     {
 		// This ensures, that edges cannot be changed after they are created.
         // But makes it possible to retrive information about them.
-        public Vertex From => _from;
-        public Vertex To => _to;
+		public Vertex _nameFrom => _from;
+		public Vertex _nameTo => _to;
 
 		private Vertex _from;
 		private Vertex _to;

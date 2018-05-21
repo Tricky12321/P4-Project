@@ -3,9 +3,9 @@ namespace Giraph.Classes
 {
     public class Graph
     {
-        public GraphCollection<Vertex> Vertices = new GraphCollection<Vertex>();
-        public GraphCollection<Edge> Edges = new GraphCollection<Edge>();
-        public bool Directed = false;
+        public GraphCollection<Vertex> _nameVertices = new GraphCollection<Vertex>();
+		public GraphCollection<Edge> _nameEdges = new GraphCollection<Edge>();
+		public bool _nameDirected = false;
 
         //EXTENSIONS HERE
         //*****EXTEND*****
