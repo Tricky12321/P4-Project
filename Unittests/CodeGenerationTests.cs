@@ -182,14 +182,14 @@ namespace Unittests
 		[TestCase("Graph _nameg1 = new Graph();", ExpectedResult = true)]
         [TestCase("Vertex _newVertex_nameg1;", ExpectedResult = true)]
 		[TestCase("Vertex _nameva = new Vertex();", ExpectedResult = true)]
-		[TestCase("_nameg1.Vertices.Add(_nameva);", ExpectedResult = true)]
+		[TestCase("_nameg1._nameVertices.Add(_nameva);", ExpectedResult = true)]
 		[TestCase("Vertex _namevb = new Vertex();", ExpectedResult = true)]
-		[TestCase("_nameg1.Edges.Add(_namex);", ExpectedResult = true)]
-		[TestCase("_nameg1.Edges.Add(_namez);", ExpectedResult = true)]
-        [TestCase("_nameg1.Vertices.Add(_namevb);", ExpectedResult = true)]
-        [TestCase("_nameg1.Vertices.Add(_namevc);", ExpectedResult = true)]
-        [TestCase("_nameg1.Vertices.Add(_namevd);", ExpectedResult = true)]
-        [TestCase("_nameg1.Vertices.Add(_nameve);", ExpectedResult = true)]
+		[TestCase("_nameg1._nameEdges.Add(_namex);", ExpectedResult = true)]
+		[TestCase("_nameg1._nameEdges.Add(_namez);", ExpectedResult = true)]
+        [TestCase("_nameg1._nameVertices.Add(_namevb);", ExpectedResult = true)]
+        [TestCase("_nameg1._nameVertices.Add(_namevc);", ExpectedResult = true)]
+        [TestCase("_nameg1._nameVertices.Add(_namevd);", ExpectedResult = true)]
+        [TestCase("_nameg1._nameVertices.Add(_nameve);", ExpectedResult = true)]
         [TestCase("Edge _newEdge_nameg1;", ExpectedResult = true)]
         [TestCase("Vertex _namevc = new Vertex();", ExpectedResult = true)]
         [TestCase("Vertex _namevd = new Vertex();", ExpectedResult = true)]
@@ -197,20 +197,20 @@ namespace Unittests
         [TestCase("Edge _namex = new Edge(_namevb,_namevd);", ExpectedResult = true)]
         [TestCase("Edge _namey = new Edge(_namevd,_nameve);", ExpectedResult = true)]
         [TestCase("Edge _namez = new Edge(_nameva,_namevc);", ExpectedResult = true)]
-		[TestCase("_nameg1.Edges.Add(_namey);", ExpectedResult = true)]
-		[TestCase("_nameg1.Directed = false;", ExpectedResult = true)]
+		[TestCase("_nameg1._nameEdges.Add(_namey);", ExpectedResult = true)]
+		[TestCase("_nameg1._nameDirected = false;", ExpectedResult = true)]
 
 		[TestCase("Graph _nameg2 = new Graph();", ExpectedResult = true)]
         [TestCase("Vertex _newVertex_nameg2;", ExpectedResult = true)]
 		[TestCase("_newVertex_nameg2 = new Vertex();", ExpectedResult = true)]
-		[TestCase("_nameg2.Vertices.Add(_newVertex_nameg2);", ExpectedResult = true)]
+		[TestCase("_nameg2._nameVertices.Add(_newVertex_nameg2);", ExpectedResult = true)]
         [TestCase("Edge _newEdge_nameg2;", ExpectedResult = true)]
-		[TestCase("_nameg2.Directed = false;", ExpectedResult = true)]
+		[TestCase("_nameg2._nameDirected = false;", ExpectedResult = true)]
 
 		[TestCase("Graph _nameg3 = new Graph();", ExpectedResult = false)]
         [TestCase("Vertex _newVertex_nameg3;", ExpectedResult = false)]
-		[TestCase("_nameg3.Vertices.Add(_newVertex_nameg3);", ExpectedResult = false)]
-		[TestCase("_nameg3.Directed = false;", ExpectedResult = false)]
+		[TestCase("_nameg3._nameVertices.Add(_newVertex_nameg3);", ExpectedResult = false)]
+		[TestCase("_nameg3._nameDirected = false;", ExpectedResult = false)]
 
         public bool GraphDeclarationCodeTest(string Code)
         {
@@ -254,8 +254,8 @@ namespace Unittests
         }
 
 
-		[TestCase("foreach (Vertex _namev in _nameg1.Vertices)", ExpectedResult = true)]
-		[TestCase("foreach (Edge _namee in _nameg1.Edges)", ExpectedResult = true)]
+		[TestCase("foreach (Vertex _namev in _nameg1._nameVertices)", ExpectedResult = true)]
+		[TestCase("foreach (Edge _namee in _nameg1._nameEdges)", ExpectedResult = true)]
         [TestCase("foreach ()", ExpectedResult = false)]
         public bool ForeachCodeTest(string Code)
         {
