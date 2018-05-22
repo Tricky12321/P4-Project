@@ -154,17 +154,16 @@ namespace Compiler.AST
         {
             BoolComparisonNode BCompare = new BoolComparisonNode(context.Start.Line, context.Start.Column);
             // Checks if there is a prefix, if there is, add it to the Node
-            if (context.prefix != null)
+			// TODO: Se om dette virker...
+			if (context.expression() != null && !(context.Parent is GiraphParser.BoolComparisonsContext)) {
+				return Visit(context.expression());
+			}
+
+			if (context.prefix != null)
             {
                 BCompare.Prefix = context.prefix.Text;
                 BCompare.AdoptChildren(Visit(context.boolComparisons(0)));
             }
-            // Checks if there is a Suffix, if there is, add it to the Node
-            /*if (context.suffix != null)
-            {
-                BCompare.Suffix = context.suffix.Text;
-                BCompare.AdoptChildren(Visit(context.boolComparisons(0)));
-            }*/
             // Check if there are left and right "()" around the boolcomparison
             if (context.rightP != null && context.leftP != null && context.boolComparisons() != null)
             {
