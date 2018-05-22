@@ -11,7 +11,9 @@ namespace Compiler.CodeGeneration.GenerationCode
         public StringBuilder MainBody = new StringBuilder();
         public StringBuilder GraphExtends = new StringBuilder();
         public StringBuilder EdgeExtends = new StringBuilder();
-        public StringBuilder VertexExtends = new StringBuilder();
+		public StringBuilder VertexExtends = new StringBuilder();
+		public StringBuilder GlobalSet = new StringBuilder();
+        public StringBuilder Global = new StringBuilder();
 
 
 		private string _programFile = Utilities.CurrentPath+"/CodeGeneration/Program.cs";
@@ -22,11 +24,14 @@ namespace Compiler.CodeGeneration.GenerationCode
         private string _functions = "*****FUNCTIONS*****";
         private string _global = "*****GLOBAL*****";
         private string _extend = "//*****EXTEND*****";
+		private string _globalSet = "*****GLOBAL_SET*****";
 
         public void FillMainBody()
         {
             string text = File.ReadAllText(_programFile);
-            text = text.Replace(_mainBody, MainBody.ToString());
+			text = text.Replace(_mainBody, MainBody.ToString());
+			text = text.Replace(_global, Global.ToString());
+            text = text.Replace(_globalSet, GlobalSet.ToString());
             File.WriteAllText(_programFile, text);
         }
 

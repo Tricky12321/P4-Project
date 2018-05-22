@@ -199,20 +199,16 @@ namespace Unittests
         [TestCase("Edge _namey = new Edge(_namevd,_nameve);", ExpectedResult = true)]
         [TestCase("Edge _namez = new Edge(_nameva,_namevc);", ExpectedResult = true)]
 		[TestCase("_nameg1._nameEdges.Add(_namey);", ExpectedResult = true)]
-		[TestCase("_nameg1._nameDirected = false;", ExpectedResult = true)]
 
 		[TestCase("Graph _nameg2 = new Graph();", ExpectedResult = true)]
         [TestCase("Vertex _newVertex_nameg2;", ExpectedResult = true)]
 		[TestCase("_newVertex_nameg2 = new Vertex();", ExpectedResult = true)]
 		[TestCase("_nameg2._nameVertices.Add(_newVertex_nameg2);", ExpectedResult = true)]
         [TestCase("Edge _newEdge_nameg2;", ExpectedResult = true)]
-		[TestCase("_nameg2._nameDirected = false;", ExpectedResult = true)]
 
 		[TestCase("Graph _nameg3 = new Graph();", ExpectedResult = false)]
         [TestCase("Vertex _newVertex_nameg3;", ExpectedResult = false)]
 		[TestCase("_nameg3._nameVertices.Add(_newVertex_nameg3);", ExpectedResult = false)]
-		[TestCase("_nameg3._nameDirected = false;", ExpectedResult = false)]
-
         public bool GraphDeclarationCodeTest(string Code)
         {
             string FileContent = File.ReadAllText(ProgramCSFile);

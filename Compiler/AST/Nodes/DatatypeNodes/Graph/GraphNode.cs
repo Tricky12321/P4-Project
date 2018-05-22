@@ -8,7 +8,7 @@ namespace Compiler.AST.Nodes.DatatypeNodes
         public List<GraphDeclVertexNode> Vertices = new List<GraphDeclVertexNode>();
 
         public bool Directed = false;
-
+		public bool Global = false;
         public GraphNode(int LineNumber, int CharIndex) : base(LineNumber, CharIndex)
         {
             

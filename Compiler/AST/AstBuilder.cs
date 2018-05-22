@@ -16,7 +16,6 @@ namespace Compiler.AST
     internal class AstBuilder : GiraphParserBaseVisitor<AbstractNode>
     {
         private string _funcName;
-
         public AbstractNode root;
         public override AbstractNode VisitStart([NotNull] GiraphParser.StartContext context)
         {
@@ -134,36 +133,7 @@ namespace Compiler.AST
                     GNode.Edges.Add(ENode);
                 }
             }
-
-            // Handle the setQuery Nodes, if there are any
-            foreach (var Child in context.graphDclBlock().graphSetQuery())
-            {
-                GNode.AdoptChildren(Visit(Child));
-            }
-
-            foreach (var Child in GNode.Children)
-            {
-                if ((Child as GraphSetQuery).Attributes.Item1.Name == "'Directed'")
-                {
-                    GNode.Directed = (Child as GraphSetQuery).ToExpressionString() == "true";
-                }
-            }
-
             return GNode;
-        }
-
-        public override AbstractNode VisitGraphSetQuery([NotNull] GiraphParser.GraphSetQueryContext context)
-        {
-            GraphSetQuery SetQuery = new GraphSetQuery(context.Start.Line, context.Start.Column);
-
-            VariableAttributeNode attribute = Visit(context.GetChild(1).GetChild(0)) as VariableAttributeNode;
-
-            attribute.ClassType = AllType.GRAPH;
-            ExpressionNode expression = Visit(context.GetChild(1).GetChild(2)) as ExpressionNode;
-            string expType = context.GetChild(1).GetChild(1).GetText();
-            SetQuery.Attributes = (Tuple.Create<VariableAttributeNode, string, ExpressionNode>(attribute, expType, expression));
-
-            return SetQuery;
         }
 
         public override AbstractNode VisitWhileLoop([NotNull] GiraphParser.WhileLoopContext context)

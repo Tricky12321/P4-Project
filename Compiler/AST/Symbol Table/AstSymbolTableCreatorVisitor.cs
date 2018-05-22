@@ -14,6 +14,8 @@ namespace Compiler.AST.SymbolTable
         public SymTable SymbolTable = new SymTable();
         private bool _initialBuildDone = false;
         public bool MainDefined = false;
+		public bool Global = false;
+        
         public bool CheckDeclared(string name)
         {
             if (name != null)
@@ -204,11 +206,11 @@ namespace Compiler.AST.SymbolTable
         public override void Visit(StartNode node)
         {
 
-            // Startnode is responcible for ignoring top-down programming
-            // This is done by visiting the diffent global nodes in the correct order, to ensure that functions, predicate, and extend nodes
-            // can see each other when the program is run the first time
-            // This is very important because if this was not the case, predicates wouldnt be able to use extend attributes of classes.
-
+			// Startnode is responcible for ignoring top-down programming
+			// This is done by visiting the diffent global nodes in the correct order, to ensure that functions, predicate, and extend nodes
+			// can see each other when the program is run the first time
+			// This is very important because if this was not the case, predicates wouldnt be able to use extend attributes of classes.
+			Global = true;
 
 
             /* Inspections order of AST nodes. VERY IMPORTANT
@@ -225,12 +227,18 @@ namespace Compiler.AST.SymbolTable
             node.Children.Where(x => x is ExtendNode).ToList().ForEach(x => x.Accept(this));
             // Index all function nodes
             FunctionNodes = node.Children.Where(x => x is FunctionNode).ToList();
-            // Accept all the function nodes, so they can enter themselfes in the symboltable
-            // Also to enter all the parameters into the symbol table
-            FunctionNodes.ForEach(x => x.Accept(this));
+			// Accept all the function nodes, so they can enter themselfes in the symboltable
+			// Also to enter all the parameters into the symbol table
+			FunctionNodes.ForEach(x => x.Accept(this));
             // grab all predicate nodes, that are not in a function, and add them to a list
             PredicateNodes = node.Children.Where(x => x is PredicateNode).ToList();
+			var VariableNodes = node.Children.Where(x => x is VariableDclNode).ToList();
+			var GraphNodes = node.Children.Where(x => x is GraphNode).ToList();
             // Accept them all, but dont acces their body
+			GraphNodes.ForEach(x => (x as GraphNode).Global = true);
+			GraphNodes.ForEach(x => x.Accept(this));
+			VariableNodes.ForEach(x => (x as VariableDclNode).Global = true);
+			VariableNodes.ForEach(x => x.Accept(this));
             PredicateNodes.ForEach(x => x.Accept(this));
             // Now that everything is declared for both functions and predicates, Visit their body(children)
             FunctionNodes.ForEach(x => VisitChildrenNewScope(x));
@@ -481,12 +489,6 @@ namespace Compiler.AST.SymbolTable
             }
 
             VisitChildrenNewScope(node.ElseCodeBlock, BlockType.ElseStatement);
-        }
-
-        public override void Visit(GraphSetQuery node)
-        {
-            SymbolTable.SetCurrentNode(node);
-            SymbolTable.AttributeDefined(node.Name, AllType.GRAPH);
         }
 
         public override void Visit(DeclarationNode node)

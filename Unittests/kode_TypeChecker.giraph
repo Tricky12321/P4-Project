@@ -47,7 +47,7 @@ Main -> void () {
     [
         vertex va(), vb(), vc(), vd(), ve();
         edge x(vb, vd), y(vd, ve), z(va, vc);
-        set 'Directed' = false;
+
     ]
 
 	collection int tim;
@@ -93,7 +93,7 @@ Main -> void () {
     [
 		vertex vx(intSom = 4), vxx(intSom = 3);
 		edge ex(vx, vxx, intSom = 5);
-		set 'Directed' = 25;
+        
 	]
 
 
@@ -162,8 +162,8 @@ anothervoidFunc -> void (void anothervoidparameter){
     [
 		vertex vvvx(intSom = 4), vxxxx(intSom = 3);
 		edge exxxx(vvvx, vxxxx, intSom = 5);
-		set 'Directed' = 10.5;
-	]
+
+    ]
 	add vertex vcmmm(intSom = 73.5) to g3;
 
 	bool testbool = hej2 < ecol;

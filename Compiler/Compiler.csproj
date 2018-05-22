@@ -1,5 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="..\packages\NUnit.3.10.1\build\NUnit.props" Condition="Exists('..\packages\NUnit.3.10.1\build\NUnit.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -91,7 +90,6 @@
     <Compile Include="AST\Nodes\CodeBlockNode.cs" />
     <Compile Include="AST\Nodes\CodeBlockContentNode.cs" />
     <Compile Include="AST\Nodes\DatatypeNodes\Graph\GraphNode.cs" />
-    <Compile Include="AST\Nodes\DatatypeNodes\Graph\GraphSetQuery.cs" />
     <Compile Include="AST\Nodes\BoolComparisonNode.cs" />
     <Compile Include="AST\Nodes\ExpressionNode.cs" />
     <Compile Include="AST\Nodes\DatatypeNodes\VariableNode.cs" />

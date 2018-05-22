@@ -33,7 +33,6 @@ namespace Compiler.AST
         public abstract void Visit(VariableDclNode node);
         public abstract void Visit(GraphDeclVertexNode node);
         public abstract void Visit(GraphDeclEdgeNode node);
-        public abstract void Visit(GraphSetQuery node);
         public abstract void Visit(SetQueryNode node);
         public abstract void Visit(WhereNode node);
         public abstract void Visit(ExtendNode node);

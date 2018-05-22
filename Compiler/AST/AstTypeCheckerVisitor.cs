@@ -673,13 +673,10 @@ namespace Compiler.AST
                 item.Value.Accept(this);
                 AllType? typeOfKey = _symbolTable.GetAttributeType(item.Key, AllType.VERTEX);
                 ExpressionNode expNode = (ExpressionNode)item.Value.Children[0];
-                if (typeOfKey == expNode.OverAllType)
+				if (!(typeOfKey == expNode.OverAllType))
                 {
+					_symbolTable.TypeExpressionMismatch();
 
-                }
-                else
-                {
-                    _symbolTable.TypeExpressionMismatch();
                 }
             }
         }
@@ -713,14 +710,14 @@ namespace Compiler.AST
         {
             _symbolTable.SetCurrentNode(node);
             VisitChildren(node);
-            foreach (AbstractNode item in node.Edges)
-            {
-                item.Accept(this);
-            }
             foreach (AbstractNode item in node.Vertices)
             {
                 item.Accept(this);
             }
+			foreach (AbstractNode item in node.Edges)
+			{
+				item.Accept(this);
+			}
         }
 
         public override void Visit(FunctionNode node)
@@ -772,24 +769,6 @@ namespace Compiler.AST
                 }
             }
             _symbolTable.CloseScope();
-        }
-
-        public override void Visit(GraphSetQuery node)
-        {
-            _symbolTable.SetCurrentNode(node);
-            string targetName = node.Attributes.Item1.Name;
-            AllType? targetType = _symbolTable.GetAttributeType(targetName, AllType.GRAPH);
-            node.Attributes.Item3.Accept(this);
-            AllType? assignedType = node.Attributes.Item3.OverAllType;
-
-            if (targetType == assignedType)
-            {
-                //both the attribute type and the assigned value are of the same type.
-            }
-            else
-            {
-                _symbolTable.WrongTypeError(node.Attributes.Item1.Name, node.Attributes.Item3.Name);
-            }
         }
 
         public override void Visit(DeclarationNode node)
@@ -1205,15 +1184,15 @@ namespace Compiler.AST
             {
                 AllType? variableExpressionType = _symbolTable.RetrieveSymbol(node.Assignment.Name);
             }
+            
 
-            _symbolTable.SetCurrentNode(node);
             if (node.Parent is ExpressionNode expNode)
             {
-                expNode.OverAllType = _symbolTable.RetrieveSymbol(node.Name);
+                expNode.OverAllType = _symbolTable.RetrieveSymbol(node.Name, false);
             }
-            node.Type = _symbolTable.RetrieveSymbol(node.Name).ToString();
+            node.Type = _symbolTable.RetrieveSymbol(node.Name, false).ToString();
         }
-
+        
         public override void Visit(CodeBlockNode node)
         {
             _symbolTable.SetCurrentNode(node);

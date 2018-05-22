@@ -121,12 +121,7 @@ namespace Compiler.AST
             }
             ProgramCode.Append(")");
         }
-
-        public override void Visit(GraphSetQuery node)
-        {
-            Debug.Print("GraphSetQueryNode");
-            ProgramCode.Append($"SET {node.Attributes.Item1.Name} = {node.Attributes.Item3.ExpressionString()};\n");
-        }
+       
 
         public override void Visit(SetQueryNode node)
         {

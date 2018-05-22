@@ -464,12 +464,6 @@ public interface IGiraphParserVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <return>The visitor result.</return>
 	Result VisitSetQuery([NotNull] GiraphParser.SetQueryContext context);
 	/// <summary>
-	/// Visit a parse tree produced by <see cref="GiraphParser.graphSetQuery"/>.
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	/// <return>The visitor result.</return>
-	Result VisitGraphSetQuery([NotNull] GiraphParser.GraphSetQueryContext context);
-	/// <summary>
 	/// Visit a parse tree produced by <see cref="GiraphParser.setExpressionAtri"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>

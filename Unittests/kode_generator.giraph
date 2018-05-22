@@ -96,13 +96,13 @@ Main -> void () {
     [
         vertex va(), vb(), vc(), vd(), ve();
         edge x(vb, vd), y(vd, ve), z(va, vc);
-        set 'Directed' = false;
+
     ]
 
     graph g2
     [
         vertex (), (), (), (), ();
-        set 'Directed' = false;
+
     ] 
 
     for 1 to 10 : 1

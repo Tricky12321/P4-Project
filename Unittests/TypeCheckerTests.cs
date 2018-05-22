@@ -125,13 +125,6 @@ namespace Unittests
             Assert.IsTrue(errorlist.Contains(errorMessage));
         }
 
-        [TestCase("Variable 'Directed' and  are missmatch of types. Line number 96:19")]
-        [TestCase("Variable 'Directed' and  are missmatch of types. Line number 165:19")]
-        public void graphSetErrors(string errorMessage)
-        {
-            Assert.IsTrue(errorlist.Contains(errorMessage));
-        }
-
         [TestCase("Target variable: fratim is not of type collection 71:25")]
         [TestCase("It is not possible to declare a variable with the same variable. Duplicates used: fratim2 100:26")]
         [TestCase("There is a type mismatch in the expression on 102:26")]
