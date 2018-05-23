@@ -88,7 +88,7 @@ namespace Compiler.CodeGeneration.GenerationCode
 		{
 			if (node.CollectionDcl)
 			{
-				Indent();
+
 				_currentStringBuilder.Append($"Collection<{ResolveTypeToCS(node.Type_enum)}> ");
 				_currentStringBuilder.Append(HandleCSharpKeywords(node.Name));
 				if (node.Assignment != null)
@@ -104,7 +104,7 @@ namespace Compiler.CodeGeneration.GenerationCode
 			}
 			else
 			{
-				Indent();
+
 				_currentStringBuilder.Append(ResolveTypeToCS(node.Type_enum) + " ");
 				_currentStringBuilder.Append(HandleCSharpKeywords(node.Name));
 				if (node.Assignment != null)
@@ -134,15 +134,15 @@ namespace Compiler.CodeGeneration.GenerationCode
 			if (node.Name == "Main")
 			{
 				_currentStringBuilder = MainBody;
-				_tabCount++;
+
 				VisitChildren(node);
-				_tabCount--;
+
 			}
 			else
 			{
 				_currentStringBuilder = Functions;
 				_currentStringBuilder.Append("\n");
-				Indent();
+
 				_currentStringBuilder.Append($"public static");
 				if (node.IsCollection)
 				{
@@ -172,13 +172,13 @@ namespace Compiler.CodeGeneration.GenerationCode
 					}
 				}
 				_currentStringBuilder.Append(") \n");
-				Indent();
+
 				_currentStringBuilder.Append("{\n");
-				_tabCount++;
+
 				VisitChildren(node);
-				_tabCount--;
+
 				_currentStringBuilder.Append("\n");
-				Indent();
+
 				_currentStringBuilder.Append("}");
 			}
 			_currentStringBuilder = Functions;
@@ -186,7 +186,7 @@ namespace Compiler.CodeGeneration.GenerationCode
 
 		public override void Visit(ReturnNode node)
 		{
-			Indent();
+
 			_currentStringBuilder.Append("return ");
 			node.Children[0].Accept(this);
 			_currentStringBuilder.Append(";\n");
@@ -214,30 +214,32 @@ namespace Compiler.CodeGeneration.GenerationCode
 
 		public override void Visit(GraphNode node)
 		{
-			
+
 			StringBuilder OldStringbuilder = _currentStringBuilder;
 			if (node.Global)
 			{
 				_currentStringBuilder = Global;
 				_currentStringBuilder.Append("\n");
-                Indent();
+
 				_currentStringBuilder.Append("public static ");
-                _currentStringBuilder.Append($"Graph {HandleCSharpKeywords(node.Name)} = new Graph();\n\n");
-            }
-            else
-            {
+				_currentStringBuilder.Append($"Graph {HandleCSharpKeywords(node.Name)} = new Graph();\n\n");
+			}
+			else
+			{
 				_currentStringBuilder.Append("\n");
-                Indent();
+
 				_currentStringBuilder.Append($"Graph {HandleCSharpKeywords(node.Name)} = new Graph();\n\n");
 
 			}
 			if (node.Global)
 			{
 				_currentStringBuilder = Global;
-				Indent();
+
 				_currentStringBuilder.Append($"public static Vertex _newVertex{HandleCSharpKeywords(node.Name)};\n");
-			} else {
-				Indent();
+			}
+			else
+			{
+
 				_currentStringBuilder.Append($"Vertex _newVertex{HandleCSharpKeywords(node.Name)};\n");
 
 			}
@@ -248,12 +250,14 @@ namespace Compiler.CodeGeneration.GenerationCode
 				if (vertex.Name == null)
 				{
 					vertexName = $"_newVertex{HandleCSharpKeywords(node.Name)}";
-					Indent();
+
 					if (node.Global)
 					{
 						_currentStringBuilder = Global;
 						_currentStringBuilder.Append($"public static {vertexName} = new Vertex();\n");
-					} else {
+					}
+					else
+					{
 						_currentStringBuilder.Append($"{vertexName} = new Vertex();\n");
 					}
 					_currentStringBuilder = OldStringbuilder;
@@ -261,13 +265,15 @@ namespace Compiler.CodeGeneration.GenerationCode
 				else
 				{
 					vertexName = HandleCSharpKeywords(vertex.Name);
-                    if (node.Global)
-                    {
-                        _currentStringBuilder = Global;
-						Indent();
+					if (node.Global)
+					{
+						_currentStringBuilder = Global;
+
 						_currentStringBuilder.Append($"public static Vertex {vertexName} = new Vertex();\n");
-					} else{
-						Indent();
+					}
+					else
+					{
+
 						_currentStringBuilder.Append($"Vertex {vertexName} = new Vertex();\n");
 					}
 					_currentStringBuilder = OldStringbuilder;
@@ -279,7 +285,7 @@ namespace Compiler.CodeGeneration.GenerationCode
 					{
 						_currentStringBuilder = GlobalSet;
 					}
-					Indent();
+
 					_currentStringBuilder.Append($"{vertexName}.{HandleCSharpKeywords(value.Key)} = ");
 					value.Value.Accept(this);
 					_currentStringBuilder.Append($";\n");
@@ -290,17 +296,19 @@ namespace Compiler.CodeGeneration.GenerationCode
 				{
 					_currentStringBuilder = GlobalSet;
 				}
-				Indent();
+
 				_currentStringBuilder.Append($"{HandleCSharpKeywords(node.Name)}._nameVertices.Add({vertexName});\n\n");
 				_currentStringBuilder = OldStringbuilder;
 			}
-            if (node.Global)
-            {
-                _currentStringBuilder = Global;
-				Indent();
-                _currentStringBuilder.Append($"public static Edge _newEdge{HandleCSharpKeywords(node.Name)};\n");
-			} else {
-				Indent();
+			if (node.Global)
+			{
+				_currentStringBuilder = Global;
+
+				_currentStringBuilder.Append($"public static Edge _newEdge{HandleCSharpKeywords(node.Name)};\n");
+			}
+			else
+			{
+
 				_currentStringBuilder.Append($"Edge _newEdge{HandleCSharpKeywords(node.Name)};\n");
 			}
 			_currentStringBuilder = OldStringbuilder;
@@ -313,13 +321,13 @@ namespace Compiler.CodeGeneration.GenerationCode
 					if (node.Global)
 					{
 						_currentStringBuilder = Global;
-						Indent();
+
 						_currentStringBuilder.Append($"public static {edgeName} = new Edge({HandleCSharpKeywords(edge.VertexNameFrom)},{HandleCSharpKeywords(edge.VertexNameTo)});\n");
 
 					}
 					else
 					{
-						Indent();
+
 						_currentStringBuilder.Append($"{edgeName} = new Edge({HandleCSharpKeywords(edge.VertexNameFrom)},{HandleCSharpKeywords(edge.VertexNameTo)});\n");
 					}
 					_currentStringBuilder = OldStringbuilder;
@@ -330,13 +338,13 @@ namespace Compiler.CodeGeneration.GenerationCode
 					if (node.Global)
 					{
 						_currentStringBuilder = Global;
-						Indent();
+
 						_currentStringBuilder.Append($"public static Edge {edgeName} = new Edge({HandleCSharpKeywords(edge.VertexNameFrom)},{HandleCSharpKeywords(edge.VertexNameTo)});\n");
 
 					}
 					else
 					{
-						Indent();
+
 						_currentStringBuilder.Append($"Edge {edgeName} = new Edge({HandleCSharpKeywords(edge.VertexNameFrom)},{HandleCSharpKeywords(edge.VertexNameTo)});\n");
 
 					}
@@ -345,11 +353,11 @@ namespace Compiler.CodeGeneration.GenerationCode
 
 				foreach (KeyValuePair<string, AbstractNode> value in edge.ValueList)
 				{
-                    if (node.Global)
-                    {
-                        _currentStringBuilder = GlobalSet;
-                    }
-					Indent();
+					if (node.Global)
+					{
+						_currentStringBuilder = GlobalSet;
+					}
+
 					_currentStringBuilder.Append($"{edgeName}.{HandleCSharpKeywords(value.Key)} = ");
 					value.Value.Accept(this);
 					_currentStringBuilder.Append($";\n");
@@ -359,7 +367,7 @@ namespace Compiler.CodeGeneration.GenerationCode
 				{
 					_currentStringBuilder = GlobalSet;
 				}
-				Indent();
+
 				_currentStringBuilder.Append($"{HandleCSharpKeywords(node.Name)}._nameEdges.Add({edgeName});\n\n");
 				_currentStringBuilder = OldStringbuilder;
 			}
@@ -373,11 +381,11 @@ namespace Compiler.CodeGeneration.GenerationCode
 				_currentStringBuilder = Global;
 			}
 			_currentStringBuilder.Append("\n");
-			Indent();
+
 			if (node.Global)
 			{
 				_currentStringBuilder.Append("public static ");
-            }
+			}
 
 			_currentStringBuilder.Append(ResolveTypeToCS(node.Type_enum) + " ");
 			_currentStringBuilder.Append(HandleCSharpKeywords(node.Name));
@@ -426,47 +434,43 @@ namespace Compiler.CodeGeneration.GenerationCode
 					AbstractNode expression = item.Item3;
 					if (IsCollection)
 					{
-						Indent();
+
 						_currentStringBuilder.Append($"foreach (var {HandleCSharpKeywords("val")} in {HandleCSharpKeywords(InVaraible)}) \n");
-						Indent();
+
 						_currentStringBuilder.Append($"{{\n");
-						_tabCount++;
+
 						//Foreach body
 						if (node.WhereCondition != null)
 						{
-							Indent();
 							_currentStringBuilder.Append($"if (");
 							node.WhereCondition.Accept(this);
-							_currentStringBuilder.Append($")\n");
-							Indent();
-							_currentStringBuilder.Append($"{{\n");
+							_currentStringBuilder.Append($")\n {{\n");
+
 							// IfBody
-							_tabCount++;
-							Indent();
+
+
 							_currentStringBuilder.Append($"{HandleCSharpKeywords("val")}.{HandleCSharpKeywords(VariableName)} {AssignOperator} ");
 							expression.Accept(this);
-							_currentStringBuilder.Append($";\n");
+							_currentStringBuilder.Append($";\n }}");
 
-							Indent();
-							_currentStringBuilder.Append($"}}");
+
 						}
 						else
 						{
-							Indent();
+
 							_currentStringBuilder.Append($"{HandleCSharpKeywords("val")}.{HandleCSharpKeywords(VariableName)} {AssignOperator} ");
 							expression.Accept(this);
 							_currentStringBuilder.Append($";\n");
 
 						}
 
-						_currentStringBuilder.Append($"\n");
-						_tabCount--;
-						Indent();
-						_currentStringBuilder.Append($"}}\n");
+						_currentStringBuilder.Append($"\n }}\n");
+
+
 					}
 					else
 					{
-						Indent();
+
 						_currentStringBuilder.Append($"{HandleCSharpKeywords(InVaraible)}.{HandleCSharpKeywords(VariableName)} {AssignOperator} ");
 						expression.Accept(this);
 						_currentStringBuilder.Append($";\n");
@@ -491,7 +495,7 @@ namespace Compiler.CodeGeneration.GenerationCode
 						expression = item.Item3;
 					}
 
-					Indent();
+
 					_currentStringBuilder.Append($"{HandleCSharpKeywords(VariableName)} {AssignOperator} ");
 					expression.Accept(this);
 					_currentStringBuilder.Append($";\n");
@@ -501,7 +505,7 @@ namespace Compiler.CodeGeneration.GenerationCode
 
 		public override void Visit(SelectAllQueryNode node)
 		{
-			_currentStringBuilder.Append($"_funSelectAllQuery{node.ID}{functionID}();\nCollection<{ResolveTypeToCS(node.Type_enum)}> _funSelectAllQuery{node.ID}{functionID++}(){{\n");
+			_currentStringBuilder.Append($"_funSelectAllQuery{node.ID}_{functionID}();\nCollection<{ResolveTypeToCS(node.Type_enum)}> _funSelectAllQuery{node.ID}_{functionID++}(){{\n");
 			_currentStringBuilder.Append($"Collection<{ResolveTypeToCS(node.Type_enum)}> _col{node.ID} = new Collection<{ResolveTypeToCS(node.Type_enum)}>();\n");
 
 			if (node.Type == "void")
@@ -574,22 +578,15 @@ namespace Compiler.CodeGeneration.GenerationCode
 			string placeValString = $"_val{node.ID}";
 			string placeAttriString = node.Attribute == null ? "" : $".{node.Attribute.Replace("'", "")}";
 			string boolOpString = maxIfTrue ? ">" : "<";
-
-			extractString.Append($"{placeFuncString}{node.ID}_{functionID}();\n{ResolveTypeToCS(node.Type_enum)} {placeFuncString}{node.ID}_{functionID++}(){{\n");
-
-			extractString.Append($"{ResolveTypeToCS(node.Type_enum)} {placeValString} = {HandleCSharpKeywords(node.Variable)}.First();\ndouble placeDouble = {HandleCSharpKeywords(node.Variable)}.First(){placeAttriString};\n");
-
+			extractString.Append($"{placeFuncString}{node.ID}_{functionID}();" +
+			                     $"\n{ResolveTypeToCS(node.Type_enum)} {placeFuncString}{node.ID}_{functionID++}(){{\n");
+			extractString.Append($"{ResolveTypeToCS(node.Type_enum)} {placeValString} = {HandleCSharpKeywords(node.Variable)}.First();" +
+			                     $"double placeDouble = {HandleCSharpKeywords(node.Variable)}.First(){placeAttriString};\n");
 			extractString.Append($"foreach (var item in {HandleCSharpKeywords(node.Variable)}){{\n");
-
 			extractString.Append($"if(item{placeAttriString} {boolOpString} placeDouble){{\n");
 			extractString.Append($"{placeValString} = item;\nplaceDouble = item{placeAttriString};\n}}\n}}\n");
-
-
-
 			extractString.Append($"{HandleCSharpKeywords(node.Variable)}.Remove({placeValString});\n");
-
 			extractString.Append($"return {placeValString};\n}}\n\n");
-
 			return extractString;
 		}
 
@@ -610,48 +607,24 @@ namespace Compiler.CodeGeneration.GenerationCode
 			// if (boolComparison) {statement}
 			// elseif (boolComparison) {statement} (unlimited times...)
 			// else {statement}
-			_currentStringBuilder.Append("\n");
-			Indent();
-			_currentStringBuilder.Append("if (");
+			_currentStringBuilder.Append("\n if(");
 			node.IfCondition.Accept(this);
-			_currentStringBuilder.Append(") \n");
-			Indent();
-			_currentStringBuilder.Append("{\n");
-			_tabCount++;
+			_currentStringBuilder.Append(") \n {\n");
 			node.IfCodeBlock.Accept(this);
-			_tabCount--;
-			_currentStringBuilder.Append("\n");
-			Indent();
-			_currentStringBuilder.Append("} \n");
+			_currentStringBuilder.Append("\n } \n");
 			foreach (var item in node.ElseIfList)
 			{
-				_currentStringBuilder.Append("\n");
-				Indent();
-				_currentStringBuilder.Append("else if (");
+				_currentStringBuilder.Append("\n else if (");
 				item.Item1.Accept(this); // BoolComparison
-				_currentStringBuilder.Append(") \n");
-				Indent();
-				_currentStringBuilder.Append("{");
-				_tabCount++;
+				_currentStringBuilder.Append(") \n {");
 				item.Item2.Accept(this); // Codeblock
-				_tabCount--;
-				_currentStringBuilder.Append("\n ");
-				Indent();
-				_currentStringBuilder.Append("}\n ");
+				_currentStringBuilder.Append("\n }\n");
 			}
 			if (node.ElseCodeBlock != null)
 			{
-				_currentStringBuilder.Append("\n");
-				Indent();
-				_currentStringBuilder.Append("else");
-				Indent();
-				_currentStringBuilder.Append("{");
-				_tabCount++;
+				_currentStringBuilder.Append("\n else {");
 				node.ElseCodeBlock.Accept(this);
-				_tabCount--;
-				_currentStringBuilder.Append("\n");
-				Indent();
-				_currentStringBuilder.Append("} \n");
+				_currentStringBuilder.Append("\n } \n");
 			}
 		}
 
@@ -716,26 +689,34 @@ namespace Compiler.CodeGeneration.GenerationCode
 				{
 					if (item is GraphDeclVertexNode || item is GraphDeclEdgeNode)
 					{
-						string _newVariable = _newVariabelCounter;
+						string _newVariable;
+						if (item.Name != null && item.Name != "")
+						{
+							_newVariable = item.Name;
+						}
+						else
+						{
+							_newVariable = _newVariabelCounter;
+						}
 						string type = item is GraphDeclEdgeNode ? "Edge" : "Vertex";
-						Indent();
-						_currentStringBuilder.Append($"{type} {_newVariable} = new {type}();\n");
+
+						_currentStringBuilder.Append($"{type} {HandleCSharpKeywords(_newVariable)} = new {type}();\n");
 
 						foreach (var val in ((GraphDeclVertexNode)item).ValueList)
 						{
-							_currentStringBuilder.Append($"{_newVariable}.{HandleCSharpKeywords(val.Key)} = ");
+							_currentStringBuilder.Append($"{HandleCSharpKeywords(_newVariable)}.{HandleCSharpKeywords(val.Key)} = ");
 							val.Value.Accept(this);
 							_currentStringBuilder.Append($";\n");
 						}
 						if (item is GraphDeclEdgeNode)
 						{
-							Indent();
-							_currentStringBuilder.Append($"{HandleCSharpKeywords(node.ToVariable)}._nameEdges.Push({_newVariable});\n");
+
+							_currentStringBuilder.Append($"{HandleCSharpKeywords(node.ToVariable)}._nameEdges.Push({HandleCSharpKeywords(_newVariable)});\n");
 						}
 						else
 						{
-							Indent();
-							_currentStringBuilder.Append($"{HandleCSharpKeywords(node.ToVariable)}._nameVertices.Push({_newVariable});\n");
+
+							_currentStringBuilder.Append($"{HandleCSharpKeywords(node.ToVariable)}._nameVertices.Push({HandleCSharpKeywords(_newVariable)});\n");
 						}
 					}
 				}
@@ -744,7 +725,7 @@ namespace Compiler.CodeGeneration.GenerationCode
 			{
 				foreach (var item in node.TypeOrVariable)
 				{
-					Indent();
+
 					_currentStringBuilder.Append($"{HandleCSharpKeywords(node.ToVariable)}.Push(");
 					item.Accept(this);
 					_currentStringBuilder.Append($");\n");
@@ -755,7 +736,7 @@ namespace Compiler.CodeGeneration.GenerationCode
 		public override void Visit(PredicateNode node)
 		{
 			_currentStringBuilder.Append($"\n");
-			Indent();
+
 			_currentStringBuilder.Append($"bool {HandleCSharpKeywords(node.Name)} (");
 
 			bool first = true;
@@ -774,13 +755,13 @@ namespace Compiler.CodeGeneration.GenerationCode
 			}
 
 			_currentStringBuilder.Append($") {{ \n ");
-			_tabCount++;
-			Indent();
+
+
 			_currentStringBuilder.Append($"return ");
 			VisitChildren(node);
 			_currentStringBuilder.Append($"; \n");
-			_tabCount--;
-			Indent();
+
+
 			_currentStringBuilder.Append($"}}\n");
 
 		}
@@ -792,7 +773,7 @@ namespace Compiler.CodeGeneration.GenerationCode
 
 		public override void Visit(EnqueueQueryNode node)
 		{
-			Indent();
+
 			_currentStringBuilder.Append($"{HandleCSharpKeywords(node.VariableCollection)}.Enqueue(");
 			node.VariableToAdd.Accept(this);
 			_currentStringBuilder.Append($");\n");
@@ -806,7 +787,7 @@ namespace Compiler.CodeGeneration.GenerationCode
 
 		public override void Visit(PushQueryNode node)
 		{
-			Indent();
+
 			_currentStringBuilder.Append($"{HandleCSharpKeywords(node.VariableCollection)}.Push(");
 			node.VariableToAdd.Accept(this);
 			_currentStringBuilder.Append($");\n");
@@ -815,7 +796,7 @@ namespace Compiler.CodeGeneration.GenerationCode
 		public override void Visit(ForLoopNode node)
 		{
 			_currentStringBuilder.Append("\n");
-			Indent();
+
 			_currentStringBuilder.Append("for (");
 			if (node.VariableDeclaration != null)
 			{
@@ -835,45 +816,45 @@ namespace Compiler.CodeGeneration.GenerationCode
 				node.Increment.Accept(this);
 			}
 			_currentStringBuilder.Append($") \n");
-			Indent();
+
 			_currentStringBuilder.Append($"{{");
-			_tabCount++;
+
 			VisitChildren(node);
-			_tabCount--;
+
 			_currentStringBuilder.Append($"\n");
-			Indent();
+
 			_currentStringBuilder.Append($"}}");
 		}
 
 		public override void Visit(ForeachLoopNode node)
 		{
-			Indent();
+
 			_currentStringBuilder.Append($"foreach (");
 			_currentStringBuilder.Append($"{ResolveTypeToCS(node.VariableType_enum)} {HandleCSharpKeywords(node.VariableName)} in {HandleCSharpKeywords(node.InVariableName)}");
 			_currentStringBuilder.Append($") \n");
-			Indent();
+
 			_currentStringBuilder.Append($"{{");
-			_tabCount++;
+
 			VisitChildren(node);
-			Indent();
+
 			_currentStringBuilder.Append($"\n");
-			_tabCount--;
-			Indent();
+
+
 			_currentStringBuilder.Append($"}}\n");
 
 		}
 
 		public override void Visit(WhileLoopNode node)
 		{
-			Indent();
+
 			_currentStringBuilder.Append("while (");
 			node.BoolCompare.Accept(this);
 			_currentStringBuilder.Append(")\n");
-			Indent();
+
 			_currentStringBuilder.Append("{");
 			VisitChildren(node);
 			_currentStringBuilder.Append("\n");
-			Indent();
+
 			_currentStringBuilder.Append("}\n");
 
 		}
@@ -886,7 +867,14 @@ namespace Compiler.CodeGeneration.GenerationCode
 
 		public override void Visit(VariableNode node)
 		{
-			_currentStringBuilder.Append(HandleCSharpKeywords(node.Name));
+			if ((node.Type_enum == AllType.EDGE || node.Type_enum == AllType.VERTEX) && node.IsCollection == false)
+			{
+				_currentStringBuilder.Append(HandleCSharpKeywords(node.Name) + ".Get()");
+			}
+			else
+			{
+				_currentStringBuilder.Append(HandleCSharpKeywords(node.Name));
+			}
 		}
 
 		public override void Visit(AbstractNode node)
@@ -920,7 +908,7 @@ namespace Compiler.CodeGeneration.GenerationCode
 		{
 			bool first = true;
 			_currentStringBuilder.Append("\n");
-			Indent();
+
 			_currentStringBuilder.Append("Console.WriteLine(");
 			foreach (var item in node.Children)
 			{
@@ -959,7 +947,7 @@ namespace Compiler.CodeGeneration.GenerationCode
 		public override void Visit(RunQueryNode node)
 		{
 			_currentStringBuilder.Append("\n");
-			Indent();
+
 			_currentStringBuilder.Append(HandleCSharpKeywords(node.FunctionName) + "(");
 			bool first = true;
 			foreach (var item in node.Children)
@@ -988,6 +976,7 @@ namespace Compiler.CodeGeneration.GenerationCode
 			// TODO: Default values for extended variables needs to be set
 			StringBuilder _currentExtension;
 			// Find out what class to extend, as they have their own extension classes.
+			bool dispose_mode = true;
 			switch (Class)
 			{
 				case AllType.GRAPH:
@@ -995,9 +984,11 @@ namespace Compiler.CodeGeneration.GenerationCode
 					break;
 				case AllType.EDGE:
 					_currentExtension = _edgeExtensions;
+					dispose_mode = true;
 					break;
 				case AllType.VERTEX:
 					_currentExtension = _vertexExtensions;
+					dispose_mode = true;
 					break;
 				default:
 					throw new Exception("You are trying to extend a non-class type, which is illegal!");
@@ -1006,86 +997,67 @@ namespace Compiler.CodeGeneration.GenerationCode
 			if (IsCollection)
 			{
 				_currentExtension.Append("\n");
-				Indent(ref _currentExtension);
 				_currentExtension.Append($"public Collection<{ResolveTypeToCS(ExtendType)}> {HandleCSharpKeywords(ExtendName)} = new Collection<{ResolveTypeToCS(ExtendType)}>();\n");
 				if (ExtendNameShort != null && ExtendNameShort != "")
 				{
 					_currentExtension.Append("\n");
-					Indent(ref _currentExtension);
 					_currentExtension.Append($"public Collection<{ResolveTypeToCS(ExtendType)}> {HandleCSharpKeywords(ExtendNameShort)} {{ \n");
-					_tabCount++;
-					Indent(ref _currentExtension);
+
 					_currentExtension.Append("get\n");
-					Indent(ref _currentExtension);
 					_currentExtension.Append($"{{\n");
-					_tabCount++;
-					Indent(ref _currentExtension);
+
 					_currentExtension.Append($"return { HandleCSharpKeywords(ExtendName)};\n");
-					_tabCount--;
-					Indent(ref _currentExtension);
+
 					_currentExtension.Append($"}}\n");
-					Indent(ref _currentExtension);
 					_currentExtension.Append("set \n");
-					Indent(ref _currentExtension);
 					_currentExtension.Append($"{{\n");
-					_tabCount++;
-					Indent(ref _currentExtension);
+
 					_currentExtension.Append($"{HandleCSharpKeywords(ExtendName)} = value;\n");
-					_tabCount--;
-					Indent(ref _currentExtension);
+
 					_currentExtension.Append($"}}\n");
-					_tabCount--;
-					Indent(ref _currentExtension);
+
 					_currentExtension.Append("}\n");
 				}
 			}
 			else // if its everything else
 			{
+				// Check if its a disposeable class
+				string OriginalName = $"_ORIGINAL_{HandleCSharpKeywords(ExtendName)}";
 
 				if (ExtendType == AllType.GRAPH)
 				{
 					_currentExtension.Append("\n");
-					Indent(ref _currentExtension);
-					_currentExtension.Append($"public {ResolveTypeToCS(ExtendType)} {HandleCSharpKeywords(ExtendName)} = new {ResolveTypeToCS(ExtendType)}();\n");
+					_currentExtension.Append($"private {ResolveTypeToCS(ExtendType)} {OriginalName} = new {ResolveTypeToCS(ExtendType)}();\n");
 				}
 				else
 				{
-					_currentExtension.Append("\n");
-					Indent(ref _currentExtension);
-					_currentExtension.Append($"public {ResolveTypeToCS(ExtendType)} {HandleCSharpKeywords(ExtendName)};\n");
+
+					_currentExtension.Append($"public {ResolveTypeToCS(ExtendType)} {OriginalName};\n");
 				}
+				ExtendWithGetter(ExtendType, _currentExtension, ExtendName, OriginalName);
 				if (ExtendNameShort != null && ExtendNameShort != "")
 				{
-					_currentExtension.Append("\n");
-					Indent(ref _currentExtension);
-					_currentExtension.Append($"public {ResolveTypeToCS(ExtendType)} {HandleCSharpKeywords(ExtendNameShort)} {{ \n");
-					_tabCount++;
-					Indent(ref _currentExtension);
-					_currentExtension.Append("get\n");
-					Indent(ref _currentExtension);
-					_currentExtension.Append($"{{\n");
-					_tabCount++;
-					Indent(ref _currentExtension);
-					_currentExtension.Append($"return {HandleCSharpKeywords(ExtendName)};\n");
-					_tabCount--;
-					Indent(ref _currentExtension);
-					_currentExtension.Append($"}}\n");
-					Indent(ref _currentExtension);
-					_currentExtension.Append("set\n");
-					Indent(ref _currentExtension);
-					_currentExtension.Append($"{{\n");
-					_tabCount++;
-					Indent(ref _currentExtension);
-					_currentExtension.Append($"{HandleCSharpKeywords(ExtendName)} = value;\n");
-					_tabCount--;
-					Indent(ref _currentExtension);
-					_currentExtension.Append($"}}\n");
-					_tabCount--;
-					Indent(ref _currentExtension);
-					_currentExtension.Append("}\n");
+					ExtendWithGetter(ExtendType, _currentExtension, ExtendNameShort, OriginalName);
 				}
 			}
 
+		}
+
+		private void ExtendWithGetter(AllType ExtendType, StringBuilder _currentExtension, string ExtendName, string OriginalName)
+		{
+			_currentExtension.Append("\n");
+			_currentExtension.Append($"public {ResolveTypeToCS(ExtendType)} {HandleCSharpKeywords(ExtendName)} {{ \n");
+			_currentExtension.Append("get\n");
+			_currentExtension.Append($"{{\n Update(); \n");
+			_currentExtension.Append($"if (disposed) {{  Console.WriteLine(\"You are trying to reference am object which no longer exists\"); Environment.Exit(0); }}\n");
+			_currentExtension.Append($"return {(OriginalName)};\n");
+			_currentExtension.Append($"}}\n");
+			_currentExtension.Append("set\n");
+			_currentExtension.Append($"{{\nUpdate(); \n");
+			_currentExtension.Append($"if (disposed) {{  Console.WriteLine(\"You are trying to reference am object which no longer exists\"); Environment.Exit(0); }}\n");
+			_currentExtension.Append($"{(OriginalName)} = value;\n");
+			_currentExtension.Append($"}}\n");
+			_currentExtension.Append("}\n");
 		}
 
 		public override void Visit(PredicateCall node)
@@ -1108,56 +1080,40 @@ namespace Compiler.CodeGeneration.GenerationCode
 			_currentStringBuilder.Append($")");
 		}
 
-		public void Indent(ref StringBuilder stringBuilder)
-		{
-			for (int i = 0; i < _tabCount; i++)
-			{
-				stringBuilder.Append("\t");
-			}
-		}
-
-		public void Indent()
-		{
-			for (int i = 0; i < _tabCount; i++)
-			{
-				_currentStringBuilder.Append("\t");
-			}
-		}
-
 		public override void Visit(RemoveAllQueryNode node)
 		{
 			_currentStringBuilder.Append("\n");
 			if (node.WhereCondition != null)
 			{
-				Indent();
+
 				_currentStringBuilder.Append($"foreach (var val in {HandleCSharpKeywords(node.Variable)})\n");
-				Indent();
+
 				_currentStringBuilder.Append($"{{\n");
 				// ForeachBody
-				_tabCount++;
+
 				// Open If
 				_currentStringBuilder.Append($"if (");
 				node.WhereCondition.Accept(this);
 				_currentStringBuilder.Append(") \n");
-				Indent();
+
 				_currentStringBuilder.Append($"{{\n");
-				_tabCount++;
+
 				// IfBody
-				Indent();
+
 				_currentStringBuilder.Append($"{HandleCSharpKeywords(node.Variable)}.Remove(val);\n");
-				_tabCount--;
-				Indent();
+
+
 				// Close IfBody
 				_currentStringBuilder.Append($"}}");
 				_currentStringBuilder.Append($"\n");
-				_tabCount--;
-				Indent();
+
+
 				// Close Foreach
 				_currentStringBuilder.Append($"}}");
 			}
 			else
 			{
-				Indent();
+
 				_currentStringBuilder.Append($"{HandleCSharpKeywords(node.Variable)}.RemoveAll();\n");
 			}
 		}
@@ -1167,36 +1123,21 @@ namespace Compiler.CodeGeneration.GenerationCode
 			_currentStringBuilder.Append("\n");
 			if (node.WhereCondition != null)
 			{
-				Indent();
-				_currentStringBuilder.Append($"foreach (var val in {HandleCSharpKeywords(node.Variable)})\n");
-				Indent();
-				_currentStringBuilder.Append($"{{\n");
+
 				// ForeachBody
-				_tabCount++;
 				// Open If
-				_currentStringBuilder.Append($"if (");
+				_currentStringBuilder.Append($"foreach (var val in {HandleCSharpKeywords(node.Variable)})\n {{\n if (");
 				node.WhereCondition.Accept(this);
-				_currentStringBuilder.Append(") \n");
-				Indent();
-				_currentStringBuilder.Append($"{{\n");
-				_tabCount++;
+				_currentStringBuilder.Append(") \n {{\n");
+
 				// IfBody
-				Indent();
-				_currentStringBuilder.Append($"{HandleCSharpKeywords(node.Variable)}.Remove(val);\n");
-				_currentStringBuilder.Append($"break;\n");
-				_tabCount--;
-				Indent();
-				// Close IfBody
-				_currentStringBuilder.Append($"}}");
-				_currentStringBuilder.Append($"\n");
-				_tabCount--;
-				Indent();
-				// Close Foreach
-				_currentStringBuilder.Append($"}}");
+
+				_currentStringBuilder.Append($"{HandleCSharpKeywords(node.Variable)}.Remove(val);\n break;\n }} \n }}");
+
 			}
 			else
 			{
-				Indent();
+
 				_currentStringBuilder.Append($"{HandleCSharpKeywords(node.Variable)}.RemoveAt(0);\n");
 			}
 		}

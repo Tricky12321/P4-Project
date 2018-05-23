@@ -8,6 +8,7 @@ namespace Giraph
         *****GLOBAL*****
         public static void Main(string[] args)
         {
+			
             // GLOBAL SETTERS BEING ADDED
             *****GLOBAL_SET*****
             // GLOBAL SETTERS END

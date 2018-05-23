@@ -20,7 +20,7 @@ namespace Compiler
 	{
 		private static bool _error = false;
 		private static bool _ignoreErrors = false;
-		private static bool _dontDelete = false;
+		private static bool _dontDelete = true;
 		public static bool TestMode = false;
 		public static bool WriteDebugText = false;
 		public static void Main(string[] args)

@@ -72,16 +72,25 @@ namespace Giraph.Classes
             return max;
         }
 
-        public void RemoveItem(T obj)
+		public new bool Remove(T obj)
         {
-            this.Remove(obj);
+            if (typeof(T) == typeof(Vertex))
+            {
+                (obj as Vertex).disposed = true;
+
+            }
+            else if (typeof(T) == typeof(Edge))
+            {
+                (obj as Edge).disposed = true;
+            }
+            return base.Remove(obj);
         }
 
-        public void RemoveAll()
+        public new void RemoveAll()
         {
-            foreach (var item in this)
+            foreach (var item in this.ToList())
             {
-                this.Remove(item);
+                Remove(item);
             }
         }
 

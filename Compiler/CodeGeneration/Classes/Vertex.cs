@@ -1,19 +1,32 @@
 ﻿using System;
 namespace Giraph.Classes
 {
-    public class Vertex : IDisposable
+    public class Vertex
     {
-        //EXTENSIONS HERE
-        //*****EXTEND*****
-        //EXTENSIONS ENDED
+		//EXTENSIONS HERE
+		//*****EXTEND*****
+		//EXTENSIONS ENDED
+
         public Vertex()
         {
             
         }
+        
+		public bool disposed = false;
 
-        public void Dispose()
+		private void Update()
         {
-            GC.SuppressFinalize(this); 
+            
         }
+
+		public Vertex Get() {
+			if (disposed) {
+				Console.WriteLine("You are trying to reference am object which no longer exists");
+				Environment.Exit(0);
+				return null;
+			} else {
+				return this;
+			}
+		}
     }
 }
