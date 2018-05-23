@@ -411,7 +411,7 @@ namespace Compiler.AST.SymbolTable
 							var ClassName = Names[0];
 							Names.RemoveAt(0);
 							var type = RetrieveSymbol(ClassName) ?? default(AllType);
-                            
+
 							var output = RetrieveTypeFromClasses(Names, type, out IsCollection);
 							return output;
 						}
@@ -1030,6 +1030,14 @@ namespace Compiler.AST.SymbolTable
 		public void ParamerIsVoid(string function, string parameter)
 		{
 			string errormessage = $"The parameter: {parameter} cannot be of type void " + GetLineNumber();
+			Console.WriteLine(errormessage);
+			TypeCheckErrorList.Add(errormessage);
+			Error();
+		}
+
+		public void IlligalOperator(string Operator)
+		{
+			string errormessage = $"The Operator '{Operator}' is illigal here, only '+' is allowed when working with strings concatination " + GetLineNumber();
 			Console.WriteLine(errormessage);
 			TypeCheckErrorList.Add(errormessage);
 			Error();

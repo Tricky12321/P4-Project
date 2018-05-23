@@ -952,18 +952,18 @@ namespace Compiler.AST
 					}
 
 					if (node.Right is ExpressionNode)
-                    {
-                        node.RightType = ((ExpressionNode)node.Right).OverAllType ?? default(AllType);
-                    }
-                    else if (node.Right.Children[0] is PredicateNode)
-                    {
-                        node.RightType = _symbolTable.RetrieveSymbol(node.Right.Children[0].Name) ?? default(AllType);
-                    }
-                    else if (node.Right is BoolComparisonNode)
-                    {
-                        node.RightType = ((ExpressionNode)node.Right.Children[0]).OverAllType ?? default(AllType);
+					{
+						node.RightType = ((ExpressionNode)node.Right).OverAllType ?? default(AllType);
+					}
+					else if (node.Right.Children[0] is PredicateNode)
+					{
+						node.RightType = _symbolTable.RetrieveSymbol(node.Right.Children[0].Name) ?? default(AllType);
+					}
+					else if (node.Right is BoolComparisonNode)
+					{
+						node.RightType = ((ExpressionNode)node.Right.Children[0]).OverAllType ?? default(AllType);
 
-                    }
+					}
 				}
 				if (node.RightType != AllType.UNKNOWNTYPE && node.LeftType != AllType.UNKNOWNTYPE)
 				{
@@ -979,7 +979,7 @@ namespace Compiler.AST
 			else
 			{
 				VisitChildren(node);
-                /*
+				/*
 				if (node.HasChildren)
 				{
 					if (node.Children[0] is ExpressionNode expNode)
@@ -1001,10 +1001,25 @@ namespace Compiler.AST
 			if (node.ExpressionParts.Where(x => x.Type != null && x.Type_enum == AllType.STRING).Count() > 0)
 			{
 				node.OverAllType = AllType.STRING;
+				foreach (var item in node.ExpressionParts)
+				{
+					if (item is OperatorNode opNode)
+					{
+						if (opNode.Operator != "+")
+						{
+							_symbolTable.IlligalOperator(opNode.Operator);
+						}
+					}
+					else if (item is ExpressionNode)
+					{
+						item.Accept(this);
+					}
+				}
 				//ignore the rest of the type checking of expression. An expressionpart is string, therefore everything will turn to a string
 			}
 			else
 			{
+
 				foreach (AbstractNode item in node.ExpressionParts)
 				{
 					if (!(item is OperatorNode))
@@ -1273,6 +1288,9 @@ namespace Compiler.AST
 		public override void Visit(VariableDclNode node)
 		{
 			_symbolTable.SetCurrentNode(node);
+			if (node.LineNumber == 106) {
+				
+			}
 			AllType? variableType = _symbolTable.RetrieveSymbol(node.Name);
 			if (node.Type_enum == AllType.VOID)
 			{
@@ -1284,49 +1302,40 @@ namespace Compiler.AST
 			{
 				foreach (AbstractNode child in node.Children)
 				{
-					if (child.Children.Count != 0)
+					ExpressionNode expNode = null;
+					if (child is BoolComparisonNode)
 					{
-						ExpressionNode expNode;
-						if (child is BoolComparisonNode)
-						{
-							expNode = (ExpressionNode)child.Children[0];
-						}
-						else
-						{
-							expNode = (ExpressionNode)child;
-						}
-						expNode.Accept(this);
-						if (expNode.OverAllType != variableType)
-						{
-							if (variableType == AllType.DECIMAL && expNode.OverAllType == AllType.INT)
-							{
-								//TODO det bliver mærkeligt med select query...
-								//ints can be added to decimal variables, but not vice versa
-							}
-							else
-							{
-								_symbolTable.WrongTypeError(child.Name, node.Name);
-							}
-						}
-						else
-						{
-							foreach (AbstractNode expPartNode in expNode.ExpressionParts)
-							{
-								if (expPartNode.Name != null)
-								{
-									if (expPartNode.Name == node.Name)
-									{
-										_symbolTable.DeclarationCantBeSameVariable(node.Name);
-									}
-									else
-									{
-										//the variables and the expression is of same type, and have not used the same variable for declaration and for expression.
-									}
-								}
-							}
-							//the variables and the expression is of same type, and have not used the same variable for declaration and for expression.
-						}
+						((BoolComparisonNode)child).Accept(this);
 					}
+					else
+					{
+						expNode = (ExpressionNode)child;
+						expNode.Accept(this);
+						foreach (AbstractNode expPartNode in expNode.ExpressionParts)
+                        {
+                            if (expPartNode is VariableNode varNode)
+                            {
+                                if (varNode.Name == node.Name)
+                                {
+                                    // If the variable used in the assignment when declaring a variable is the same, print an error
+                                    _symbolTable.DeclarationCantBeSameVariable(node.Name);
+                                }
+                            }
+                        }
+                    }
+					if (expNode != null && expNode.OverAllType != variableType)
+					{
+						if (variableType == AllType.DECIMAL && expNode.OverAllType == AllType.INT)
+						{
+							//TODO det bliver mærkeligt med select query...
+							//ints can be added to decimal variables, but not vice versa
+						}
+						else
+						{
+							_symbolTable.WrongTypeError(child.Name, node.Name);
+						}
+
+                    }
 				}
 			}
 		}
