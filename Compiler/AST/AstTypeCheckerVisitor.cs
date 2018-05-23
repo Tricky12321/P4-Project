@@ -1288,8 +1288,9 @@ namespace Compiler.AST
 		public override void Visit(VariableDclNode node)
 		{
 			_symbolTable.SetCurrentNode(node);
-			if (node.LineNumber == 106) {
-				
+			if (node.LineNumber == 106)
+			{
+
 			}
 			AllType? variableType = _symbolTable.RetrieveSymbol(node.Name);
 			if (node.Type_enum == AllType.VOID)
@@ -1312,17 +1313,17 @@ namespace Compiler.AST
 						expNode = (ExpressionNode)child;
 						expNode.Accept(this);
 						foreach (AbstractNode expPartNode in expNode.ExpressionParts)
-                        {
-                            if (expPartNode is VariableNode varNode)
-                            {
-                                if (varNode.Name == node.Name)
-                                {
-                                    // If the variable used in the assignment when declaring a variable is the same, print an error
-                                    _symbolTable.DeclarationCantBeSameVariable(node.Name);
-                                }
-                            }
-                        }
-                    }
+						{
+							if (expPartNode is VariableNode varNode)
+							{
+								if (varNode.Name == node.Name)
+								{
+									// If the variable used in the assignment when declaring a variable is the same, print an error
+									_symbolTable.DeclarationCantBeSameVariable(node.Name);
+								}
+							}
+						}
+					}
 					if (expNode != null && expNode.OverAllType != variableType)
 					{
 						if (variableType == AllType.DECIMAL && expNode.OverAllType == AllType.INT)
@@ -1335,7 +1336,7 @@ namespace Compiler.AST
 							_symbolTable.WrongTypeError(child.Name, node.Name);
 						}
 
-                    }
+					}
 				}
 			}
 		}
@@ -1471,18 +1472,22 @@ namespace Compiler.AST
 			int iterator = 0;
 			foreach (AbstractNode item in node.Children)
 			{
-				AllType formalParameterType = predParaTypes[iterator];
+				AllType actualParameterType = AllType.UNKNOWNTYPE;
 				item.Accept(this);
-				AllType actualParameterType = item.Type_enum;
+				if (item is ExpressionNode)
+				{
+					actualParameterType = (item as ExpressionNode).OverAllType ?? AllType.UNKNOWNTYPE;
+				}
+				else if (item is BoolComparisonNode)
+				{
+					actualParameterType = AllType.BOOL;
+				}
+				AllType formalParameterType = predParaTypes[iterator];
 				if (actualParameterType == AllType.UNKNOWNTYPE)
 				{
 					actualParameterType = _symbolTable.RetrieveSymbol(item.Name) ?? AllType.UNKNOWNTYPE;
 				}
-				if (formalParameterType == actualParameterType)
-				{
-					//typecorrect
-				}
-				else
+				if (formalParameterType != actualParameterType)
 				{
 					_symbolTable.PredicateTypeError(item.Name);
 				}

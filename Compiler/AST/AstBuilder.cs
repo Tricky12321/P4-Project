@@ -94,7 +94,7 @@ namespace Compiler.AST
                     {
                         foreach (var Attribute in NestedChild.assignment())
                         {
-                            VNode.ValueList.Add(Attribute.variable().GetText(), Visit(Attribute.boolComparisons()));
+                            VNode.ValueList.Add(Attribute.variable().GetText(), Visit(Attribute.boolCompOrExp()));
                         }
                     }
                     GNode.Vertices.Add(VNode);
@@ -126,7 +126,7 @@ namespace Compiler.AST
                             // This is in order to ignore the attributes that are without 
                             if (Attribute.variable() != null)
                             {
-                                ENode.ValueList.Add(Attribute.variable().GetText(), Visit(Attribute.boolComparisons()));
+								ENode.ValueList.Add(Attribute.variable().GetText(), Visit(Attribute.boolCompOrExp()));
                             }
                         }
                     }
@@ -149,29 +149,29 @@ namespace Compiler.AST
 
             return WhileNode;
         }
-
-        public override AbstractNode VisitBoolComparisons([NotNull] GiraphParser.BoolComparisonsContext context)
+        
+        public override AbstractNode VisitBoolCompOrExp([NotNull] GiraphParser.BoolCompOrExpContext context)
         {
             BoolComparisonNode BCompare = new BoolComparisonNode(context.Start.Line, context.Start.Column);
             // Checks if there is a prefix, if there is, add it to the Node
 			// TODO: Se om dette virker...
-			if (context.expression() != null && !(context.Parent is GiraphParser.BoolComparisonsContext)) {
+			if (context.expression() != null && !(context.Parent is GiraphParser.BoolCompOrExpContext)) {
 				return Visit(context.expression());
 			}
 
 			if (context.prefix != null)
             {
                 BCompare.Prefix = context.prefix.Text;
-                BCompare.AdoptChildren(Visit(context.boolComparisons(0)));
+                BCompare.AdoptChildren(Visit(context.boolCompOrExp(0)));
             }
             // Check if there are left and right "()" around the boolcomparison
-            if (context.rightP != null && context.leftP != null && context.boolComparisons() != null)
+			if (context.rightP != null && context.leftP != null && context.boolCompOrExp() != null)
             {
                 BCompare.InsideParentheses = true;
-                BCompare.AdoptChildren(Visit(context.boolComparisons(0)));
+				BCompare.AdoptChildren(Visit(context.boolCompOrExp(0)));
             }
             // Checks if there is a left and right statement, because this will indicatef that the boolcomparison, has a left bool and right bool, compared by the operator.
-            else if (context.right != null && context.left != null && context.boolComparisons() != null)
+			else if (context.right != null && context.left != null && context.boolCompOrExp() != null)
             {
                 BCompare.Left = Visit(context.left);
                 BCompare.Right = Visit(context.right);
@@ -266,7 +266,7 @@ namespace Compiler.AST
                     VariableAttributeNode attribute = Visit(ExpNode.attribute()) as VariableAttributeNode;
                     attribute.ClassVariableName = SetNode.InVariable.Name; //  Only set Class Variable if its an attribute
                     attribute.IsAttribute = true;
-                    AbstractNode expression = Visit(ExpNode.simpleBoolComparison());
+                    AbstractNode expression = Visit(ExpNode.simpleBoolCompOrExp());
                     SetNode.Attributes.Add(Tuple.Create(attribute, ExpNode.compoundAssign().GetText(), expression));
                 }
             }
@@ -277,7 +277,7 @@ namespace Compiler.AST
                 foreach (var ExpNode in context.setExpressionVari())
                 {
                     VariableAttributeNode attribute = Visit(ExpNode.variable()) as VariableAttributeNode;
-                    AbstractNode expression = Visit(ExpNode.boolComparisons()) as AbstractNode;
+                    AbstractNode expression = Visit(ExpNode.boolCompOrExp()) as AbstractNode;
                     SetNode.Attributes.Add(Tuple.Create(attribute, ExpNode.compoundAssign().GetText(), expression));
                 }
             }
@@ -484,7 +484,7 @@ namespace Compiler.AST
         public override AbstractNode VisitWhere([NotNull] GiraphParser.WhereContext context)
         {
             WhereNode WNode = new WhereNode(context.Start.Line, context.Start.Column);
-            WNode.AdoptChildren(Visit(context.simpleBoolComparison()));
+			WNode.AdoptChildren(Visit(context.simpleBoolCompOrExp()));
             /*foreach (var Child in context.boolComparisons().children)
             {
                 WNode.AdoptChildren(Visit(Child));
@@ -520,9 +520,9 @@ namespace Compiler.AST
             DeclarationNode DclNode = new DeclarationNode(context.Start.Line, context.Start.Column);
             DclNode.Type = context.objects().GetText();
             DclNode.Name = context.variable().GetText();
-            if (context.boolComparisons() != null)
+            if (context.boolCompOrExp() != null)
             {
-                DclNode.Assignment = Visit(context.boolComparisons());
+                DclNode.Assignment = Visit(context.boolCompOrExp());
             }
             return DclNode;
         }
@@ -549,7 +549,7 @@ namespace Compiler.AST
         public override AbstractNode VisitIfElseIfElse([NotNull] GiraphParser.IfElseIfElseContext context)
         {
             IfElseIfElseNode IfNode = new IfElseIfElseNode(context.Start.Line, context.Start.Column);
-            IfNode.IfCondition = Visit(context.boolComparisons()) as BoolComparisonNode;
+            IfNode.IfCondition = Visit(context.boolCompOrExp()) as BoolComparisonNode;
             IfNode.IfCodeBlock = Visit(context.codeBlock()) as CodeBlockNode;
             if (context.elseifCond() != null)
             {
@@ -557,7 +557,7 @@ namespace Compiler.AST
                 foreach (var ElseIf in context.elseifCond())
                 {
                     // Add their conditions and codeblocks
-                    IfNode.ElseIfList.Add(Tuple.Create((Visit(ElseIf.boolComparisons()) as BoolComparisonNode), (Visit(ElseIf.codeBlock()) as CodeBlockNode)));
+                    IfNode.ElseIfList.Add(Tuple.Create((Visit(ElseIf.boolCompOrExp()) as BoolComparisonNode), (Visit(ElseIf.codeBlock()) as CodeBlockNode)));
                 }
             }
 
@@ -590,7 +590,7 @@ namespace Compiler.AST
                 }
             }
             // Adopt the boolcomparisons of the Predicate as children to the PNode
-            PNode.AdoptChildren(Visit(context.simpleBoolComparison()));
+			PNode.AdoptChildren(Visit(context.simpleBoolCompOrExp()));
             return PNode;
         }
 
@@ -648,7 +648,7 @@ namespace Compiler.AST
         public override AbstractNode VisitEnqueueOP([NotNull] GiraphParser.EnqueueOPContext context)
         {
             EnqueueQueryNode EnqueueNode = new EnqueueQueryNode(context.Start.Line, context.Start.Column);
-            EnqueueNode.VariableToAdd = Visit(context.boolComparisons());
+            EnqueueNode.VariableToAdd = Visit(context.boolCompOrExp());
             EnqueueNode.VariableCollection = context.variable().GetText();
             return EnqueueNode;
         }
@@ -672,7 +672,7 @@ namespace Compiler.AST
         public override AbstractNode VisitPushOP([NotNull] GiraphParser.PushOPContext context)
         {
             PushQueryNode PushNode = new PushQueryNode(context.Start.Line, context.Start.Column);
-            PushNode.VariableToAdd = Visit(context.boolComparisons());
+            PushNode.VariableToAdd = Visit(context.boolCompOrExp());
             PushNode.VariableCollection = context.variable().GetText();
             return PushNode;
         }
@@ -736,7 +736,7 @@ namespace Compiler.AST
             VariableNode.Name = context.variable().GetText();
             if (context.EQUALS() != null)
             {
-                VariableNode.AdoptChildren(Visit(context.boolComparisons()));
+                VariableNode.AdoptChildren(Visit(context.boolCompOrExp()));
             }
             return VariableNode;
         }
@@ -878,12 +878,12 @@ namespace Compiler.AST
             {
                 AddNode.IsColl = true;
                 // ITS ALL TYPE
-                AddNode.TypeOrVariable.Add(Visit(context.addToColl().collExpression().boolComparisons()));
+                AddNode.TypeOrVariable.Add(Visit(context.addToColl().collExpression().boolCompOrExp()));
                 if (context.addToColl().collExpressionExt() != null)
                 {
                     foreach (var item in context.addToColl().collExpressionExt())
                     {
-                        AddNode.TypeOrVariable.Add(Visit(item.collExpression().boolComparisons()));
+                        AddNode.TypeOrVariable.Add(Visit(item.collExpression().boolCompOrExp()));
                     }
                 }
                 // Shared
@@ -924,7 +924,7 @@ namespace Compiler.AST
             {
                 foreach (var Child in context.assignment())
                 {
-                    VarNode.ValueList.Add(Child.variable().GetText(), Visit(Child.boolComparisons()));
+                    VarNode.ValueList.Add(Child.variable().GetText(), Visit(Child.boolCompOrExp()));
                     VarNode.AdoptChildren(Visit(Child));
                 }
             }
@@ -944,7 +944,7 @@ namespace Compiler.AST
             {
                 foreach (var Child in context.assignment())
                 {
-                    VarNode.ValueList.Add(Child.variable().GetText(), Visit(Child.boolComparisons()));
+                    VarNode.ValueList.Add(Child.variable().GetText(), Visit(Child.boolCompOrExp()));
                     VarNode.AdoptChildren(Visit(Child));
                 }
             }
@@ -995,7 +995,7 @@ namespace Compiler.AST
             PredicateCall predicateCall = new PredicateCall(context.Start.Line, context.Start.Column);
             predicateCall.Name = context.variable().GetText();
 
-            foreach (var item in context.parameters().varOrConst())
+            foreach (var item in context.parameters().simpleBoolCompOrExp())
             {
                 predicateCall.AdoptChildren(Visit(item));
             }
@@ -1061,30 +1061,28 @@ namespace Compiler.AST
 
             return ExpNode;
         }
-
-        public override AbstractNode VisitSimpleBoolComparison([NotNull] GiraphParser.SimpleBoolComparisonContext context)
+        
+		public override AbstractNode VisitSimpleBoolCompOrExp([NotNull] GiraphParser.SimpleBoolCompOrExpContext context)
         {
             BoolComparisonNode BCompare = new BoolComparisonNode(context.Start.Line, context.Start.Column);
             // Checks if there is a prefix, if there is, add it to the Node
-            if (context.prefix != null)
+			if (context.simpleExpression() != null && !(context.Parent is GiraphParser.SimpleBoolCompOrExpContext))
+            {
+                return Visit(context.simpleExpression());
+            }
+			if (context.prefix != null)
             {
                 BCompare.Prefix = context.prefix.Text;
-                BCompare.AdoptChildren(Visit(context.simpleBoolComparison(0)));
+                BCompare.AdoptChildren(Visit(context.simpleBoolCompOrExp(0)));
             }
-            // Checks if there is a Suffix, if there is, add it to the Node
-            /*if (context.suffix != null)
-            {
-                BCompare.Suffix = context.suffix.Text;
-                BCompare.AdoptChildren(Visit(context.boolComparisons(0)));
-            }*/
             // Check if there are left and right "()" around the boolcomparison
-            if (context.rightP != null && context.leftP != null && context.simpleBoolComparison() != null)
+			if (context.rightP != null && context.leftP != null && context.simpleBoolCompOrExp() != null)
             {
                 BCompare.InsideParentheses = true;
-                BCompare.AdoptChildren(Visit(context.simpleBoolComparison(0)));
+				BCompare.AdoptChildren(Visit(context.simpleBoolCompOrExp(0)));
             }
             // Checks if there is a left and right statement, because this will indicatef that the boolcomparison, has a left bool and right bool, compared by the operator.
-            else if (context.right != null && context.left != null && context.simpleBoolComparison() != null)
+			else if (context.right != null && context.left != null && context.simpleBoolCompOrExp() != null)
             {
                 BCompare.Left = Visit(context.left);
                 BCompare.Right = Visit(context.right);

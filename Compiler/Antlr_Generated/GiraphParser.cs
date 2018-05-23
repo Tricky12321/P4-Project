@@ -42,11 +42,11 @@ public partial class GiraphParser : Parser {
 		EQUALS=26, QUOTE=27, ELSEIF=28, ELSE=29, TO=30, IN=31, FOR=32, FOREACH=33, 
 		RETURN=34, WHILE=35, DO=36, SET=37, SELECT=38, SELECTALL=39, FROM=40, 
 		WHERE=41, ADD=42, COLLECTION=43, RIGHTARROW=44, RUN=45, WITH=46, EXTEND=47, 
-		PREDICATE=48, POP=49, PUSH=50, ENQUEUE=51, DEQUEUE=52, CONDITIONSEP=53, 
-		REMOVE=54, REMOVEALL=55, EXTRACTMIN=56, EXTRACTMAX=57, PRINT=58, UNDERSCORE=59, 
-		COMMENTSTART=60, BOOL=61, COMPOUNDASSIGN=62, INTEGER=63, FLOATNUM=64, 
-		VARIABLENAME=65, LETTER=66, LOWLETTER=67, CAPLETTER=68, ZERO=69, DIGITNZ=70, 
-		FUNCTIONID=71, WhiteSpace=72, WS=73, STRING=74, SPECIALCHARS=75;
+		PREDICATE=48, POP=49, PUSH=50, PEEK=51, ENQUEUE=52, DEQUEUE=53, CONDITIONSEP=54, 
+		REMOVE=55, REMOVEALL=56, EXTRACTMIN=57, EXTRACTMAX=58, PRINT=59, UNDERSCORE=60, 
+		COMMENTSTART=61, BOOL=62, COMPOUNDASSIGN=63, INTEGER=64, FLOATNUM=65, 
+		VARIABLENAME=66, LETTER=67, LOWLETTER=68, CAPLETTER=69, ZERO=70, DIGITNZ=71, 
+		FUNCTIONID=72, WhiteSpace=73, WS=74, STRING=75, SPECIALCHARS=76;
 	public const int
 		RULE_start = 0, RULE_program = 1, RULE_dcls = 2, RULE_objectDcl = 3, RULE_singleObjectDcl = 4, 
 		RULE_variableDcl = 5, RULE_graphInitDcl = 6, RULE_graphDclBlock = 7, RULE_vertexDcls = 8, 
@@ -58,8 +58,8 @@ public partial class GiraphParser : Parser {
 		RULE_codeBlock = 27, RULE_returnBlock = 28, RULE_runFunction = 29, RULE_codeBlockContent = 30, 
 		RULE_varOrConst = 31, RULE_variable = 32, RULE_constant = 33, RULE_string = 34, 
 		RULE_integer = 35, RULE_floatnum = 36, RULE_bool = 37, RULE_objects = 38, 
-		RULE_ifElseIfElse = 39, RULE_elseifCond = 40, RULE_elseCond = 41, RULE_boolComparisons = 42, 
-		RULE_simpleBoolComparison = 43, RULE_predicate = 44, RULE_predicateCall = 45, 
+		RULE_ifElseIfElse = 39, RULE_elseifCond = 40, RULE_elseCond = 41, RULE_boolCompOrExp = 42, 
+		RULE_simpleBoolCompOrExp = 43, RULE_predicate = 44, RULE_predicateCall = 45, 
 		RULE_where = 46, RULE_andOr = 47, RULE_extend = 48, RULE_select = 49, 
 		RULE_selectAll = 50, RULE_addQuery = 51, RULE_addToGraph = 52, RULE_addToColl = 53, 
 		RULE_collExpression = 54, RULE_collExpressionExt = 55, RULE_loopDcl = 56, 
@@ -82,8 +82,8 @@ public partial class GiraphParser : Parser {
 		"simpleOperators", "advancedOperators", "formalParams", "formalParam", 
 		"functionDcl", "codeBlock", "returnBlock", "runFunction", "codeBlockContent", 
 		"varOrConst", "variable", "constant", "string", "integer", "floatnum", 
-		"bool", "objects", "ifElseIfElse", "elseifCond", "elseCond", "boolComparisons", 
-		"simpleBoolComparison", "predicate", "predicateCall", "where", "andOr", 
+		"bool", "objects", "ifElseIfElse", "elseifCond", "elseCond", "boolCompOrExp", 
+		"simpleBoolCompOrExp", "predicate", "predicateCall", "where", "andOr", 
 		"extend", "select", "selectAll", "addQuery", "addToGraph", "addToColl", 
 		"collExpression", "collExpressionExt", "loopDcl", "foreachLoop", "whileLoop", 
 		"forLoop", "forCondition", "forConditionInside", "forConditionStart", 
@@ -103,8 +103,8 @@ public partial class GiraphParser : Parser {
 		"'else'", "'to'", "'in'", "'for'", "'foreach'", "'return'", "'while'", 
 		"'do'", "'set'", "'select'", "'selectall'", "'from'", "'where'", "'add'", 
 		"'collection'", "'->'", "'run'", "'with'", "'extend'", "'predicate'", 
-		"'pop'", "'push'", "'enqueue'", "'dequeue'", null, "'remove'", "'removeall'", 
-		"'extractmin'", "'extractmax'", "'print'", "'_'", "'//'"
+		"'pop'", "'push'", "'peek'", "'enqueue'", "'dequeue'", null, "'remove'", 
+		"'removeall'", "'extractmin'", "'extractmax'", "'print'", "'_'", "'//'"
 	};
 	private static readonly string[] _SymbolicNames = {
 		null, "BOOLOPERATOR", "TYPE", "GRAPHOBJ", "VERTEXOBJ", "EDGEOBJ", "PLUS", 
@@ -112,11 +112,11 @@ public partial class GiraphParser : Parser {
 		"COLON", "IF", "LP", "RP", "LCB", "RCB", "LSB", "RSB", "DOT", "SINGLEQUOTE", 
 		"EQUALS", "QUOTE", "ELSEIF", "ELSE", "TO", "IN", "FOR", "FOREACH", "RETURN", 
 		"WHILE", "DO", "SET", "SELECT", "SELECTALL", "FROM", "WHERE", "ADD", "COLLECTION", 
-		"RIGHTARROW", "RUN", "WITH", "EXTEND", "PREDICATE", "POP", "PUSH", "ENQUEUE", 
-		"DEQUEUE", "CONDITIONSEP", "REMOVE", "REMOVEALL", "EXTRACTMIN", "EXTRACTMAX", 
-		"PRINT", "UNDERSCORE", "COMMENTSTART", "BOOL", "COMPOUNDASSIGN", "INTEGER", 
-		"FLOATNUM", "VARIABLENAME", "LETTER", "LOWLETTER", "CAPLETTER", "ZERO", 
-		"DIGITNZ", "FUNCTIONID", "WhiteSpace", "WS", "STRING", "SPECIALCHARS"
+		"RIGHTARROW", "RUN", "WITH", "EXTEND", "PREDICATE", "POP", "PUSH", "PEEK", 
+		"ENQUEUE", "DEQUEUE", "CONDITIONSEP", "REMOVE", "REMOVEALL", "EXTRACTMIN", 
+		"EXTRACTMAX", "PRINT", "UNDERSCORE", "COMMENTSTART", "BOOL", "COMPOUNDASSIGN", 
+		"INTEGER", "FLOATNUM", "VARIABLENAME", "LETTER", "LOWLETTER", "CAPLETTER", 
+		"ZERO", "DIGITNZ", "FUNCTIONID", "WhiteSpace", "WS", "STRING", "SPECIALCHARS"
 	};
 	public static readonly IVocabulary DefaultVocabulary = new Vocabulary(_LiteralNames, _SymbolicNames);
 
@@ -189,7 +189,7 @@ public partial class GiraphParser : Parser {
 				State = 193;
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
-			} while ( ((((_la - 2)) & ~0x3f) == 0 && ((1L << (_la - 2)) & ((1L << (TYPE - 2)) | (1L << (GRAPHOBJ - 2)) | (1L << (VERTEXOBJ - 2)) | (1L << (EDGEOBJ - 2)) | (1L << (COLLECTION - 2)) | (1L << (EXTEND - 2)) | (1L << (PREDICATE - 2)) | (1L << (COMMENTSTART - 2)) | (1L << (VARIABLENAME - 2)))) != 0) );
+			} while ( (((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << TYPE) | (1L << GRAPHOBJ) | (1L << VERTEXOBJ) | (1L << EDGEOBJ) | (1L << COLLECTION) | (1L << EXTEND) | (1L << PREDICATE) | (1L << COMMENTSTART))) != 0) || _la==VARIABLENAME );
 			State = 195; Match(Eof);
 			}
 		}
@@ -415,8 +415,8 @@ public partial class GiraphParser : Parser {
 		}
 		public ITerminalNode SC() { return GetToken(GiraphParser.SC, 0); }
 		public ITerminalNode EQUALS() { return GetToken(GiraphParser.EQUALS, 0); }
-		public BoolComparisonsContext boolComparisons() {
-			return GetRuleContext<BoolComparisonsContext>(0);
+		public BoolCompOrExpContext boolCompOrExp() {
+			return GetRuleContext<BoolCompOrExpContext>(0);
 		}
 		public SingleObjectDclContext(ParserRuleContext parent, int invokingState)
 			: base(parent, invokingState)
@@ -447,7 +447,7 @@ public partial class GiraphParser : Parser {
 				{
 				State = 215; Match(EQUALS);
 				{
-				State = 216; boolComparisons(0);
+				State = 216; boolCompOrExp(0);
 				}
 				}
 			}
@@ -475,8 +475,8 @@ public partial class GiraphParser : Parser {
 		}
 		public ITerminalNode SC() { return GetToken(GiraphParser.SC, 0); }
 		public ITerminalNode EQUALS() { return GetToken(GiraphParser.EQUALS, 0); }
-		public BoolComparisonsContext boolComparisons() {
-			return GetRuleContext<BoolComparisonsContext>(0);
+		public BoolCompOrExpContext boolCompOrExp() {
+			return GetRuleContext<BoolCompOrExpContext>(0);
 		}
 		public VariableDclContext(ParserRuleContext parent, int invokingState)
 			: base(parent, invokingState)
@@ -507,7 +507,7 @@ public partial class GiraphParser : Parser {
 				{
 				State = 223; Match(EQUALS);
 				{
-				State = 224; boolComparisons(0);
+				State = 224; boolCompOrExp(0);
 				}
 				}
 			}
@@ -616,31 +616,26 @@ public partial class GiraphParser : Parser {
 			_la = TokenStream.LA(1);
 			while (_la==VERTEXOBJ || _la==EDGEOBJ) {
 				{
-				State = 240;
+				{
+				State = 236;
 				ErrorHandler.Sync(this);
 				switch (TokenStream.LA(1)) {
 				case VERTEXOBJ:
 					{
-					{
 					State = 234; vertexDcls();
-					{
-					State = 235; Match(SC);
-					}
-					}
 					}
 					break;
 				case EDGEOBJ:
 					{
-					{
-					State = 237; edgeDcls();
-					{
-					State = 238; Match(SC);
-					}
-					}
+					State = 235; edgeDcls();
 					}
 					break;
 				default:
 					throw new NoViableAltException(this);
+				}
+				{
+				State = 238; Match(SC);
+				}
 				}
 				}
 				State = 244;
@@ -772,7 +767,7 @@ public partial class GiraphParser : Parser {
 			State = 268;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
-			if (((((_la - 2)) & ~0x3f) == 0 && ((1L << (_la - 2)) & ((1L << (TYPE - 2)) | (1L << (GRAPHOBJ - 2)) | (1L << (VERTEXOBJ - 2)) | (1L << (EDGEOBJ - 2)) | (1L << (VARIABLENAME - 2)))) != 0)) {
+			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << TYPE) | (1L << GRAPHOBJ) | (1L << VERTEXOBJ) | (1L << EDGEOBJ))) != 0) || _la==VARIABLENAME) {
 				{
 				State = 260; assignment();
 				State = 265;
@@ -959,8 +954,8 @@ public partial class GiraphParser : Parser {
 		public CompoundAssignContext compoundAssign() {
 			return GetRuleContext<CompoundAssignContext>(0);
 		}
-		public BoolComparisonsContext boolComparisons() {
-			return GetRuleContext<BoolComparisonsContext>(0);
+		public BoolCompOrExpContext boolCompOrExp() {
+			return GetRuleContext<BoolCompOrExpContext>(0);
 		}
 		public AllTypeContext allType() {
 			return GetRuleContext<AllTypeContext>(0);
@@ -996,7 +991,7 @@ public partial class GiraphParser : Parser {
 
 			State = 300; variable();
 			State = 301; compoundAssign();
-			State = 302; boolComparisons(0);
+			State = 302; boolCompOrExp(0);
 			}
 		}
 		catch (RecognitionException re) {
@@ -2010,8 +2005,8 @@ public partial class GiraphParser : Parser {
 			return GetRuleContext<RunFunctionContext>(0);
 		}
 		public ITerminalNode SC() { return GetToken(GiraphParser.SC, 0); }
-		public BoolComparisonsContext boolComparisons() {
-			return GetRuleContext<BoolComparisonsContext>(0);
+		public BoolCompOrExpContext boolCompOrExp() {
+			return GetRuleContext<BoolCompOrExpContext>(0);
 		}
 		public ReturnBlockContext(ParserRuleContext parent, int invokingState)
 			: base(parent, invokingState)
@@ -2047,7 +2042,7 @@ public partial class GiraphParser : Parser {
 				EnterOuterAlt(_localctx, 2);
 				{
 				State = 413; Match(RETURN);
-				State = 414; boolComparisons(0);
+				State = 414; boolCompOrExp(0);
 				{
 				State = 415; Match(SC);
 				}
@@ -2662,8 +2657,8 @@ public partial class GiraphParser : Parser {
 		public ElseifCondContext elseif;
 		public ElseCondContext g;
 		public ITerminalNode IF() { return GetToken(GiraphParser.IF, 0); }
-		public BoolComparisonsContext boolComparisons() {
-			return GetRuleContext<BoolComparisonsContext>(0);
+		public BoolCompOrExpContext boolCompOrExp() {
+			return GetRuleContext<BoolCompOrExpContext>(0);
 		}
 		public CodeBlockContext codeBlock() {
 			return GetRuleContext<CodeBlockContext>(0);
@@ -2698,7 +2693,7 @@ public partial class GiraphParser : Parser {
 			EnterOuterAlt(_localctx, 1);
 			{
 			State = 478; Match(IF);
-			State = 479; boolComparisons(0);
+			State = 479; boolCompOrExp(0);
 			State = 480; codeBlock();
 			State = 484;
 			ErrorHandler.Sync(this);
@@ -2737,8 +2732,8 @@ public partial class GiraphParser : Parser {
 
 	public partial class ElseifCondContext : ParserRuleContext {
 		public ITerminalNode ELSEIF() { return GetToken(GiraphParser.ELSEIF, 0); }
-		public BoolComparisonsContext boolComparisons() {
-			return GetRuleContext<BoolComparisonsContext>(0);
+		public BoolCompOrExpContext boolCompOrExp() {
+			return GetRuleContext<BoolCompOrExpContext>(0);
 		}
 		public CodeBlockContext codeBlock() {
 			return GetRuleContext<CodeBlockContext>(0);
@@ -2763,7 +2758,7 @@ public partial class GiraphParser : Parser {
 			EnterOuterAlt(_localctx, 1);
 			{
 			State = 490; Match(ELSEIF);
-			State = 491; boolComparisons(0);
+			State = 491; boolCompOrExp(0);
 			State = 492; codeBlock();
 			}
 		}
@@ -2817,19 +2812,19 @@ public partial class GiraphParser : Parser {
 		return _localctx;
 	}
 
-	public partial class BoolComparisonsContext : ParserRuleContext {
-		public BoolComparisonsContext left;
+	public partial class BoolCompOrExpContext : ParserRuleContext {
+		public BoolCompOrExpContext left;
 		public IToken leftP;
 		public IToken rightP;
 		public IToken prefix;
 		public ExpressionContext exp;
 		public PredicateCallContext predi;
-		public BoolComparisonsContext right;
-		public BoolComparisonsContext[] boolComparisons() {
-			return GetRuleContexts<BoolComparisonsContext>();
+		public BoolCompOrExpContext right;
+		public BoolCompOrExpContext[] boolCompOrExp() {
+			return GetRuleContexts<BoolCompOrExpContext>();
 		}
-		public BoolComparisonsContext boolComparisons(int i) {
-			return GetRuleContext<BoolComparisonsContext>(i);
+		public BoolCompOrExpContext boolCompOrExp(int i) {
+			return GetRuleContext<BoolCompOrExpContext>(i);
 		}
 		public ITerminalNode LP() { return GetToken(GiraphParser.LP, 0); }
 		public ITerminalNode RP() { return GetToken(GiraphParser.RP, 0); }
@@ -2844,30 +2839,30 @@ public partial class GiraphParser : Parser {
 		public AndOrContext andOr() {
 			return GetRuleContext<AndOrContext>(0);
 		}
-		public BoolComparisonsContext(ParserRuleContext parent, int invokingState)
+		public BoolCompOrExpContext(ParserRuleContext parent, int invokingState)
 			: base(parent, invokingState)
 		{
 		}
-		public override int RuleIndex { get { return RULE_boolComparisons; } }
+		public override int RuleIndex { get { return RULE_boolCompOrExp; } }
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IGiraphParserVisitor<TResult> typedVisitor = visitor as IGiraphParserVisitor<TResult>;
-			if (typedVisitor != null) return typedVisitor.VisitBoolComparisons(this);
+			if (typedVisitor != null) return typedVisitor.VisitBoolCompOrExp(this);
 			else return visitor.VisitChildren(this);
 		}
 	}
 
 	[RuleVersion(0)]
-	public BoolComparisonsContext boolComparisons() {
-		return boolComparisons(0);
+	public BoolCompOrExpContext boolCompOrExp() {
+		return boolCompOrExp(0);
 	}
 
-	private BoolComparisonsContext boolComparisons(int _p) {
+	private BoolCompOrExpContext boolCompOrExp(int _p) {
 		ParserRuleContext _parentctx = Context;
 		int _parentState = State;
-		BoolComparisonsContext _localctx = new BoolComparisonsContext(Context, _parentState);
-		BoolComparisonsContext _prevctx = _localctx;
+		BoolCompOrExpContext _localctx = new BoolCompOrExpContext(Context, _parentState);
+		BoolCompOrExpContext _prevctx = _localctx;
 		int _startState = 84;
-		EnterRecursionRule(_localctx, 84, RULE_boolComparisons, _p);
+		EnterRecursionRule(_localctx, 84, RULE_boolCompOrExp, _p);
 		try {
 			int _alt;
 			EnterOuterAlt(_localctx, 1);
@@ -2878,14 +2873,14 @@ public partial class GiraphParser : Parser {
 			case 1:
 				{
 				State = 498; _localctx.leftP = Match(LP);
-				State = 499; boolComparisons(0);
+				State = 499; boolCompOrExp(0);
 				State = 500; _localctx.rightP = Match(RP);
 				}
 				break;
 			case 2:
 				{
 				State = 502; _localctx.prefix = Match(NOT);
-				State = 503; boolComparisons(4);
+				State = 503; boolCompOrExp(4);
 				}
 				break;
 			case 3:
@@ -2910,9 +2905,9 @@ public partial class GiraphParser : Parser {
 					_prevctx = _localctx;
 					{
 					{
-					_localctx = new BoolComparisonsContext(_parentctx, _parentState);
+					_localctx = new BoolCompOrExpContext(_parentctx, _parentState);
 					_localctx.left = _prevctx;
-					PushNewRecursionContext(_localctx, _startState, RULE_boolComparisons);
+					PushNewRecursionContext(_localctx, _startState, RULE_boolCompOrExp);
 					State = 508;
 					if (!(Precpred(Context, 3))) throw new FailedPredicateException(this, "Precpred(Context, 3)");
 					State = 511;
@@ -2932,7 +2927,7 @@ public partial class GiraphParser : Parser {
 					default:
 						throw new NoViableAltException(this);
 					}
-					State = 513; _localctx.right = boolComparisons(4);
+					State = 513; _localctx.right = boolCompOrExp(4);
 					}
 					} 
 				}
@@ -2953,19 +2948,19 @@ public partial class GiraphParser : Parser {
 		return _localctx;
 	}
 
-	public partial class SimpleBoolComparisonContext : ParserRuleContext {
-		public SimpleBoolComparisonContext left;
+	public partial class SimpleBoolCompOrExpContext : ParserRuleContext {
+		public SimpleBoolCompOrExpContext left;
 		public IToken leftP;
 		public IToken rightP;
 		public IToken prefix;
 		public SimpleExpressionContext exp;
 		public PredicateCallContext predi;
-		public SimpleBoolComparisonContext right;
-		public SimpleBoolComparisonContext[] simpleBoolComparison() {
-			return GetRuleContexts<SimpleBoolComparisonContext>();
+		public SimpleBoolCompOrExpContext right;
+		public SimpleBoolCompOrExpContext[] simpleBoolCompOrExp() {
+			return GetRuleContexts<SimpleBoolCompOrExpContext>();
 		}
-		public SimpleBoolComparisonContext simpleBoolComparison(int i) {
-			return GetRuleContext<SimpleBoolComparisonContext>(i);
+		public SimpleBoolCompOrExpContext simpleBoolCompOrExp(int i) {
+			return GetRuleContext<SimpleBoolCompOrExpContext>(i);
 		}
 		public ITerminalNode LP() { return GetToken(GiraphParser.LP, 0); }
 		public ITerminalNode RP() { return GetToken(GiraphParser.RP, 0); }
@@ -2980,30 +2975,30 @@ public partial class GiraphParser : Parser {
 		public AndOrContext andOr() {
 			return GetRuleContext<AndOrContext>(0);
 		}
-		public SimpleBoolComparisonContext(ParserRuleContext parent, int invokingState)
+		public SimpleBoolCompOrExpContext(ParserRuleContext parent, int invokingState)
 			: base(parent, invokingState)
 		{
 		}
-		public override int RuleIndex { get { return RULE_simpleBoolComparison; } }
+		public override int RuleIndex { get { return RULE_simpleBoolCompOrExp; } }
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IGiraphParserVisitor<TResult> typedVisitor = visitor as IGiraphParserVisitor<TResult>;
-			if (typedVisitor != null) return typedVisitor.VisitSimpleBoolComparison(this);
+			if (typedVisitor != null) return typedVisitor.VisitSimpleBoolCompOrExp(this);
 			else return visitor.VisitChildren(this);
 		}
 	}
 
 	[RuleVersion(0)]
-	public SimpleBoolComparisonContext simpleBoolComparison() {
-		return simpleBoolComparison(0);
+	public SimpleBoolCompOrExpContext simpleBoolCompOrExp() {
+		return simpleBoolCompOrExp(0);
 	}
 
-	private SimpleBoolComparisonContext simpleBoolComparison(int _p) {
+	private SimpleBoolCompOrExpContext simpleBoolCompOrExp(int _p) {
 		ParserRuleContext _parentctx = Context;
 		int _parentState = State;
-		SimpleBoolComparisonContext _localctx = new SimpleBoolComparisonContext(Context, _parentState);
-		SimpleBoolComparisonContext _prevctx = _localctx;
+		SimpleBoolCompOrExpContext _localctx = new SimpleBoolCompOrExpContext(Context, _parentState);
+		SimpleBoolCompOrExpContext _prevctx = _localctx;
 		int _startState = 86;
-		EnterRecursionRule(_localctx, 86, RULE_simpleBoolComparison, _p);
+		EnterRecursionRule(_localctx, 86, RULE_simpleBoolCompOrExp, _p);
 		try {
 			int _alt;
 			EnterOuterAlt(_localctx, 1);
@@ -3014,14 +3009,14 @@ public partial class GiraphParser : Parser {
 			case 1:
 				{
 				State = 520; _localctx.leftP = Match(LP);
-				State = 521; simpleBoolComparison(0);
+				State = 521; simpleBoolCompOrExp(0);
 				State = 522; _localctx.rightP = Match(RP);
 				}
 				break;
 			case 2:
 				{
 				State = 524; _localctx.prefix = Match(NOT);
-				State = 525; simpleBoolComparison(4);
+				State = 525; simpleBoolCompOrExp(4);
 				}
 				break;
 			case 3:
@@ -3046,9 +3041,9 @@ public partial class GiraphParser : Parser {
 					_prevctx = _localctx;
 					{
 					{
-					_localctx = new SimpleBoolComparisonContext(_parentctx, _parentState);
+					_localctx = new SimpleBoolCompOrExpContext(_parentctx, _parentState);
 					_localctx.left = _prevctx;
-					PushNewRecursionContext(_localctx, _startState, RULE_simpleBoolComparison);
+					PushNewRecursionContext(_localctx, _startState, RULE_simpleBoolCompOrExp);
 					State = 530;
 					if (!(Precpred(Context, 3))) throw new FailedPredicateException(this, "Precpred(Context, 3)");
 					State = 533;
@@ -3068,7 +3063,7 @@ public partial class GiraphParser : Parser {
 					default:
 						throw new NoViableAltException(this);
 					}
-					State = 535; _localctx.right = simpleBoolComparison(4);
+					State = 535; _localctx.right = simpleBoolCompOrExp(4);
 					}
 					} 
 				}
@@ -3101,8 +3096,8 @@ public partial class GiraphParser : Parser {
 		public ITerminalNode RP() { return GetToken(GiraphParser.RP, 0); }
 		public ITerminalNode COLON() { return GetToken(GiraphParser.COLON, 0); }
 		public ITerminalNode LCB() { return GetToken(GiraphParser.LCB, 0); }
-		public SimpleBoolComparisonContext simpleBoolComparison() {
-			return GetRuleContext<SimpleBoolComparisonContext>(0);
+		public SimpleBoolCompOrExpContext simpleBoolCompOrExp() {
+			return GetRuleContext<SimpleBoolCompOrExpContext>(0);
 		}
 		public ITerminalNode RCB() { return GetToken(GiraphParser.RCB, 0); }
 		public ITerminalNode SC() { return GetToken(GiraphParser.SC, 0); }
@@ -3132,7 +3127,7 @@ public partial class GiraphParser : Parser {
 			State = 545; Match(RP);
 			State = 546; Match(COLON);
 			State = 547; Match(LCB);
-			State = 548; simpleBoolComparison(0);
+			State = 548; simpleBoolCompOrExp(0);
 			State = 549; Match(RCB);
 			{
 			State = 550; Match(SC);
@@ -3202,8 +3197,8 @@ public partial class GiraphParser : Parser {
 	public partial class WhereContext : ParserRuleContext {
 		public ITerminalNode WHERE() { return GetToken(GiraphParser.WHERE, 0); }
 		public ITerminalNode LP() { return GetToken(GiraphParser.LP, 0); }
-		public SimpleBoolComparisonContext simpleBoolComparison() {
-			return GetRuleContext<SimpleBoolComparisonContext>(0);
+		public SimpleBoolCompOrExpContext simpleBoolCompOrExp() {
+			return GetRuleContext<SimpleBoolCompOrExpContext>(0);
 		}
 		public ITerminalNode RP() { return GetToken(GiraphParser.RP, 0); }
 		public WhereContext(ParserRuleContext parent, int invokingState)
@@ -3231,7 +3226,7 @@ public partial class GiraphParser : Parser {
 				{
 				State = 557; Match(WHERE);
 				State = 558; Match(LP);
-				State = 559; simpleBoolComparison(0);
+				State = 559; simpleBoolCompOrExp(0);
 				State = 560; Match(RP);
 				}
 				break;
@@ -3239,7 +3234,7 @@ public partial class GiraphParser : Parser {
 				EnterOuterAlt(_localctx, 2);
 				{
 				State = 562; Match(WHERE);
-				State = 563; simpleBoolComparison(0);
+				State = 563; simpleBoolCompOrExp(0);
 				}
 				break;
 			}
@@ -3717,8 +3712,8 @@ public partial class GiraphParser : Parser {
 	}
 
 	public partial class CollExpressionContext : ParserRuleContext {
-		public BoolComparisonsContext boolComparisons() {
-			return GetRuleContext<BoolComparisonsContext>(0);
+		public BoolCompOrExpContext boolCompOrExp() {
+			return GetRuleContext<BoolCompOrExpContext>(0);
 		}
 		public CollExpressionContext(ParserRuleContext parent, int invokingState)
 			: base(parent, invokingState)
@@ -3739,7 +3734,7 @@ public partial class GiraphParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 631; boolComparisons(0);
+			State = 631; boolCompOrExp(0);
 			}
 		}
 		catch (RecognitionException re) {
@@ -3915,8 +3910,8 @@ public partial class GiraphParser : Parser {
 
 	public partial class WhileLoopContext : ParserRuleContext {
 		public ITerminalNode WHILE() { return GetToken(GiraphParser.WHILE, 0); }
-		public BoolComparisonsContext boolComparisons() {
-			return GetRuleContext<BoolComparisonsContext>(0);
+		public BoolCompOrExpContext boolCompOrExp() {
+			return GetRuleContext<BoolCompOrExpContext>(0);
 		}
 		public CodeBlockContext codeBlock() {
 			return GetRuleContext<CodeBlockContext>(0);
@@ -3941,7 +3936,7 @@ public partial class GiraphParser : Parser {
 			EnterOuterAlt(_localctx, 1);
 			{
 			State = 648; Match(WHILE);
-			State = 649; boolComparisons(0);
+			State = 649; boolCompOrExp(0);
 			State = 650; codeBlock();
 			}
 		}
@@ -4881,8 +4876,8 @@ public partial class GiraphParser : Parser {
 			return GetRuleContext<CompoundAssignContext>(0);
 		}
 		public ITerminalNode LP() { return GetToken(GiraphParser.LP, 0); }
-		public SimpleBoolComparisonContext simpleBoolComparison() {
-			return GetRuleContext<SimpleBoolComparisonContext>(0);
+		public SimpleBoolCompOrExpContext simpleBoolCompOrExp() {
+			return GetRuleContext<SimpleBoolCompOrExpContext>(0);
 		}
 		public ITerminalNode RP() { return GetToken(GiraphParser.RP, 0); }
 		public SetExpressionAtriSimContext(ParserRuleContext parent, int invokingState)
@@ -4917,7 +4912,7 @@ public partial class GiraphParser : Parser {
 				{
 				{
 				State = 786; Match(LP);
-				State = 787; simpleBoolComparison(0);
+				State = 787; simpleBoolCompOrExp(0);
 				State = 788; Match(RP);
 				}
 				}
@@ -4925,7 +4920,7 @@ public partial class GiraphParser : Parser {
 			case 2:
 				{
 				{
-				State = 790; simpleBoolComparison(0);
+				State = 790; simpleBoolCompOrExp(0);
 				}
 				}
 				break;
@@ -4951,8 +4946,8 @@ public partial class GiraphParser : Parser {
 			return GetRuleContext<CompoundAssignContext>(0);
 		}
 		public ITerminalNode LP() { return GetToken(GiraphParser.LP, 0); }
-		public BoolComparisonsContext boolComparisons() {
-			return GetRuleContext<BoolComparisonsContext>(0);
+		public BoolCompOrExpContext boolCompOrExp() {
+			return GetRuleContext<BoolCompOrExpContext>(0);
 		}
 		public ITerminalNode RP() { return GetToken(GiraphParser.RP, 0); }
 		public SetExpressionVariContext(ParserRuleContext parent, int invokingState)
@@ -4987,7 +4982,7 @@ public partial class GiraphParser : Parser {
 				{
 				{
 				State = 795; Match(LP);
-				State = 796; boolComparisons(0);
+				State = 796; boolCompOrExp(0);
 				State = 797; Match(RP);
 				}
 				}
@@ -4995,7 +4990,7 @@ public partial class GiraphParser : Parser {
 			case 2:
 				{
 				{
-				State = 799; boolComparisons(0);
+				State = 799; boolCompOrExp(0);
 				}
 				}
 				break;
@@ -5282,8 +5277,8 @@ public partial class GiraphParser : Parser {
 
 	public partial class EnqueueOPContext : ParserRuleContext {
 		public ITerminalNode ENQUEUE() { return GetToken(GiraphParser.ENQUEUE, 0); }
-		public BoolComparisonsContext boolComparisons() {
-			return GetRuleContext<BoolComparisonsContext>(0);
+		public BoolCompOrExpContext boolCompOrExp() {
+			return GetRuleContext<BoolCompOrExpContext>(0);
 		}
 		public ITerminalNode TO() { return GetToken(GiraphParser.TO, 0); }
 		public VariableContext variable() {
@@ -5310,7 +5305,7 @@ public partial class GiraphParser : Parser {
 			EnterOuterAlt(_localctx, 1);
 			{
 			State = 822; Match(ENQUEUE);
-			State = 823; boolComparisons(0);
+			State = 823; boolCompOrExp(0);
 			State = 824; Match(TO);
 			State = 825; variable();
 			{
@@ -5413,8 +5408,8 @@ public partial class GiraphParser : Parser {
 
 	public partial class PushOPContext : ParserRuleContext {
 		public ITerminalNode PUSH() { return GetToken(GiraphParser.PUSH, 0); }
-		public BoolComparisonsContext boolComparisons() {
-			return GetRuleContext<BoolComparisonsContext>(0);
+		public BoolCompOrExpContext boolCompOrExp() {
+			return GetRuleContext<BoolCompOrExpContext>(0);
 		}
 		public ITerminalNode TO() { return GetToken(GiraphParser.TO, 0); }
 		public VariableContext variable() {
@@ -5441,7 +5436,7 @@ public partial class GiraphParser : Parser {
 			EnterOuterAlt(_localctx, 1);
 			{
 			State = 836; Match(PUSH);
-			State = 837; boolComparisons(0);
+			State = 837; boolCompOrExp(0);
 			State = 838; Match(TO);
 			State = 839; variable();
 			{
@@ -5593,11 +5588,11 @@ public partial class GiraphParser : Parser {
 	}
 
 	public partial class ParametersContext : ParserRuleContext {
-		public VarOrConstContext[] varOrConst() {
-			return GetRuleContexts<VarOrConstContext>();
+		public SimpleBoolCompOrExpContext[] simpleBoolCompOrExp() {
+			return GetRuleContexts<SimpleBoolCompOrExpContext>();
 		}
-		public VarOrConstContext varOrConst(int i) {
-			return GetRuleContext<VarOrConstContext>(i);
+		public SimpleBoolCompOrExpContext simpleBoolCompOrExp(int i) {
+			return GetRuleContext<SimpleBoolCompOrExpContext>(i);
 		}
 		public ITerminalNode[] COMMA() { return GetTokens(GiraphParser.COMMA); }
 		public ITerminalNode COMMA(int i) {
@@ -5623,7 +5618,7 @@ public partial class GiraphParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 860; varOrConst();
+			State = 860; simpleBoolCompOrExp(0);
 			State = 865;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
@@ -5631,7 +5626,7 @@ public partial class GiraphParser : Parser {
 				{
 				{
 				State = 861; Match(COMMA);
-				State = 862; varOrConst();
+				State = 862; simpleBoolCompOrExp(0);
 				}
 				}
 				State = 867;
@@ -5713,8 +5708,8 @@ public partial class GiraphParser : Parser {
 	}
 
 	public partial class PrintOptionContext : ParserRuleContext {
-		public BoolComparisonsContext boolComparisons() {
-			return GetRuleContext<BoolComparisonsContext>(0);
+		public BoolCompOrExpContext boolCompOrExp() {
+			return GetRuleContext<BoolCompOrExpContext>(0);
 		}
 		public PrintOptionContext(ParserRuleContext parent, int invokingState)
 			: base(parent, invokingState)
@@ -5735,7 +5730,7 @@ public partial class GiraphParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 876; boolComparisons(0);
+			State = 876; boolCompOrExp(0);
 			}
 		}
 		catch (RecognitionException re) {
@@ -6034,18 +6029,18 @@ public partial class GiraphParser : Parser {
 
 	public override bool Sempred(RuleContext _localctx, int ruleIndex, int predIndex) {
 		switch (ruleIndex) {
-		case 42: return boolComparisons_sempred((BoolComparisonsContext)_localctx, predIndex);
-		case 43: return simpleBoolComparison_sempred((SimpleBoolComparisonContext)_localctx, predIndex);
+		case 42: return boolCompOrExp_sempred((BoolCompOrExpContext)_localctx, predIndex);
+		case 43: return simpleBoolCompOrExp_sempred((SimpleBoolCompOrExpContext)_localctx, predIndex);
 		}
 		return true;
 	}
-	private bool boolComparisons_sempred(BoolComparisonsContext _localctx, int predIndex) {
+	private bool boolCompOrExp_sempred(BoolCompOrExpContext _localctx, int predIndex) {
 		switch (predIndex) {
 		case 0: return Precpred(Context, 3);
 		}
 		return true;
 	}
-	private bool simpleBoolComparison_sempred(SimpleBoolComparisonContext _localctx, int predIndex) {
+	private bool simpleBoolCompOrExp_sempred(SimpleBoolCompOrExpContext _localctx, int predIndex) {
 		switch (predIndex) {
 		case 1: return Precpred(Context, 3);
 		}
@@ -6054,7 +6049,7 @@ public partial class GiraphParser : Parser {
 
 	private static char[] _serializedATN = {
 		'\x3', '\x608B', '\xA72A', '\x8133', '\xB9ED', '\x417C', '\x3BE7', '\x7786', 
-		'\x5964', '\x3', 'M', '\x390', '\x4', '\x2', '\t', '\x2', '\x4', '\x3', 
+		'\x5964', '\x3', 'N', '\x390', '\x4', '\x2', '\t', '\x2', '\x4', '\x3', 
 		'\t', '\x3', '\x4', '\x4', '\t', '\x4', '\x4', '\x5', '\t', '\x5', '\x4', 
 		'\x6', '\t', '\x6', '\x4', '\a', '\t', '\a', '\x4', '\b', '\t', '\b', 
 		'\x4', '\t', '\t', '\t', '\x4', '\n', '\t', '\n', '\x4', '\v', '\t', '\v', 
@@ -6097,20 +6092,20 @@ public partial class GiraphParser : Parser {
 		'\x3', '\x6', '\x3', '\x6', '\x3', '\a', '\x3', '\a', '\x3', '\a', '\x3', 
 		'\a', '\x5', '\a', '\xE4', '\n', '\a', '\x3', '\a', '\x3', '\a', '\x3', 
 		'\b', '\x3', '\b', '\x3', '\b', '\x3', '\b', '\x3', '\t', '\x3', '\t', 
-		'\x3', '\t', '\x3', '\t', '\x3', '\t', '\x3', '\t', '\x3', '\t', '\a', 
-		'\t', '\xF3', '\n', '\t', '\f', '\t', '\xE', '\t', '\xF6', '\v', '\t', 
-		'\x3', '\t', '\x3', '\t', '\x3', '\n', '\x3', '\n', '\x3', '\n', '\x3', 
-		'\n', '\a', '\n', '\xFE', '\n', '\n', '\f', '\n', '\xE', '\n', '\x101', 
-		'\v', '\n', '\x3', '\v', '\x5', '\v', '\x104', '\n', '\v', '\x3', '\v', 
-		'\x3', '\v', '\x3', '\v', '\x3', '\v', '\a', '\v', '\x10A', '\n', '\v', 
-		'\f', '\v', '\xE', '\v', '\x10D', '\v', '\v', '\x5', '\v', '\x10F', '\n', 
-		'\v', '\x3', '\v', '\x3', '\v', '\x3', '\f', '\x3', '\f', '\x3', '\f', 
-		'\x3', '\f', '\a', '\f', '\x117', '\n', '\f', '\f', '\f', '\xE', '\f', 
-		'\x11A', '\v', '\f', '\x3', '\r', '\x5', '\r', '\x11D', '\n', '\r', '\x3', 
-		'\r', '\x3', '\r', '\x3', '\r', '\x3', '\r', '\x3', '\r', '\x3', '\r', 
-		'\a', '\r', '\x125', '\n', '\r', '\f', '\r', '\xE', '\r', '\x128', '\v', 
-		'\r', '\x3', '\r', '\x3', '\r', '\x3', '\xE', '\x5', '\xE', '\x12D', '\n', 
-		'\xE', '\x3', '\xE', '\x3', '\xE', '\x3', '\xE', '\x3', '\xE', '\x3', 
+		'\x3', '\t', '\x5', '\t', '\xEF', '\n', '\t', '\x3', '\t', '\x3', '\t', 
+		'\a', '\t', '\xF3', '\n', '\t', '\f', '\t', '\xE', '\t', '\xF6', '\v', 
+		'\t', '\x3', '\t', '\x3', '\t', '\x3', '\n', '\x3', '\n', '\x3', '\n', 
+		'\x3', '\n', '\a', '\n', '\xFE', '\n', '\n', '\f', '\n', '\xE', '\n', 
+		'\x101', '\v', '\n', '\x3', '\v', '\x5', '\v', '\x104', '\n', '\v', '\x3', 
+		'\v', '\x3', '\v', '\x3', '\v', '\x3', '\v', '\a', '\v', '\x10A', '\n', 
+		'\v', '\f', '\v', '\xE', '\v', '\x10D', '\v', '\v', '\x5', '\v', '\x10F', 
+		'\n', '\v', '\x3', '\v', '\x3', '\v', '\x3', '\f', '\x3', '\f', '\x3', 
+		'\f', '\x3', '\f', '\a', '\f', '\x117', '\n', '\f', '\f', '\f', '\xE', 
+		'\f', '\x11A', '\v', '\f', '\x3', '\r', '\x5', '\r', '\x11D', '\n', '\r', 
+		'\x3', '\r', '\x3', '\r', '\x3', '\r', '\x3', '\r', '\x3', '\r', '\x3', 
+		'\r', '\a', '\r', '\x125', '\n', '\r', '\f', '\r', '\xE', '\r', '\x128', 
+		'\v', '\r', '\x3', '\r', '\x3', '\r', '\x3', '\xE', '\x5', '\xE', '\x12D', 
+		'\n', '\xE', '\x3', '\xE', '\x3', '\xE', '\x3', '\xE', '\x3', '\xE', '\x3', 
 		'\xF', '\x3', '\xF', '\x3', '\xF', '\x3', '\xF', '\a', '\xF', '\x137', 
 		'\n', '\xF', '\f', '\xF', '\xE', '\xF', '\x13A', '\v', '\xF', '\x3', '\x10', 
 		'\x3', '\x10', '\x3', '\x10', '\x3', '\x10', '\a', '\x10', '\x140', '\n', 
@@ -6240,7 +6235,7 @@ public partial class GiraphParser : Parser {
 		'\xA6', '\xA8', '\xAA', '\xAC', '\xAE', '\xB0', '\xB2', '\xB4', '\xB6', 
 		'\xB8', '\xBA', '\xBC', '\xBE', '\x2', '\a', '\x3', '\x2', '\b', '\t', 
 		'\x3', '\x2', '\n', '\f', '\x3', '\x2', '\x5', '\a', '\x3', '\x2', '\xE', 
-		'\xF', '\x4', '\x2', '\x1C', '\x1C', '@', '@', '\x2', '\x3A6', '\x2', 
+		'\xF', '\x4', '\x2', '\x1C', '\x1C', '\x41', '\x41', '\x2', '\x3A6', '\x2', 
 		'\xC1', '\x3', '\x2', '\x2', '\x2', '\x4', '\xCC', '\x3', '\x2', '\x2', 
 		'\x2', '\x6', '\xD1', '\x3', '\x2', '\x2', '\x2', '\b', '\xD5', '\x3', 
 		'\x2', '\x2', '\x2', '\n', '\xD7', '\x3', '\x2', '\x2', '\x2', '\f', '\xDF', 
@@ -6330,11 +6325,11 @@ public partial class GiraphParser : Parser {
 		'\xE8', '\a', '\x5', '\x2', '\x2', '\xE8', '\xE9', '\x5', '\x42', '\"', 
 		'\x2', '\xE9', '\xEA', '\x5', '\x10', '\t', '\x2', '\xEA', '\xF', '\x3', 
 		'\x2', '\x2', '\x2', '\xEB', '\xF4', '\a', '\x18', '\x2', '\x2', '\xEC', 
-		'\xED', '\x5', '\x12', '\n', '\x2', '\xED', '\xEE', '\a', '\x10', '\x2', 
-		'\x2', '\xEE', '\xF3', '\x3', '\x2', '\x2', '\x2', '\xEF', '\xF0', '\x5', 
-		'\x16', '\f', '\x2', '\xF0', '\xF1', '\a', '\x10', '\x2', '\x2', '\xF1', 
-		'\xF3', '\x3', '\x2', '\x2', '\x2', '\xF2', '\xEC', '\x3', '\x2', '\x2', 
-		'\x2', '\xF2', '\xEF', '\x3', '\x2', '\x2', '\x2', '\xF3', '\xF6', '\x3', 
+		'\xEF', '\x5', '\x12', '\n', '\x2', '\xED', '\xEF', '\x5', '\x16', '\f', 
+		'\x2', '\xEE', '\xEC', '\x3', '\x2', '\x2', '\x2', '\xEE', '\xED', '\x3', 
+		'\x2', '\x2', '\x2', '\xEF', '\xF0', '\x3', '\x2', '\x2', '\x2', '\xF0', 
+		'\xF1', '\a', '\x10', '\x2', '\x2', '\xF1', '\xF3', '\x3', '\x2', '\x2', 
+		'\x2', '\xF2', '\xEE', '\x3', '\x2', '\x2', '\x2', '\xF3', '\xF6', '\x3', 
 		'\x2', '\x2', '\x2', '\xF4', '\xF2', '\x3', '\x2', '\x2', '\x2', '\xF4', 
 		'\xF5', '\x3', '\x2', '\x2', '\x2', '\xF5', '\xF7', '\x3', '\x2', '\x2', 
 		'\x2', '\xF6', '\xF4', '\x3', '\x2', '\x2', '\x2', '\xF7', '\xF8', '\a', 
@@ -6495,8 +6490,8 @@ public partial class GiraphParser : Parser {
 		'\x1C4', '\x1C7', '\x5', '\x42', '\"', '\x2', '\x1C5', '\x1C7', '\x5', 
 		'\x44', '#', '\x2', '\x1C6', '\x1C4', '\x3', '\x2', '\x2', '\x2', '\x1C6', 
 		'\x1C5', '\x3', '\x2', '\x2', '\x2', '\x1C7', '\x41', '\x3', '\x2', '\x2', 
-		'\x2', '\x1C8', '\x1CD', '\a', '\x43', '\x2', '\x2', '\x1C9', '\x1CA', 
-		'\a', '\x1A', '\x2', '\x2', '\x1CA', '\x1CC', '\a', '\x43', '\x2', '\x2', 
+		'\x2', '\x1C8', '\x1CD', '\a', '\x44', '\x2', '\x2', '\x1C9', '\x1CA', 
+		'\a', '\x1A', '\x2', '\x2', '\x1CA', '\x1CC', '\a', '\x44', '\x2', '\x2', 
 		'\x1CB', '\x1C9', '\x3', '\x2', '\x2', '\x2', '\x1CC', '\x1CF', '\x3', 
 		'\x2', '\x2', '\x2', '\x1CD', '\x1CB', '\x3', '\x2', '\x2', '\x2', '\x1CD', 
 		'\x1CE', '\x3', '\x2', '\x2', '\x2', '\x1CE', '\x43', '\x3', '\x2', '\x2', 
@@ -6506,11 +6501,11 @@ public partial class GiraphParser : Parser {
 		'\x2', '\x1D4', '\x1D0', '\x3', '\x2', '\x2', '\x2', '\x1D4', '\x1D1', 
 		'\x3', '\x2', '\x2', '\x2', '\x1D4', '\x1D2', '\x3', '\x2', '\x2', '\x2', 
 		'\x1D4', '\x1D3', '\x3', '\x2', '\x2', '\x2', '\x1D5', '\x45', '\x3', 
-		'\x2', '\x2', '\x2', '\x1D6', '\x1D7', '\a', 'L', '\x2', '\x2', '\x1D7', 
-		'G', '\x3', '\x2', '\x2', '\x2', '\x1D8', '\x1D9', '\a', '\x41', '\x2', 
+		'\x2', '\x2', '\x2', '\x1D6', '\x1D7', '\a', 'M', '\x2', '\x2', '\x1D7', 
+		'G', '\x3', '\x2', '\x2', '\x2', '\x1D8', '\x1D9', '\a', '\x42', '\x2', 
 		'\x2', '\x1D9', 'I', '\x3', '\x2', '\x2', '\x2', '\x1DA', '\x1DB', '\a', 
-		'\x42', '\x2', '\x2', '\x1DB', 'K', '\x3', '\x2', '\x2', '\x2', '\x1DC', 
-		'\x1DD', '\a', '?', '\x2', '\x2', '\x1DD', 'M', '\x3', '\x2', '\x2', '\x2', 
+		'\x43', '\x2', '\x2', '\x1DB', 'K', '\x3', '\x2', '\x2', '\x2', '\x1DC', 
+		'\x1DD', '\a', '@', '\x2', '\x2', '\x1DD', 'M', '\x3', '\x2', '\x2', '\x2', 
 		'\x1DE', '\x1DF', '\t', '\x4', '\x2', '\x2', '\x1DF', 'O', '\x3', '\x2', 
 		'\x2', '\x2', '\x1E0', '\x1E1', '\a', '\x13', '\x2', '\x2', '\x1E1', '\x1E2', 
 		'\x5', 'V', ',', '\x2', '\x1E2', '\x1E6', '\x5', '\x38', '\x1D', '\x2', 
@@ -6669,7 +6664,7 @@ public partial class GiraphParser : Parser {
 		'\x15', '\x2', '\x2', '\x2BD', '\x2BF', '\x3', '\x2', '\x2', '\x2', '\x2BE', 
 		'\x2A9', '\x3', '\x2', '\x2', '\x2', '\x2BE', '\x2B2', '\x3', '\x2', '\x2', 
 		'\x2', '\x2BF', '\x83', '\x3', '\x2', '\x2', '\x2', '\x2C0', '\x2C1', 
-		'\x5', '\x88', '\x45', '\x2', '\x2C1', '\x2C2', '\a', '\x43', '\x2', '\x2', 
+		'\x5', '\x88', '\x45', '\x2', '\x2C1', '\x2C2', '\a', '\x44', '\x2', '\x2', 
 		'\x2C2', '\x2C3', '\a', '\x1C', '\x2', '\x2', '\x2C3', '\x2C4', '\x5', 
 		'\x82', '\x42', '\x2', '\x2C4', '\x85', '\x3', '\x2', '\x2', '\x2', '\x2C5', 
 		'\x2C6', '\a', '\x14', '\x2', '\x2', '\x2C6', '\x2C7', '\x5', '\x88', 
@@ -6754,10 +6749,10 @@ public partial class GiraphParser : Parser {
 		'\x3', '\x2', '\x2', '\x2', '\x336', '\x333', '\x3', '\x2', '\x2', '\x2', 
 		'\x336', '\x334', '\x3', '\x2', '\x2', '\x2', '\x336', '\x335', '\x3', 
 		'\x2', '\x2', '\x2', '\x337', '\xA1', '\x3', '\x2', '\x2', '\x2', '\x338', 
-		'\x339', '\a', '\x35', '\x2', '\x2', '\x339', '\x33A', '\x5', 'V', ',', 
+		'\x339', '\a', '\x36', '\x2', '\x2', '\x339', '\x33A', '\x5', 'V', ',', 
 		'\x2', '\x33A', '\x33B', '\a', ' ', '\x2', '\x2', '\x33B', '\x33C', '\x5', 
 		'\x42', '\"', '\x2', '\x33C', '\x33D', '\a', '\x10', '\x2', '\x2', '\x33D', 
-		'\xA3', '\x3', '\x2', '\x2', '\x2', '\x33E', '\x33F', '\a', '\x36', '\x2', 
+		'\xA3', '\x3', '\x2', '\x2', '\x2', '\x33E', '\x33F', '\a', '\x37', '\x2', 
 		'\x2', '\x33F', '\x340', '\a', '*', '\x2', '\x2', '\x340', '\x341', '\x5', 
 		'\x42', '\"', '\x2', '\x341', '\xA5', '\x3', '\x2', '\x2', '\x2', '\x342', 
 		'\x343', '\a', '\x33', '\x2', '\x2', '\x343', '\x344', '\a', '*', '\x2', 
@@ -6766,22 +6761,22 @@ public partial class GiraphParser : Parser {
 		'\x347', '\x348', '\x5', 'V', ',', '\x2', '\x348', '\x349', '\a', ' ', 
 		'\x2', '\x2', '\x349', '\x34A', '\x5', '\x42', '\"', '\x2', '\x34A', '\x34B', 
 		'\a', '\x10', '\x2', '\x2', '\x34B', '\xA9', '\x3', '\x2', '\x2', '\x2', 
-		'\x34C', '\x34E', '\a', ':', '\x2', '\x2', '\x34D', '\x34F', '\x5', '\x9A', 
+		'\x34C', '\x34E', '\a', ';', '\x2', '\x2', '\x34D', '\x34F', '\x5', '\x9A', 
 		'N', '\x2', '\x34E', '\x34D', '\x3', '\x2', '\x2', '\x2', '\x34E', '\x34F', 
 		'\x3', '\x2', '\x2', '\x2', '\x34F', '\x350', '\x3', '\x2', '\x2', '\x2', 
 		'\x350', '\x351', '\a', '*', '\x2', '\x2', '\x351', '\x353', '\x5', '\x42', 
 		'\"', '\x2', '\x352', '\x354', '\x5', '^', '\x30', '\x2', '\x353', '\x352', 
 		'\x3', '\x2', '\x2', '\x2', '\x353', '\x354', '\x3', '\x2', '\x2', '\x2', 
-		'\x354', '\xAB', '\x3', '\x2', '\x2', '\x2', '\x355', '\x357', '\a', ';', 
+		'\x354', '\xAB', '\x3', '\x2', '\x2', '\x2', '\x355', '\x357', '\a', '<', 
 		'\x2', '\x2', '\x356', '\x358', '\x5', '\x9A', 'N', '\x2', '\x357', '\x356', 
 		'\x3', '\x2', '\x2', '\x2', '\x357', '\x358', '\x3', '\x2', '\x2', '\x2', 
 		'\x358', '\x359', '\x3', '\x2', '\x2', '\x2', '\x359', '\x35A', '\a', 
 		'*', '\x2', '\x2', '\x35A', '\x35C', '\x5', '\x42', '\"', '\x2', '\x35B', 
 		'\x35D', '\x5', '^', '\x30', '\x2', '\x35C', '\x35B', '\x3', '\x2', '\x2', 
 		'\x2', '\x35C', '\x35D', '\x3', '\x2', '\x2', '\x2', '\x35D', '\xAD', 
-		'\x3', '\x2', '\x2', '\x2', '\x35E', '\x363', '\x5', '@', '!', '\x2', 
+		'\x3', '\x2', '\x2', '\x2', '\x35E', '\x363', '\x5', 'X', '-', '\x2', 
 		'\x35F', '\x360', '\a', '\x11', '\x2', '\x2', '\x360', '\x362', '\x5', 
-		'@', '!', '\x2', '\x361', '\x35F', '\x3', '\x2', '\x2', '\x2', '\x362', 
+		'X', '-', '\x2', '\x361', '\x35F', '\x3', '\x2', '\x2', '\x2', '\x362', 
 		'\x365', '\x3', '\x2', '\x2', '\x2', '\x363', '\x361', '\x3', '\x2', '\x2', 
 		'\x2', '\x363', '\x364', '\x3', '\x2', '\x2', '\x2', '\x364', '\xAF', 
 		'\x3', '\x2', '\x2', '\x2', '\x365', '\x363', '\x3', '\x2', '\x2', '\x2', 
@@ -6792,38 +6787,38 @@ public partial class GiraphParser : Parser {
 		'\x2', '\x2', '\x2', '\x36C', '\xB1', '\x3', '\x2', '\x2', '\x2', '\x36D', 
 		'\x36B', '\x3', '\x2', '\x2', '\x2', '\x36E', '\x36F', '\x5', 'V', ',', 
 		'\x2', '\x36F', '\xB3', '\x3', '\x2', '\x2', '\x2', '\x370', '\x371', 
-		'\a', '<', '\x2', '\x2', '\x371', '\x372', '\x5', '\xB0', 'Y', '\x2', 
+		'\a', '=', '\x2', '\x2', '\x371', '\x372', '\x5', '\xB0', 'Y', '\x2', 
 		'\x372', '\x373', '\a', '\x10', '\x2', '\x2', '\x373', '\xB5', '\x3', 
-		'\x2', '\x2', '\x2', '\x374', '\x375', '\a', '\x36', '\x2', '\x2', '\x375', 
+		'\x2', '\x2', '\x2', '\x374', '\x375', '\a', '\x37', '\x2', '\x2', '\x375', 
 		'\x376', '\a', '*', '\x2', '\x2', '\x376', '\x378', '\x5', '\x42', '\"', 
 		'\x2', '\x377', '\x379', '\x5', '^', '\x30', '\x2', '\x378', '\x377', 
 		'\x3', '\x2', '\x2', '\x2', '\x378', '\x379', '\x3', '\x2', '\x2', '\x2', 
-		'\x379', '\xB7', '\x3', '\x2', '\x2', '\x2', '\x37A', '\x37B', '\a', '>', 
-		'\x2', '\x2', '\x37B', '\x37C', '\a', 'L', '\x2', '\x2', '\x37C', '\xB9', 
+		'\x379', '\xB7', '\x3', '\x2', '\x2', '\x2', '\x37A', '\x37B', '\a', '?', 
+		'\x2', '\x2', '\x37B', '\x37C', '\a', 'M', '\x2', '\x2', '\x37C', '\xB9', 
 		'\x3', '\x2', '\x2', '\x2', '\x37D', '\x37E', '\x5', '\xB8', ']', '\x2', 
-		'\x37E', '\xBB', '\x3', '\x2', '\x2', '\x2', '\x37F', '\x380', '\a', '\x38', 
+		'\x37E', '\xBB', '\x3', '\x2', '\x2', '\x2', '\x37F', '\x380', '\a', '\x39', 
 		'\x2', '\x2', '\x380', '\x381', '\a', '*', '\x2', '\x2', '\x381', '\x383', 
 		'\x5', '\x42', '\"', '\x2', '\x382', '\x384', '\x5', '^', '\x30', '\x2', 
 		'\x383', '\x382', '\x3', '\x2', '\x2', '\x2', '\x383', '\x384', '\x3', 
 		'\x2', '\x2', '\x2', '\x384', '\x385', '\x3', '\x2', '\x2', '\x2', '\x385', 
 		'\x386', '\a', '\x10', '\x2', '\x2', '\x386', '\xBD', '\x3', '\x2', '\x2', 
-		'\x2', '\x387', '\x388', '\a', '\x39', '\x2', '\x2', '\x388', '\x389', 
-		'\a', '*', '\x2', '\x2', '\x389', '\x38B', '\x5', '\x42', '\"', '\x2', 
-		'\x38A', '\x38C', '\x5', '^', '\x30', '\x2', '\x38B', '\x38A', '\x3', 
-		'\x2', '\x2', '\x2', '\x38B', '\x38C', '\x3', '\x2', '\x2', '\x2', '\x38C', 
-		'\x38D', '\x3', '\x2', '\x2', '\x2', '\x38D', '\x38E', '\a', '\x10', '\x2', 
-		'\x2', '\x38E', '\xBF', '\x3', '\x2', '\x2', '\x2', 'Y', '\xC3', '\xCC', 
-		'\xD1', '\xD5', '\xDB', '\xE3', '\xF2', '\xF4', '\xFF', '\x103', '\x10B', 
-		'\x10E', '\x118', '\x11C', '\x126', '\x12C', '\x138', '\x141', '\x146', 
-		'\x151', '\x155', '\x15E', '\x162', '\x168', '\x16E', '\x173', '\x177', 
-		'\x182', '\x18D', '\x196', '\x1A3', '\x1AE', '\x1B3', '\x1C2', '\x1C6', 
-		'\x1CD', '\x1D4', '\x1E6', '\x1EA', '\x1FC', '\x201', '\x206', '\x212', 
-		'\x217', '\x21C', '\x236', '\x245', '\x249', '\x24D', '\x255', '\x25B', 
-		'\x25F', '\x264', '\x26F', '\x275', '\x281', '\x286', '\x297', '\x29E', 
-		'\x2A2', '\x2AF', '\x2B9', '\x2BE', '\x2D1', '\x2D5', '\x2DA', '\x2E1', 
-		'\x2E7', '\x2EF', '\x2F5', '\x2FF', '\x303', '\x307', '\x310', '\x319', 
-		'\x322', '\x330', '\x336', '\x34E', '\x353', '\x357', '\x35C', '\x363', 
-		'\x36B', '\x378', '\x383', '\x38B',
+		'\x2', '\x387', '\x388', '\a', ':', '\x2', '\x2', '\x388', '\x389', '\a', 
+		'*', '\x2', '\x2', '\x389', '\x38B', '\x5', '\x42', '\"', '\x2', '\x38A', 
+		'\x38C', '\x5', '^', '\x30', '\x2', '\x38B', '\x38A', '\x3', '\x2', '\x2', 
+		'\x2', '\x38B', '\x38C', '\x3', '\x2', '\x2', '\x2', '\x38C', '\x38D', 
+		'\x3', '\x2', '\x2', '\x2', '\x38D', '\x38E', '\a', '\x10', '\x2', '\x2', 
+		'\x38E', '\xBF', '\x3', '\x2', '\x2', '\x2', 'Y', '\xC3', '\xCC', '\xD1', 
+		'\xD5', '\xDB', '\xE3', '\xEE', '\xF4', '\xFF', '\x103', '\x10B', '\x10E', 
+		'\x118', '\x11C', '\x126', '\x12C', '\x138', '\x141', '\x146', '\x151', 
+		'\x155', '\x15E', '\x162', '\x168', '\x16E', '\x173', '\x177', '\x182', 
+		'\x18D', '\x196', '\x1A3', '\x1AE', '\x1B3', '\x1C2', '\x1C6', '\x1CD', 
+		'\x1D4', '\x1E6', '\x1EA', '\x1FC', '\x201', '\x206', '\x212', '\x217', 
+		'\x21C', '\x236', '\x245', '\x249', '\x24D', '\x255', '\x25B', '\x25F', 
+		'\x264', '\x26F', '\x275', '\x281', '\x286', '\x297', '\x29E', '\x2A2', 
+		'\x2AF', '\x2B9', '\x2BE', '\x2D1', '\x2D5', '\x2DA', '\x2E1', '\x2E7', 
+		'\x2EF', '\x2F5', '\x2FF', '\x303', '\x307', '\x310', '\x319', '\x322', 
+		'\x330', '\x336', '\x34E', '\x353', '\x357', '\x35C', '\x363', '\x36B', 
+		'\x378', '\x383', '\x38B',
 	};
 
 	public static readonly ATN _ATN =

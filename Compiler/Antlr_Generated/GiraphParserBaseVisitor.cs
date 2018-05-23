@@ -454,7 +454,7 @@ public partial class GiraphParserBaseVisitor<Result> : AbstractParseTreeVisitor<
 	/// <return>The visitor result.</return>
 	public virtual Result VisitElseCond([NotNull] GiraphParser.ElseCondContext context) { return VisitChildren(context); }
 	/// <summary>
-	/// Visit a parse tree produced by <see cref="GiraphParser.boolComparisons"/>.
+	/// Visit a parse tree produced by <see cref="GiraphParser.boolCompOrExp"/>.
 	/// <para>
 	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
 	/// on <paramref name="context"/>.
@@ -462,9 +462,9 @@ public partial class GiraphParserBaseVisitor<Result> : AbstractParseTreeVisitor<
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	public virtual Result VisitBoolComparisons([NotNull] GiraphParser.BoolComparisonsContext context) { return VisitChildren(context); }
+	public virtual Result VisitBoolCompOrExp([NotNull] GiraphParser.BoolCompOrExpContext context) { return VisitChildren(context); }
 	/// <summary>
-	/// Visit a parse tree produced by <see cref="GiraphParser.simpleBoolComparison"/>.
+	/// Visit a parse tree produced by <see cref="GiraphParser.simpleBoolCompOrExp"/>.
 	/// <para>
 	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
 	/// on <paramref name="context"/>.
@@ -472,7 +472,7 @@ public partial class GiraphParserBaseVisitor<Result> : AbstractParseTreeVisitor<
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	public virtual Result VisitSimpleBoolComparison([NotNull] GiraphParser.SimpleBoolComparisonContext context) { return VisitChildren(context); }
+	public virtual Result VisitSimpleBoolCompOrExp([NotNull] GiraphParser.SimpleBoolCompOrExpContext context) { return VisitChildren(context); }
 	/// <summary>
 	/// Visit a parse tree produced by <see cref="GiraphParser.predicate"/>.
 	/// <para>

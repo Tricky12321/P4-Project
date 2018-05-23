@@ -22,7 +22,7 @@ namespace Compiler
 		private static bool _ignoreErrors = false;
 		private static bool _dontDelete = true;
 		public static bool TestMode = false;
-		public static bool WriteDebugText = false;
+		public static bool WriteDebugText = true;
 		public static void Main(string[] args)
 		{
 			Console.ForegroundColor = ConsoleColor.Red;

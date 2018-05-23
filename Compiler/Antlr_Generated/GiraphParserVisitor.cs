@@ -284,17 +284,17 @@ public interface IGiraphParserVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <return>The visitor result.</return>
 	Result VisitElseCond([NotNull] GiraphParser.ElseCondContext context);
 	/// <summary>
-	/// Visit a parse tree produced by <see cref="GiraphParser.boolComparisons"/>.
+	/// Visit a parse tree produced by <see cref="GiraphParser.boolCompOrExp"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	Result VisitBoolComparisons([NotNull] GiraphParser.BoolComparisonsContext context);
+	Result VisitBoolCompOrExp([NotNull] GiraphParser.BoolCompOrExpContext context);
 	/// <summary>
-	/// Visit a parse tree produced by <see cref="GiraphParser.simpleBoolComparison"/>.
+	/// Visit a parse tree produced by <see cref="GiraphParser.simpleBoolCompOrExp"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	Result VisitSimpleBoolComparison([NotNull] GiraphParser.SimpleBoolComparisonContext context);
+	Result VisitSimpleBoolCompOrExp([NotNull] GiraphParser.SimpleBoolCompOrExpContext context);
 	/// <summary>
 	/// Visit a parse tree produced by <see cref="GiraphParser.predicate"/>.
 	/// </summary>
