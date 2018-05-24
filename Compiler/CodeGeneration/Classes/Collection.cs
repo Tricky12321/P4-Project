@@ -37,6 +37,10 @@ namespace Giraph.Classes
         }
         */
 
+		public T First() {
+			return this[0];
+		}
+
         private T RemoveLast()
         {
             T LastElement = this.Last();
