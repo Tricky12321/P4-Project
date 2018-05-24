@@ -18,17 +18,10 @@ namespace Giraph.Classes
         public T Dequeue => this.RemoveLast();
 
         public void Enqueue(T Item) => this.Insert(0, Item);
-
-        public T Peek => this.First();
-
+              
         public T Select(Func<T, Boolean> p) => this.Where(p).Single();
 
         public List<T> SelectAll(Func<T, Boolean> p) => this.Where(p).ToList();
-
-        public T First()
-        {
-            return this.First();
-        }
 
         /*
         public List<T> Remove(Func<T, Boolean> p)

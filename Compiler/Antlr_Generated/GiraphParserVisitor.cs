@@ -422,12 +422,6 @@ public interface IGiraphParserVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <return>The visitor result.</return>
 	Result VisitOperation([NotNull] GiraphParser.OperationContext context);
 	/// <summary>
-	/// Visit a parse tree produced by <see cref="GiraphParser.inlineDcl"/>.
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	/// <return>The visitor result.</return>
-	Result VisitInlineDcl([NotNull] GiraphParser.InlineDclContext context);
-	/// <summary>
 	/// Visit a parse tree produced by <see cref="GiraphParser.foreachCondition"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
@@ -464,12 +458,6 @@ public interface IGiraphParserVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <return>The visitor result.</return>
 	Result VisitSetQuery([NotNull] GiraphParser.SetQueryContext context);
 	/// <summary>
-	/// Visit a parse tree produced by <see cref="GiraphParser.setExpressionAtri"/>.
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	/// <return>The visitor result.</return>
-	Result VisitSetExpressionAtri([NotNull] GiraphParser.SetExpressionAtriContext context);
-	/// <summary>
 	/// Visit a parse tree produced by <see cref="GiraphParser.setExpressionAtriSim"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
@@ -493,12 +481,6 @@ public interface IGiraphParserVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
 	Result VisitAttribute([NotNull] GiraphParser.AttributeContext context);
-	/// <summary>
-	/// Visit a parse tree produced by <see cref="GiraphParser.setOneAttri"/>.
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	/// <return>The visitor result.</return>
-	Result VisitSetOneAttri([NotNull] GiraphParser.SetOneAttriContext context);
 	/// <summary>
 	/// Visit a parse tree produced by <see cref="GiraphParser.collNoReturnOps"/>.
 	/// </summary>
@@ -553,18 +535,6 @@ public interface IGiraphParserVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
 	Result VisitParameters([NotNull] GiraphParser.ParametersContext context);
-	/// <summary>
-	/// Visit a parse tree produced by <see cref="GiraphParser.printOptions"/>.
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	/// <return>The visitor result.</return>
-	Result VisitPrintOptions([NotNull] GiraphParser.PrintOptionsContext context);
-	/// <summary>
-	/// Visit a parse tree produced by <see cref="GiraphParser.printOption"/>.
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	/// <return>The visitor result.</return>
-	Result VisitPrintOption([NotNull] GiraphParser.PrintOptionContext context);
 	/// <summary>
 	/// Visit a parse tree produced by <see cref="GiraphParser.print"/>.
 	/// </summary>

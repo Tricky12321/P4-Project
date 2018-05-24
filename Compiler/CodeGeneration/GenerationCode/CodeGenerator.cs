@@ -580,7 +580,7 @@ namespace Compiler.CodeGeneration.GenerationCode
 			string boolOpString = maxIfTrue ? ">" : "<";
 			extractString.Append($"{placeFuncString}{node.ID}_{functionID}();" +
 			                     $"\n{ResolveTypeToCS(node.Type_enum)} {placeFuncString}{node.ID}_{functionID++}(){{\n");
-			extractString.Append($"{ResolveTypeToCS(node.Type_enum)} {placeValString} = {HandleCSharpKeywords(node.Variable)}.First();" +
+			extractString.Append($"{ResolveTypeToCS(node.Type_enum)} {placeValString} = {HandleCSharpKeywords(node.Variable)}.First();\n" +
 			                     $"double placeDouble = {HandleCSharpKeywords(node.Variable)}.First(){placeAttriString};\n");
 			extractString.Append($"foreach (var item in {HandleCSharpKeywords(node.Variable)}){{\n");
 			extractString.Append($"if(item{placeAttriString} {boolOpString} placeDouble){{\n");
