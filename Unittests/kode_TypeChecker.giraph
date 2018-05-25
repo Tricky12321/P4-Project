@@ -50,6 +50,7 @@ Main -> void () {
 
     ]
 
+
 	collection int tim;
 	collection string hej;
 	int timint = 5;
@@ -134,21 +135,21 @@ newFunc -> void () {
 	}
 	void voidVar;
 	int decitest = 1+1.5;
-	int k = k;
-	int i = i+i;
-	print k, i+nyhej;
 
-	run voidFunc with (k);
-	run wrongreturnFunc with (k);
+
+    
+
+
+
+
 	run wrongreturnFunc with (2.5);
 	run voidFunc with (2.5);
 	run voidFunc;
 
-	predicate po(int predint) : { predint < 5 };
-	if (po(5.5)) {
-	}
-	remove from i;
-	removeall from i;
+    
+
+
+
 }
 
 anothervoidFunc -> void (void anothervoidparameter){

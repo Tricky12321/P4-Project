@@ -153,11 +153,16 @@ namespace Compiler.AST
 		public override AbstractNode VisitBoolCompOrExp([NotNull] GiraphParser.BoolCompOrExpContext context)
 		{
 			BoolComparisonNode BCompare = new BoolComparisonNode(context.Start.Line, context.Start.Column);
+			BCompare.Type = "bool";
 			// Checks if there is a prefix, if there is, add it to the Node
 			// TODO: Se om dette virker...
-			if (context.expression() != null && !(context.Parent is GiraphParser.BoolCompOrExpContext))
+			if (context.expression() != null)
 			{
-				return Visit(context.expression());
+				AbstractNode output = Visit(context.expression());
+				if (output is ExpressionNode expNode && context.rightP != null && context.leftP != null) {
+					expNode.hasparentheses = true;
+				}
+				return output;
 			}
 
 			if (context.prefix != null)
@@ -169,7 +174,12 @@ namespace Compiler.AST
 			if (context.rightP != null && context.leftP != null && context.boolCompOrExp() != null)
 			{
 				BCompare.InsideParentheses = true;
-				BCompare.AdoptChildren(Visit(context.boolCompOrExp(0)));
+				var output = Visit(context.boolCompOrExp(0));
+				BCompare.AdoptChildren(output);
+                if (output is ExpressionNode expNode) {
+                    expNode.hasparentheses = true;
+                        return expNode;
+                }
 			}
 			// Checks if there is a left and right statement, because this will indicatef that the boolcomparison, has a left bool and right bool, compared by the operator.
 			else if (context.right != null && context.left != null && context.boolCompOrExp() != null)
@@ -208,8 +218,9 @@ namespace Compiler.AST
 		{
 			ExpressionNode ExpNode = new ExpressionNode(context.Start.Line, context.Start.Column);
 			ExpNode.ExpressionParts = EvaluateExpression(context);
-			//ExpNode.AdoptChildren(Visit(context.GetChild(0)));
-
+			if (ExpNode.ExpressionParts.Count == 1) {
+				return ExpNode.ExpressionParts[0];
+			}
 			return ExpNode;
 		}
 
@@ -293,14 +304,45 @@ namespace Compiler.AST
 		{
 			List<AbstractNode> expressionPart = new List<AbstractNode>();
 
-			//expressionPart = VisitVarOrconstExpressionExtRecursive(context);
-
 			for (int i = 0; i < context.ChildCount; i++)
 			{
-				expressionPart.Add(Visit(context.GetChild(i)));
+				// If its an operator, the operator needs to know its left and right stuff
+				if (context.GetChild(i) is GiraphParser.SimpleOperatorsContext || context.GetChild(i) is GiraphParser.AdvancedOperatorsContext || context.GetChild(i) is GiraphParser.OperatorContext) {
+					OperatorNode OperatorNode = Visit(context.GetChild(i)) as OperatorNode;
+					OperatorNode.Left = expressionPart[i - 1];
+					OperatorNode.Right = Visit(context.GetChild(i + 1));
+					expressionPart.Add(OperatorNode);
+					expressionPart.Add(OperatorNode.Right);
+					i++;
+				} else {
+					expressionPart.Add(Visit(context.GetChild(i)));
+                }
 			}
 			return expressionPart;
 		}
+
+		public override AbstractNode VisitExpressionStart([NotNull] GiraphParser.ExpressionStartContext context)
+		{
+			ExpressionNode expNode = new ExpressionNode(context.Start.Line, context.Start.Column);
+			expNode.ExpressionParts = EvaluateExpression(context);
+			if (expNode.ExpressionParts.Count == 1) {
+				return expNode.ExpressionParts[0];
+			}
+			return expNode;
+		}
+
+		public override AbstractNode VisitExpressionAdvanced([NotNull] GiraphParser.ExpressionAdvancedContext context)
+		{
+			ExpressionNode expNode = new ExpressionNode(context.Start.Line, context.Start.Column);
+			expNode.ExpressionParts = EvaluateExpression(context);
+			if (expNode.ExpressionParts.Count == 1)
+            {
+                return expNode.ExpressionParts[0];
+            }
+            return expNode;
+		}
+
+
 
 		public override AbstractNode VisitOperand([NotNull] GiraphParser.OperandContext context)
 		{
@@ -342,6 +384,20 @@ namespace Compiler.AST
 			OperatorNode opNode = new OperatorNode(context.Start.Line, context.Start.Column);
 			opNode.Operator = context.GetText();
 			return opNode;
+		}
+
+		public override AbstractNode VisitSimpleOperators([NotNull] GiraphParser.SimpleOperatorsContext context)
+		{
+			OperatorNode opNode = new OperatorNode(context.Start.Line, context.Start.Column);
+            opNode.Operator = context.GetText();
+            return opNode;
+		}
+
+		public override AbstractNode VisitAdvancedOperators([NotNull] GiraphParser.AdvancedOperatorsContext context)
+		{
+			OperatorNode opNode = new OperatorNode(context.Start.Line, context.Start.Column);
+            opNode.Operator = context.GetText();
+            return opNode;
 		}
 
 		/*private List<AbstractNode> VisitVarOrconstExpressionExtRecursive([NotNull] IParseTree context)
@@ -386,7 +442,8 @@ namespace Compiler.AST
 			switch (type)
 			{
 				case "GiraphParser+BoolContext":
-				case "GiraphParser+BoolComparisonsContext":
+				case "GiraphParser+SimpleBoolCompOrExpContext":
+				case "GiraphParser+BoolCompOrExpContext":
 					return ExpressionPartType.BOOL;
 				case "GiraphParser+FloatnumContext":
 					return ExpressionPartType.DECIMAL;
@@ -575,13 +632,13 @@ namespace Compiler.AST
 			PredicateNode PNode = new PredicateNode(context.Start.Line, context.Start.Column);
 			PNode.Name = context.variable().GetText();
 			// Check if there is any parameters
-			if (context.formalParams() != null && context.formalParams().formalParam() != null)
+			if (context.predicateParams() != null && context.predicateParams().predicateParam() != null)
 			{
 				// If there are any parameters, loop though all of them
-				foreach (var Param in context.formalParams().formalParam())
+				foreach (var Param in context.predicateParams().predicateParam())
 				{
 					string ParameterName = Param.variable().GetText();
-					string ParameterType = Param.allTypeWithColl().GetText();
+					string ParameterType = Param.allType().GetText();
 					// Add them to the paramter list
 					PNode.AddParameter(ParameterType, ParameterName, context.Start.Line, context.Start.Column);
 				}
@@ -669,7 +726,8 @@ namespace Compiler.AST
 		public override AbstractNode VisitPushOP([NotNull] GiraphParser.PushOPContext context)
 		{
 			PushQueryNode PushNode = new PushQueryNode(context.Start.Line, context.Start.Column);
-			PushNode.VariableToAdd = Visit(context.boolCompOrExp());
+			var output = Visit(context.boolCompOrExp());
+			PushNode.VariableToAdd = output;
 			PushNode.VariableCollection = context.variable().GetText();
 			return PushNode;
 		}
@@ -1045,18 +1103,27 @@ namespace Compiler.AST
 			ExpressionNode ExpNode = new ExpressionNode(context.Start.Line, context.Start.Column);
 			ExpNode.ExpressionParts = EvaluateExpression(context);
 			//ExpNode.AdoptChildren(Visit(context.GetChild(0)));
-
+			if (ExpNode.ExpressionParts.Count == 1)
+            {
+				return ExpNode.ExpressionParts[0];
+            }
 			return ExpNode;
 		}
 
 		public override AbstractNode VisitSimpleBoolCompOrExp([NotNull] GiraphParser.SimpleBoolCompOrExpContext context)
 		{
 			BoolComparisonNode BCompare = new BoolComparisonNode(context.Start.Line, context.Start.Column);
+			BCompare.Type = "bool";
 			// Checks if there is a prefix, if there is, add it to the Node
-			if (context.simpleExpression() != null && !(context.Parent is GiraphParser.SimpleBoolCompOrExpContext))
-			{
-				return Visit(context.simpleExpression());
-			}
+			if (context.simpleExpression() != null)
+            {
+				AbstractNode output = Visit(context.simpleExpression());
+                if (output is ExpressionNode expNode && context.rightP != null && context.leftP != null)
+                {
+                    expNode.hasparentheses = true;
+                }
+                return output;
+            }
 			if (context.prefix != null)
 			{
 				BCompare.Prefix = context.prefix.Text;

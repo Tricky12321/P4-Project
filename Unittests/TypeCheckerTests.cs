@@ -136,9 +136,8 @@ namespace Unittests
 			Assert.IsTrue(errorlist.Contains(errorMessage));
 		}
 
-		[TestCase("There is a type mismatch in the expression on 109:25")]
+		[TestCase("Variable  and expint are missmatch of types. Line number 109:14")]
 		[TestCase("There is a type mismatch in the expression on 110:25")]
-		[TestCase("There is a type mismatch in the expression on 139:12")]
 		public void ExpressionErrors(string errorMessage)
 		{
 			Assert.IsTrue(errorlist.Contains(errorMessage));
@@ -170,14 +169,11 @@ namespace Unittests
 		[TestCase("Variable  and expint are missmatch of types. Line number 109:14")]
 		[TestCase("Declaration cant be of type void! 135:1")]
 		[TestCase("Variable  and decitest are missmatch of types. Line number 136:18")]
-		[TestCase("It is not possible to declare a variable with the same variable. Duplicates used: k 137:9")]
-		[TestCase("It is not possible to declare a variable with the same variable. Duplicates used: i 138:11")]
 		public void variableDclErrors(string errorMessage)
 		{
 			Assert.IsTrue(errorlist.Contains(errorMessage));
 		}
 
-		[TestCase("one or more provided variables or constants is not legal to print. 139:12")]
 		[TestCase("one or more provided variables or constants is not legal to print. 173:7")]
 		public void printErrors(string errorMessage)
 		{

@@ -659,14 +659,15 @@ namespace Compiler.CodeGeneration.GenerationCode
 		{
 			foreach (var item in node.ExpressionParts)
 			{
-				bool tester = item is ExpressionNode expNode && expNode.hasparentheses;
-				if (tester)
+
+				bool Parentheses = item is ExpressionNode expNode && expNode.hasparentheses;
+				if (Parentheses)
 				{
 					_currentStringBuilder.Append("(");
 				}
 				item.Accept(this);
 
-				if (tester)
+				if (Parentheses)
 				{
 					_currentStringBuilder.Append(")");
 				}
@@ -889,16 +890,11 @@ namespace Compiler.CodeGeneration.GenerationCode
 
 		public override void Visit(ConstantNode node)
 		{
-			if (node.Type_enum == AllType.STRING)
+			if (node.Type_enum == AllType.STRING || node.Type_enum == AllType.BOOL || node.Type_enum == AllType.INT)
 			{
 				_currentStringBuilder.Append(node.Value);
 			}
 			else if (node.Type_enum == AllType.DECIMAL)
-			{
-				_currentStringBuilder.Append(node.Value);
-				_currentStringBuilder.Append("m");
-			}
-			else if (node.Type_enum == AllType.BOOL || node.Type_enum == AllType.INT)
 			{
 				_currentStringBuilder.Append(node.Value);
 			}
@@ -1049,12 +1045,12 @@ namespace Compiler.CodeGeneration.GenerationCode
 			_currentExtension.Append($"public {ResolveTypeToCS(ExtendType)} {HandleCSharpKeywords(ExtendName)} {{ \n");
 			_currentExtension.Append("get\n");
 			_currentExtension.Append($"{{\n Update(); \n");
-			_currentExtension.Append($"if (disposed) {{  Console.WriteLine(\"You are trying to reference am object which no longer exists\"); Environment.Exit(0); }}\n");
+			_currentExtension.Append($"if (disposed) {{  Console.WriteLine(\"You are trying to reference an object which no longer exists\"); Environment.Exit(0); }}\n");
 			_currentExtension.Append($"return {(OriginalName)};\n");
 			_currentExtension.Append($"}}\n");
 			_currentExtension.Append("set\n");
 			_currentExtension.Append($"{{\nUpdate(); \n");
-			_currentExtension.Append($"if (disposed) {{  Console.WriteLine(\"You are trying to reference am object which no longer exists\"); Environment.Exit(0); }}\n");
+			_currentExtension.Append($"if (disposed) {{  Console.WriteLine(\"You are trying to reference an object which no longer exists\"); Environment.Exit(0); }}\n");
 			_currentExtension.Append($"{(OriginalName)} = value;\n");
 			_currentExtension.Append($"}}\n");
 			_currentExtension.Append("}\n");

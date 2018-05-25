@@ -83,7 +83,7 @@ namespace Giraph.Classes
             return base.Remove(obj);
         }
 
-        public new void RemoveAll()
+        public void RemoveAll()
         {
             foreach (var item in this.ToList())
             {

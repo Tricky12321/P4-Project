@@ -92,11 +92,16 @@ namespace Compiler.AST.SymbolTable
         //All the visit stuff-----------------------------------------
         public override void Visit(VariableDclNode node)
         {
+			var name = node.Name;
+            VisitChildren(node);
             SymbolTable.SetCurrentNode(node);
-            var name = node.Name;
             if (CheckAlreadyDeclared(node.Name))
             {
                 SymbolTable.EnterSymbol(node.Name, node.Type_enum);
+            }
+			if (node.Children.Count > 0)
+            {
+				SymbolTable.SetAssigned(node.Name);
             }
         }
 
@@ -247,8 +252,9 @@ namespace Compiler.AST.SymbolTable
             // Set initialBuildDone so predicates now will visit their children when visited inside functions
             _initialBuildDone = true;
 
-            //VisitChildren(node);
-        }
+			//VisitChildren(node);
+			SymbolTable.SymbolTableBuilderDone = true;
+		}
 
         public override void Visit(GraphNode node)
         {
@@ -313,8 +319,11 @@ namespace Compiler.AST.SymbolTable
 			// visits the varaible dcl node, and the assignment expression (Item1, Item3)
             foreach (var Exp in node.Attributes)
             {
+				if (Exp.Item1 is VariableNode) {
+					SymbolTable.SetAssigned(Exp.Item1.Name);
+				}
                 Exp.Item1.Accept(this);
-                Exp.Item3.Accept(this);
+				Exp.Item3.Accept(this);
             }
             // What children does a setNode have? 
             // Maybe variables? I dont know...
@@ -494,9 +503,13 @@ namespace Compiler.AST.SymbolTable
         public override void Visit(DeclarationNode node)
         {
             SymbolTable.SetCurrentNode(node);
+            
             if (CheckAlreadyDeclared(node.Name))
             {
                 SymbolTable.EnterSymbol(node.Name, node.Type_enum, node.CollectionDcl);
+				if (node.CollectionDcl || node.Type_enum == AllType.GRAPH) {
+					SymbolTable.SetAssigned(node.Name);
+				}
             }
             if (node.Assignment != null)
             {

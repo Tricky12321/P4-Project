@@ -13,6 +13,7 @@ namespace Compiler.AST.SymbolTable
         public uint Depth;
         public bool Reachable = true;
         public bool IsCollection = false;
+		public bool IsAssigned = false;
         public SymbolTableEntry(AllType type, uint depth)
         {
             Type = type;

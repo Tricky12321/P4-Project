@@ -110,6 +110,18 @@ public interface IGiraphParserVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <return>The visitor result.</return>
 	Result VisitAssignment([NotNull] GiraphParser.AssignmentContext context);
 	/// <summary>
+	/// Visit a parse tree produced by <see cref="GiraphParser.expressionStart"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitExpressionStart([NotNull] GiraphParser.ExpressionStartContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="GiraphParser.expressionAdvanced"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitExpressionAdvanced([NotNull] GiraphParser.ExpressionAdvancedContext context);
+	/// <summary>
 	/// Visit a parse tree produced by <see cref="GiraphParser.expression"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
@@ -175,6 +187,18 @@ public interface IGiraphParserVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
 	Result VisitAdvancedOperators([NotNull] GiraphParser.AdvancedOperatorsContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="GiraphParser.predicateParams"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitPredicateParams([NotNull] GiraphParser.PredicateParamsContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="GiraphParser.predicateParam"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitPredicateParam([NotNull] GiraphParser.PredicateParamContext context);
 	/// <summary>
 	/// Visit a parse tree produced by <see cref="GiraphParser.formalParams"/>.
 	/// </summary>
