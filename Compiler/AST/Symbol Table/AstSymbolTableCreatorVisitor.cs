@@ -172,6 +172,7 @@ namespace Compiler.AST.SymbolTable
                 {
                     SymbolTable.MainHasWrongReturnType();
                 }
+				SymbolTable.SetAssigned(node.Name);
             }
             SymbolTable.SetCurrentNode(node);
             AllType type = Utilities.FindTypeFromString(node.ReturnType);
@@ -179,7 +180,8 @@ namespace Compiler.AST.SymbolTable
             if (!SymbolTable.DeclaredLocally(functionName))
             {
                 SymbolTable.EnterSymbol(functionName, type, node.IsCollection);
-                SymbolTable.OpenScope(node.Name);
+				SymbolTable.SetAssigned(node.Name);
+				SymbolTable.OpenScope(node.Name);
 
                 foreach (ParameterNode parameter in node.Parameters)
                 {
