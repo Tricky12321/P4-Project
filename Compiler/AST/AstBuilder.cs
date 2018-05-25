@@ -960,16 +960,7 @@ namespace Compiler.AST
 				{
 					AddNode.ToVariable = context.addToColl().variable().GetText();
 				}
-				if (context.addToColl().where() != null)
-				{
-					AddNode.WhereCondition = Visit(context.addToColl().where());
-				}
 			}
-			else
-			{
-				throw new Exception("Whaaaaaaaat?!");
-			}
-
 			return AddNode;
 		}
 
