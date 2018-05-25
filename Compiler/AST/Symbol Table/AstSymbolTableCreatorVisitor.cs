@@ -602,6 +602,7 @@ namespace Compiler.AST.SymbolTable
             else
             {
                 SymbolTable.EnterSymbol(node.VariableName, node.VariableType_enum);
+				SymbolTable.SetAssigned(node.VariableName);
             }
             // CHeck if the variable (collection) to loop though, is defined!
             SymbolTable.CheckIfDefined(node.InVariableName);
