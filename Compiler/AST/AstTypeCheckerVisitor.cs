@@ -945,6 +945,7 @@ namespace Compiler.AST
 		public override void Visit(RunQueryNode node)
 		{
 			_symbolTable.SetCurrentNode(node);
+            node.Type = _symbolTable.RetrieveSymbol(node.FunctionName).ToString().ToLower();
 			bool isCollection = false;
 			VisitChildren(node);
 			List<FunctionParameterEntry> funcParamList = _symbolTable.GetParameterTypes(node.FunctionName);
