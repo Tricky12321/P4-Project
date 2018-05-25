@@ -172,7 +172,6 @@ namespace Compiler.AST.SymbolTable
                 {
                     SymbolTable.MainHasWrongReturnType();
                 }
-				SymbolTable.SetAssigned(node.Name);
             }
             SymbolTable.SetCurrentNode(node);
             AllType type = Utilities.FindTypeFromString(node.ReturnType);
