@@ -248,11 +248,11 @@ namespace Compiler.AST.SymbolTable
 			VariableNodes.ForEach(x => x.Accept(this));
             PredicateNodes.ForEach(x => x.Accept(this));
             // Now that everything is declared for both functions and predicates, Visit their body(children)
-            FunctionNodes.ForEach(x => VisitChildrenNewScope(x));
+			_initialBuildDone = true;
+			FunctionNodes.ForEach(x => VisitChildrenNewScope(x));
             PredicateNodes.ForEach(x => VisitChildrenNewScope(x));
 
             // Set initialBuildDone so predicates now will visit their children when visited inside functions
-            _initialBuildDone = true;
 
 			//VisitChildren(node);
 			SymbolTable.SymbolTableBuilderDone = true;
