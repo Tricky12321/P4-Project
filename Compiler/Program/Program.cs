@@ -19,7 +19,7 @@ namespace Compiler
 	public static class Program
 	{
 		private static bool _error = false;
-		private static bool _ignoreErrors = false;
+		private static bool _ignoreErrors = true;
 		private static bool _dontDelete = true;
 		public static bool TestMode = false;
 		public static bool WriteDebugText = false;

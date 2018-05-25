@@ -886,7 +886,7 @@ namespace Compiler.AST
 		public override AbstractNode VisitPrint([NotNull] GiraphParser.PrintContext context)
 		{
 			PrintQueryNode PNode = new PrintQueryNode(context.Start.Line, context.Start.Column);
-			PNode.AdoptChildren(Visit(context.boolCompOrExp()));
+			PNode.AdoptChildren(Visit(context.simpleBoolCompOrExp()));
 			return PNode;
 		}
 
