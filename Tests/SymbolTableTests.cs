@@ -9,7 +9,7 @@ using System.Diagnostics;
 using Compiler;
 using Newtonsoft.Json;
 using Newtonsoft;
-namespace Unittests
+namespace Tests
 {
     [TestFixture()]
     public class SymbolTableTests

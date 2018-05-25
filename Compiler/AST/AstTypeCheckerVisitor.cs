@@ -785,8 +785,6 @@ namespace Compiler.AST
 			VisitChildren(node);
 			_symbolTable.SetCurrentNode(node);
 			AllType funcType = _symbolTable.RetrieveSymbol(node.FuncName, out bool FuncTypeCollection, false) ?? AllType.UNKNOWNTYPE;
-			bool ReturnTypeCollection = false;
-
 			CheckAllowedCast(funcType, node.Children[0].Type_enum);
 
 		}

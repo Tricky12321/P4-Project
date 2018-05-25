@@ -746,7 +746,6 @@ namespace Compiler.AST.SymbolTable
 
 				return GetPredicateParameters(name, false);
 			}
-			return null;
 		}
 
 		public List<FunctionParameterEntry> GetParameterTypes(string FunctionName)

@@ -5,7 +5,7 @@ using System;
 using Compiler;
 using System.Collections.Generic;
 
-namespace Unittests
+namespace Tests
 {
 	[TestFixture()]
 	public class TypeCheckerTest

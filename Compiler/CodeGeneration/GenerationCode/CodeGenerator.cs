@@ -21,7 +21,6 @@ namespace Compiler.CodeGeneration.GenerationCode
 		public StringBuilder GlobalSet;
 		private int _forLoopCounter = 0;
 		private int _newVariableCounter_private = 0;
-		private int _tabCount = 2;
 		private string _boolComparisonPrefix = "";
 		private string _newVariabelCounter
 		{
@@ -978,11 +977,8 @@ namespace Compiler.CodeGeneration.GenerationCode
 
 		public void ExtendClass(AllType Class, AllType ExtendType, string ExtendName, string ExtendNameShort, bool IsCollection = false)
 		{
-			_tabCount = 2;
-			// TODO: Default values for extended variables needs to be set
 			StringBuilder _currentExtension;
 			// Find out what class to extend, as they have their own extension classes.
-			bool dispose_mode = true;
 			switch (Class)
 			{
 				case AllType.GRAPH:
@@ -990,11 +986,9 @@ namespace Compiler.CodeGeneration.GenerationCode
 					break;
 				case AllType.EDGE:
 					_currentExtension = _edgeExtensions;
-					dispose_mode = true;
 					break;
 				case AllType.VERTEX:
 					_currentExtension = _vertexExtensions;
-					dispose_mode = true;
 					break;
 				default:
 					throw new Exception("You are trying to extend a non-class type, which is illegal!");

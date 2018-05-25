@@ -16,9 +16,7 @@ namespace Compiler.AST.SymbolTable
         private uint _elseIfStatementCounter = 0;
         private uint _elseStatementCounter = 0;
         private uint _whereStatementCounter = 0;
-        private uint _predicateStatementCounter = 0;
 
-        private BlockType _loopType;
         public uint depth;
 
         // Since prefixes is private, we need to be able to get them, but not set them

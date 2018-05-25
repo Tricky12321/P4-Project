@@ -8,7 +8,6 @@ namespace Compiler.AST.SymbolTable
 {
     class SymbolTableEntry
     {
-        public string Name;
         public AllType Type;
         public uint Depth;
         public bool Reachable = true;
