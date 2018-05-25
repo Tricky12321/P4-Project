@@ -562,32 +562,42 @@ namespace Compiler.CodeGeneration.GenerationCode
 
 		public override void Visit(ExtractMaxQueryNode node)
 		{
-			_currentStringBuilder.Append(GetExtractString(node, true));
+            GetExtractString(node, true);
+        }
+
+        public override void Visit(ExtractMinQueryNode node)
+		{
+			GetExtractString(node, false);
 		}
 
-		public override void Visit(ExtractMinQueryNode node)
+		private void GetExtractString(AbstractExtractNode node, bool maxIfTrue)
 		{
-			_currentStringBuilder.Append(GetExtractString(node, false));
-		}
-
-		private StringBuilder GetExtractString(AbstractExtractNode node, bool maxIfTrue)
-		{
-			StringBuilder extractString = new StringBuilder();
-
 			string placeFuncString = maxIfTrue ? "_funExtMax" : "_funExtMin";
 			string placeValString = $"_val{node.ID}";
 			string placeAttriString = node.Attribute == null ? "" : $".{node.Attribute.Replace("'", "")}";
 			string boolOpString = maxIfTrue ? ">" : "<";
-			extractString.Append($"{placeFuncString}{node.ID}_{functionID}();" +
+            _currentStringBuilder.Append($"{placeFuncString}{node.ID}_{functionID}();" +
 			                     $"\n{ResolveTypeToCS(node.Type_enum)} {placeFuncString}{node.ID}_{functionID++}(){{\n");
-			extractString.Append($"{ResolveTypeToCS(node.Type_enum)} {placeValString} = {HandleCSharpKeywords(node.Variable)}.First();\n" +
-			                     $"double placeDouble = {HandleCSharpKeywords(node.Variable)}.First(){placeAttriString};\n");
-			extractString.Append($"foreach (var item in {HandleCSharpKeywords(node.Variable)}){{\n");
-			extractString.Append($"if(item{placeAttriString} {boolOpString} placeDouble){{\n");
-			extractString.Append($"{placeValString} = item;\nplaceDouble = item{placeAttriString};\n}}\n}}\n");
-			extractString.Append($"{HandleCSharpKeywords(node.Variable)}.Remove({placeValString});\n");
-			extractString.Append($"return {placeValString};\n}}\n\n");
-			return extractString;
+            string maxOrMinDec = maxIfTrue ? "decimal.MinValue;" : "decimal.MaxValue;";
+            _currentStringBuilder.Append($"{ResolveTypeToCS(node.Type_enum)} {placeValString} = {maxOrMinDec}\nint _variablei = 0;\n");
+            _currentStringBuilder.Append($"foreach (var {HandleCSharpKeywords("val")} in {HandleCSharpKeywords(node.Variable)}){{\n");
+
+            if (node.WhereCondition != null)
+            {
+                _currentStringBuilder.Append($"if(");
+                node.WhereCondition.Accept(this);
+                _currentStringBuilder.Append($")\n{{");
+            }
+            _currentStringBuilder.Append($"if({HandleCSharpKeywords("val")}{placeAttriString} {boolOpString} {placeValString}){{\n");
+
+            _currentStringBuilder.Append($"{placeValString} = {HandleCSharpKeywords("val")};\n_variablei++;}}\n}}\n");
+            if (node.WhereCondition != null)
+            {
+                _currentStringBuilder.Append($"}}");
+            }
+            _currentStringBuilder.Append($"if(_variablei == 0){{throw new NullReferenceException(\"No element to extract\");}}");
+            _currentStringBuilder.Append($"{HandleCSharpKeywords(node.Variable)}.Remove({placeValString});\n");
+            _currentStringBuilder.Append($"return {placeValString};\n}}\n\n");
 		}
 
 		public override void Visit(WhereNode node)
