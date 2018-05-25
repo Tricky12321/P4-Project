@@ -309,8 +309,7 @@ namespace Compiler.AST
 			if (node.Parent != null)
 			{
 				AllType? collectionNameType = _symbolTable.RetrieveSymbol(node.Variable, out bool isCollectionInQuery, false);
-				bool FromIsColl = isCollectionInQuery;
-				if (FromIsColl)
+				if (isCollectionInQuery)
 				{
 					if (node.Parent is ExpressionNode expNode)
 					{
@@ -600,10 +599,6 @@ namespace Compiler.AST
 				AbstractNode abNode = node.Assignment;
                 AllType typeOfRetreiveVariable = _symbolTable.RetrieveSymbol(abNode.Name, out bool isCollectionRetrieve) ?? AllType.UNKNOWNTYPE;
                 CheckAllowedCast(typeOfVariable, abNode.Type_enum);
-                if (isCollectionRetrieve)
-                {
-                    _symbolTable.TargetIsNotCollError(node.Name);
-                }
 			}
 		}
 
