@@ -238,11 +238,6 @@ namespace Compiler.AST
 			return VarNode;
 		}
 
-		/*public override AbstractNode VisitVariableFunc([NotNull] GiraphParser.VariableFuncContext context)
-        {
-            return Visit(context.GetChild(0));
-        }*/
-
 		public override AbstractNode VisitLoopDcl([NotNull] GiraphParser.LoopDclContext context)
 		{
 
@@ -421,43 +416,7 @@ namespace Compiler.AST
             opNode.Operator = context.GetText();
             return opNode;
 		}
-
-		/*private List<AbstractNode> VisitVarOrconstExpressionExtRecursive([NotNull] IParseTree context)
-        {
-            List<AbstractNode> expression = new List<AbstractNode>();
-
-            if (context.GetType().ToString() == "GiraphParser+VariableContext")
-            {
-                string placeholderString = string.Empty;
-                for (int i = 0; i < context.ChildCount; i++)
-                {
-                    placeholderString += context.GetChild(i).GetText();
-                    expression.AddRange(VisitVarOrconstExpressionExtRecursive(context.GetChild(i)));
-                }
-                List<AbstractNode> listPlaceholder = new List<AbstractNode>();
-                listPlaceholder.Add(new OperatorNode(1,1));
-                return listPlaceholder;
-            }
-
-
-            if (context.ChildCount == 0)
-            {
-                List<AbstractNode> expressionPlaceholder = new List<AbstractNode>();
-
-                expressionPlaceholder.Add(new OperatorNode(1,2));
-                return expressionPlaceholder;
-                //context.ToString();
-            }
-            else
-            {
-                for (int i = 0; i < context.ChildCount; i++)
-                {
-                    expression.AddRange(VisitVarOrconstExpressionExtRecursive(context.GetChild(i)));
-                }
-            }
-            return expression;
-        }*/
-
+        
 		private ExpressionPartType ExpressionPartTypeFinder(IParseTree context)
 		{
 			string type = context.GetType().ToString();
@@ -834,7 +793,7 @@ namespace Compiler.AST
 			boolComparison.ComparisonOperator = "<";
 			if (contextInside.forConditionStart().forConditionDcl() != null)
 			{
-				ForLoop.VariableDeclaration = Visit(contextInside.forConditionStart().forConditionDcl()); ;
+				ForLoop.VariableDeclaration = Visit(contextInside.forConditionStart().forConditionDcl());
 				VariableNode varNode = new VariableNode(context.Start.Line, context.Start.Column);
 				varNode.Name = (ForLoop.VariableDeclaration as VariableDclNode).Name;
 				varNode.Type = (ForLoop.VariableDeclaration as VariableDclNode).Type;
@@ -1106,8 +1065,7 @@ namespace Compiler.AST
 					AbstractNode attNode = Visit(context.GetChild(0));
 					return attNode;
 			}
-			//Skal returnere en constnode eller en varnode;
-			throw new VisitVarOrConstWrongTypeException("Fejl i Mads' Kode igen!!");
+			return null;
 		}
 
 		public override AbstractNode VisitSimpleExpression([NotNull] GiraphParser.SimpleExpressionContext context)

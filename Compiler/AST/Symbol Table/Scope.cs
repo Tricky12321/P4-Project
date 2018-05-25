@@ -47,7 +47,6 @@ namespace Compiler.AST.SymbolTable
         /// </summary>
         /// <param name="Parent">Parent scope, used when closeing a scope to return</param>
         /// <param name="depth">Depth is used to determine at what depth variables are declared, makes it easier to debug</param>
-        /// <param name="prefixes">The current prefixes used</param>
         public Scope(Scope Parent, uint depth)
         {
             // Copy the input list, so the previus prefix list is keept

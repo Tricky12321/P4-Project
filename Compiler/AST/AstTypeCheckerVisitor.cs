@@ -177,79 +177,24 @@ namespace Compiler.AST
 		public override void Visit(ExtractMaxQueryNode node)
 		{
 			_symbolTable.SetCurrentNode(node);
-			checkCollectionFollowsCollection(node.Variable);
-			AllType? collectionNameType = _symbolTable.RetrieveSymbol(node.Variable, out bool isCollectionInQuery, false);
-			AllType? typeAttribute = AllType.UNKNOWNTYPE;
-			if (isCollectionInQuery)
-			{
-				if (node.Attribute != null)
-				{
-					if (collectionNameType != null && collectionNameType != AllType.INT && collectionNameType != AllType.DECIMAL)
-					{
-						if (_symbolTable.IsExtended(node.Attribute, collectionNameType ?? default(AllType)))
-						{
-							typeAttribute = _symbolTable.GetAttributeType(node.Attribute, collectionNameType ?? default(AllType));
-							if (typeAttribute == AllType.DECIMAL || typeAttribute == AllType.INT)
-							{
-								//variable is a collection, which are different from decimal and int collections, 
-								//an attribute is specified, and are of type int or decimal, which ir MUST be!
-								node.Type = collectionNameType.ToString();
-								node.Name = node.Variable;
-							}
-							else
-							{
-								//attribute is other than int or decimal, which it may not be.
-								_symbolTable.AttributeIllegal();
-							}
-						}
-						else
-						{
-							//the class is not extended with given attribute
-							_symbolTable.AttributeNotExtendedOnClass(node.Attribute, collectionNameType);
-						}
-					}
-					else
-					{
-						//the collection type is either int, decimal or null. which are not legal.
-						_symbolTable.ExtractCollNotIntOrDeciError();
-						//SKAL FINDE UD AF OM DEN ERROR I SYMTABLE ER KORREKT AT BRUGE ET ELLER ANDET STED HER
-					}
-				}
-				else
-				{
-					if (collectionNameType == AllType.DECIMAL || collectionNameType == AllType.INT)
-					{
-						//the attribute is proveded, there the collection must be of type decimal or interger.
-						//Because it will sort on the values of the items in the decimal or integer collections,
-						//and not on some attribute extended on the classes.
-						node.Type = collectionNameType.ToString();
-					}
-					else
-					{
-						_symbolTable.NoAttriProvidedCollNeedsToBeIntOrDecimalError();
-					}
-					//attribute not specified - coll needs to be int or deci
-				}
-			}
-			else
-			{
-				//the from variable needs to be a collection. You cannot retrieve something from a variable - only retrieve from a collections.
-				_symbolTable.FromVarIsNotCollError(node.Variable);
-			}
-
-			if (isCollectionInQuery)
-			{
-				if (node.Parent is ExpressionNode expNode)
-				{
-					expNode.OverAllType = collectionNameType;
-				}
-				node.Type = collectionNameType.ToString();
-			}
-
-			if (node.WhereCondition != null)
-			{
-				node.WhereCondition.Accept(this);
-			}
+            checkCollectionFollowsCollection(node.Variable);
+            AllType? collectionNameType = _symbolTable.RetrieveSymbol(node.Variable, out bool isCollectionInQuery, false);
+            if (isCollectionInQuery)
+            {
+                node.Type = collectionNameType.ToString().ToLower();
+                if (!_symbolTable.IsClass(node.Type_enum) && node.Attribute != "")
+                {
+                    _symbolTable.AttributeUsedOnNonClass();
+                }
+            }
+            else
+            {
+                _symbolTable.NotCollection(node.Variable);
+            }
+            if (node.WhereCondition != null)
+            {
+                node.WhereCondition.Accept(this);
+            }
 		}
 
 		public override void Visit(ExtractMinQueryNode node)
@@ -260,6 +205,10 @@ namespace Compiler.AST
 			if (isCollectionInQuery)
 			{
 				node.Type = collectionNameType.ToString().ToLower();
+				if (!_symbolTable.IsClass(node.Type_enum) && node.Attribute != "")
+				{
+					_symbolTable.AttributeUsedOnNonClass();
+				}
 			}
 			else
 			{
@@ -346,7 +295,8 @@ namespace Compiler.AST
 			_symbolTable.SetCurrentNode(node);
 			checkCollectionFollowsCollection(node.Variable);
 			AllType CollectionType = _symbolTable.RetrieveSymbol(node.Variable, out bool isCollection) ?? AllType.UNKNOWNTYPE;
-			if (!isCollection) {
+			if (!isCollection)
+			{
 				_symbolTable.ExpectedCollection();
 				return;
 			}
@@ -365,13 +315,13 @@ namespace Compiler.AST
 		public override void Visit(DequeueQueryNode node)
 		{
 			_symbolTable.SetCurrentNode(node);
-            AllType CollectionType = _symbolTable.RetrieveSymbol(node.Variable, out bool isCollection) ?? AllType.UNKNOWNTYPE;
-            if (!isCollection)
-            {
-                _symbolTable.ExpectedCollection();
-                return;
-            }
-            node.Type = CollectionType.ToString().ToLower();
+			AllType CollectionType = _symbolTable.RetrieveSymbol(node.Variable, out bool isCollection) ?? AllType.UNKNOWNTYPE;
+			if (!isCollection)
+			{
+				_symbolTable.ExpectedCollection();
+				return;
+			}
+			node.Type = CollectionType.ToString().ToLower();
 		}
 
 		public override void Visit(AddQueryNode node)
@@ -398,15 +348,9 @@ namespace Compiler.AST
 					{
 						if (vertexOrEdgedcl is GraphDeclVertexNode || vertexOrEdgedcl is GraphDeclEdgeNode)
 						{
-							_symbolTable.DeclarationsCantBeAdded(DeclarationSetPrint(node), node.ToVariable);
 							break;
 						}
 					}
-				}
-				else
-				{
-					Console.WriteLine("should not be possible to reach this. IsGraph bool can only be true if its declarations for a graph"
-						+ "or vertices/edges added to the graphs original attributes:   .Vertices and .Edges");
 				}
 			}
 			//if the ToVariable is a collection:
@@ -597,8 +541,8 @@ namespace Compiler.AST
 				VisitChildren(node);
 				AllType typeOfVariable = _symbolTable.RetrieveSymbol(node.Name) ?? AllType.UNKNOWNTYPE;
 				AbstractNode abNode = node.Assignment;
-                AllType typeOfRetreiveVariable = _symbolTable.RetrieveSymbol(abNode.Name, out bool isCollectionRetrieve) ?? AllType.UNKNOWNTYPE;
-                CheckAllowedCast(typeOfVariable, abNode.Type_enum);
+				AllType typeOfRetreiveVariable = _symbolTable.RetrieveSymbol(abNode.Name, out bool isCollectionRetrieve) ?? AllType.UNKNOWNTYPE;
+				CheckAllowedCast(typeOfVariable, abNode.Type_enum);
 			}
 		}
 
@@ -663,7 +607,7 @@ namespace Compiler.AST
 			{
 				VisitChildren(node);
 			}
-		}      
+		}
 		public override void Visit(ExpressionNode node)
 		{
 			_symbolTable.SetCurrentNode(node);
@@ -673,9 +617,11 @@ namespace Compiler.AST
 				node.OverAllType = AllType.STRING;
 				foreach (var item in node.ExpressionParts)
 				{
-					if (item is VariableNode varNode) {
+					if (item is VariableNode varNode)
+					{
 						_symbolTable.RetrieveSymbol(item.Name, out bool isCollection);
-						if (isCollection) {
+						if (isCollection)
+						{
 							_symbolTable.CollectionInExpression();
 						}
 					}
@@ -713,9 +659,9 @@ namespace Compiler.AST
 		}
 
 		public bool CheckAllowedCastExpression(AllType OriginalType, AllType NewType)
-        {
-            return CheckAllowedCast(OriginalType, NewType, out AllType? hidden);
-        }
+		{
+			return CheckAllowedCast(OriginalType, NewType, out AllType? hidden);
+		}
 
 
 		public bool CheckAllowedCast(AllType OriginalType, AllType NewType)
@@ -725,7 +671,8 @@ namespace Compiler.AST
 
 		public bool CheckAllowedCast(AllType OriginalType, AllType NewType, out AllType? OverAllType, bool Expression = false)
 		{
-			if (OriginalType == AllType.VOID || NewType == AllType.VOID) {
+			if (OriginalType == AllType.VOID || NewType == AllType.VOID)
+			{
 				_symbolTable.DeclarationCantBeTypeVoid();
 			}
 			if (OriginalType == NewType)
@@ -759,13 +706,14 @@ namespace Compiler.AST
 
 		private bool CheckDecimalIntCast(AllType First, AllType Second, bool Expression)
 		{
-			if (Expression) {
+			if (Expression)
+			{
 				if (First == AllType.INT && Second == AllType.DECIMAL)
-                {
-                    return true;
-                }
+				{
+					return true;
+				}
 			}
-		    if (First == AllType.DECIMAL && Second == AllType.INT)
+			if (First == AllType.DECIMAL && Second == AllType.INT)
 			{
 				return true;
 			}
@@ -895,9 +843,10 @@ namespace Compiler.AST
 		{
 			_symbolTable.SetCurrentNode(node);
 			VisitChildren(node);
-			if (node.Children.Count > 0) {
+			if (node.Children.Count > 0)
+			{
 				CheckAllowedCast(node.Type_enum, node.Children[0].Type_enum);
-            }
+			}
 		}
 
 		public override void Visit(OperatorNode node)
@@ -940,7 +889,7 @@ namespace Compiler.AST
 		public override void Visit(RunQueryNode node)
 		{
 			_symbolTable.SetCurrentNode(node);
-            node.Type = _symbolTable.RetrieveSymbol(node.FunctionName).ToString().ToLower();
+			node.Type = _symbolTable.RetrieveSymbol(node.FunctionName).ToString().ToLower();
 			bool isCollection = false;
 			VisitChildren(node);
 			List<FunctionParameterEntry> funcParamList = _symbolTable.GetParameterTypes(node.FunctionName);
@@ -949,7 +898,7 @@ namespace Compiler.AST
 			AllType placeholderType = AllType.UNKNOWNTYPE;
 			if (node.Parent is ExpressionNode expNode)
 			{
-				expNode.OverAllType = _symbolTable.RetrieveSymbol(node.FunctionName); ;
+				expNode.OverAllType = _symbolTable.RetrieveSymbol(node.FunctionName);
 			}
 
 			if (node.Children.Count > 0)

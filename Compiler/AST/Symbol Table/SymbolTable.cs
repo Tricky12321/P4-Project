@@ -271,6 +271,7 @@ namespace Compiler.AST.SymbolTable
 
 		}
 
+
 		/// <summary>
 		/// Gets the type of the attribute.
 		/// </summary>
@@ -354,10 +355,6 @@ namespace Compiler.AST.SymbolTable
 			// [GRAPH/VERTEX/EDGE]-><KEYS>->ClassEntry
 			string name = names[0];
 			// Check if the class contains a variable with the name given
-			if (type == AllType.UNKNOWNTYPE)
-			{
-
-			}
 			if (_classesTable[type].ContainsKey(name))
 			{
 				var entry = _classesTable[type][name];
@@ -892,10 +889,10 @@ namespace Compiler.AST.SymbolTable
 			PrintError(errormessage);
 		}
 
-		public void DeclarationsCantBeAdded(string declarationSet, string graphCollection)
+		public void DeclarationsCantBeAdded(string declarationSet)
 		{
-			string errormessage = $"The {declarationSet} cannot be added to the collection in the graph! " + GetLineNumber();
-			PrintError(errormessage);
+		    string errormessage = $"The {declarationSet} cannot be added to the collection in the graph! " + GetLineNumber();
+		    PrintError(errormessage);
 
 		}
 
@@ -1084,6 +1081,11 @@ namespace Compiler.AST.SymbolTable
 		{
 			string errormessage = $"Use of unassigned variable " + GetLineNumber();
 			PrintError(errormessage);
+		}
+
+		public void AttributeUsedOnNonClass() {
+			string errormessage = $"It is not possible to use attributes when the target isnt a class " + GetLineNumber();
+            PrintError(errormessage);
 		}
 	}
 }

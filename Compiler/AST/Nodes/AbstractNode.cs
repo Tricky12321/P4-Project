@@ -28,13 +28,13 @@ namespace Compiler.AST.Nodes
             get
             {
                 AbstractNode Child = LeftmostChild;
-                List<AbstractNode> Children = new List<AbstractNode>();
+                List<AbstractNode> ChildrenList = new List<AbstractNode>();
                 while (Child != null)
                 {
-                    Children.Add(Child);
+					ChildrenList.Add(Child);
                     Child = Child.RightSibling;
                 }
-                return Children;
+				return ChildrenList;
             }
         }
 
