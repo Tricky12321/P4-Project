@@ -264,6 +264,7 @@ namespace Compiler.AST.SymbolTable
             if (CheckAlreadyDeclared(node.Name))
             {
                 SymbolTable.EnterSymbol(node.Name, AllType.GRAPH);
+				SymbolTable.SetAssigned(node.Name);
                 // Visits all the different vertex declarations in the graph declaration
                 foreach (var Vertex in node.Vertices)
                 {

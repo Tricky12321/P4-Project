@@ -7,7 +7,7 @@ using Compiler.AST.Nodes;
 using Compiler.AST.SymbolTable;
 using System.Diagnostics;
 using Compiler;
-namespace Unittests
+namespace Tests
 {
     [TestFixture()]
     public class UtilitiesTest

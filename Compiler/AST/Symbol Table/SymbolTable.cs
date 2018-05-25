@@ -373,7 +373,7 @@ namespace Compiler.AST.SymbolTable
 		}
 
 		public void CheckAssigned(string Name) {
-			if (!_symTable[Name].IsAssigned && !SymbolTableBuilderDone) {
+			if (!_symTable[Name].IsAssigned && !SymbolTableBuilderDone && !Name.Contains("'")) {
 				UseOfUnassigned();
 			}
 		}
