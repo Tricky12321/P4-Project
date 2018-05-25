@@ -41,10 +41,7 @@ namespace Compiler
 			ErrorChecker(_error, 9999, "Code error!");
 			AbstractNode AST = BuildAST(CST);
 			SymTable SymbolTable = BuildSymbolTable(AST as StartNode);
-			if (Utilities.GetOS() != OS.MacOS || true)
-			{
-				TypeCheck(SymbolTable, AST as StartNode);
-			}
+			TypeCheck(SymbolTable, AST as StartNode);
 			//PrettyPrint(AST as StartNode);
 			WriteCodeToFiles(AST as StartNode);
 			TotalTimer.Stop();
