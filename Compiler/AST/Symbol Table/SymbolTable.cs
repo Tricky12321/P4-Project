@@ -199,9 +199,42 @@ namespace Compiler.AST.SymbolTable
 			// Now that there is only the name left to check, check that too, which means that it should be in the global scope
 			return _symTable[toCheckFor].Type;
 		}
-      
-		public void SetAssigned(string VariableName) {
-			_symTable[GetName(VariableName)].IsAssigned = true;
+
+		public void SetAssigned(string VariableName)
+		{
+			if (_symTable.ContainsKey(GetName(VariableName)))
+			{
+				_symTable[GetName(VariableName)].IsAssigned = true;
+			}
+			else
+			{
+				string NewName = GetName(VariableName);
+				while (!_symTable.ContainsKey(NewName))
+				{
+					var test = NewName.Split('.').ToList();
+					test.RemoveAt(test.Count - 2);
+					bool first = true;
+					NewName = "";
+					foreach (var item in test)
+					{
+						if (first)
+						{
+							NewName += item;
+							first = false;
+						}
+						else
+						{
+							NewName += "."+item;
+						}
+					}
+					if (_symTable.ContainsKey(NewName)) {
+						_symTable[NewName].IsAssigned = true;
+						break;
+					}
+				}
+
+
+			}
 		}
 
 		/// <summary>
@@ -210,7 +243,7 @@ namespace Compiler.AST.SymbolTable
 		/// <param name="name">Name of variable</param>
 		/// <param name="type">Type of varialbe</param>
 		/// <param name="IsCollection">If set to <c>true</c> its a collection.</param>
-		public void EnterSymbol(string name, AllType type, bool IsCollection = false ,bool IgnoreReserved = false)
+		public void EnterSymbol(string name, AllType type, bool IsCollection = false, bool IgnoreReserved = false)
 		{
 			if (!CheckReserved(name, IgnoreReserved))
 			{
@@ -372,8 +405,10 @@ namespace Compiler.AST.SymbolTable
 			return RetrieveSymbol(Name, out IsCollection, ShowErrors);
 		}
 
-		public void CheckAssigned(string Name) {
-			if (!_symTable[Name].IsAssigned && !SymbolTableBuilderDone && !Name.Contains("'")) {
+		public void CheckAssigned(string Name)
+		{
+			if (!_symTable[Name].IsAssigned && !SymbolTableBuilderDone && !Name.Contains("'"))
+			{
 				UseOfUnassigned();
 			}
 		}
@@ -458,8 +493,8 @@ namespace Compiler.AST.SymbolTable
 						{
 							match = true;
 							CheckAssigned(Name);
-                            IsCollection = _symTable[Name].IsCollection;
-                            var type = _symTable[Name].Type;
+							IsCollection = _symTable[Name].IsCollection;
+							var type = _symTable[Name].Type;
 							return type;
 						}
 					}
@@ -770,23 +805,25 @@ namespace Compiler.AST.SymbolTable
 		}
 
 		public void AddClassVariablesToScope(AllType type)
-        {
-            if (IsClass(type))
-            {
-                foreach (var item in _classesTable[type])
-                {
-                    // Enters all attributes 
-                    EnterSymbol("'" + item.Key + "'", item.Value.Type, item.Value.Collection);
-                }
-            }
-        }
-
-		public void PrintError(string error) {
-			if (!TypeCheckErrorList.Contains(error)) {
-                Console.WriteLine(error);
-                TypeCheckErrorList.Add(error);
+		{
+			if (IsClass(type))
+			{
+				foreach (var item in _classesTable[type])
+				{
+					// Enters all attributes 
+					EnterSymbol("'" + item.Key + "'", item.Value.Type, item.Value.Collection);
+				}
 			}
-            Error();
+		}
+
+		public void PrintError(string error)
+		{
+			if (!TypeCheckErrorList.Contains(error))
+			{
+				Console.WriteLine(error);
+				TypeCheckErrorList.Add(error);
+			}
+			Error();
 		}
 
 		public void NotImplementedError(AbstractNode node)
@@ -1001,40 +1038,46 @@ namespace Compiler.AST.SymbolTable
 			PrintError(errormessage);
 		}
 
-		public void CannotCastClass() {
+		public void CannotCastClass()
+		{
 			string errormessage = $"Vertex, Graph and Edge cannot be cast to any other type! " + GetLineNumber();
 			PrintError(errormessage);
 		}
-        
-		public void IlligalCast() {
+
+		public void IlligalCast()
+		{
 			string errormessage = $"There is a type mismatch or illigal cast " + GetLineNumber();
 			PrintError(errormessage);
 		}
 
-		public void ClassOperatorError() {
+		public void ClassOperatorError()
+		{
 			string errormessage = $"Classes cannot be used when working with operators! " + GetLineNumber();
 			PrintError(errormessage);
 		}
 
 		public void InvalidTypeClass()
-        {
-            string errormessage = $"Invalid type, has to be a class " + GetLineNumber();
-            PrintError(errormessage);
-        }
+		{
+			string errormessage = $"Invalid type, has to be a class " + GetLineNumber();
+			PrintError(errormessage);
+		}
 
-		public void ExpectedCollection() {
+		public void ExpectedCollection()
+		{
 			string errormessage = $"Expected a collection " + GetLineNumber();
-            PrintError(errormessage);
+			PrintError(errormessage);
 		}
 
-		public void CollectionInExpression() {
+		public void CollectionInExpression()
+		{
 			string errormessage = $"Collections are illigal in expressions " + GetLineNumber();
-            PrintError(errormessage);
+			PrintError(errormessage);
 		}
 
-		public void UseOfUnassigned() {
+		public void UseOfUnassigned()
+		{
 			string errormessage = $"Use of unassigned variable " + GetLineNumber();
-            PrintError(errormessage);
+			PrintError(errormessage);
 		}
 	}
 }
