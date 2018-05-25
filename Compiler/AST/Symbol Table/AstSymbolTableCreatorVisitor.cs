@@ -202,6 +202,7 @@ namespace Compiler.AST.SymbolTable
             if (CheckAlreadyDeclared(node.Name))
             {
                 SymbolTable.EnterSymbol(node.Name, node.Type_enum, node.IsCollection);
+				SymbolTable.SetAssigned(node.Name);
                 if (node.Parent != null && (node.Parent is FunctionNode))
                 {
 
@@ -290,6 +291,7 @@ namespace Compiler.AST.SymbolTable
             if (CheckAlreadyDeclared(node.Name))
             {
                 SymbolTable.EnterSymbol(vertexName, AllType.VERTEX);
+				SymbolTable.SetAssigned(vertexName);
                 foreach (var attribute in node.ValueList)
                 {
                     SymbolTable.AttributeDefined(attribute.Key, AllType.VERTEX);
@@ -304,6 +306,7 @@ namespace Compiler.AST.SymbolTable
             if (CheckAlreadyDeclared(node.Name))
             {
                 SymbolTable.EnterSymbol(node.Name, AllType.EDGE);
+				SymbolTable.SetAssigned(node.Name);
                 CheckDeclared(node.VertexNameFrom);
                 CheckDeclared(node.VertexNameTo);
                 foreach (var attribute in node.ValueList)
@@ -471,6 +474,7 @@ namespace Compiler.AST.SymbolTable
             SymbolTable.SetCurrentNode(node);
             string predicateName = node.Name;
             SymbolTable.EnterSymbol(predicateName, AllType.BOOL);
+			SymbolTable.SetAssigned(predicateName);
             SymbolTable.AddPredicateToList(predicateName);
             SymbolTable.OpenScope(node.Name);
             foreach (ParameterNode parameter in node.Parameters)
