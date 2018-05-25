@@ -1046,7 +1046,7 @@ namespace Compiler.AST.SymbolTable
 
 		public void CannotCastClass()
 		{
-			string errormessage = $"Vertex, Graph and Edge cannot be cast to any other type! " + GetLineNumber();
+			string errormessage = $"Graph, Vertex, Edge and Collection cannot be cast to any other type! " + GetLineNumber();
 			PrintError(errormessage);
 		}
 
