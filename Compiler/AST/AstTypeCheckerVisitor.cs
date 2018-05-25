@@ -205,7 +205,7 @@ namespace Compiler.AST
 			if (isCollectionInQuery)
 			{
 				node.Type = collectionNameType.ToString().ToLower();
-				if (!_symbolTable.IsClass(node.Type_enum) && node.Attribute != "")
+				if (!_symbolTable.IsClass(node.Type_enum) && node.Attribute != null && node.Attribute != "")
 				{
 					_symbolTable.AttributeUsedOnNonClass();
 				}
