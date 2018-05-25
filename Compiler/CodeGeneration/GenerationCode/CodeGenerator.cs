@@ -577,7 +577,7 @@ namespace Compiler.CodeGeneration.GenerationCode
 			string boolOpString = maxIfTrue ? ">" : "<";
             _currentStringBuilder.Append($"{placeFuncString}{node.ID}_{functionID}();" +
 			                     $"\n{ResolveTypeToCS(node.Type_enum)} {placeFuncString}{node.ID}_{functionID++}(){{\n");
-            string maxOrMinDec = maxIfTrue ? "decimal.MinValue;" : "decimal.MaxValue;";
+            string maxOrMinDec = maxIfTrue ? $"{ResolveTypeToCS(node.Type_enum)}.MinValue;" : $"{ResolveTypeToCS(node.Type_enum)}.MaxValue;";
             _currentStringBuilder.Append($"{ResolveTypeToCS(node.Type_enum)} {placeValString} = {maxOrMinDec}\nint _variablei = 0;\n");
             _currentStringBuilder.Append($"foreach (var {HandleCSharpKeywords("val")} in {HandleCSharpKeywords(node.Variable)}){{\n");
 
