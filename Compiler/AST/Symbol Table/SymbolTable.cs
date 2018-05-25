@@ -202,6 +202,9 @@ namespace Compiler.AST.SymbolTable
 
 		public void SetAssigned(string VariableName)
 		{
+			if (VariableName == null) {
+				return;
+			}
 			if (_symTable.ContainsKey(GetName(VariableName)))
 			{
 				_symTable[GetName(VariableName)].IsAssigned = true;
