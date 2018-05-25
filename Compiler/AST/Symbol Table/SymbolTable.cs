@@ -1087,5 +1087,11 @@ namespace Compiler.AST.SymbolTable
 			string errormessage = $"It is not possible to use attributes when the target isnt a class " + GetLineNumber();
             PrintError(errormessage);
 		}
+
+		public void CollectionOfClasses()
+        {
+            string errormessage = $"It is not possible to run extractmin or extractmax on collections containing classes " + GetLineNumber();
+            PrintError(errormessage);
+        }
 	}
 }
