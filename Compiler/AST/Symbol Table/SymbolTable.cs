@@ -202,6 +202,9 @@ namespace Compiler.AST.SymbolTable
 
 		public void SetAssigned(string VariableName)
 		{
+			if (VariableName == null) {
+				return;
+			}
 			if (_symTable.ContainsKey(GetName(VariableName)))
 			{
 				_symTable[GetName(VariableName)].IsAssigned = true;
@@ -407,6 +410,9 @@ namespace Compiler.AST.SymbolTable
 
 		public void CheckAssigned(string Name)
 		{
+			if (IsClass(_symTable[Name].Type)) {
+				return;
+			}
 			if (!_symTable[Name].IsAssigned && !SymbolTableBuilderDone && !Name.Contains("'"))
 			{
 				UseOfUnassigned();
