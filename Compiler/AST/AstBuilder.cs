@@ -342,6 +342,28 @@ namespace Compiler.AST
             return expNode;
 		}
 
+		public override AbstractNode VisitSimpleExpressionStart([NotNull] GiraphParser.SimpleExpressionStartContext context)
+        {
+            ExpressionNode expNode = new ExpressionNode(context.Start.Line, context.Start.Column);
+            expNode.ExpressionParts = EvaluateExpression(context);
+            if (expNode.ExpressionParts.Count == 1)
+            {
+                return expNode.ExpressionParts[0];
+            }
+            return expNode;
+        }
+
+        public override AbstractNode VisitSimpleExpressionAdvanced([NotNull] GiraphParser.SimpleExpressionAdvancedContext context)
+        {
+            ExpressionNode expNode = new ExpressionNode(context.Start.Line, context.Start.Column);
+            expNode.ExpressionParts = EvaluateExpression(context);
+            if (expNode.ExpressionParts.Count == 1)
+            {
+                return expNode.ExpressionParts[0];
+            }
+            return expNode;
+        }
+
 
 
 		public override AbstractNode VisitOperand([NotNull] GiraphParser.OperandContext context)
@@ -1099,15 +1121,13 @@ namespace Compiler.AST
 
 		public override AbstractNode VisitSimpleExpression([NotNull] GiraphParser.SimpleExpressionContext context)
 		{
-			var test = context.GetText();
 			ExpressionNode ExpNode = new ExpressionNode(context.Start.Line, context.Start.Column);
-			ExpNode.ExpressionParts = EvaluateExpression(context);
-			//ExpNode.AdoptChildren(Visit(context.GetChild(0)));
-			if (ExpNode.ExpressionParts.Count == 1)
+            ExpNode.ExpressionParts = EvaluateExpression(context);
+            if (ExpNode.ExpressionParts.Count == 1)
             {
-				return ExpNode.ExpressionParts[0];
+                return ExpNode.ExpressionParts[0];
             }
-			return ExpNode;
+            return ExpNode;
 		}
 
 		public override AbstractNode VisitSimpleBoolCompOrExp([NotNull] GiraphParser.SimpleBoolCompOrExpContext context)

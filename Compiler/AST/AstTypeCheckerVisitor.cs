@@ -675,7 +675,6 @@ namespace Compiler.AST
 			// Check if its a string everything should be cast to:
 			if (node.ExpressionParts.Where(x => x.Type != null && x.Type_enum == AllType.STRING).Count() > 0)
 			{
-
 				node.OverAllType = AllType.STRING;
 				foreach (var item in node.ExpressionParts)
 				{
@@ -710,7 +709,7 @@ namespace Compiler.AST
 				{
 					node.OverAllType = item.Type_enum;
 				}
-				CheckAllowedCast(item.Type_enum, node.OverAllType ?? AllType.UNKNOWNTYPE, out node.OverAllType);
+				CheckAllowedCast(item.Type_enum, node.OverAllType ?? AllType.UNKNOWNTYPE, out node.OverAllType, true);
 			}
 			if (node.Type_enum == AllType.UNKNOWNTYPE)
 			{
@@ -718,19 +717,28 @@ namespace Compiler.AST
 			}
 		}
 
+		public bool CheckAllowedCastExpression(AllType OriginalType, AllType NewType)
+        {
+            return CheckAllowedCast(OriginalType, NewType, out AllType? hidden);
+        }
+
+
 		public bool CheckAllowedCast(AllType OriginalType, AllType NewType)
 		{
 			return CheckAllowedCast(OriginalType, NewType, out AllType? hidden);
 		}
 
-		public bool CheckAllowedCast(AllType OriginalType, AllType NewType, out AllType? OverAllType)
+		public bool CheckAllowedCast(AllType OriginalType, AllType NewType, out AllType? OverAllType, bool Expression = false)
 		{
+			if (OriginalType == AllType.VOID || NewType == AllType.VOID) {
+				_symbolTable.DeclarationCantBeTypeVoid();
+			}
 			if (OriginalType == NewType)
 			{
 				OverAllType = OriginalType;
 				return true;
 			}
-			if (CheckDecimalIntCast(OriginalType, NewType))
+			if (CheckDecimalIntCast(OriginalType, NewType, Expression))
 			{
 				OverAllType = AllType.DECIMAL;
 				return true;
@@ -754,13 +762,15 @@ namespace Compiler.AST
 			return false;
 		}
 
-		private bool CheckDecimalIntCast(AllType First, AllType Second)
+		private bool CheckDecimalIntCast(AllType First, AllType Second, bool Expression)
 		{
-			if (First == AllType.INT && Second == AllType.DECIMAL)
-			{
-				return true;
+			if (Expression) {
+				if (First == AllType.INT && Second == AllType.DECIMAL)
+                {
+                    return true;
+                }
 			}
-			else if (First == AllType.DECIMAL && Second == AllType.INT)
+		    if (First == AllType.DECIMAL && Second == AllType.INT)
 			{
 				return true;
 			}
@@ -891,36 +901,10 @@ namespace Compiler.AST
 		public override void Visit(VariableDclNode node)
 		{
 			_symbolTable.SetCurrentNode(node);
-			AllType? variableType = _symbolTable.RetrieveSymbol(node.Name);
-			if (node.Type_enum == AllType.VOID)
-			{
-				_symbolTable.DeclarationCantBeTypeVoid();
-			}
 			VisitChildren(node);
-
-			if (node.Children != null)
-			{
-				foreach (AbstractNode child in node.Children)
-				{
-					AbstractNode expNode = null;
-					if (child is BoolComparisonNode)
-					{
-						((BoolComparisonNode)child).Accept(this);
-					}
-					else
-					{
-						expNode = child;
-						expNode.Accept(this);
-					}
-					if (expNode != null && expNode.Type_enum != variableType && expNode.Type_enum != AllType.UNKNOWNTYPE)
-					{
-						if (!(variableType == AllType.DECIMAL && expNode.Type_enum == AllType.INT))
-						{
-							_symbolTable.WrongTypeError(child.Name, node.Name);
-						}
-					}
-				}
-			}
+			if (node.Children.Count > 0) {
+				CheckAllowedCast(node.Type_enum, node.Children[0].Type_enum);
+            }
 		}
 
 		public override void Visit(OperatorNode node)
@@ -934,7 +918,7 @@ namespace Compiler.AST
 			{
 				node.Right.Accept(this);
 				node.Left.Accept(this);
-				CheckAllowedCast(node.Left.Type_enum, node.Right.Type_enum, out AllType? OverAllType);
+				CheckAllowedCast(node.Left.Type_enum, node.Right.Type_enum, out AllType? OverAllType, true);
 				node.Type = OverAllType.ToString().ToLower();
 			}
 			VisitChildren(node);

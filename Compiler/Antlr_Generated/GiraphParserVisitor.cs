@@ -128,6 +128,18 @@ public interface IGiraphParserVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <return>The visitor result.</return>
 	Result VisitExpression([NotNull] GiraphParser.ExpressionContext context);
 	/// <summary>
+	/// Visit a parse tree produced by <see cref="GiraphParser.simpleExpressionStart"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitSimpleExpressionStart([NotNull] GiraphParser.SimpleExpressionStartContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="GiraphParser.simpleExpressionAdvanced"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitSimpleExpressionAdvanced([NotNull] GiraphParser.SimpleExpressionAdvancedContext context);
+	/// <summary>
 	/// Visit a parse tree produced by <see cref="GiraphParser.simpleExpression"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
