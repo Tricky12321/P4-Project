@@ -14,7 +14,7 @@ using Compiler.AST.Nodes.LoopNodes;
 using Compiler.AST.Nodes.QueryNodes;
 
 
-namespace Unittests
+namespace Tests
 {
     [TestFixture()]
     public class AstBuilderTests

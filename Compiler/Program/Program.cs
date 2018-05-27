@@ -20,9 +20,9 @@ namespace Compiler
 	{
 		private static bool _error = false;
 		private static bool _ignoreErrors = false;
-		private static bool _dontDelete = true;
+		private static bool _dontDelete = false;
 		public static bool TestMode = false;
-		public static bool WriteDebugText = true;
+		public static bool WriteDebugText = false;
 		public static void Main(string[] args)
 		{
 			Console.ForegroundColor = ConsoleColor.Red;
@@ -41,10 +41,7 @@ namespace Compiler
 			ErrorChecker(_error, 9999, "Code error!");
 			AbstractNode AST = BuildAST(CST);
 			SymTable SymbolTable = BuildSymbolTable(AST as StartNode);
-			if (Utilities.GetOS() != OS.MacOS || true)
-			{
-				TypeCheck(SymbolTable, AST as StartNode);
-			}
+			TypeCheck(SymbolTable, AST as StartNode);
 			//PrettyPrint(AST as StartNode);
 			WriteCodeToFiles(AST as StartNode);
 			TotalTimer.Stop();

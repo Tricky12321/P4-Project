@@ -10,6 +10,9 @@ namespace Compiler.AST.Nodes
     {
         public string Operator;
 
+		public AbstractNode Left;
+		public AbstractNode Right;
+
         public OperatorNode(int LineNumber, int CharIndex) : base(LineNumber, CharIndex)
         {
         }

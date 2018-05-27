@@ -92,11 +92,16 @@ namespace Compiler.AST.SymbolTable
         //All the visit stuff-----------------------------------------
         public override void Visit(VariableDclNode node)
         {
+			var name = node.Name;
+            VisitChildren(node);
             SymbolTable.SetCurrentNode(node);
-            var name = node.Name;
             if (CheckAlreadyDeclared(node.Name))
             {
                 SymbolTable.EnterSymbol(node.Name, node.Type_enum);
+            }
+			if (node.Children.Count > 0)
+            {
+				SymbolTable.SetAssigned(node.Name);
             }
         }
 
@@ -174,7 +179,8 @@ namespace Compiler.AST.SymbolTable
             if (!SymbolTable.DeclaredLocally(functionName))
             {
                 SymbolTable.EnterSymbol(functionName, type, node.IsCollection);
-                SymbolTable.OpenScope(node.Name);
+				SymbolTable.SetAssigned(node.Name);
+				SymbolTable.OpenScope(node.Name);
 
                 foreach (ParameterNode parameter in node.Parameters)
                 {
@@ -196,6 +202,7 @@ namespace Compiler.AST.SymbolTable
             if (CheckAlreadyDeclared(node.Name))
             {
                 SymbolTable.EnterSymbol(node.Name, node.Type_enum, node.IsCollection);
+				SymbolTable.SetAssigned(node.Name);
                 if (node.Parent != null && (node.Parent is FunctionNode))
                 {
 
@@ -241,14 +248,15 @@ namespace Compiler.AST.SymbolTable
 			VariableNodes.ForEach(x => x.Accept(this));
             PredicateNodes.ForEach(x => x.Accept(this));
             // Now that everything is declared for both functions and predicates, Visit their body(children)
-            FunctionNodes.ForEach(x => VisitChildrenNewScope(x));
+			_initialBuildDone = true;
+			FunctionNodes.ForEach(x => VisitChildrenNewScope(x));
             PredicateNodes.ForEach(x => VisitChildrenNewScope(x));
 
             // Set initialBuildDone so predicates now will visit their children when visited inside functions
-            _initialBuildDone = true;
 
-            //VisitChildren(node);
-        }
+			//VisitChildren(node);
+			SymbolTable.SymbolTableBuilderDone = true;
+		}
 
         public override void Visit(GraphNode node)
         {
@@ -258,6 +266,7 @@ namespace Compiler.AST.SymbolTable
             if (CheckAlreadyDeclared(node.Name))
             {
                 SymbolTable.EnterSymbol(node.Name, AllType.GRAPH);
+				SymbolTable.SetAssigned(node.Name);
                 // Visits all the different vertex declarations in the graph declaration
                 foreach (var Vertex in node.Vertices)
                 {
@@ -282,6 +291,7 @@ namespace Compiler.AST.SymbolTable
             if (CheckAlreadyDeclared(node.Name))
             {
                 SymbolTable.EnterSymbol(vertexName, AllType.VERTEX);
+				SymbolTable.SetAssigned(vertexName);
                 foreach (var attribute in node.ValueList)
                 {
                     SymbolTable.AttributeDefined(attribute.Key, AllType.VERTEX);
@@ -296,6 +306,7 @@ namespace Compiler.AST.SymbolTable
             if (CheckAlreadyDeclared(node.Name))
             {
                 SymbolTable.EnterSymbol(node.Name, AllType.EDGE);
+				SymbolTable.SetAssigned(node.Name);
                 CheckDeclared(node.VertexNameFrom);
                 CheckDeclared(node.VertexNameTo);
                 foreach (var attribute in node.ValueList)
@@ -313,8 +324,11 @@ namespace Compiler.AST.SymbolTable
 			// visits the varaible dcl node, and the assignment expression (Item1, Item3)
             foreach (var Exp in node.Attributes)
             {
+				if (Exp.Item1 is VariableNode) {
+					SymbolTable.SetAssigned(Exp.Item1.Name);
+				}
                 Exp.Item1.Accept(this);
-                Exp.Item3.Accept(this);
+				Exp.Item3.Accept(this);
             }
             // What children does a setNode have? 
             // Maybe variables? I dont know...
@@ -401,6 +415,8 @@ namespace Compiler.AST.SymbolTable
             CheckDeclared(node.Variable);
             if (node.WhereCondition != null)
             {
+				var type = SymbolTable.RetrieveSymbol(node.Variable);
+                (node.WhereCondition as WhereNode).AttributeClass = type ?? default(AllType);
                 node.WhereCondition.Accept(this);
             }
         }
@@ -411,7 +427,9 @@ namespace Compiler.AST.SymbolTable
             CheckDeclared(node.Variable);
             if (node.WhereCondition != null)
             {
-                node.WhereCondition.Accept(this);
+				var type = SymbolTable.RetrieveSymbol(node.Variable);
+                (node.WhereCondition as WhereNode).AttributeClass = type ?? default(AllType);
+				node.WhereCondition.Accept(this);
             }
         }
 
@@ -460,6 +478,7 @@ namespace Compiler.AST.SymbolTable
             SymbolTable.SetCurrentNode(node);
             string predicateName = node.Name;
             SymbolTable.EnterSymbol(predicateName, AllType.BOOL);
+			SymbolTable.SetAssigned(predicateName);
             SymbolTable.AddPredicateToList(predicateName);
             SymbolTable.OpenScope(node.Name);
             foreach (ParameterNode parameter in node.Parameters)
@@ -494,9 +513,13 @@ namespace Compiler.AST.SymbolTable
         public override void Visit(DeclarationNode node)
         {
             SymbolTable.SetCurrentNode(node);
+            
             if (CheckAlreadyDeclared(node.Name))
             {
                 SymbolTable.EnterSymbol(node.Name, node.Type_enum, node.CollectionDcl);
+				if (node.CollectionDcl || node.Type_enum == AllType.GRAPH) {
+					SymbolTable.SetAssigned(node.Name);
+				}
             }
             if (node.Assignment != null)
             {
@@ -583,6 +606,7 @@ namespace Compiler.AST.SymbolTable
             else
             {
                 SymbolTable.EnterSymbol(node.VariableName, node.VariableType_enum);
+				SymbolTable.SetAssigned(node.VariableName);
             }
             // CHeck if the variable (collection) to loop though, is defined!
             SymbolTable.CheckIfDefined(node.InVariableName);

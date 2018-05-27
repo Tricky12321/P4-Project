@@ -21,7 +21,6 @@ namespace Compiler.CodeGeneration.GenerationCode
 		public StringBuilder GlobalSet;
 		private int _forLoopCounter = 0;
 		private int _newVariableCounter_private = 0;
-		private int _tabCount = 2;
 		private string _boolComparisonPrefix = "";
 		private string _newVariabelCounter
 		{
@@ -685,14 +684,15 @@ namespace Compiler.CodeGeneration.GenerationCode
 		{
 			foreach (var item in node.ExpressionParts)
 			{
-				bool tester = item is ExpressionNode expNode && expNode.hasparentheses;
-				if (tester)
+
+				bool Parentheses = item is ExpressionNode expNode && expNode.hasparentheses;
+				if (Parentheses)
 				{
 					_currentStringBuilder.Append("(");
 				}
 				item.Accept(this);
 
-				if (tester)
+				if (Parentheses)
 				{
 					_currentStringBuilder.Append(")");
 				}
@@ -915,16 +915,11 @@ namespace Compiler.CodeGeneration.GenerationCode
 
 		public override void Visit(ConstantNode node)
 		{
-			if (node.Type_enum == AllType.STRING)
+			if (node.Type_enum == AllType.STRING || node.Type_enum == AllType.BOOL || node.Type_enum == AllType.INT)
 			{
 				_currentStringBuilder.Append(node.Value);
 			}
 			else if (node.Type_enum == AllType.DECIMAL)
-			{
-				_currentStringBuilder.Append(node.Value);
-				_currentStringBuilder.Append("m");
-			}
-			else if (node.Type_enum == AllType.BOOL || node.Type_enum == AllType.INT)
 			{
 				_currentStringBuilder.Append(node.Value);
 			}
@@ -998,11 +993,8 @@ namespace Compiler.CodeGeneration.GenerationCode
 
 		public void ExtendClass(AllType Class, AllType ExtendType, string ExtendName, string ExtendNameShort, bool IsCollection = false)
 		{
-			_tabCount = 2;
-			// TODO: Default values for extended variables needs to be set
 			StringBuilder _currentExtension;
 			// Find out what class to extend, as they have their own extension classes.
-			bool dispose_mode = true;
 			switch (Class)
 			{
 				case AllType.GRAPH:
@@ -1010,11 +1002,9 @@ namespace Compiler.CodeGeneration.GenerationCode
 					break;
 				case AllType.EDGE:
 					_currentExtension = _edgeExtensions;
-					dispose_mode = true;
 					break;
 				case AllType.VERTEX:
 					_currentExtension = _vertexExtensions;
-					dispose_mode = true;
 					break;
 				default:
 					throw new Exception("You are trying to extend a non-class type, which is illegal!");
@@ -1075,12 +1065,12 @@ namespace Compiler.CodeGeneration.GenerationCode
 			_currentExtension.Append($"public {ResolveTypeToCS(ExtendType)} {HandleCSharpKeywords(ExtendName)} {{ \n");
 			_currentExtension.Append("get\n");
 			_currentExtension.Append($"{{\n Update(); \n");
-			_currentExtension.Append($"if (disposed) {{  Console.WriteLine(\"You are trying to reference am object which no longer exists\"); Environment.Exit(0); }}\n");
+			_currentExtension.Append($"if (disposed) {{  Console.WriteLine(\"You are trying to reference an object which no longer exists\"); Environment.Exit(0); }}\n");
 			_currentExtension.Append($"return {(OriginalName)};\n");
 			_currentExtension.Append($"}}\n");
 			_currentExtension.Append("set\n");
 			_currentExtension.Append($"{{\nUpdate(); \n");
-			_currentExtension.Append($"if (disposed) {{  Console.WriteLine(\"You are trying to reference am object which no longer exists\"); Environment.Exit(0); }}\n");
+			_currentExtension.Append($"if (disposed) {{  Console.WriteLine(\"You are trying to reference an object which no longer exists\"); Environment.Exit(0); }}\n");
 			_currentExtension.Append($"{(OriginalName)} = value;\n");
 			_currentExtension.Append($"}}\n");
 			_currentExtension.Append("}\n");

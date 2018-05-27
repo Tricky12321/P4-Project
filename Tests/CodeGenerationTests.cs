@@ -12,7 +12,7 @@ using Compiler.AST.Nodes.DatatypeNodes;
 using Compiler.AST.Nodes.LoopNodes;
 using Compiler.AST.Nodes.QueryNodes;
 using System.IO;
-namespace Unittests
+namespace Tests
 {
 	[TestFixture()]
 	public class CodeGenerationTest

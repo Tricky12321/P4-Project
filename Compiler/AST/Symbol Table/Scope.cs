@@ -16,9 +16,7 @@ namespace Compiler.AST.SymbolTable
         private uint _elseIfStatementCounter = 0;
         private uint _elseStatementCounter = 0;
         private uint _whereStatementCounter = 0;
-        private uint _predicateStatementCounter = 0;
 
-        private BlockType _loopType;
         public uint depth;
 
         // Since prefixes is private, we need to be able to get them, but not set them
@@ -49,7 +47,6 @@ namespace Compiler.AST.SymbolTable
         /// </summary>
         /// <param name="Parent">Parent scope, used when closeing a scope to return</param>
         /// <param name="depth">Depth is used to determine at what depth variables are declared, makes it easier to debug</param>
-        /// <param name="prefixes">The current prefixes used</param>
         public Scope(Scope Parent, uint depth)
         {
             // Copy the input list, so the previus prefix list is keept

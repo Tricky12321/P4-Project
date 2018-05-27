@@ -57,8 +57,8 @@ Main -> void () {
 }
 
 Test -> void () {
-    int i;
-    decimal d;
+    int i = 0;
+    decimal d = 0;
     graph g2 
     [
         vertex va(v=1), vb(v=2), vc(v=1), vd(v=2), ve(v=1);

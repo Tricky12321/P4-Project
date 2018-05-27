@@ -10,9 +10,9 @@ namespace Compiler.AST.Nodes
             
         }
 
-        public override void Accept(AstVisitorBase visitor)
+        public override void Accept(AstVisitorBase Visitor)
         {
-            visitor.Visit(this);
+			Visitor.Visit(this);
         }
     }
 }
