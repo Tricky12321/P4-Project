@@ -570,16 +570,29 @@ namespace Compiler.CodeGeneration.GenerationCode
 			GetExtractString(node, false);
 		}
 
-		private void GetExtractString(AbstractExtractNode node, bool maxIfTrue)
-		{
-			string placeFuncString = maxIfTrue ? "_funExtMax" : "_funExtMin";
-			string placeValString = $"_val{node.ID}";
-			string placeAttriString = node.Attribute == null ? "" : $".{node.Attribute.Replace("'", "")}";
-			string boolOpString = maxIfTrue ? ">" : "<";
+        private void GetExtractString(AbstractExtractNode node, bool maxIfTrue)
+        {
+            string placeFuncString = maxIfTrue ? "_funExtMax" : "_funExtMin";
+            string placeValString = $"_val{node.ID}";
+            string placeAttriString = node.Attribute == null ? "" : $".{node.Attribute.Replace("'", "")}";
+            string boolOpString = maxIfTrue ? ">" : "<";
+            string maxOrMinDec = string.Empty;
+
             _currentStringBuilder.Append($"{placeFuncString}{node.ID}_{functionID}();" +
-			                     $"\n{ResolveTypeToCS(node.Type_enum)} {placeFuncString}{node.ID}_{functionID++}(){{\n");
-            string maxOrMinDec = maxIfTrue ? "decimal.MinValue;" : "decimal.MaxValue;";
-            _currentStringBuilder.Append($"{ResolveTypeToCS(node.Type_enum)} {placeValString} = {maxOrMinDec}\nint _variablei = 0;\n");
+                                 $"\n{ResolveTypeToCS(node.Type_enum)} {placeFuncString}{node.ID}_{functionID++}(){{\n");
+
+            if (node.Type_enum == AllType.DECIMAL || node.Type_enum == AllType.INT)
+            {
+                maxOrMinDec = maxIfTrue ? $"{ResolveTypeToCS(node.Type_enum)}.MinValue;" : $"{ResolveTypeToCS(node.Type_enum)}.MaxValue;";
+                _currentStringBuilder.Append($"{ResolveTypeToCS(node.Type_enum)} {placeValString} = {maxOrMinDec}\n");
+            }
+            else
+            {
+                _currentStringBuilder.Append($"{ResolveTypeToCS(node.Type_enum)} {placeValString} = default({ResolveTypeToCS(node.Type_enum)}) ;\n");
+            }
+
+            _currentStringBuilder.Append($"int _variablei = 0;\ndecimal _variableDec = decimal.MaxValue;\n");
+
             _currentStringBuilder.Append($"foreach (var {HandleCSharpKeywords("val")} in {HandleCSharpKeywords(node.Variable)}){{\n");
 
             if (node.WhereCondition != null)
@@ -588,19 +601,22 @@ namespace Compiler.CodeGeneration.GenerationCode
                 node.WhereCondition.Accept(this);
                 _currentStringBuilder.Append($")\n{{");
             }
-            _currentStringBuilder.Append($"if({HandleCSharpKeywords("val")}{placeAttriString} {boolOpString} {placeValString}){{\n");
+            _currentStringBuilder.Append($"if({HandleCSharpKeywords("val" + placeAttriString)} {boolOpString} _variableDec){{\n");
 
-            _currentStringBuilder.Append($"{placeValString} = {HandleCSharpKeywords("val")};\n_variablei++;}}\n}}\n");
+            _currentStringBuilder.Append($"{placeValString} = {HandleCSharpKeywords("val")};");
+            _currentStringBuilder.Append($"_variableDec = {HandleCSharpKeywords("val" + placeAttriString)};\n_variablei++;}}\n}}\n");
             if (node.WhereCondition != null)
             {
                 _currentStringBuilder.Append($"}}");
             }
             _currentStringBuilder.Append($"if(_variablei == 0){{throw new NullReferenceException(\"No element to extract\");}}");
+
             _currentStringBuilder.Append($"{HandleCSharpKeywords(node.Variable)}.Remove({placeValString});\n");
             _currentStringBuilder.Append($"return {placeValString};\n}}\n\n");
-		}
+        }
 
-		public override void Visit(WhereNode node)
+
+        public override void Visit(WhereNode node)
 		{
 			VisitChildren(node);
 		}
