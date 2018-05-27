@@ -203,10 +203,10 @@ namespace Compiler.AST
 			checkCollectionFollowsCollection(node.Variable);
 			AllType collectionNameType = _symbolTable.RetrieveSymbol(node.Variable, out bool isCollectionInQuery, false) ?? AllType.UNKNOWNTYPE;
 
-			if (_symbolTable.IsClass(collectionNameType)) {
+			/*if (_symbolTable.IsClass(collectionNameType)) {
 				_symbolTable.CollectionOfClasses();
 				return;
-			}
+			}*/
 			if (isCollectionInQuery)
 			{
 				node.Type = collectionNameType.ToString().ToLower();
