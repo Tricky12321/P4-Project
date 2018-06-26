@@ -319,8 +319,8 @@ namespace Compiler.AST.SymbolTable
         public override void Visit(SetQueryNode node)
         {
             SymbolTable.SetCurrentNode(node);
-            // SetQuery, is kinda magic. 
-            // It expects attributes, if there is any
+
+			// It expects attributes, if there is any
 			// visits the varaible dcl node, and the assignment expression (Item1, Item3)
             foreach (var Exp in node.Attributes)
             {
@@ -342,9 +342,9 @@ namespace Compiler.AST.SymbolTable
             {
                 CheckDeclared(node.InVariable.Name);
             }
-            // WhereCondition nodes are magic, and should not be tempered with. 
-            // Ask Thue
-            if (node.WhereCondition != null)
+
+
+			if (node.WhereCondition != null)
             {
 				// This tells the WhereCondition what type the val variable should have, if this is not set corretly, the program will crash
 				(node.WhereCondition as WhereNode).AttributeClass = SymbolTable.RetrieveSymbol(node.InVariable.Name) ?? default(AllType);

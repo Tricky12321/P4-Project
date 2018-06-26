@@ -20,7 +20,7 @@ namespace Compiler
 	{
 		private static bool _error = false;
 		private static bool _ignoreErrors = false;
-		private static bool _dontDelete = false;
+		private static bool _dontDelete = true;
 		public static bool TestMode = false;
 		public static bool WriteDebugText = false;
 		public static void Main(string[] args)
@@ -28,7 +28,7 @@ namespace Compiler
 			Console.ForegroundColor = ConsoleColor.Red;
 			Compile();
 		}
-
+            
 		public static void Compile()
 		{
 			Stopwatch TotalTimer = new Stopwatch();
@@ -58,7 +58,7 @@ namespace Compiler
 			PrintCompilerMessage("AstBuilder took: " + AstBuildTimer.ElapsedMilliseconds + "ms");
 			return ast;
 		}
-
+        /*
 		public static void PrettyPrint(StartNode start)
 		{
 			Stopwatch PPTimer = new Stopwatch();
@@ -69,7 +69,7 @@ namespace Compiler
 			PrintCompilerMessage($"Pretty Printer took: {PPTimer.ElapsedMilliseconds}ms");
 			PrintCompilerMessage(PPVisitor.ProgramCode.ToString(), ConsoleColor.Green);
 		}
-
+        */
 		public static GiraphParser.StartContext BuildCST(string FilePath)
 		{
 			TextWriter DefaultOut = Console.Out;
@@ -90,14 +90,14 @@ namespace Compiler
 			Console.SetOut(DefaultOut);
 			Console.SetError(DefaultOut);
 			PrintCompilerMessage($"CST Builder took: {CSTTimer.ElapsedMilliseconds}ms");
-			Console.WriteLine(result.ToString());
+			Console.WriteLine(result);
 			if (result != "")
 			{
 				_error = true;
 			}
 			return output;
 		}
-
+        /*
 		public static GiraphParser.StartContext BuildCSTText(string Text)
 		{
 
@@ -113,7 +113,7 @@ namespace Compiler
 			PrintCompilerMessage($"CST Builder took: {CSTTimer.ElapsedMilliseconds}ms");
 			return parser.start();
 		}
-
+        */
 		public static SymTable BuildSymbolTable(StartNode node)
 		{
 			Stopwatch SymbolTableTimer = new Stopwatch();

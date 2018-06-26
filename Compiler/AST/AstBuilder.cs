@@ -568,6 +568,7 @@ namespace Compiler.AST
 			dclNode.CollectionDcl = true;
 			dclNode.Type = context.allType().GetText();
 			dclNode.Name = context.variable().GetText();
+			var test = context.collectionAssignment();
 			if (context.collectionAssignment() != null)
 			{
 				dclNode.Assignment = Visit(context.collectionAssignment());

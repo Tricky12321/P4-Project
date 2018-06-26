@@ -355,7 +355,7 @@ namespace Compiler.AST.SymbolTable
 			// [GRAPH/VERTEX/EDGE]-><KEYS>->ClassEntry
 			string name = names[0];
 			// Check if the class contains a variable with the name given
-			if (_classesTable[type].ContainsKey(name))
+    		if (_classesTable[type].ContainsKey(name))
 			{
 				var entry = _classesTable[type][name];
 				// Check if the type on the names place, is a class type

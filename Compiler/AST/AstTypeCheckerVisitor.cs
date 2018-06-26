@@ -27,6 +27,7 @@ namespace Compiler.AST
 				_symbolTable.OpenScope(Name);
 				foreach (AbstractNode child in node.GetChildren())
 				{
+					child.Parent = node;
 					child.Accept(this);
 				}
 				_symbolTable.CloseScope();
@@ -40,12 +41,13 @@ namespace Compiler.AST
 				_symbolTable.OpenScope(Type);
 				foreach (AbstractNode child in node.GetChildren())
 				{
+					child.Parent = node;
 					child.Accept(this);
 				}
 				_symbolTable.CloseScope();
 			}
 		}
-
+        /*
 		private string DeclarationSetPrint(AddQueryNode node)
 		{
 			StringBuilder dclList = new StringBuilder();
@@ -58,14 +60,14 @@ namespace Compiler.AST
 			dclList.Append(")");
 			return dclList.ToString();
 		}
-
+        */
 		public override void VisitChildren(AbstractNode node)
 		{
 			/*if (node is BoolComparisonNode boolNode && boolNode.ChildCount != 0 && boolNode.Children[0] is ExpressionNode)
             {
                 foreach (var child in (node.Children[0] as ExpressionNode).ExpressionParts)
                 {
-                    child.Parent = node.Children[0];
+                    child.Parent = node;
                     if (child != null)
                     {
                         child.Accept(this);
@@ -77,7 +79,7 @@ namespace Compiler.AST
                 */
 			foreach (AbstractNode child in node.GetChildren())
 			{
-				child.Parent = node.Children[0];
+				child.Parent = node;
 				if (child != null)
 				{
 					child.Accept(this);
@@ -240,8 +242,9 @@ namespace Compiler.AST
 				}
 				else if (node.Parent is ExpressionNode expNode)
 				{
+					// extractmin 'length' from selectall from asdf where () where () 
 					node.Type = collectionNameType.ToString();
-					expNode.QueryName = node.Variable;
+					//expNode.QueryName = node.Variable;
 					expNode.OverAllType = collectionNameType;
 					expNode.Name = node.Variable;
 				}
@@ -386,14 +389,8 @@ namespace Compiler.AST
 
 					if (isCollectionTargetColl)
 					{//non-declarations are added to an extended collection on graph, or simply a collection.
-						if (TypeOfTargetCollection == typeOfVar)
-						{
-							//the expression type is correct corresponding to the type of the target collection.
-						}
-						else
-						{//mismatch of types if the target collection is not of same type of the expression
-							_symbolTable.WrongTypeError(item.Name, node.ToVariable);
-						}
+						bool AllowedCast = TypeOfTargetCollection == AllType.DECIMAL && typeOfVar == AllType.INT;
+						CheckAllowedCast(TypeOfTargetCollection ?? AllType.UNKNOWNTYPE, typeOfVar?? AllType.UNKNOWNTYPE);
 					}
 					else if (targetIsGraph)
 					{//if variables are added to the graph.
@@ -546,7 +543,9 @@ namespace Compiler.AST
 				VisitChildren(node);
 				AllType typeOfVariable = _symbolTable.RetrieveSymbol(node.Name) ?? AllType.UNKNOWNTYPE;
 				AbstractNode abNode = node.Assignment;
-				AllType typeOfRetreiveVariable = _symbolTable.RetrieveSymbol(abNode.Name, out bool isCollectionRetrieve) ?? AllType.UNKNOWNTYPE;
+				if (!(abNode is RunQueryNode)) {
+					AllType typeOfRetreiveVariable = _symbolTable.RetrieveSymbol(abNode.Name, out bool isCollectionRetrieve) ?? AllType.UNKNOWNTYPE;
+                }
 				CheckAllowedCast(typeOfVariable, abNode.Type_enum);
 			}
 		}

@@ -25,6 +25,7 @@ namespace Giraph.Classes
 		private void Update() {
 			if (_from.Get() == null || _to.Get() == null)
             {
+				Console.WriteLine("Edge is now disposed!");
                 disposed = true;
             }
 		}
@@ -34,7 +35,7 @@ namespace Giraph.Classes
 			Update();
             if (disposed)
             {
-				
+				    
                 return null;
             }
             else

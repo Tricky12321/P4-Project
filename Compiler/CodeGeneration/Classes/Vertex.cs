@@ -20,13 +20,7 @@ namespace Giraph.Classes
         }
 
 		public Vertex Get() {
-			if (disposed) {
-				Console.WriteLine("You are trying to reference am object which no longer exists");
-				Environment.Exit(0);
-				return null;
-			} else {
 				return this;
-			}
 		}
     }
 }

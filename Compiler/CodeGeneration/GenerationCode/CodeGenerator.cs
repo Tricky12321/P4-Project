@@ -627,7 +627,7 @@ namespace Compiler.CodeGeneration.GenerationCode
 
 		public override void Visit(IfElseIfElseNode node)
 		{
-			// This is magic, dont try to learn it...
+
 			// It works by:
 			// if (boolComparison) {statement}
 			// elseif (boolComparison) {statement} (unlimited times...)
@@ -1064,6 +1064,20 @@ namespace Compiler.CodeGeneration.GenerationCode
 			_currentExtension.Append("\n");
 			_currentExtension.Append($"public {ResolveTypeToCS(ExtendType)} {HandleCSharpKeywords(ExtendName)} {{ \n");
 			_currentExtension.Append("get\n");
+			_currentExtension.Append($"{{");
+			_currentExtension.Append($"return {(OriginalName)};\n");
+			_currentExtension.Append($"}}\n");
+			_currentExtension.Append("set\n");
+			_currentExtension.Append($"{{");
+            _currentExtension.Append($"{(OriginalName)} = value;\n");
+            _currentExtension.Append($"}}\n");
+            _currentExtension.Append("}\n");
+
+            /*
+
+			_currentExtension.Append("\n");
+			_currentExtension.Append($"public {ResolveTypeToCS(ExtendType)} {HandleCSharpKeywords(ExtendName)} {{ \n");
+			_currentExtension.Append("get\n");
 			_currentExtension.Append($"{{\n Update(); \n");
 			_currentExtension.Append($"if (disposed) {{  Console.WriteLine(\"You are trying to reference an object which no longer exists\"); Environment.Exit(0); }}\n");
 			_currentExtension.Append($"return {(OriginalName)};\n");
@@ -1074,6 +1088,7 @@ namespace Compiler.CodeGeneration.GenerationCode
 			_currentExtension.Append($"{(OriginalName)} = value;\n");
 			_currentExtension.Append($"}}\n");
 			_currentExtension.Append("}\n");
+			*/
 		}
 
 		public override void Visit(PredicateCall node)

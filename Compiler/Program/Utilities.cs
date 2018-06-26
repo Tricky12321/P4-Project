@@ -90,7 +90,7 @@ namespace Compiler
             }
         }
 
-
+        /*
 		public static string JsonSerilize(object Item) {
 			JsonSerializer serializer = new JsonSerializer();
             serializer.Converters.Add(new JavaScriptDateTimeConverter());
@@ -104,7 +104,7 @@ namespace Compiler
             }
 			return serializer.ToString();
 		}
-
+        */
 		// https://stackoverflow.com/questions/10389701/how-to-create-a-recursive-function-to-copy-all-files-and-folders
 		public static void CopyAll(string SourcePath, string DestinationPath)
         {
