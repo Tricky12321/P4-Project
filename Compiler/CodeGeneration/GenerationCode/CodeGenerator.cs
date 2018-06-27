@@ -589,8 +589,11 @@ namespace Compiler.CodeGeneration.GenerationCode
             {
                 _currentStringBuilder.Append($"{ResolveTypeToCS(node.Type_enum)} {placeValString} = default({ResolveTypeToCS(node.Type_enum)}) ;\n");
             }
-
-            _currentStringBuilder.Append($"int _variablei = 0;\ndecimal _variableDec = decimal.MaxValue;\n");
+			if (maxIfTrue) {
+				_currentStringBuilder.Append($"int _variablei = 0;\ndecimal _variableDec = decimal.MinValue;\n");
+			}else {
+				_currentStringBuilder.Append($"int _variablei = 0;\ndecimal _variableDec = decimal.MaxValue;\n");
+			}
 
             _currentStringBuilder.Append($"foreach (var {HandleCSharpKeywords("val")} in {HandleCSharpKeywords(node.Variable)}){{\n");
 

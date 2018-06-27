@@ -61,11 +61,6 @@ namespace Tests
         {
             Assert.IsTrue(errorlist.Contains(errorMessage));
         }
-        [TestCase("Given attribute: 'intSom2' is not extended on Class: EDGE 59:4")]
-		public void AttributeGiven(string errorMessage)
-        {
-            Assert.IsTrue(errorlist.Contains(errorMessage));
-        }
         [TestCase("hej2 is not a collection, and therefore remove is not able to be used 174:4")]
         [TestCase("hej2 is not a collection, and therefore remove is not able to be used 175:4")]
 		public void NotCollection(string errorMessage)
@@ -75,12 +70,6 @@ namespace Tests
         [TestCase("i is not a collection, and therefore remove is not able to be used 148:4")]
         [TestCase("i is not a collection, and therefore remove is not able to be used 149:4")]
 		public void NotACollection(string errorMessage)
-        {
-            Assert.IsTrue(errorlist.Contains(errorMessage));
-        }
-        [TestCase("If a attribute is provided for assortment, the specified collection must not be of type Decimal or Integer 60:4")]
-        [TestCase("If no attribute is provided for assortment, the specified collection must be of type Decimal or Integer 61:4")]
-		public void AttributeError(string errorMessage)
         {
             Assert.IsTrue(errorlist.Contains(errorMessage));
         }
@@ -99,21 +88,10 @@ namespace Tests
             Assert.IsTrue(errorlist.Contains(errorMessage));
         }
         [TestCase("Target variable: endnuentim is not of type collection 85:8")]
-        [TestCase("Target variable: fratim2 is not of type collection 98:29")]
-        [TestCase("Target variable: fratim4 is not of type collection 100:29")]
-        [TestCase("Target variable: fratim5 is not of type collection 101:29")]
-        [TestCase("Target variable: vcv is not of type collection 80:17")]
-        [TestCase("Target variable: vtim1 is not of type collection 102:19")]
 		public void TargetVariable(string errorMessage)
         {
             Assert.IsTrue(errorlist.Contains(errorMessage));
         }
-        [TestCase("The declaration set:(vvcv) cannot be added to the collection in the graph! 82:4")]
-		public void Declaration(string errorMessage)
-        {
-            Assert.IsTrue(errorlist.Contains(errorMessage));
-        }
-        [TestCase("The variable retrieved from: g1.intSom is not of type collection 62:4")]
         [TestCase("The variable retrieved from: hej2 is not of type collection 154:27")]
         [TestCase("The variable retrieved from: hej2 is not of type collection 155:18")]
         [TestCase("The variable retrieved from: timint is not of type collection 70:28")]
@@ -142,11 +120,6 @@ namespace Tests
         {
             Assert.IsTrue(errorlist.Contains(errorMessage));
         }
-        [TestCase("Type of attribute must be of type Integer or Decimal 58:4")]
-		public void IntegerOrDecimalForceError(string errorMessage)
-        {
-            Assert.IsTrue(errorlist.Contains(errorMessage));
-        }
         [TestCase("Use of unassigned variable 166:20")]
 		public void UnassignedVariable(string errorMessage)
         {
@@ -154,14 +127,8 @@ namespace Tests
         }
         [TestCase("Variable e and g3.Vertices are missmatch of types. Line number 168:4")]
         [TestCase("Variable System.Collections.Generic.List`1[Compiler.AST.Nodes.AbstractNode] and g1 are missmatch of types. Line number 84:8")]
-        [TestCase("Variable timdouble and tim are missmatch of types. Line number 83:8")]
         [TestCase("Variable v and nyhej are missmatch of types. Line number 131:4")]
 		public void VariableErrors(string errorMessage)
-        {
-            Assert.IsTrue(errorlist.Contains(errorMessage));
-        }
-        [TestCase("Vertex, Graph and Edge cannot be cast to any other type! 170:10")]
-		public void ClassCastTest(string errorMessage)
         {
             Assert.IsTrue(errorlist.Contains(errorMessage));
         }
